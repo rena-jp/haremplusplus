@@ -1,0 +1,209 @@
+body.qh-local {
+  background-color: rgb(69, 33, 41);
+  color: white;
+}
+
+.App {
+  text-align: center;
+  font-size: 16pt;
+  color: white;
+}
+
+.app-title {
+  background-image: url(https://hh.hh-content.com/pictures/design/symbol_shadow.svg);
+  background-position-x: left;
+  background-position-y: center;
+  background-repeat: no-repeat;
+  padding-left: 60px;
+
+  cursor: pointer;
+}
+
+.App-logo {
+  height: 10vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+.harem {
+  display: flex;
+  padding: 0px 0px 30px 15px;
+  overflow: auto;
+}
+
+.data-input {
+  width: 60%;
+  height: 200px;
+}
+
+.girlsList {
+  width: 35%;
+  padding-left: 8px;
+  padding-right: 8px;
+  /* overflow: auto; */
+}
+
+.girlsList > .owned {
+  margin-bottom: 15px;
+}
+
+.girlsList > div {
+  flex: 1;
+  display: flex;
+  flex-flow: row wrap;
+  row-gap: 8px;
+  column-gap: 5px;
+}
+
+.blessings-summary {
+  display: flex;
+  flex-flow: row wrap;
+  row-gap: 5px;
+  column-gap: 5px;
+  justify-content: center;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+.blessings-summary > div {
+  display: flex;
+  flex-flow: column;
+  row-gap: 5px;
+  padding: 15px;
+}
+
+.blessings-summary > div > p {
+  padding: 0px;
+  margin: 0px;
+  text-align: left;
+}
+
+.missing-girls-blessing > .owned {
+  color: #c93e3e;
+  font-weight: bold;
+}
+
+.toggle-filter {
+  cursor: pointer;
+}
+
+.filter-enabled {
+  filter: drop-shadow(0px 0px 3px white);
+  text-decoration: underline;
+  /* background-color: deepskyblue;
+  border-radius: 5px;
+  padding: 3px; */
+}
+
+.rare-blessing > .total {
+  color: #c93e3e;
+  font-weight: bold;
+}
+
+.girlDescription {
+  margin-right: 20px;
+  width: 65%;
+  height: 100%;
+}
+
+.qh_description {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  /* overflow: visible; */
+}
+
+.qh_description > .pose {
+  width: 40%;
+  flex: 1;
+}
+
+.qh_description > .pose > img {
+  max-height: 95%;
+}
+
+.details > p,
+.details > .lore > p {
+  text-align: left;
+}
+
+.details > p > .grade {
+  justify-content: left;
+}
+
+.general-attributes {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+}
+
+.pose-and-stats {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.qh_description > .details {
+  width: 55%;
+}
+
+.App a {
+  color: white;
+}
+
+.blessings-list {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.blessing-item {
+  background-color: #c93e3e;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  padding: 10px;
+  margin: 10px;
+}
+
+.blessing-item > h4,
+.blessing-item > p {
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+div.pop {
+  display: flex;
+  justify-content: center;
+}
+ul.pop {
+  text-align: left;
+}
+li.ok {
+  color: green;
+}
+li.nok {
+  color: red;
+}
+
+.App input,
+.App button {
+  font-size: 14pt;
+  padding: 5px;
+}
+
+.action {
+  cursor: pointer;
+}

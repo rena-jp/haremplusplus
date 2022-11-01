@@ -1,0 +1,94 @@
+.gems-summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.gems-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  width: 100%;
+}
+
+.gems-layout > div {
+  padding: 5px;
+}
+
+/** Toolbar */
+
+.harem-toolbar {
+  /* border: 1px solid red; */
+  display: flex;
+  flex-direction: row;
+  justify-items: center;
+  align-items: center;
+  align-content: center;
+  margin-bottom: 8px;
+  padding: 8px 25px;
+  flex-wrap: wrap;
+  column-gap: 15px;
+}
+
+.harem-toolbar > .break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+/** Toolbar: Quick search */
+
+.quick-search > input.hh-text-input {
+  background-image: url(https://hh2.hh-content.com/pictures/design/form/search_field_L.png);
+  background-position: 100% 50%;
+  background-repeat: no-repeat;
+  background-size: 40px;
+
+  width: 18em;
+}
+
+.harem-toolbar > .quick-filters {
+  margin-left: 60px;
+}
+
+.harem-toolbar > .quick-filters > p {
+  padding: 0px;
+  margin: 0px;
+}
+
+.harem-toolbar > .clear-filters > .hh-action-button {
+  width: 10em;
+  padding: 5px;
+}
+
+.harem-toolbar > .owned-gems-summary > .gems-count > .elementIcon {
+  width: 45px;
+  height: 45px;
+}
+
+.scenes-browser {
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: middle;
+}
+
+.scenes-browser img {
+  /** Normalize width. Icons have a different top/bottom border and would look inconsistent with a height attribute */
+  width: 50px;
+}
+
+.harem-toolbar > .refresh {
+  margin-left: auto; /* Push to the end of the toolbar */
+}
+
+.harem-toolbar > .refresh[disabled] {
+  animation: refresh-blink-animation 0.75s ease-in-out infinite alternate;
+}
+
+@keyframes refresh-blink-animation {
+  from {
+    filter: grayscale(100%);
+  }
+  to {
+    filter: grayscale(50%);
+  }
+}

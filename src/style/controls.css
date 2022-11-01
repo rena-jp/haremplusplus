@@ -1,0 +1,67 @@
+.hh-action-button {
+  border: 1px solid #ffa23e;
+  background: linear-gradient(
+    to bottom,
+    rgba(60, 60, 60, 0.7) 0,
+    rgba(10, 10, 10, 0.9) 100%
+  );
+  /* background-color: rgba(0, 0, 0, 0.3); */
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #c61f52, 0 0 13px rgba(159, 7, 58, 0.6),
+    0 0 13px rgba(159, 7, 58, 0.95);
+  color: white;
+
+  outline: none;
+
+  cursor: pointer;
+}
+
+.hh-action-button:hover {
+  border: 1px solid #edb273;
+}
+
+.hh-action-button:active {
+  border: 1px solid #f4c99b;
+}
+
+.hh-action-button:disabled,
+.hh-action-button[disabled] {
+  border: 1px solid #ffa23e;
+  color: grey;
+  box-shadow: none;
+  background: none; /* Disable original game rule */
+  background-color: rgba(0, 0, 0, 0.3);
+
+  cursor: initial;
+}
+
+input.hh-text-input {
+  border: 1px solid #ffa23e;
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  box-shadow: 0 2px 0 #c61f52, 0 0 13px rgba(159, 7, 58, 0.6),
+    0 0 13px rgba(159, 7, 58, 0.95);
+  color: white;
+
+  outline: none;
+}
+
+input.hh-text-input.number {
+  width: 7ch;
+}
+
+button.toggle.pressed {
+  background: linear-gradient(to bottom, #ffa23e 0, #c41b53 100%);
+}
+
+/**
+* For filters: the button is checked, but the filter is inactive
+*/
+.inactive > button.toggle.pressed {
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.3) 0,
+    rgba(88, 88, 88, 0.3) 100%
+  );
+  color: darkgray;
+}

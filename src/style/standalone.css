@@ -1,0 +1,5 @@
+/** Workaround for standalone */
+.App.standalone,
+.App.standalone > div:first-of-type {
+  height: 100%;
+}

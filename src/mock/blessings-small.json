@@ -1,0 +1,31 @@
+{
+  "active": [
+    {
+      "title": "Week of the 赤",
+      "description": "All girls with <span class=\"blessing-condition\">髪の色 赤</span> gain <span class=\"blessing-bonus\">+ 30%</span> bonus on all attributes.",
+      "start_ts": 1666004400,
+      "end_ts": 1666609199
+    },
+    {
+      "title": "Week of the 蠍座",
+      "description": "All girls with <span class=\"blessing-condition\">Zodiac sign 蠍座</span> gain <span class=\"blessing-bonus\">+ 40%</span> bonus on all attributes.",
+      "start_ts": 1666004400,
+      "end_ts": 1666609199
+    }
+  ],
+  "upcoming": [
+    {
+      "title": "Week of the 紫色",
+      "description": "All girls with <span class=\"blessing-condition\">目の色 紫色</span> gain <span class=\"blessing-bonus\">+ 35%</span> bonus on all attributes.",
+      "start_ts": 1666609200,
+      "end_ts": 1667217599
+    },
+    {
+      "title": "Week of the 蟹座",
+      "description": "All girls with <span class=\"blessing-condition\">Zodiac sign 蟹座</span> gain <span class=\"blessing-bonus\">+ 40%</span> bonus on all attributes.",
+      "start_ts": 1666609200,
+      "end_ts": 1667217599
+    }
+  ],
+  "success": true
+}

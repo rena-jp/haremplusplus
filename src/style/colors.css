@@ -1,0 +1,83 @@
+.color > span {
+  font-weight: bold;
+  --var-color: white;
+  --var-shadow-color: black;
+  color: var(--var-color);
+  text-shadow: 1px 1px 0 var(--var-shadow-color),
+    -1px 1px 0 var(--var-shadow-color), -1px -1px 0 var(--var-shadow-color),
+    1px -1px 0 var(--var-shadow-color);
+}
+.color > .blue {
+  --var-color: #24a0ff;
+}
+.color > .golden {
+  --var-color: #ffb923;
+}
+.color > .green {
+  --var-color: #00e772;
+}
+.color > .brown {
+  --var-color: #cb6f2b;
+}
+.color > .pink {
+  --var-color: #ff5a81;
+}
+.color > .red {
+  --var-color: #ff2a52;
+}
+.color > .purple {
+  --var-color: #e42eff;
+}
+.color > .orange {
+  --var-color: #ff9600;
+}
+.color > .silver {
+  --var-color: #ccc;
+}
+.color > .darkPink {
+  --var-color: #ca0080;
+}
+.color > .black {
+  --var-shadow-color: #24a0ff;
+  --var-color: black;
+}
+.color > .grey {
+  --var-color: #999;
+}
+.color > .unknown {
+  --var-color: #fff;
+}
+.color > .dark {
+  --var-color: #67422a;
+  --var-shadow-color: #fff;
+}
+.color > .darkBlond {
+  --var-color: #cb6f2b;
+}
+.color > .strawberryBlond {
+  --var-color: #ffa792;
+}
+.color > .blond {
+  --var-color: #fff049;
+}
+.color > .white {
+  --var-color: #fff;
+}
+.color > .rarity.starter {
+  --var-color: #fff;
+}
+.color > .rarity.common {
+  --var-color: #8d8e9f;
+}
+.color > .rarity.rare {
+  --var-color: #23b56b;
+}
+.color > .rarity.epic {
+  --var-color: #ffb244;
+}
+.color > .rarity.legendary {
+  --var-color: #8e36a9;
+}
+.color > .rarity.mythic {
+  --var-color: #ec0039;
+}

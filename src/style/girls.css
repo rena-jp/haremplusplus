@@ -1,0 +1,236 @@
+.girlTile {
+  font-size: 16pt;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  user-select: none;
+}
+
+.girlTile > .girl-header {
+  padding-top: 5px;
+}
+
+.girlTile > .avatar-area {
+  position: relative;
+}
+
+.girlTile > .avatar-area > .avatar {
+  margin-top: auto;
+  padding: 5px 10px 5px 10px;
+}
+
+.avatar > img {
+  width: 100px;
+  height: 100px;
+  border: 3px solid white;
+  border-radius: 8px;
+  display: block;
+}
+
+.grade {
+  display: flex;
+  flex-direction: row;
+}
+
+.girlTile > .grade {
+  justify-content: center;
+  padding-top: 20px; /** Offset the element icon */
+}
+
+.details > .grade {
+  justify-content: left;
+}
+
+.girlTile > .grade {
+  margin-top: -8px;
+  margin-bottom: 3px;
+}
+
+.star {
+  width: 22px;
+  height: 22px;
+  background-size: cover;
+  background-repeat: no-repeat;
+  margin-left: -3px;
+  margin-right: -3px;
+  display: inline-block;
+}
+.star.empty {
+  background-image: url(https://hh.hh-content.com/design_v2/affstar_empty_S.png);
+}
+.star.solid {
+  background-image: url(https://hh.hh-content.com/design_v2/affstar_S.png);
+}
+.star.solid.current {
+  filter: drop-shadow(0px 0px 3px orange);
+}
+
+.avatar-area > .element {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  transform: translate(-50%, 0);
+}
+
+.element {
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: block;
+}
+
+.element.dark {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Dominatrix.png');
+}
+.element.white {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Submissive.png');
+}
+.element.purple {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Voyeurs.png');
+}
+.element.red {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Eccentric.png');
+}
+.element.blue {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Sensual.png');
+}
+.element.green {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Exhibitionist.png');
+}
+.element.orange {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Physical.png');
+}
+.element.yellow {
+  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
+}
+
+.qh_shards {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 1;
+
+  background-image: url(https://hh2.hh-content.com/shards.png);
+  background-position: left;
+  padding-left: 36px;
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+
+  color: #80058b;
+  text-shadow: 1px 1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff,
+    1px -1px 0 #fff;
+  font-weight: bold;
+}
+
+.qh_shards > img {
+  vertical-align: middle;
+  width: 40px;
+  height: 40px;
+}
+
+.girlTile.starting > .avatar-area > .avatar > img,
+.girlTile.common > .avatar-area > .avatar > img {
+  background-color: #8d8e9f;
+  /* border-color: lightgrey; */
+}
+
+.girlTile.rare > .avatar-area > .avatar > img {
+  background-color: #23b56b;
+  /* border-color: greenyellow; */
+}
+
+.girlTile.epic > .avatar-area > .avatar > img {
+  background-color: #ffb244;
+  /* border-color: gold; */
+}
+
+.girlTile.legendary > .avatar-area > .avatar > img {
+  background-color: #8e36a9;
+  /* border-color: fuchsia; */
+}
+
+.girlTile.mythic > .avatar-area > .avatar > img {
+  background-color: #ec0039;
+  /* border-color: tomato; */
+}
+
+.girlTile.salary > .avatar-area > .soft_currency {
+  background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
+  background-size: cover;
+  width: 45px;
+  height: 45px;
+  position: absolute;
+  bottom: -10px;
+  left: -5px;
+}
+
+.girlTile > .avatar-area > .upgrade-girl {
+  position: absolute;
+  right: -15px;
+  top: 15px;
+
+  width: 55px;
+  height: 55px;
+}
+
+.girlTile {
+  border-radius: 10px;
+}
+
+.girlTile.not-owned > .avatar-area > .avatar {
+  opacity: 0.5;
+}
+
+.girlTile:hover {
+  background-color: pink;
+}
+
+.girlTile.selected {
+  background-color: #61dafb;
+}
+
+.bio {
+  text-align: justify;
+}
+
+.blessed {
+  color: green;
+}
+
+.pose {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.pose-switcher {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.pose-switcher > .pose-selector {
+  border: 3px solid white;
+  background-color: #1f2958;
+  width: 25px;
+  height: 25px;
+  transform: rotate(45deg);
+}
+
+.pose-switcher > .pose-selector.solid {
+  cursor: pointer;
+}
+
+.pose-switcher > .pose-selector.solid.current {
+  background: radial-gradient(yellow, darkorange);
+  box-shadow: 0px 0px 7px darkorange;
+  cursor: initial;
+}
+
+.pose-switcher > .pose-selector.empty {
+  background-color: grey;
+}

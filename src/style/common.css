@@ -1,0 +1,101 @@
+.elementIcon {
+  width: 30px;
+  vertical-align: middle;
+}
+
+.gems-count-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.upgrade-girl {
+  background-image: url(https://hh2.hh-content.com/design_v2/affstar_upgrade.png);
+  background-position: center;
+  background-size: cover;
+
+  width: 35px;
+  height: 35px;
+}
+
+.qh-tooltip {
+  font-size: 2em; /* We have lots of space in Tooltips; use large fonts */
+  text-align: left;
+}
+
+.stats-description,
+.stats-description > .qh-tooltip-wrapper > .stat-icon {
+  width: 60px;
+  height: 60px;
+}
+
+.stat-icon {
+  width: 1em;
+  height: 1em;
+  display: inline-block;
+  background-size: cover;
+  vertical-align: top;
+}
+
+.stat-icon.class_0 {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/1.png);
+}
+.stat-icon.class_1 {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/2.png);
+}
+.stat-icon.class_2 {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/3.png);
+}
+
+.pose-icon {
+  background-size: cover;
+  width: 80px;
+  height: 80px;
+}
+
+.pose-icon.doggie {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/1.png);
+}
+
+.pose-icon.dolphin {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/2.png);
+}
+.pose-icon.missionary {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/3.png);
+}
+.pose-icon.sodomy {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/4.png);
+}
+.pose-icon.sixnine {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/5.png);
+}
+.pose-icon.jackhammer {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/6.png);
+}
+.pose-icon.nosedive {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/7.png);
+}
+.pose-icon.column {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/8.png);
+}
+.pose-icon.indian {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/9.png);
+}
+.pose-icon.suspended {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/10.png);
+}
+.pose-icon.splitting {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/11.png);
+}
+.pose-icon.bridge {
+  background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/12.png);
+}
+
+.close-popup {
+  cursor: pointer;
+  background-image: url(https://hh2.hh-content.com/clubs/ic_xCross.png);
+  background-size: cover;
+  width: 45px;
+  height: 45px;
+}

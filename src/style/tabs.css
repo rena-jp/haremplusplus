@@ -1,0 +1,32 @@
+.tab-folder {
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  z-index: 3;
+}
+
+.tab-folder > .tab {
+  border: 1px solid white;
+  border-right: none;
+  border-radius: 5px;
+  min-height: 115px;
+  min-width: 1.5em;
+  padding: 3px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  background-color: black;
+}
+
+.tab-folder > .tab.active {
+  background-color: deepskyblue;
+}
+
+.tab-folder > .tab > .tab-label {
+  writing-mode: vertical-rl;
+  user-select: none;
+}
