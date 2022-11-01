@@ -4,6 +4,11 @@
 
 This project provides a userscript (To be used with Tampermonkey, or similar browser extensions) to replace the original Harem with a quicker, more dynamic version.
 
+## Installation
+
+- Install Tampermonkey or another userscript extension for your web-browser
+- Open https://raw.githubusercontent.com/LiliatHH/haremplusplus/main/release/haremplusplus.user.js and click Install
+
 ## Features
 
 - Speed: Keeps all data in cache on your device, so it can render immediately, even if the server lags
