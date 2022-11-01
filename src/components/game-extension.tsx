@@ -19,8 +19,6 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
   visible,
   setVisible
 }) => {
-  console.debug('Render GameExtension');
-
   const [options, setOptions] = useState<HaremOptions | undefined>(undefined);
 
   useEffect(() => {
