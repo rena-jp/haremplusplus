@@ -392,6 +392,13 @@ export function getMatchingGirls(
   );
 }
 
+export function matchesBlessings(
+  girl: BaseGirlData,
+  blessings: BlessingDefinition[]
+): boolean {
+  return blessings.some((blessing) => matchesBlessing(girl, blessing));
+}
+
 export function matchesBlessing(
   girl: BaseGirlData,
   blessing: BlessingType,

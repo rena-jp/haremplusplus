@@ -152,7 +152,7 @@ export const Summary: React.FC<SummaryProps> = ({
             {missingAffAll > missingAffELM ? (
               <>
                 <span title="Epic, Legendary & Mythic">{missingAffELM}</span>{' '}
-                <span title="All rarities">{missingAffAll}</span>
+                <span title="All rarities">({missingAffAll})</span>
               </>
             ) : (
               <span>{missingAffELM}</span>

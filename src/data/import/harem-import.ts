@@ -116,17 +116,6 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       stats: getStats(baseCommonGirl, girlData.caracs, currentBlessings)
     };
 
-    if (
-      commonGirl.fullName === 'Sara Jay' ||
-      commonGirl.fullName === 'Nikki Benz'
-    ) {
-      const regex = new RegExp('ava[0-9]');
-      commonGirl.poseImage = commonGirl.poseImage.replace(regex, 'avb0');
-      commonGirl.poseImage0 = commonGirl.poseImage;
-      commonGirl.icon = 'https://hh2.hh-content.com/ic_loading_carrot.svg';
-      commonGirl.icon0 = commonGirl.icon;
-    }
-
     allGirls.push(commonGirl);
   });
 

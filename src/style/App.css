@@ -38,7 +38,7 @@ body.qh-local {
 .harem {
   display: flex;
   padding: 0px 0px 30px 15px;
-  overflow: auto;
+  /* overflow: auto; */
 }
 
 .data-input {
@@ -132,13 +132,36 @@ body.qh-local {
   max-height: 95%;
 }
 
-.details > p,
-.details > .lore > p {
+.details-content > p,
+.details-content > .details-section > p {
   text-align: left;
 }
 
-.details > p > .grade {
+.details-content > p > .grade {
   justify-content: left;
+}
+
+.section-switch {
+  display: flex;
+  justify-content: left;
+  gap: 30px;
+  margin-bottom: 8px;
+}
+
+.section-switch > span {
+  cursor: pointer;
+  color: #d08467;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000;
+}
+
+.section-switch > span.active {
+  cursor: initial;
+  color: #ffb827;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -2px -2px 5px rgba(255, 159, 0, 0.4),
+    2px -2px 5px rgba(255, 159, 0, 0.4), -2px 2px 5px rgba(255, 159, 0, 0.4),
+    2px 2px 5px rgba(255, 159, 0, 0.4), 0 0 10px rgba(255, 159, 0, 0.4);
 }
 
 .general-attributes {
@@ -156,6 +179,18 @@ body.qh-local {
 
 .qh_description > .details {
   width: 55%;
+  padding-right: 15px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.details-header {
+  margin-bottom: 8px;
+}
+
+.details-content {
+  overflow: auto;
 }
 
 .App a {

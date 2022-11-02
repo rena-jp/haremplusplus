@@ -134,12 +134,12 @@ export async function loadBlessings(
 ): Promise<GameBlessingData> {
   try {
     const blessingsData = await loadBlessingsData();
-    if (blessingsData) {
+    if (blessingsData && blessingsData.active.length > 0) {
       if (
         // Blessings only change once a week; so if we have a version in
         // cache that hasn't expired, there's no need to refresh.
         blessingsData.active.every(
-          (blessing) => blessing.end_ts * 1000 > Date.now()
+          (blessing) => (blessing.end_ts ?? 0) * 1000 > Date.now()
         )
       ) {
         return blessingsData;

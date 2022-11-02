@@ -36,11 +36,6 @@
   overflow: auto;
 }
 
-.details {
-  overflow: auto;
-  padding-right: 15px;
-}
-
 .App.game-extension.hidden {
   visibility: hidden;
 }

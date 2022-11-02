@@ -171,8 +171,12 @@ export interface GemsCountProps {
 }
 
 export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
-  const tooltipContent = useMemo(
-    () => (
+  const tooltipContent = useMemo(() => {
+    const totalCount = [...gemsCount.values()].reduce(
+      (a, b) => (a ?? 0) + (b ?? 0),
+      0
+    );
+    return (
       <div className="gems-count-details">
         {Elements.values().map((element) => (
           <GemsCountEntry
@@ -181,10 +185,14 @@ export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
             count={gemsCount.get(element) ?? 0}
           />
         ))}
+        <GemsCountEntry
+          key="rainbow"
+          element="rainbow"
+          count={totalCount ?? 0}
+        />
       </div>
-    ),
-    [gemsCount]
-  );
+    );
+  }, [gemsCount]);
 
   return (
     <Tooltip cssClasses="gems-count" place="bottom" tooltip={tooltipContent}>
@@ -238,7 +246,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
 };
 
 interface GemsCountEntryProps {
-  element: Element;
+  element: Element | 'rainbow';
   count: number;
 }
 
@@ -259,6 +267,7 @@ export interface StatsDescriptionProps {
   currentStats: Stats;
   upcomingStats: Stats;
   potentialMultiplier: number;
+  blessed: boolean;
   statIcon?: Class;
 }
 
@@ -267,6 +276,7 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
   currentStats,
   upcomingStats,
   potentialMultiplier,
+  blessed,
   statIcon
 }) => {
   // https://hh2.hh-content.com/pictures/misc/items_icons/3.png
@@ -277,13 +287,14 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
         tooltip={
           <StatsDescription
             baseStats={baseStats}
+            blessed={blessed}
             currentStats={currentStats}
             upcomingStats={upcomingStats}
             potentialMultiplier={potentialMultiplier}
           />
         }
       >
-        <StatIcon statClass={statIcon ?? Class.Knowhow} />
+        <StatIcon statClass={statIcon ?? Class.Knowhow} blessed={blessed} />
       </Tooltip>
     </span>
   );
@@ -366,10 +377,18 @@ export const StatsList: React.FC<StatsProps> = ({
 
 export interface StatIconProps {
   statClass: Class;
+  blessed?: boolean;
 }
 
-export const StatIcon: React.FC<StatIconProps> = ({ statClass }) => {
-  return <span className={`stat-icon class_${statClass}`} />;
+export const StatIcon: React.FC<StatIconProps> = ({ statClass, blessed }) => {
+  console.log('Blessed: ', blessed);
+  return (
+    <span
+      className={`stat-icon class_${statClass}${
+        blessed === true ? ' blessed' : ''
+      }`}
+    />
+  );
 };
 
 export interface PoseIconProps {

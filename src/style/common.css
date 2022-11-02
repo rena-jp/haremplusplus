@@ -38,6 +38,10 @@
   vertical-align: top;
 }
 
+.stat-icon.blessed {
+  filter: drop-shadow(3px 3px 5px darkgreen);
+}
+
 .stat-icon.class_0 {
   background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/1.png);
 }

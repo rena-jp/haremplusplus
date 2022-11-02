@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useMemo } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   BlessingDefinition,
@@ -6,12 +6,14 @@ import {
   EyeColor,
   getBlessedStats,
   HairColor,
+  matchesBlessing,
+  matchesBlessings,
   Pose,
   Quest,
   Stats,
   Zodiac
 } from '../data/data';
-import { RarityText } from './colors';
+import { RarityColorText } from './colors';
 import {
   ElementIcon,
   format,
@@ -54,6 +56,8 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
     [gameAPI, girl]
   );
 
+  const [showLore, setShowLore] = useState(false);
+
   return (
     <div className="qh_description">
       {girl === undefined ? (
@@ -65,133 +69,180 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
             <PoseSwitcher girl={girl} selectPose={selectPose} />
           </div>
           <div className="details">
-            <p>
-              <Tooltip delay={1500} tooltip={<span>ID: {girl.id}</span>}>
-                Name: {girl.name}
-              </Tooltip>
-            </p>
-            <p>Full Name: {girl.fullName}</p>
-            <p className="general-attributes color">
-              <RarityText rarity={girl.rarity} />
+            <div className="details-header general-attributes color">
+              <RarityColorText rarity={girl.rarity}>
+                <Tooltip delay={1500} tooltip={<span>ID: {girl.id}</span>}>
+                  {girl.name}
+                </Tooltip>
+              </RarityColorText>
               <ElementIcon element={girl.element} />
               <ScenesBrowser
                 girlId={girl.id}
                 quests={girl.quests}
                 domain={domain}
               />
-            </p>
-            {girl.stats || girl.pose !== Pose.unknown ? (
-              <p className="pose-and-stats">
-                <PoseIcon pose={girl.pose} />
-                {girl.stats ? (
-                  <StatsDetails
-                    girl={girl}
-                    baseStats={girl.stats}
-                    currentBlessing={activeBlessing}
-                    upcomingBlessing={nextBlessing}
-                  />
-                ) : null}
-              </p>
-            ) : null}
-            {girl.recruited ? (
-              <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>
-            ) : null}
-            <p>Zodiac: {Zodiac[girl.zodiac]}</p>
-            <p className="color">
-              Hair Color:{' '}
-              {girl.hairColor
-                .map((c) => HairColor[c])
-                .map<ReactNode>((color) => (
-                  <span key={color} className={color}>
-                    {color}
-                  </span>
-                ))
-                .reduce((a, b) => [a, ' & ', b])}
-            </p>
-            <p className="color">
-              Eye Color:{' '}
-              {girl.eyeColor
-                .map((c) => EyeColor[c])
-                .map<ReactNode>((color) => (
-                  <span key={color} className={color}>
-                    {color}
-                  </span>
-                ))
-                .reduce((a, b) => [a, ' & ', b])}
-            </p>
-            {girl.missingAff > 0 ? (
-              <p>
-                Missing Affection: {format(girl.missingAff)}{' '}
-                {/* <img
-                  src="https://hh2.hh-content.com/pictures/items/K1.png"
-                  style={{ height: '4ex' }}
-                /> */}
-              </p>
-            ) : null}
-            {girl.missingGXP > 0 ? (
-              <p>
-                Missing XP: {format(girl.missingGXP)}{' '}
-                {/* <img
-                  src="https://hh2.hh-content.com/pictures/items/XP1.png"
-                  style={{ height: '4ex' }}
-                /> */}
-              </p>
-            ) : null}
-            {girl.missingGems > 0 ? (
-              <p>
-                Missing Gems: {format(girl.missingGems)}{' '}
-                <GemIcon element={girl.element} />
-              </p>
-            ) : null}
+            </div>
             {girl.own ? (
-              <>
-                {/* 
-                  https://www.hentaiheroes.com/girl/${girl.id}?resource=experience 
-                  https://www.hentaiheroes.com/shop.html?type=potion&girl=${girl.id}
-                */}
-                <p>
-                  <a
-                    href={`${domain}/girl/${girl.id}?resource=experience`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Go to Girl's page
-                  </a>{' '}
-                  (GXP)
-                </p>
-                {/* 
-                  https://www.hentaiheroes.com/girl/${girl.id}?resource=affection
-                  https://www.hentaiheroes.com/shop.html?type=gift&girl=${girl.id}
-                */}
-                <p>
-                  <a
-                    href={`${domain}/girl/${girl.id}?resource=affection`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Go to Girl's page
-                  </a>{' '}
-                  (Aff)
-                </p>
-              </>
+              <div className="section-switch">
+                <span
+                  onClick={() => setShowLore(false)}
+                  className={showLore ? 'inactive' : 'active'}
+                >
+                  Stats
+                </span>
+                <span
+                  onClick={() => setShowLore(true)}
+                  className={showLore ? 'active' : 'inactive'}
+                >
+                  Description
+                </span>
+              </div>
             ) : null}
-            <p>
-              Sources:{' '}
-              {girl.sources.length === 0 ? 'unknown' : girl.sources.join(', ')}
-            </p>
-            {girl.own ? <LoreSection girl={girl} /> : null}
-            <p>
-              <a
-                href={`${domain}/harem/${girl.id}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Go to original Harem
-              </a>
-            </p>
+            <div className="details-content">
+              {showLore ? (
+                girl.own ? (
+                  <LoreSection girl={girl} />
+                ) : null
+              ) : (
+                <BlessingSection
+                  girl={girl}
+                  currentBlessing={activeBlessing}
+                  upcomingBlessing={nextBlessing}
+                  domain={domain}
+                />
+              )}
+              <p>
+                <a
+                  href={`${domain}/harem/${girl.id}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Go to original Harem
+                </a>
+              </p>
+            </div>
           </div>
         </>
       )}
+    </div>
+  );
+};
+
+export interface BlessingSectionProps {
+  domain: string;
+  girl: CommonGirlData;
+  currentBlessing: BlessingDefinition[];
+  upcomingBlessing: BlessingDefinition[];
+}
+
+export const BlessingSection: React.FC<BlessingSectionProps> = ({
+  domain,
+  girl,
+  currentBlessing,
+  upcomingBlessing
+}) => {
+  return (
+    <div className="details-section stats">
+      <p>Full Name: {girl.fullName}</p>
+      {girl.stats || girl.pose !== Pose.unknown ? (
+        <p className="pose-and-stats">
+          <PoseIcon pose={girl.pose} />
+          {girl.stats ? (
+            <StatsDetails
+              girl={girl}
+              baseStats={girl.stats}
+              currentBlessing={currentBlessing}
+              upcomingBlessing={upcomingBlessing}
+            />
+          ) : null}
+        </p>
+      ) : null}
+      {girl.recruited ? (
+        <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>
+      ) : null}
+      <p>Zodiac: {Zodiac[girl.zodiac]}</p>
+      <p className="color">
+        Hair Color:{' '}
+        {girl.hairColor
+          .map((c) => HairColor[c])
+          .map<ReactNode>((color) => (
+            <span key={color} className={color}>
+              {color}
+            </span>
+          ))
+          .reduce((a, b) => [a, ' & ', b])}
+      </p>
+      <p className="color">
+        Eye Color:{' '}
+        {girl.eyeColor
+          .map((c) => EyeColor[c])
+          .map<ReactNode>((color) => (
+            <span key={color} className={color}>
+              {color}
+            </span>
+          ))
+          .reduce((a, b) => [a, ' & ', b])}
+      </p>
+      {girl.missingAff > 0 ? (
+        <p>
+          Missing Affection: {format(girl.missingAff)}{' '}
+          {/* <img
+                  src="https://hh2.hh-content.com/pictures/items/K1.png"
+                  style={{ height: '4ex' }}
+                /> */}
+        </p>
+      ) : null}
+      {girl.missingGXP > 0 ? (
+        <p>
+          Missing XP: {format(girl.missingGXP)}{' '}
+          {/* <img
+                  src="https://hh2.hh-content.com/pictures/items/XP1.png"
+                  style={{ height: '4ex' }}
+                /> */}
+        </p>
+      ) : null}
+      {girl.missingGems > 0 ? (
+        <p>
+          Missing Gems: {format(girl.missingGems)}{' '}
+          <GemIcon element={girl.element} />
+        </p>
+      ) : null}
+      {girl.own ? (
+        <>
+          {/* 
+                  https://www.hentaiheroes.com/girl/${girl.id}?resource=experience 
+                  https://www.hentaiheroes.com/shop.html?type=potion&girl=${girl.id}
+                */}
+          <p>
+            <a
+              href={`${domain}/girl/${girl.id}?resource=experience`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Go to Girl's page
+            </a>{' '}
+            (GXP)
+          </p>
+          {/* 
+                  https://www.hentaiheroes.com/girl/${girl.id}?resource=affection
+                  https://www.hentaiheroes.com/shop.html?type=gift&girl=${girl.id}
+                */}
+          <p>
+            <a
+              href={`${domain}/girl/${girl.id}?resource=affection`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Go to Girl's page
+            </a>{' '}
+            (Aff)
+          </p>
+        </>
+      ) : null}
+      <p>
+        Sources:{' '}
+        {girl.sources.length === 0 ? 'unknown' : girl.sources.join(', ')}
+      </p>
     </div>
   );
 };
@@ -203,12 +254,7 @@ export interface LoreSectionProps {
 export const LoreSection: React.FC<LoreSectionProps> = ({ girl }) => {
   const stars = girl.stars;
   return (
-    <div className="lore">
-      <>
-        <p>
-          Salary: {format(girl.salary!)} ({formatTime(girl.salaryTime!)})
-        </p>
-      </>
+    <div className="details-section lore">
       {stars >= 1 ? (
         <>
           <p className="bio">{girl.bio}</p>
@@ -228,6 +274,11 @@ export const LoreSection: React.FC<LoreSectionProps> = ({ girl }) => {
           <p>Fetish: {girl.fetish}</p>
         </>
       ) : null}
+      <>
+        <p>
+          Salary: {format(girl.salary!)} ({formatTime(girl.salaryTime!)})
+        </p>
+      </>
     </div>
   );
 };
@@ -254,6 +305,11 @@ export const StatsDetails: React.FC<StatsProps> = ({
     [girl, baseStats, upcomingBlessing]
   );
 
+  const blessed =
+    matchesBlessings(girl, currentBlessing) ||
+    matchesBlessings(girl, upcomingBlessing);
+  console.log('Blessed: ', blessed);
+
   const potentialLevelMultiplier = 1 / (girl.level ?? 1);
   const potentialGradeMultiplier =
     (1 + 0.3 * girl.maxStars) / (1 + 0.3 * girl.stars);
@@ -264,6 +320,7 @@ export const StatsDetails: React.FC<StatsProps> = ({
     <>
       <StatsDescriptionTooltip
         baseStats={baseStats}
+        blessed={blessed}
         currentStats={currentStats}
         upcomingStats={upcomingStats}
         potentialMultiplier={potentialMultiplier}

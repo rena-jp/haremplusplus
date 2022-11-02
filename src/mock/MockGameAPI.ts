@@ -106,13 +106,13 @@ export class MockGameAPI implements GameAPI {
         () =>
           resolve({
             darkness: entry(1000),
-            fire: entry(1500),
+            fire: entry(49555),
             light: entry(15000),
             nature: entry(2750),
-            psychic: entry(9000),
+            psychic: entry(42),
             stone: entry(12500),
-            sun: entry(10000),
-            water: entry(Math.ceil(Math.random() * 10000))
+            sun: entry(9001),
+            water: entry(30000 + Math.ceil(Math.random() * 69999))
           }),
         100
       );

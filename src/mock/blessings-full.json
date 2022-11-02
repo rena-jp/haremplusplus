@@ -1,20 +1,6 @@
 {
   "active": [
     {
-      "title": "Semaine du Violet",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur des yeux Violet</span> obtiennent <span class=\"blessing-bonus\">+ 35%</span> de bonus sur tous les attributs.",
-      "start_ts": 1666609200,
-      "end_ts": 1667217599
-    },
-    {
-      "title": "Semaine du Cancer",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Signe astrologique Cancer</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
-      "start_ts": 1666609200,
-      "end_ts": 1667217599
-    }
-  ],
-  "upcoming": [
-    {
       "title": "Semaine du Taureau",
       "description": "Toutes les filles avec <span class=\"blessing-condition\">Signe astrologique Taureau</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
       "start_ts": 1667217600,
@@ -25,6 +11,20 @@
       "description": "Toutes les filles avec <span class=\"blessing-condition\">Position préférée Chaise Longue</span> obtiennent <span class=\"blessing-bonus\">+ 20%</span> de bonus sur tous les attributs.",
       "start_ts": 1667217600,
       "end_ts": 1667822399
+    }
+  ],
+  "upcoming": [
+    {
+      "title": "Semaine du Marron",
+      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Marron</span> obtiennent <span class=\"blessing-bonus\">+ 30%</span> de bonus sur tous les attributs.",
+      "start_ts": 1667822400,
+      "end_ts": 1668427199
+    },
+    {
+      "title": "Semaine du Commune",
+      "description": "Toutes les filles avec <span class=\"blessing-condition\">Rareté Commune</span> obtiennent <span class=\"blessing-bonus\">+ 20%</span> de bonus sur tous les attributs.",
+      "start_ts": 1667822400,
+      "end_ts": 1668427199
     }
   ],
   "success": true
