@@ -6,7 +6,6 @@ import {
   EyeColor,
   getBlessedStats,
   HairColor,
-  matchesBlessing,
   matchesBlessings,
   Pose,
   Quest,
