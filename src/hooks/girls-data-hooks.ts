@@ -70,7 +70,8 @@ function matchesSearch(girl: CommonGirlData, search: string): boolean {
     girl.name.toLowerCase().includes(lowerSearch) ||
     girl.name.toLowerCase().includes(replaceQuotes) ||
     girl.fullName.toLowerCase().includes(lowerSearch) ||
-    girl.fullName.toLowerCase().includes(replaceQuotes)
+    girl.fullName.toLowerCase().includes(replaceQuotes) ||
+    girl.id === search
     // || girl.bio.toLowerCase().includes(lowerSearch)
   );
 }
