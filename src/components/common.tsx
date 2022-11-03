@@ -381,7 +381,6 @@ export interface StatIconProps {
 }
 
 export const StatIcon: React.FC<StatIconProps> = ({ statClass, blessed }) => {
-  console.log('Blessed: ', blessed);
   return (
     <span
       className={`stat-icon class_${statClass}${

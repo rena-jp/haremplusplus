@@ -114,7 +114,7 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         </button>
       </div>
       <div className="quick-filters">
-        <p>
+        <p className="toggle0pose">
           <label
             htmlFor="0pose"
             title="Show the 0-star pose for each girl. Can be used for screenshots, to avoid spoilers"

@@ -1,3 +1,5 @@
+import { firstToUpper } from '../components/common';
+
 export enum Rarity {
   starting,
   common,
@@ -264,6 +266,16 @@ export namespace Blessings {
     return valueType[blessingValue];
   }
 
+  export function toDisplayString(
+    blessing: Blessing,
+    blessingValue: HairColor | Rarity | EyeColor | Zodiac | Pose | Element
+  ): string {
+    if (blessing === Blessing.Zodiac) {
+      return Zodiacs.toDisplayString(blessingValue as Zodiac);
+    }
+    return stringValue(blessing, blessingValue);
+  }
+
   export function getBlessingValue(
     girl: BaseGirlData,
     blessing: Blessing
@@ -344,6 +356,11 @@ export namespace Zodiacs {
     }
     console.error('Unknown Zodiac symbol: ', zodiacSymbol);
     return undefined;
+  }
+
+  export function toDisplayString(zodiac: Zodiac): string {
+    const name = Zodiac[zodiac];
+    return Symbols[zodiac] + ' ' + firstToUpper(name);
   }
 }
 

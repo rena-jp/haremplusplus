@@ -10,7 +10,7 @@ import {
   Pose,
   Quest,
   Stats,
-  Zodiac
+  Zodiacs
 } from '../data/data';
 import { RarityColorText } from './colors';
 import {
@@ -159,7 +159,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       {girl.recruited ? (
         <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>
       ) : null}
-      <p>Zodiac: {Zodiac[girl.zodiac]}</p>
+      <p>Zodiac: {Zodiacs.toDisplayString(girl.zodiac)}</p>
       <p className="color">
         Hair Color:{' '}
         {girl.hairColor
@@ -201,7 +201,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
         </p>
       ) : null}
       {girl.missingGems > 0 ? (
-        <p>
+        <p className="missing-gems">
           Missing Gems: {format(girl.missingGems)}{' '}
           <GemIcon element={girl.element} />
         </p>
@@ -220,7 +220,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             >
               Go to Girl's page
             </a>{' '}
-            (GXP)
+            (Books)
           </p>
           {/* 
                   https://www.hentaiheroes.com/girl/${girl.id}?resource=affection
@@ -234,7 +234,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             >
               Go to Girl's page
             </a>{' '}
-            (Aff)
+            (Gifts)
           </p>
         </>
       ) : null}
@@ -307,7 +307,6 @@ export const StatsDetails: React.FC<StatsProps> = ({
   const blessed =
     matchesBlessings(girl, currentBlessing) ||
     matchesBlessings(girl, upcomingBlessing);
-  console.log('Blessed: ', blessed);
 
   const potentialLevelMultiplier = 1 / (girl.level ?? 1);
   const potentialGradeMultiplier =

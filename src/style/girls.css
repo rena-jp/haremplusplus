@@ -105,6 +105,13 @@
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
 }
 
+.missing-gems {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5ch;
+}
+
 .qh_shards {
   position: absolute;
   top: 50%;
@@ -126,7 +133,6 @@
 }
 
 .qh_shards > img {
-  vertical-align: middle;
   width: 40px;
   height: 40px;
 }

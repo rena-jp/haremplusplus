@@ -6,6 +6,7 @@ import {
   Blessings,
   BlessingType,
   CommonGirlData,
+  Element,
   Elements,
   equalBlessing,
   EyeColor,
@@ -15,7 +16,7 @@ import {
   Rarity
 } from '../data/data';
 import '../style/harem.css';
-import { CloseButton, format, GemIcon } from './common';
+import { CloseButton, ElementIcon, format, GemIcon } from './common';
 import { QuickFilter } from './harem';
 import { PanelProps } from './panels';
 
@@ -345,14 +346,19 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
       ? `rarity ${blessingEnum[blessing.blessingValue]}`
       : '';
 
-  const blessingDescription = (
-    <span className="color">
-      {Blessings.toString(blessing.blessing)}{' '}
-      <span className={colorName}>
-        {Blessings.stringValue(blessing.blessing, blessing.blessingValue)}
+  const blessingDescription =
+    blessing.blessing === Blessing.Element ? (
+      <span className="element-blessing">
+        <ElementIcon element={blessing.blessingValue as Element} />
       </span>
-    </span>
-  );
+    ) : (
+      <span className="color">
+        {Blessings.toString(blessing.blessing)}{' '}
+        <span className={colorName}>
+          {Blessings.toDisplayString(blessing.blessing, blessing.blessingValue)}
+        </span>
+      </span>
+    );
   const styles: string[] = [];
 
   const rarity = blessing.blessing === Blessing.Rarity;
@@ -378,15 +384,16 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
   }
 
   styles.push('toggle-filter');
+  styles.push(Blessing[blessing.blessing]);
   if (filters.find((f) => equalBlessing(f.blessing, blessing)) !== undefined) {
     styles.push('filter-enabled');
   }
 
   const blessingCount = (
-    <>
+    <span>
       <span className="owned">{owned}</span>/
       <span className="total">{total}</span>
-    </>
+    </span>
   );
   return (
     <p className={styles.join(' ')} onClick={() => toggleFilter([blessing])}>

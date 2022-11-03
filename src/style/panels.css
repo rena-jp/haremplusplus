@@ -157,3 +157,23 @@
 .sort-list > * {
   min-width: 30%;
 }
+
+.toggle-filter.Element {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5ch;
+}
+
+.element-blessing {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 0.5ch;
+}
+
+.element-blessing > .element {
+  display: inline;
+}
