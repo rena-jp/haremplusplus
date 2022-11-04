@@ -203,11 +203,13 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       </div>
       <div className="girlDescription">
         <GirlDescription
+          allGirls={allGirls}
           girl={selectedGirl}
           activeBlessing={currentBlessings}
           nextBlessing={upcomingBlessings}
           show0Pose={show0Pose}
           gameAPI={gameAPI}
+          selectGirl={selectGirl}
         />
       </div>
     </div>

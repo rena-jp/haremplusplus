@@ -22,13 +22,16 @@ import {
   StatsDescriptionTooltip,
   Tooltip
 } from './common';
+import { SimpleGirlTile } from './girl';
 
 export interface GirlDescriptionProps {
+  allGirls: CommonGirlData[];
   girl?: CommonGirlData;
   activeBlessing: BlessingDefinition[];
   nextBlessing: BlessingDefinition[];
   show0Pose: boolean;
   gameAPI: GameAPI;
+  selectGirl(girl: CommonGirlData): void;
 }
 
 export const GirlDescription: React.FC<GirlDescriptionProps> = ({
@@ -36,7 +39,9 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   activeBlessing,
   nextBlessing,
   show0Pose,
-  gameAPI
+  gameAPI,
+  allGirls,
+  selectGirl
 }) => {
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
 
@@ -98,16 +103,23 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               </div>
             ) : null}
             <div className="details-content">
-              {showLore ? (
-                girl.own ? (
-                  <LoreSection girl={girl} />
-                ) : null
+              {showLore && girl.own ? (
+                <LoreSection girl={girl} />
               ) : (
                 <BlessingSection
                   girl={girl}
                   currentBlessing={activeBlessing}
                   upcomingBlessing={nextBlessing}
                   domain={domain}
+                />
+              )}
+              {girl.variations && girl.variations.length > 1 && (
+                <VariationsList
+                  allGirls={allGirls}
+                  variations={girl.variations}
+                  selectGirl={selectGirl}
+                  selectedGirl={girl}
+                  show0Pose={show0Pose}
                 />
               )}
               <p>
@@ -420,5 +432,65 @@ const QuestStep: React.FC<QuestStepProps> = ({ quest, domain, girlId }) => {
     <a href={`${domain}/${link}`} target="_blank" rel="noreferrer">
       {img}
     </a>
+  );
+};
+
+export interface VariationsListProps {
+  allGirls: CommonGirlData[];
+  variations: string[];
+  selectGirl(girl: CommonGirlData): void;
+  selectedGirl: CommonGirlData;
+  show0Pose: boolean;
+}
+
+export const VariationsList: React.FC<VariationsListProps> = ({
+  allGirls,
+  variations,
+  selectedGirl,
+  selectGirl,
+  show0Pose
+}) => {
+  return (
+    <div className="variations-list">
+      {variations.map((variantId) => {
+        const girl = allGirls.find((girl) => girl.id === variantId);
+        if (!girl) {
+          return null;
+        }
+        return (
+          <VariationTile
+            key={girl.id}
+            girl={girl}
+            selectGirl={selectGirl}
+            selected={selectedGirl.id === girl.id}
+            show0Pose={show0Pose}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+export interface VariationTileProps {
+  girl: CommonGirlData;
+  selectGirl(girl: CommonGirlData): void;
+  selected: boolean;
+  show0Pose: boolean;
+}
+
+export const VariationTile: React.FC<VariationTileProps> = ({
+  girl,
+  selectGirl,
+  selected,
+  show0Pose
+}) => {
+  const onClick = useCallback(() => selectGirl(girl), [girl]);
+  return (
+    <SimpleGirlTile
+      girl={girl}
+      onClick={onClick}
+      show0Pose={show0Pose}
+      selected={selected}
+    />
   );
 };

@@ -1,22 +1,74 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
 import { ElementIcon, Grade, SalaryIcon, UpgradeIcon } from './common';
 
-export interface GirlProps {
+export interface GirlTileProps {
   girl: CommonGirlData;
   selected: boolean;
-  selectGirl: (girl: CommonGirlData) => void;
   show0Pose: boolean;
+}
+
+export interface SimpleGirlTileProps extends GirlTileProps {
+  onClick: () => void;
+  children?: ReactNode;
+  classNames?: string[];
+}
+
+export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
+  girl,
+  selected,
+  show0Pose,
+  onClick,
+  children,
+  classNames
+}) => {
+  const rarityCss = Rarity[girl.rarity];
+
+  const allClassNames = ['girlTile', rarityCss];
+  if (classNames) {
+    allClassNames.push(...classNames);
+  }
+  if (selected) {
+    allClassNames.push('selected');
+  }
+  allClassNames.push(girl.own ? 'owned' : 'not-owned');
+
+  const icon = show0Pose ? girl.icon0 : girl.icon;
+
+  return (
+    <div
+      className={allClassNames.join(' ')}
+      onClick={onClick}
+      title={girl.name}
+    >
+      <div className="avatar-area">
+        {children}
+        <div className="avatar">
+          <img src={icon} alt={girl.name} title={girl.name} />
+        </div>
+        <ElementIcon element={girl.element} />
+      </div>
+      <Grade
+        stars={girl.stars}
+        maxStars={girl.maxStars}
+        currentStar={girl.currentIcon}
+      />
+    </div>
+  );
+};
+
+export interface HaremGirlTileProps extends GirlTileProps {
   collectSalary: (girl: CommonGirlData) => void;
   /**
    * Timestamp of next salary, in ms
    */
   payAt: number | undefined;
+  selectGirl(girl: CommonGirlData): void;
 }
 
-const SimpleGirlTile: React.FC<GirlProps> = ({
+export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   girl,
   selected,
   selectGirl,
@@ -25,9 +77,6 @@ const SimpleGirlTile: React.FC<GirlProps> = ({
   payAt
 }) => {
   const selectOnClick = useCallback(() => selectGirl(girl), [selectGirl, girl]);
-  const selectedCss = selected ? 'selected' : '';
-  const ownCss = girl.own ? 'owned' : 'not-owned';
-  const rarityCss = Rarity[girl.rarity];
 
   const [salaryReady, setSalaryReady] = useState(
     payAt !== undefined && payAt <= Date.now()
@@ -46,9 +95,7 @@ const SimpleGirlTile: React.FC<GirlProps> = ({
     }
   }, [salaryReady, payAt]);
 
-  const classNames = `${selectedCss} girlTile ${ownCss} ${rarityCss} ${
-    salaryReady ? 'salary' : ''
-  }`;
+  const classNames = salaryReady ? ['salary'] : [];
   const displayedLevel =
     girl.level === undefined ? (
       <>&nbsp;</>
@@ -64,8 +111,6 @@ const SimpleGirlTile: React.FC<GirlProps> = ({
       </>
     );
 
-  const icon = show0Pose ? girl.icon0 : girl.icon;
-
   const onClick = useCallback(() => {
     selectOnClick();
     if (salaryReady && collectSalary !== undefined) {
@@ -75,25 +120,20 @@ const SimpleGirlTile: React.FC<GirlProps> = ({
   }, [collectSalary, selectOnClick, girl, salaryReady]);
 
   return (
-    <div className={classNames} onClick={onClick} title={girl.name}>
+    <SimpleGirlTile
+      girl={girl}
+      onClick={onClick}
+      selected={selected}
+      show0Pose={show0Pose}
+      classNames={classNames}
+    >
       {girl.own ? <span className="girl-header">{displayedLevel}</span> : null}
-      <div className="avatar-area">
-        <div className="avatar">
-          <img src={icon} alt={girl.name} title={girl.name} />
-        </div>
-        <ElementIcon element={girl.element} />
-        <SalaryIcon />
-        {girl.upgradeReady ? <UpgradeIcon /> : null}
-        {girl.own || girl.shards === 0 ? null : (
-          <span className="qh_shards">{girl.shards}/100</span>
-        )}
-      </div>
-      <Grade
-        stars={girl.stars}
-        maxStars={girl.maxStars}
-        currentStar={girl.currentIcon}
-      />
-    </div>
+      <SalaryIcon />
+      {girl.upgradeReady ? <UpgradeIcon /> : null}
+      {girl.own || girl.shards === 0 ? null : (
+        <span className="qh_shards">{girl.shards}/100</span>
+      )}
+    </SimpleGirlTile>
   );
 };
 
@@ -102,4 +142,4 @@ const SimpleGirlTile: React.FC<GirlProps> = ({
  * to avoid needless and expensive re-renders. The only variables in a typical
  * use case are selection and salary.
  */
-export const GirlTile = React.memo(SimpleGirlTile);
+export const GirlTile = React.memo(HaremGirlTile);

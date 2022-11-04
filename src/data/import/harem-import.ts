@@ -102,6 +102,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       fullName: girlData.ref.full_name,
       bio: girlData.ref.desc,
       sources: getSources(girlData),
+      variations: girlData.ref.variations,
       // Lore
       location: girlData.ref.location,
       career: girlData.ref.career,

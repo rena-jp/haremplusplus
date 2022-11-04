@@ -76,7 +76,6 @@ export interface BaseGirlData {
   currentIcon: number;
   missingGems: number;
   fullName: string;
-  bio: string;
   sources: EventSource[];
   quests: Quest[];
   /** Timestamp */
@@ -89,9 +88,14 @@ export interface BaseGirlData {
    * Salary value. Only for owned girls.
    */
   salary?: number;
+  /**
+   * Variations of this character. Ids.
+   */
+  variations?: string[];
 
   // Lore
 
+  bio: string;
   location: string;
   career: string;
   favoriteFood: string;
