@@ -120,6 +120,8 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
     allGirls.push(commonGirl);
   });
 
+  console.log(allGirls);
+
   return {
     allGirls: allGirls,
     activeBlessing: currentBlessings,
