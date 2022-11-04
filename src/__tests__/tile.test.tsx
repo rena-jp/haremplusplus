@@ -16,6 +16,7 @@ describe('Girl Tiles', () => {
         }}
         selected={false}
         show0Pose={false}
+        lazy={false}
       />
     );
     const tile = container.firstChild;
@@ -43,6 +44,7 @@ describe('Girl Tiles', () => {
         }}
         selected={false}
         show0Pose={false}
+        lazy={false}
       />
     );
     const tile = container.firstChild;
@@ -63,6 +65,7 @@ describe('Girl Tiles', () => {
         }}
         selected={false}
         show0Pose={true}
+        lazy={false}
       />
     );
     // image is visible
@@ -88,6 +91,7 @@ describe('Girl Tiles', () => {
         payAt={Date.now() + 60000}
         selected={false}
         show0Pose={false}
+        lazy={false}
       />
     );
     // image is visible
@@ -111,6 +115,7 @@ describe('Girl Tiles', () => {
         payAt={Date.now() + 60000}
         selected={false}
         show0Pose={false}
+        lazy={false}
       />
     );
     expect(screen.getByAltText('Ankyo de Noël')).toBeVisible();
@@ -135,6 +140,7 @@ describe('Girl Tiles', () => {
         payAt={0}
         selected={false}
         show0Pose={false}
+        lazy={false}
       />
     );
     const image = screen.getByAltText('Kimie Halloween') as HTMLImageElement;
@@ -157,6 +163,7 @@ describe('Girl Tiles', () => {
         }}
         selected={true}
         show0Pose={false}
+        lazy={false}
       />
     );
     const tile = container.firstChild;

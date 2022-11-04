@@ -1,3 +1,47 @@
+/** Main popup layout */
+
+.qh-harem {
+  height: 100%;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr 1fr;
+  column-gap: 5px;
+}
+
+.qh-harem > * {
+  min-height: 0;
+  min-width: 0;
+
+  /** Global left, right and bottom margins */
+  margin-bottom: 10px;
+  padding: 0px 8px 0px 8px;
+}
+
+.qh-harem > .harem-toolbar {
+  grid-column: 1 / 4;
+  grid-row: 1;
+
+  /** Top, left and right margin */
+  padding: 10px 8px 0px 8px;
+}
+
+.qh-harem > .girlsList {
+  grid-column: 1;
+  grid-row: 2;
+}
+
+.qh-harem > .pose {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.qh-harem > .details {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+/** Summary */
+
 .gems-summary {
   display: flex;
   flex-direction: row;
@@ -21,14 +65,12 @@
 /** Toolbar */
 
 .harem-toolbar {
-  /* border: 1px solid red; */
   display: flex;
   flex-direction: row;
   justify-items: center;
   align-items: center;
   align-content: center;
   margin-bottom: 8px;
-  padding: 8px 25px;
   flex-wrap: wrap;
   column-gap: 15px;
 }
@@ -71,8 +113,8 @@
 }
 
 .harem-toolbar > .owned-gems-summary > .gems-count > .elementIcon {
-  width: 45px;
-  height: 45px;
+  width: 2em;
+  height: 2em;
 }
 
 .scenes-browser {
@@ -84,7 +126,9 @@
 
 .scenes-browser img {
   /** Normalize width. Icons have a different top/bottom border and would look inconsistent with a height attribute */
-  width: 50px;
+  width: 2.5em;
+  /** Avoid interference with vertical align rule from the main game CSS */
+  vertical-align: middle;
 }
 
 .harem-toolbar > .refresh {
@@ -109,4 +153,88 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.missing-gems {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5ch;
+}
+
+.girlsList {
+  overflow: auto;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.girlsList > .owned {
+  margin-bottom: 15px;
+}
+
+.girlsList > div {
+  display: flex;
+  column-gap: 5px;
+  row-gap: 5px;
+  flex-wrap: wrap;
+}
+
+.pose {
+  display: flex;
+  flex-direction: column;
+  justify-content: baseline;
+  align-items: center;
+  padding-bottom: 3%;
+}
+
+.pose > img {
+  /** Auto size the image in the available space. */
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+.pose-switcher {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5ch;
+  margin-top: 3%;
+}
+
+.pose-switcher > .pose-selector {
+  border: 3px solid white;
+  background-color: #1f2958;
+  width: 1.5em;
+  height: 1.5em;
+  transform: rotate(45deg);
+}
+
+.pose-switcher > .pose-selector.solid {
+  cursor: pointer;
+}
+
+.pose-switcher > .pose-selector.solid.current {
+  background: radial-gradient(yellow, darkorange);
+  box-shadow: 0px 0px 7px darkorange;
+  cursor: initial;
+}
+
+.pose-switcher > .pose-selector.empty {
+  background-color: grey;
+}
+
+/*
+*   Description/Stats/Details Area 
+*/
+
+.details {
+  display: flex;
+  flex-direction: column;
+}
+
+.bio {
+  text-align: justify;
+}
+
+.blessed {
+  color: green;
 }

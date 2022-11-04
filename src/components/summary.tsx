@@ -396,8 +396,8 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
     </span>
   );
   return (
-    <p className={styles.join(' ')} onClick={() => toggleFilter([blessing])}>
+    <div className={styles.join(' ')} onClick={() => toggleFilter([blessing])}>
       {blessingDescription} : {blessingCount}
-    </p>
+    </div>
   );
 };

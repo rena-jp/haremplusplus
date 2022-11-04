@@ -165,7 +165,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   }, [allGirls]);
 
   return (
-    <div className="harem">
+    <>
       <div className="girlsList">
         <div className="owned">
           {ownedGirls.map((girl) => {
@@ -201,17 +201,15 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           ))}
         </div>
       </div>
-      <div className="girlDescription">
-        <GirlDescription
-          allGirls={allGirls}
-          girl={selectedGirl}
-          activeBlessing={currentBlessings}
-          nextBlessing={upcomingBlessings}
-          show0Pose={show0Pose}
-          gameAPI={gameAPI}
-          selectGirl={selectGirl}
-        />
-      </div>
-    </div>
+      <GirlDescription
+        allGirls={allGirls}
+        girl={selectedGirl}
+        activeBlessing={currentBlessings}
+        nextBlessing={upcomingBlessings}
+        show0Pose={show0Pose}
+        gameAPI={gameAPI}
+        selectGirl={selectGirl}
+      />
+    </>
   );
 };

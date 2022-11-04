@@ -60,10 +60,23 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
     [gameAPI, girl]
   );
 
-  const [showLore, setShowLore] = useState(false);
+  const [activeTab, setActiveTab] = useState<'stats' | 'lore' | 'variations'>(
+    'stats'
+  );
+
+  const visibleTab =
+    girl === undefined
+      ? 'none'
+      : activeTab === 'lore' && girl.own
+      ? 'lore'
+      : activeTab === 'variations' &&
+        girl.variations &&
+        girl.variations.length > 1
+      ? 'variations'
+      : 'stats';
 
   return (
-    <div className="qh_description">
+    <>
       {girl === undefined ? (
         <p>Select a girl to see description</p>
       ) : (
@@ -83,43 +96,53 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               <ScenesBrowser
                 girlId={girl.id}
                 quests={girl.quests}
+                stars={girl.maxStars}
                 domain={domain}
               />
             </div>
-            {girl.own ? (
-              <div className="section-switch">
+            <div className="section-switch">
+              <span
+                onClick={() => setActiveTab('stats')}
+                className={visibleTab === 'stats' ? 'active' : 'inactive'}
+              >
+                Stats
+              </span>
+              {girl.own && (
                 <span
-                  onClick={() => setShowLore(false)}
-                  className={showLore ? 'inactive' : 'active'}
-                >
-                  Stats
-                </span>
-                <span
-                  onClick={() => setShowLore(true)}
-                  className={showLore ? 'active' : 'inactive'}
+                  onClick={() => setActiveTab('lore')}
+                  className={visibleTab === 'lore' ? 'active' : 'inactive'}
                 >
                   Description
                 </span>
-              </div>
-            ) : null}
+              )}
+              {girl.variations && girl.variations.length > 1 && (
+                <span
+                  onClick={() => setActiveTab('variations')}
+                  className={
+                    visibleTab === 'variations' ? 'active' : 'inactive'
+                  }
+                >
+                  Variations
+                </span>
+              )}
+            </div>
             <div className="details-content">
-              {showLore && girl.own ? (
+              {visibleTab === 'lore' ? (
                 <LoreSection girl={girl} />
+              ) : visibleTab === 'variations' ? (
+                <VariationsList
+                  allGirls={allGirls}
+                  variations={girl.variations!}
+                  selectGirl={selectGirl}
+                  selectedGirl={girl}
+                  show0Pose={show0Pose}
+                />
               ) : (
                 <BlessingSection
                   girl={girl}
                   currentBlessing={activeBlessing}
                   upcomingBlessing={nextBlessing}
                   domain={domain}
-                />
-              )}
-              {girl.variations && girl.variations.length > 1 && (
-                <VariationsList
-                  allGirls={allGirls}
-                  variations={girl.variations}
-                  selectGirl={selectGirl}
-                  selectedGirl={girl}
-                  show0Pose={show0Pose}
                 />
               )}
               <p>
@@ -135,7 +158,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
           </div>
         </>
       )}
-    </div>
+    </>
   );
 };
 
@@ -390,49 +413,58 @@ interface ScenesBrowserProps {
   girlId: string;
   quests: Quest[];
   domain: string;
+  stars: number;
 }
 
 const ScenesBrowser: React.FC<ScenesBrowserProps> = ({
   quests,
   domain,
-  girlId
+  girlId,
+  stars
 }) => {
-  return quests ? (
+  const displayQuests: (Quest | undefined)[] =
+    quests.length < stars ? Array(stars).fill(undefined) : quests;
+
+  return (
     <span className="scenes-browser">
-      {quests.map((quest) => (
+      {displayQuests.map((quest, index) => (
         <QuestStep
           quest={quest}
           domain={domain}
           girlId={girlId}
-          key={quest.idQuest}
+          key={quest?.idQuest ?? index}
         />
       ))}
     </span>
-  ) : null;
+  );
 };
 
 interface QuestStepProps {
   girlId: string;
-  quest: Quest;
+  quest?: Quest;
   domain: string;
 }
 
 const QuestStep: React.FC<QuestStepProps> = ({ quest, domain, girlId }) => {
-  const imgSrc = quest.ready
-    ? 'https://hh2.hh-content.com/design_v2/affstar_upgrade.png'
-    : quest.done
-    ? 'https://hh2.hh-content.com/design_v2/affstar.png'
-    : 'https://hh2.hh-content.com/design_v2/affstar_empty.png';
-  const img = <img src={imgSrc} />;
-  const link =
-    quest.done || quest.ready
-      ? `quest/${quest.idQuest}`
-      : `girl/${girlId}?resource=affection`;
-  return (
-    <a href={`${domain}/${link}`} target="_blank" rel="noreferrer">
-      {img}
-    </a>
-  );
+  if (quest) {
+    const imgSrc = quest.ready
+      ? 'https://hh2.hh-content.com/design_v2/affstar_upgrade.png'
+      : quest.done
+      ? 'https://hh2.hh-content.com/design_v2/affstar.png'
+      : 'https://hh2.hh-content.com/design_v2/affstar_empty.png';
+    const img = <img src={imgSrc} />;
+    const link =
+      quest.done || quest.ready
+        ? `quest/${quest.idQuest}`
+        : `girl/${girlId}?resource=affection`;
+    return (
+      <a href={`${domain}/${link}`} target="_blank" rel="noreferrer">
+        {img}
+      </a>
+    );
+  } else {
+    return <img src="https://hh2.hh-content.com/design_v2/affstar_empty.png" />;
+  }
 };
 
 export interface VariationsListProps {

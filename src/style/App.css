@@ -5,8 +5,34 @@ body.qh-local {
 
 .App {
   text-align: center;
-  font-size: 16pt;
   color: white;
+}
+
+/** 1280px and smaller */
+@media screen and (max-width: 1280px) {
+  .App {
+    font-size: 0.8em;
+  }
+}
+
+/** 1281 to 1920 */
+@media screen and (min-width: 1281) and (max-width: 1920px) {
+  .App {
+    font-size: 1em;
+  }
+}
+
+/** 1921 to 2560 */
+@media screen and (min-width: 1921px) {
+  .App {
+    font-size: 1.35em;
+  }
+}
+
+@media screen and (min-width: 2561px) {
+  .App {
+    font-size: 1.5em;
+  }
 }
 
 .app-title {
@@ -35,37 +61,13 @@ body.qh-local {
   color: #61dafb;
 }
 
-.harem {
-  display: flex;
-  padding: 0px 0px 30px 15px;
-  /* overflow: auto; */
-}
-
 .data-input {
   width: 60%;
   height: 200px;
 }
 
-.girlsList {
-  width: 35%;
-  padding-left: 8px;
-  padding-right: 8px;
-  /* overflow: auto; */
-}
-
-.girlsList > .owned {
-  margin-bottom: 15px;
-}
-
-.girlsList > div {
-  flex: 1;
-  display: flex;
-  flex-flow: row wrap;
-  row-gap: 8px;
-  column-gap: 5px;
-}
-
 .blessings-summary {
+  text-align: left;
   display: flex;
   flex-flow: row wrap;
   row-gap: 5px;
@@ -80,12 +82,6 @@ body.qh-local {
   flex-flow: column;
   row-gap: 5px;
   padding: 15px;
-}
-
-.blessings-summary > div > p {
-  padding: 0px;
-  margin: 0px;
-  text-align: left;
 }
 
 .missing-girls-blessing > .owned {
@@ -108,28 +104,6 @@ body.qh-local {
 .rare-blessing > .total {
   color: #c93e3e;
   font-weight: bold;
-}
-
-.girlDescription {
-  margin-right: 20px;
-  width: 65%;
-  height: 100%;
-}
-
-.qh_description {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  /* overflow: visible; */
-}
-
-.qh_description > .pose {
-  width: 40%;
-  flex: 1;
-}
-
-.qh_description > .pose > img {
-  max-height: 95%;
 }
 
 .details-content > p,
@@ -187,6 +161,7 @@ body.qh-local {
 
 .details-header {
   margin-bottom: 8px;
+  height: 3em;
 }
 
 .details-content {
@@ -235,7 +210,6 @@ li.nok {
 
 .App input,
 .App button {
-  font-size: 14pt;
   padding: 5px;
 }
 

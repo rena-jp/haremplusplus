@@ -17,8 +17,9 @@
 
 .App.game-extension {
   width: 95%;
-  height: 85%;
-  margin: 5.5% auto auto auto;
+  height: calc(100% - 8em);
+  /** Leave space on top to view energy and stuff. */
+  margin: 5em auto 3em auto;
   background-color: rgb(69, 33, 41);
   padding: 0px;
   border-radius: 20px;
@@ -29,13 +30,6 @@
   flex-direction: column;
 }
 
-.harem {
-  height: 88%;
-}
-.girlsList {
-  overflow: auto;
-}
-
 .App.game-extension.hidden {
   visibility: hidden;
 }
@@ -43,4 +37,5 @@
 .game-extension * {
   /** Override the general style rule from the game, that uses a global bottom v-align */
   vertical-align: initial;
+  box-sizing: initial;
 }

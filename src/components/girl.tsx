@@ -1,4 +1,5 @@
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import LazyLoad from 'react-lazyload';
 import { CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
@@ -8,11 +9,13 @@ export interface GirlTileProps {
   girl: CommonGirlData;
   selected: boolean;
   show0Pose: boolean;
+  lazy?: boolean;
 }
 
 export interface SimpleGirlTileProps extends GirlTileProps {
   onClick: () => void;
   children?: ReactNode;
+  avatarOverlay?: ReactNode;
   classNames?: string[];
 }
 
@@ -22,7 +25,9 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   show0Pose,
   onClick,
   children,
-  classNames
+  avatarOverlay,
+  classNames,
+  lazy
 }) => {
   const rarityCss = Rarity[girl.rarity];
 
@@ -37,18 +42,42 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
 
   const icon = show0Pose ? girl.icon0 : girl.icon;
 
+  /**
+   * Use a 1x1 transparent image as placeholder. This will force proper image layout during image loading,
+   * as well as avoid rendering an alt-text while the image is loading (alt text may still appear for invalid
+   * images))
+   */
+  const placeholder =
+    'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+
   return (
     <div
       className={allClassNames.join(' ')}
       onClick={onClick}
       title={girl.name}
     >
+      {children}
       <div className="avatar-area">
-        {children}
-        <div className="avatar">
-          <img src={icon} alt={girl.name} title={girl.name} />
-        </div>
+        <WrappedImage
+          placeholder={
+            <img
+              src={placeholder}
+              alt={girl.name}
+              title={girl.name}
+              className="tile-avatar placeholder"
+            />
+          }
+          lazy={lazy !== false} /* True by default */
+        >
+          <img
+            src={icon}
+            alt={girl.name}
+            title={girl.name}
+            className="tile-avatar"
+          />
+        </WrappedImage>
         <ElementIcon element={girl.element} />
+        {avatarOverlay}
       </div>
       <Grade
         stars={girl.stars}
@@ -57,6 +86,28 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
       />
     </div>
   );
+};
+
+interface WrappedImageProps {
+  lazy: boolean;
+  children: ReactNode;
+  placeholder: ReactNode;
+}
+
+const WrappedImage: React.FC<WrappedImageProps> = ({
+  lazy,
+  children,
+  placeholder
+}) => {
+  if (lazy) {
+    return (
+      <LazyLoad placeholder={placeholder} overflow={true} offset={500}>
+        {children}
+      </LazyLoad>
+    );
+  } else {
+    return <div className="lazyload-wrapper">{children}</div>;
+  }
 };
 
 export interface HaremGirlTileProps extends GirlTileProps {
@@ -74,7 +125,8 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   selectGirl,
   show0Pose,
   collectSalary,
-  payAt
+  payAt,
+  lazy
 }) => {
   const selectOnClick = useCallback(() => selectGirl(girl), [selectGirl, girl]);
 
@@ -126,13 +178,18 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       selected={selected}
       show0Pose={show0Pose}
       classNames={classNames}
+      avatarOverlay={
+        <>
+          <SalaryIcon />
+          {girl.own || girl.shards === 0 ? null : (
+            <span className="qh_shards">{girl.shards}/100</span>
+          )}
+        </>
+      }
+      lazy={lazy}
     >
       {girl.own ? <span className="girl-header">{displayedLevel}</span> : null}
-      <SalaryIcon />
       {girl.upgradeReady ? <UpgradeIcon /> : null}
-      {girl.own || girl.shards === 0 ? null : (
-        <span className="qh_shards">{girl.shards}/100</span>
-      )}
     </SimpleGirlTile>
   );
 };

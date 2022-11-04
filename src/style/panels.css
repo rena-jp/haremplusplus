@@ -50,21 +50,6 @@
   margin-bottom: 40px;
 }
 
-.summary > .action {
-  position: absolute;
-  bottom: 5px;
-  font-size: 0.8em;
-  height: 25px;
-  margin: auto;
-  text-align: center;
-}
-
-.summary Button {
-  font-size: 1.15em;
-  padding: 6px;
-  border-radius: 10px;
-}
-
 .game-extension.hidden > .qh-panel {
   /* 
   * Ensure we don't override visibility behavior from the parent

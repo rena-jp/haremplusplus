@@ -1,0 +1,11 @@
+.test-container {
+  margin-top: 50px;
+  padding: 50px;
+  border: 1px solid red;
+  border-radius: 15px;
+  overflow: auto;
+}
+
+#quick-harem-wrapper > .test-container {
+  pointer-events: initial; /* The parent makes use ignore mouse-events. We need to explicitly handle them here */
+}

@@ -1,59 +1,85 @@
 .girlTile {
-  font-size: 16pt;
-  display: flex;
-  flex-direction: column;
   position: relative;
   user-select: none;
+  display: inline-block;
+  text-align: center;
+
+  /*
+   * Variable properties
+   */
+  --border-width: 3px;
+  --image-size: 125px;
 }
 
-.girlTile > .girl-header {
-  padding-top: 5px;
+/** 720px to 1280px */
+@media only screen and (min-width: 720px) {
+  .girlTile {
+    --border-width: 1px;
+    --image-size: 75px;
+  }
+}
+
+/** 1281 to 1920 */
+@media only screen and (min-width: 1281px) {
+  .girlTile {
+    --border-width: 2px;
+    --image-size: 100px;
+  }
+}
+
+/** 1921 to 2560 */
+@media only screen and (min-width: 1921px) {
+  .girlTile {
+    --border-width: 3px;
+    --image-size: 120px;
+  }
+}
+
+/** 2561 to >>> */
+@media only screen and (min-width: 2561px) {
+  .girlTile {
+    --border-width: 4px;
+    --image-size: 145px;
+  }
+}
+
+.girlTile > .avatar-area > .lazyload-wrapper > .tile-avatar {
+  /** Avoid interference with vertical align rule from the main game CSS */
+  vertical-align: middle;
 }
 
 .girlTile > .avatar-area {
   position: relative;
+  padding: 5px 10px 0px 10px;
 }
 
-.girlTile > .avatar-area > .avatar {
-  margin-top: auto;
-  padding: 5px 10px 5px 10px;
-}
-
-.avatar > img {
-  width: 100px;
-  height: 100px;
-  border: 3px solid white;
+.tile-avatar {
+  border: var(--border-width) solid white;
+  width: var(--image-size);
+  height: var(--image-size);
   border-radius: 8px;
+  overflow: hidden; /* If the alt text is too long, just truncate it */
   display: block;
 }
 
-.grade {
+.girlTile > .grade {
+  margin-top: 15%; /* Offset the element icon */
+  margin-bottom: 3%;
+  height: 1em;
+  width: 100%;
   display: flex;
   flex-direction: row;
-}
-
-.girlTile > .grade {
+  flex-wrap: nowrap;
+  align-items: stretch;
   justify-content: center;
-  padding-top: 20px; /** Offset the element icon */
 }
 
-.details > .grade {
-  justify-content: left;
-}
-
-.girlTile > .grade {
-  margin-top: -8px;
-  margin-bottom: 3px;
-}
-
-.star {
-  width: 22px;
-  height: 22px;
-  background-size: cover;
+.grade > .star {
+  width: 16%;
+  margin-left: -1.8%;
+  margin-right: -1.8%;
+  background-size: contain;
   background-repeat: no-repeat;
-  margin-left: -3px;
-  margin-right: -3px;
-  display: inline-block;
 }
 .star.empty {
   background-image: url(https://hh.hh-content.com/design_v2/affstar_empty_S.png);
@@ -67,49 +93,12 @@
 
 .avatar-area > .element {
   position: absolute;
-  bottom: -14px;
   left: 50%;
-  transform: translate(-50%, 0);
-}
+  bottom: 0;
+  transform: translate(-50%, 50%);
 
-.element {
-  width: 40px;
-  height: 40px;
-  background-repeat: no-repeat;
-  background-size: cover;
-  display: block;
-}
-
-.element.dark {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Dominatrix.png');
-}
-.element.white {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Submissive.png');
-}
-.element.purple {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Voyeurs.png');
-}
-.element.red {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Eccentric.png');
-}
-.element.blue {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Sensual.png');
-}
-.element.green {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Exhibitionist.png');
-}
-.element.orange {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Physical.png');
-}
-.element.yellow {
-  background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
-}
-
-.missing-gems {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5ch;
+  width: 30%;
+  height: 30%;
 }
 
 .qh_shards {
@@ -137,28 +126,28 @@
   height: 40px;
 }
 
-.girlTile.starting > .avatar-area > .avatar > img,
-.girlTile.common > .avatar-area > .avatar > img {
+.girlTile.starting > .avatar-area > .lazyload-wrapper > .tile-avatar,
+.girlTile.common > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #8d8e9f;
   /* border-color: lightgrey; */
 }
 
-.girlTile.rare > .avatar-area > .avatar > img {
+.girlTile.rare > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #23b56b;
   /* border-color: greenyellow; */
 }
 
-.girlTile.epic > .avatar-area > .avatar > img {
+.girlTile.epic > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #ffb244;
   /* border-color: gold; */
 }
 
-.girlTile.legendary > .avatar-area > .avatar > img {
+.girlTile.legendary > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #8e36a9;
   /* border-color: fuchsia; */
 }
 
-.girlTile.mythic > .avatar-area > .avatar > img {
+.girlTile.mythic > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #ec0039;
   /* border-color: tomato; */
 }
@@ -173,20 +162,24 @@
   left: -5px;
 }
 
-.girlTile > .avatar-area > .upgrade-girl {
+.girlTile > .upgrade-girl {
   position: absolute;
-  right: -15px;
-  top: 15px;
 
-  width: 55px;
-  height: 55px;
+  top: 35%;
+  transform: translate(30%, -50%);
+  right: 0;
+
+  z-index: 1;
+
+  width: 2.5em;
+  height: 2.5em;
 }
 
 .girlTile {
   border-radius: 10px;
 }
 
-.girlTile.not-owned > .avatar-area > .avatar {
+.girlTile.not-owned > .avatar-area > .lazyload-wrapper {
   opacity: 0.5;
 }
 
@@ -196,47 +189,4 @@
 
 .girlTile.selected {
   background-color: #61dafb;
-}
-
-.bio {
-  text-align: justify;
-}
-
-.blessed {
-  color: green;
-}
-
-.pose {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-}
-
-.pose-switcher {
-  display: flex;
-  flex-direction: row;
-  gap: 20px;
-}
-
-.pose-switcher > .pose-selector {
-  border: 3px solid white;
-  background-color: #1f2958;
-  width: 25px;
-  height: 25px;
-  transform: rotate(45deg);
-}
-
-.pose-switcher > .pose-selector.solid {
-  cursor: pointer;
-}
-
-.pose-switcher > .pose-selector.solid.current {
-  background: radial-gradient(yellow, darkorange);
-  box-shadow: 0px 0px 7px darkorange;
-  cursor: initial;
-}
-
-.pose-switcher > .pose-selector.empty {
-  background-color: grey;
 }

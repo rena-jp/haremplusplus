@@ -124,27 +124,29 @@ export const Harem: React.FC<HaremProps> = ({
           persistDefaultSort={sorterState.persistDefaultSort}
           isDefaultSort={sorterState.isDefaultSort}
         />
-        <HaremToolbar
-          gameAPI={gameAPI}
-          loading={loading}
-          refresh={refresh}
-          close={close}
-          totalGirlsCount={allGirls.length}
-          visibleGirlsCount={matchedGirls.length}
-          activeQuickFilters={quickFiltersState.activeQuickFilters}
-          clearQuickFilters={quickFiltersState.clearQuickFilters}
-          show0Pose={is0Pose}
-          toggle0Pose={toggle0Pose}
-        />
-        <HaremWidget
-          allGirls={allGirls}
-          girls={matchedGirls}
-          currentBlessings={currentBlessings}
-          upcomingBlessings={upcomingBlessings}
-          show0Pose={is0Pose}
-          visible={haremVisible}
-          gameAPI={gameAPI}
-        />
+        <div className="qh-harem">
+          <HaremToolbar
+            gameAPI={gameAPI}
+            loading={loading}
+            refresh={refresh}
+            close={close}
+            totalGirlsCount={allGirls.length}
+            visibleGirlsCount={matchedGirls.length}
+            activeQuickFilters={quickFiltersState.activeQuickFilters}
+            clearQuickFilters={quickFiltersState.clearQuickFilters}
+            show0Pose={is0Pose}
+            toggle0Pose={toggle0Pose}
+          />
+          <HaremWidget
+            allGirls={allGirls}
+            girls={matchedGirls}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+            show0Pose={is0Pose}
+            visible={haremVisible}
+            gameAPI={gameAPI}
+          />
+        </div>
       </FiltersContext.Provider>
     </>
   );

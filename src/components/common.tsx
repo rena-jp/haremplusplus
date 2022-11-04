@@ -58,7 +58,7 @@ export const ElementIcon: React.FC<ElementProps> = ({ element }) => {
   const elementName =
     element === 'rainbow' ? 'rainbow' : Elements.toString(element);
   const elementClasses = `element ${elementName}`;
-  return <span className={elementClasses} />;
+  return <div className={elementClasses} />;
 };
 
 export const SalaryIcon: React.FC = () => {
@@ -145,14 +145,14 @@ export const Grade: React.FC<GradeProps> = ({
   currentStar
 }) => {
   return (
-    <span className="grade">
+    <div className="grade">
       {[...Array(stars)].map((_v, i) => (
         <Star key={`full_${i}`} kind="solid" current={i === currentStar - 1} />
       ))}
       {[...Array(maxStars - stars)].map((_v, i) => (
         <Star key={`empty_${i}`} kind="empty" />
       ))}
-    </span>
+    </div>
   );
 };
 
@@ -163,7 +163,7 @@ export interface StarProps {
 export const Star: React.FC<StarProps> = ({ kind, current }) => {
   const currentStyle = current ? ' current' : '';
   const className = `star ${kind}${currentStyle}`;
-  return <span className={className} />;
+  return <div className={className} />;
 };
 
 export interface GemsCountProps {

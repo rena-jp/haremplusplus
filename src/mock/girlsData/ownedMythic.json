@@ -1,0 +1,76 @@
+{
+  "id": "225777755",
+  "name": "Bunna",
+  "icon": "https://hh2.hh-content.com/pictures/girls/225777755/ico6.png?v=2",
+  "icon0": "https://hh2.hh-content.com/pictures/girls/225777755/ico0.png",
+  "poseImage": "https://hh2.hh-content.com/pictures/girls/225777755/ava6.png?v=2",
+  "poseImage0": "https://hh2.hh-content.com/pictures/girls/225777755/ava0.png",
+  "level": 750,
+  "maxLevel": 750,
+  "class": 0,
+  "own": true,
+  "rarity": 5,
+  "stars": 6,
+  "maxStars": 6,
+  "shards": 100,
+  "recruited": 1627203626000,
+  "pose": 3,
+  "hairColor": [16, 0],
+  "eyeColor": [4],
+  "zodiac": 1,
+  "element": 6,
+  "missingAff": 0,
+  "upgradeReady": false,
+  "missingGXP": 0,
+  "currentIcon": 6,
+  "salaryTime": 28800,
+  "salary": 44000,
+  "missingGems": 0,
+  "quests": [
+    {
+      "idQuest": 11516,
+      "done": true,
+      "ready": false
+    },
+    {
+      "idQuest": 11517,
+      "done": true,
+      "ready": false
+    },
+    {
+      "idQuest": 11518,
+      "done": true,
+      "ready": false
+    },
+    {
+      "idQuest": 11519,
+      "done": true,
+      "ready": false
+    },
+    {
+      "idQuest": 11520,
+      "done": true,
+      "ready": false
+    },
+    {
+      "idQuest": 11521,
+      "done": true,
+      "ready": false
+    }
+  ],
+  "fullName": "Bunna",
+  "bio": "Comment est-ce possible ? Lupa et Bunny ont fusionné ! Mais comment ? Et pour combien de temps ? À quel point une telle créature peut-elle être puissante et cochonne ? Bunna est-il son véritable nom ? Autant de questions qui restent sans réponses. Une seule chose est sûre, c’est qu’elle est capable de vider entièrement quiconque croise sa route. À vos marques, prêts… partez !",
+  "sources": ["MD", "unknown"],
+  "variations": ["225777755", "525478506"],
+  "location": "Au même endroit que Lupa et Bunny",
+  "career": "Déesse temporaire",
+  "hobby": "Poker",
+  "birthday": "12 Mai",
+  "favoriteFood": "Katsu Kari",
+  "fetish": "Rapports brutaux",
+  "stats": {
+    "charm": 4830,
+    "knowhow": 5250,
+    "hardcore": 11340
+  }
+}

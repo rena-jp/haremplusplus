@@ -8,12 +8,12 @@ import {
   GirlsSalaryList
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
-import girls from './girlsdatalist-full.json';
-import blessings from './blessings-full.json';
-import quests from './quests-full.json';
-// const girls = {};
-// const blessings = { active: [], upcoming: [] };
-// const quests = {};
+// import girls from './girlsdatalist-full.json';
+// import blessings from './blessings-full.json';
+// import quests from './quests-full.json';
+const girls = {};
+const blessings = { active: [], upcoming: [] };
+const quests = {};
 
 const MOCK_DELAY = 2500;
 
