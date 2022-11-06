@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
 import { BlessingDefinition, CommonGirlData } from '../data/data';
 import { GirlDescription } from './description';
@@ -163,6 +164,17 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       }
     }
   }, [allGirls]);
+
+  /**
+   * Refresh lazy-loading state on render. Many events can cause
+   * stuff to suddenly appear, such as filters, but also zoom, browser resize, etc.
+   * Not all events will cause a re-render of the component, so we won't immediately
+   * detect them. As such, it's safer to re-check on every render (A simple selection
+   * change will force the missing images to load).
+   */
+  useEffect(() => {
+    forceCheck();
+  });
 
   return (
     <>
