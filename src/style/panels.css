@@ -41,13 +41,12 @@
 }
 
 .summary-content {
-  max-height: 85%;
   width: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 }
 
 .game-extension.hidden > .qh-panel {
@@ -66,13 +65,21 @@
   right: 65px;
 }
 
+.qh-panel.filters,
+.qh-panel.sort {
+  display: flex;
+  flex-direction: column;
+}
+
 .qh-panel.filters > .filters-list {
   display: flex;
   flex-direction: column;
-  max-height: 60%;
   align-items: flex-start;
   gap: 5px;
-  padding: 15px 0px;
+  margin-top: 10px;
+
+  overflow-y: auto;
+  overflow-x: clip;
 }
 
 .filter-entry {
@@ -137,6 +144,7 @@
   flex-direction: column;
   gap: 10px;
   align-items: flex-start;
+  overflow: auto;
 }
 
 .sort-list > * {

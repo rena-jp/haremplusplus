@@ -15,7 +15,7 @@
 @media only screen and (min-width: 720px) {
   .girlTile {
     --border-width: 1px;
-    --image-size: 75px;
+    --image-size: 55px;
   }
 }
 

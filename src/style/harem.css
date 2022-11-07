@@ -13,8 +13,8 @@
   min-width: 0;
 
   /** Global left, right and bottom margins */
-  margin-bottom: 10px;
-  padding: 0px 8px 0px 8px;
+  margin-bottom: 15px;
+  padding: 0px 15px 0px 15px;
 }
 
 .qh-harem > .harem-toolbar {
@@ -22,7 +22,7 @@
   grid-row: 1;
 
   /** Top, left and right margin */
-  padding: 10px 8px 0px 8px;
+  padding: 10px 15px 0px 15px;
 }
 
 .qh-harem > .girlsList {
@@ -164,7 +164,7 @@
 
 .girlsList {
   overflow: auto;
-  padding-left: 8px;
+  padding-left: 10px;
   padding-right: 8px;
 }
 

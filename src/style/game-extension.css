@@ -30,6 +30,14 @@
   flex-direction: column;
 }
 
+/** < 1280px */
+@media only screen and (max-width: 1280px) {
+  .App.game-extension {
+    height: 95%;
+    margin: auto;
+  }
+}
+
 .App.game-extension.hidden {
   visibility: hidden;
 }
