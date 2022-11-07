@@ -33,6 +33,14 @@
   display: initial;
 }
 
+.qh-panel > h2 {
+  font-size: 1.5em;
+}
+
+.qh-panel > p {
+  margin: 8px;
+}
+
 .qh-panel.summary {
   width: 80%;
   display: flex;

@@ -11,8 +11,8 @@
   --image-size: 125px;
 }
 
-/** 720px to 1280px */
-@media only screen and (min-width: 720px) {
+/** <= 1280px */
+@media only screen and (max-width: 1280px) {
   .girlTile {
     --border-width: 1px;
     --image-size: 55px;
@@ -23,7 +23,7 @@
 @media only screen and (min-width: 1281px) {
   .girlTile {
     --border-width: 2px;
-    --image-size: 100px;
+    --image-size: 75px;
   }
 }
 

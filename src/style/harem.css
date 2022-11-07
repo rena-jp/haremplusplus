@@ -8,6 +8,16 @@
   column-gap: 5px;
 }
 
+/**
+ *  On small screens, give more space to 
+ *  stats/description
+ */
+@media only screen and (max-width: 1000px) {
+  .qh-harem {
+    grid-template-columns: 1.2fr 0.6fr 1.4fr;
+  }
+}
+
 .qh-harem > * {
   min-height: 0;
   min-width: 0;
@@ -89,6 +99,8 @@
   background-size: 40px;
 
   width: 18em;
+
+  font-size: 0.8em;
 }
 
 .harem-toolbar > .quick-filters {
@@ -105,6 +117,7 @@
   flex-direction: row;
   gap: 0.5ch;
   align-items: center;
+  font-size: 0.8em;
 }
 
 .harem-toolbar > .clear-filters > .hh-action-button {
@@ -126,7 +139,7 @@
 
 .scenes-browser img {
   /** Normalize width. Icons have a different top/bottom border and would look inconsistent with a height attribute */
-  width: 2.5em;
+  width: 2em;
   /** Avoid interference with vertical align rule from the main game CSS */
   vertical-align: middle;
 }
@@ -206,6 +219,17 @@
   width: 1.5em;
   height: 1.5em;
   transform: rotate(45deg);
+}
+
+@media only screen and (max-width: 1000px) {
+  .pose-switcher {
+    gap: 1ch;
+  }
+  .pose-switcher > .pose-selector {
+    border: 1px solid white;
+    width: 0.8em;
+    height: 0.8em;
+  }
 }
 
 .pose-switcher > .pose-selector.solid {
