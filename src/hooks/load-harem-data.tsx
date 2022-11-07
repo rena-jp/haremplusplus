@@ -255,6 +255,7 @@ function quickEqualGirls(
     girl1.missingGems === girl2.missingGems && // Max level/Awakening test
     girl1.icon === girl2.icon && // Current pose test
     girl1.bio === girl2.bio && // Language test
-    girl1.variations?.length === girl2.variations?.length
+    girl1.variations?.length === girl2.variations?.length &&
+    girl1.pose === girl2.pose // Maybe the pose was unknown, and now it's not
   );
 }
