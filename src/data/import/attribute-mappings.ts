@@ -107,6 +107,12 @@ export function toFavPose(pose: string): Pose {
 }
 
 export function toElement(elementName: string): Element {
+  // elementName can be specified as "stone" or "stone_flavor_element"
+  // Trim the _flavor_element suffix when present
+  if (elementName.endsWith('_flavor_element')) {
+    const suffixIndex = elementName.indexOf('_flavor_element');
+    elementName = elementName.substring(0, suffixIndex);
+  }
   switch (elementName) {
     case 'sun':
       return Element.yellow;

@@ -1,30 +1,30 @@
 {
   "active": [
     {
-      "title": "Semaine du Taureau",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Signe astrologique Taureau</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667217600,
-      "end_ts": 1667822399
+      "title": "Week of the Epic",
+      "description": "All girls with <span class=\"blessing-condition\">Rarity Epic</span> gain <span class=\"blessing-bonus\">+ 35%</span> bonus on all attributes.",
+      "start_ts": 1667822400,
+      "end_ts": 1668427199
     },
     {
-      "title": "Semaine du Chaise Longue",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Position préférée Chaise Longue</span> obtiennent <span class=\"blessing-bonus\">+ 20%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667217600,
-      "end_ts": 1667822399
+      "title": "Week of the Libra",
+      "description": "All girls with <span class=\"blessing-condition\">Zodiac sign Libra</span> gain <span class=\"blessing-bonus\">+ 35%</span> bonus on all attributes.",
+      "start_ts": 1667822400,
+      "end_ts": 1668427199
     }
   ],
   "upcoming": [
     {
-      "title": "Semaine du Marron",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Marron</span> obtiennent <span class=\"blessing-bonus\">+ 30%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667822400,
-      "end_ts": 1668427199
+      "title": "Week of the Voyeur",
+      "description": "All girls with <span class=\"blessing-condition\">Element Voyeur</span> gain <span class=\"blessing-bonus\">+ 30%</span> bonus on all attributes.",
+      "start_ts": 1668427200,
+      "end_ts": 1669031999
     },
     {
-      "title": "Semaine du Commune",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Rareté Commune</span> obtiennent <span class=\"blessing-bonus\">+ 20%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667822400,
-      "end_ts": 1668427199
+      "title": "Week of the Blue",
+      "description": "All girls with <span class=\"blessing-condition\">Eye Color Blue</span> gain <span class=\"blessing-bonus\">+ 25%</span> bonus on all attributes.",
+      "start_ts": 1668427200,
+      "end_ts": 1669031999
     }
   ],
   "success": true

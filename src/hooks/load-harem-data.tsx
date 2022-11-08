@@ -135,7 +135,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   const updateResult = useCallback((haremData: HaremData) => {
     // Persist harem data after each update
     persistHaremData(haremData);
-    // TODO reconcile with current data, if any. Avoid full rewrite.
     const currentGirls = allGirls.current;
     const updatedGirls = reconcileGirls(currentGirls, haremData.allGirls);
     setAllGirls(updatedGirls);
@@ -254,7 +253,7 @@ function quickEqualGirls(
     girl1.stars === girl2.stars && // Unlocked Grade
     girl1.missingGems === girl2.missingGems && // Max level/Awakening test
     girl1.icon === girl2.icon && // Current pose test
-    girl1.bio === girl2.bio && // Language test
+    girl1.birthday === girl2.birthday && // Language test. Birthday is more likely to be translated in all languages.
     girl1.variations?.length === girl2.variations?.length &&
     girl1.pose === girl2.pose // Maybe the pose was unknown, and now it's not
   );
