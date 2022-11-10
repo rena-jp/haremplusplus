@@ -146,6 +146,11 @@
 
 .harem-toolbar > .refresh {
   margin-left: auto; /* Push to the end of the toolbar */
+  margin-right: clamp(
+    1rem,
+    calc(5vw - 3rem),
+    2.5rem
+  ); /* Add a bit of space before the X button */
 }
 
 .harem-toolbar > .refresh[disabled] {
