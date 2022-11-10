@@ -437,6 +437,15 @@ export function matchesBlessing(
     }
   }
 
+  // Special case: "Rarity Common" blessing should also include starting girls
+  if (
+    blessing.blessing === Blessing.Rarity &&
+    blessing.blessingValue === Rarity.common &&
+    girl.rarity === Rarity.starting
+  ) {
+    return true;
+  }
+
   if (typeof blessingValue === 'number') {
     return blessingValue === blessing.blessingValue;
   } else {
