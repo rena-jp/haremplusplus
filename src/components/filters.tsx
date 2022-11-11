@@ -14,7 +14,6 @@ import {
   SourceMultiFilter,
   UpgradeReadyFilter
 } from '../data/filters/filter-runtime';
-import { CloseButton } from './common';
 import {
   LabeledToggle,
   NumberInputWithOptions,
@@ -33,11 +32,10 @@ export interface FiltersProps extends PanelProps {
 
 export const FiltersPanel: React.FC<FiltersProps> = ({
   visible,
-  close,
   currentBlessings,
   upcomingBlessings
 }) => {
-  const className = `qh-panel filters ${visible ? 'visible' : 'hidden'}`;
+  const className = `panel filters ${visible ? 'visible' : 'hidden'}`;
 
   const {
     filters,
@@ -55,8 +53,6 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
 
   return (
     <div className={className}>
-      <CloseButton close={close} title="Close Filters" />
-      <h2>Filter</h2>
       <p>Active filter: {filterLabel}</p>
       <div className="manage-filters">
         <button
@@ -790,6 +786,7 @@ const PotentialForm: React.FC<PotentialFormProps> = ({
   return (
     <NumberInputWithOptions
       label="Potential power"
+      cssClasses={['power']}
       description={`Filter girls who have a potential power above the selected threshold
 (Normalized value, e.g. 25 for most L5 girls, 28.56 for M6)`}
       setInput={updateThreshold}

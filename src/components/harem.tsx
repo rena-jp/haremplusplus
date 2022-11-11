@@ -93,37 +93,60 @@ export const Harem: React.FC<HaremProps> = ({
     [set0Pose, is0Pose]
   );
 
+  const [displayedTab, setDisplayedTab] = useState(activeTab);
+
+  // When hiding the entire tabs panel, keep the current tab displayed (to avoid content disappearing
+  // while the panel is sliding away)
+  if (activeTab !== undefined && activeTab !== displayedTab) {
+    setDisplayedTab((previousDisplayedTab) => {
+      if (activeTab !== undefined) {
+        return activeTab;
+      } else {
+        return previousDisplayedTab;
+      }
+    });
+  }
+
+  const togglePanel = useCallback(() => {
+    if (activeTab === undefined) {
+      toggleTab(displayedTab ?? tabs[1]);
+    } else {
+      toggleTab(activeTab);
+    }
+  }, [tabs, toggleTab, activeTab]);
+
   return (
     <>
       <FiltersContext.Provider value={filtersState}>
-        <TabFolder tabs={tabs} toggleTab={toggleTab} activeTab={activeTab} />
-        <Summary
-          filteredGirls={filteredGirls}
-          allGirls={allGirls}
-          toggleFilter={quickFiltersState.toggleQuickFilter}
-          clearFilters={quickFiltersState.clearQuickFilters}
-          filters={quickFiltersState.activeQuickFilters}
-          currentBlessings={currentBlessings}
-          nextBlessings={upcomingBlessings}
-          visible={activeTab?.id === 'summary'}
-          close={closePanel}
-        />
-        <FiltersPanel
-          visible={activeTab?.id === 'filters'}
-          close={closePanel}
-          currentBlessings={currentBlessings}
-          upcomingBlessings={upcomingBlessings}
-        />
-        <SortPanel
-          visible={activeTab?.id === 'sort'}
-          close={closePanel}
-          sortConfig={sorterState.sortConfig}
-          setSortConfig={sorterState.setSortConfig}
-          currentBlessings={currentBlessings}
-          upcomingBlessings={upcomingBlessings}
-          persistDefaultSort={sorterState.persistDefaultSort}
-          isDefaultSort={sorterState.isDefaultSort}
-        />
+        <TabFolder tabs={tabs} toggleTab={toggleTab} activeTab={activeTab}>
+          <Summary
+            filteredGirls={filteredGirls}
+            allGirls={allGirls}
+            toggleFilter={quickFiltersState.toggleQuickFilter}
+            clearFilters={quickFiltersState.clearQuickFilters}
+            filters={quickFiltersState.activeQuickFilters}
+            currentBlessings={currentBlessings}
+            nextBlessings={upcomingBlessings}
+            visible={displayedTab?.id === 'summary'}
+            close={closePanel}
+          />
+          <FiltersPanel
+            visible={displayedTab?.id === 'filters'}
+            close={closePanel}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+          />
+          <SortPanel
+            visible={displayedTab?.id === 'sort'}
+            close={closePanel}
+            sortConfig={sorterState.sortConfig}
+            setSortConfig={sorterState.setSortConfig}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+            persistDefaultSort={sorterState.persistDefaultSort}
+            isDefaultSort={sorterState.isDefaultSort}
+          />
+        </TabFolder>
         <div className="qh-harem">
           <HaremToolbar
             gameAPI={gameAPI}
@@ -136,6 +159,8 @@ export const Harem: React.FC<HaremProps> = ({
             clearQuickFilters={quickFiltersState.clearQuickFilters}
             show0Pose={is0Pose}
             toggle0Pose={toggle0Pose}
+            toggleTab={togglePanel}
+            isOpenTab={activeTab !== undefined}
           />
           <HaremWidget
             allGirls={allGirls}

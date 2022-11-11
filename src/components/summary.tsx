@@ -16,7 +16,7 @@ import {
   Rarity
 } from '../data/data';
 import '../style/harem.css';
-import { CloseButton, ElementIcon, format, GemIcon } from './common';
+import { ElementIcon, format, GemIcon } from './common';
 import { QuickFilter } from './harem';
 import { PanelProps } from './panels';
 
@@ -37,8 +37,7 @@ export const Summary: React.FC<SummaryProps> = ({
   toggleFilter,
   currentBlessings,
   nextBlessings,
-  visible,
-  close
+  visible
 }) => {
   const [filteredOnly, setFilteredOnly] = useState(true);
 
@@ -98,11 +97,10 @@ export const Summary: React.FC<SummaryProps> = ({
   const missingEp = ownedEP - totalEp;
   const missingMp = ownedMP - totalMp;
 
-  const className = `qh-panel summary ${visible ? 'visible' : 'hidden'}`;
+  const className = `panel summary ${visible ? 'visible' : 'hidden'}`;
 
   return (
     <div className={className}>
-      <CloseButton close={close} title="Close Summary" />
       <div className="summary-content">
         <p>
           Total girls: {owned}/{total} ({missing}) {pct}% <br />
@@ -280,40 +278,38 @@ export interface GemsSummaryProps {
 export const GemsSummary: React.FC<GemsSummaryProps> = ({ girls }) => {
   return (
     <div className="gems-summary">
-      <div className="gems-layout">
-        {Elements.values().map((element) => {
-          const missingGemsAll = format(
-            girls
-              .filter((girl) => girl.own && girl.element === element)
-              .map((girl) => girl.missingGems)
-              .reduce((a, b) => a + b, 0)
-          );
-          const missingGemsELM = format(
-            girls
-              .filter(
-                (girl) =>
-                  girl.own &&
-                  girl.rarity > Rarity.rare &&
-                  girl.element === element
-              )
-              .map((girl) => girl.missingGems)
-              .reduce((a, b) => a + b, 0)
-          );
-          return (
-            <div key={element}>
-              <GemIcon element={element} />{' '}
-              {missingGemsAll > missingGemsELM ? (
-                <>
-                  <span title="Epic, Legendary & Mythic">{missingGemsELM}</span>{' '}
-                  <span title="All rarities">({missingGemsAll})</span>
-                </>
-              ) : (
-                <>{missingGemsAll}</>
-              )}
-            </div>
-          );
-        })}
-      </div>
+      {Elements.values().map((element) => {
+        const missingGemsAll = format(
+          girls
+            .filter((girl) => girl.own && girl.element === element)
+            .map((girl) => girl.missingGems)
+            .reduce((a, b) => a + b, 0)
+        );
+        const missingGemsELM = format(
+          girls
+            .filter(
+              (girl) =>
+                girl.own &&
+                girl.rarity > Rarity.rare &&
+                girl.element === element
+            )
+            .map((girl) => girl.missingGems)
+            .reduce((a, b) => a + b, 0)
+        );
+        return (
+          <div key={element}>
+            <GemIcon element={element} />{' '}
+            {missingGemsAll > missingGemsELM ? (
+              <>
+                <span title="Epic, Legendary & Mythic">{missingGemsELM}</span>{' '}
+                <span title="All rarities">({missingGemsAll})</span>
+              </>
+            ) : (
+              <>{missingGemsAll}</>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

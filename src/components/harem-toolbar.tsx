@@ -24,6 +24,8 @@ export interface HaremToolbarProps {
    * to close the harem, when displayed as a popup
    */
   close?: () => void;
+  toggleTab(): void;
+  isOpenTab: boolean;
 }
 
 export const HaremToolbar: React.FC<HaremToolbarProps> = ({
@@ -36,7 +38,9 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   gameAPI,
   loading,
   refresh,
-  close
+  close,
+  toggleTab,
+  isOpenTab
 }) => {
   const {
     activeFilter,
@@ -132,6 +136,18 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
       <div className="owned-gems-summary">
         <GemsCount gemsCount={gemsCount} />
       </div>
+
+      <button
+        className={`hh-action-button filter-sort-icon ${
+          isOpenTab ? 'open' : 'closed'
+        }`}
+        onClick={toggleTab}
+      >
+        <Tooltip tooltip={<span>Filter & sort</span>}>
+          <div className="filler" />
+        </Tooltip>
+      </button>
+
       <button
         className="hh-action-button refresh"
         onClick={refreshAll}

@@ -50,28 +50,6 @@
   grid-row: 2;
 }
 
-/** Summary */
-
-.gems-summary {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-}
-
-.gems-layout {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  width: 100%;
-}
-
-.gems-layout > div {
-  padding: 5px;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5ch;
-}
-
 /** Toolbar */
 
 .harem-toolbar {
@@ -145,7 +123,6 @@
 }
 
 .harem-toolbar > .refresh {
-  margin-left: auto; /* Push to the end of the toolbar */
   margin-right: clamp(
     1rem,
     calc(5vw - 3rem),
@@ -155,6 +132,31 @@
 
 .harem-toolbar > .refresh[disabled] {
   animation: refresh-blink-animation 0.75s ease-in-out infinite alternate;
+}
+
+.hh-action-button.filter-sort-icon {
+  background: center / contain content-box no-repeat
+      url(https://hh2.hh-content.com/design_v2/search_open.png),
+    linear-gradient(
+      to bottom,
+      rgba(60, 60, 60, 0.7) 0,
+      rgba(10, 10, 10, 0.9) 100%
+    );
+}
+
+.harem-toolbar > .hh-action-button {
+  height: 1.5em;
+  width: 1.5em;
+}
+
+.harem-toolbar > .filter-sort-icon {
+  margin-left: auto; /* Push to the end of the toolbar */
+
+  padding: 0.3rem;
+}
+
+.harem-toolbar > .filter-sort-icon.closed {
+  transform: scaleX(-1);
 }
 
 @keyframes refresh-blink-animation {

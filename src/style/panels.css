@@ -1,60 +1,25 @@
-.qh-panel {
-  /** Appearance */
-  opacity: 98%;
-  background-color: rgb(69, 33, 41);
-  border: 1px solid black;
-  border-radius: 15px;
-  box-shadow: 0px 0px 7px black;
-  padding: 15px;
-
-  /** Size */
-  height: 80%;
-  min-width: 35%;
-
-  /** Position */
-  position: absolute;
-  right: 45px;
-  top: 50%;
-  padding: 15px 30px;
-  transition: transform 0.5s ease-in, visibility 0.5s ease-in;
-  z-index: 2;
-}
-
-.qh-panel.visible {
-  transform: translateY(-50%);
-  visibility: visible;
-  display: initial;
-}
-
-.qh-panel.hidden,
-.qh-panel.summary.hidden {
-  transform: translateY(-50%) translateX(105%);
-  visibility: hidden;
-  display: initial;
-}
-
-.qh-panel > h2 {
+.qh-panel > .panel > h2 {
   font-size: 1.5em;
 }
 
-.qh-panel > p {
+.qh-panel > .panel > p {
   margin: 8px;
 }
 
-.qh-panel.summary {
-  width: 80%;
+.panel.summary {
   display: flex;
   align-items: center;
+  min-width: 80vw;
   flex-direction: column;
 }
 
 .summary-content {
-  width: 100%;
   overflow: auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   margin-bottom: 20px;
+  align-self: stretch;
 }
 
 .game-extension.hidden > .qh-panel {
@@ -67,19 +32,25 @@
   transition: none;
 }
 
-.qh-panel > .close-popup {
+.qh-panel {
+  display: flex;
+  flex-direction: column;
+  row-gap: 1em;
+}
+
+.qh-panel > .panel > .close-popup {
   position: absolute;
   top: 15px;
   right: 65px;
 }
 
-.qh-panel.filters,
-.qh-panel.sort {
+.panel.filters,
+.panel.sort {
   display: flex;
   flex-direction: column;
 }
 
-.qh-panel.filters > .filters-list {
+.panel.filters > .filters-list {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -106,8 +77,9 @@
   min-width: 10ch;
 }
 
-.filter-entry.rarity > button.toggle {
-  /** Use more compact buttons for Rarity, as we have many of them */
+.filter-entry.rarity > button.toggle,
+.filter-entry.power > button.toggle {
+  /** Use more compact buttons for Rarity and Potential power, as we have many of them */
   min-width: initial;
   padding-left: 8px;
   padding-right: 8px;
@@ -177,4 +149,35 @@
 
 .element-blessing > .element {
   display: inline;
+}
+
+/** Summary */
+
+.resources-summary {
+  width: 100%;
+}
+
+.gems-summary {
+  width: 100%;
+  display: inline-grid;
+  justify-items: left;
+  justify-content: center;
+  grid-template-columns: repeat(auto-fit, 15ch);
+  column-gap: 2em;
+}
+
+/**
+ * For larger screens, limit to 4 columns
+ */
+@media screen and (min-width: 900px) {
+  .gems-summary {
+    grid-template-columns: repeat(4, 15ch);
+  }
+}
+
+.gems-summary > * {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.8em;
+  align-items: center;
 }

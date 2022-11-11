@@ -73,15 +73,15 @@ body.qh-local {
   row-gap: 5px;
   column-gap: 5px;
   justify-content: center;
-  padding-left: 15px;
-  padding-right: 15px;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .blessings-summary > div {
   display: flex;
   flex-flow: column;
   row-gap: 5px;
-  padding: 15px;
+  padding: 1rem;
 }
 
 .missing-girls-blessing > .owned {

@@ -1,3 +1,7 @@
+/**
+ *  Tab Folder Labels (Component is currently not used)
+ */
+
 .tab-folder {
   position: absolute;
   right: 0px;
@@ -29,4 +33,71 @@
 .tab-folder > .tab > .tab-label {
   writing-mode: vertical-rl;
   user-select: none;
+}
+
+/**
+ *  Sliding panel
+ */
+
+.qh-panel {
+  /** Appearance */
+  opacity: 98%;
+  background-color: rgb(69, 33, 41);
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 0px 0px 7px black;
+  padding: 15px;
+
+  /** Size */
+  height: 80%;
+  min-width: 35%;
+
+  /** Position */
+  position: absolute;
+  right: 45px;
+  top: 50%;
+  padding: 15px 30px;
+  transition: transform 0.5s ease-in, visibility 0.5s ease-in;
+  z-index: 2;
+}
+
+.qh-panel.visible {
+  transform: translateY(-50%);
+  visibility: visible;
+}
+
+.qh-panel.hidden {
+  transform: translateY(-50%) translateX(105%);
+  visibility: hidden;
+}
+
+.qh-panel > .panel {
+  overflow: auto;
+}
+
+.qh-panel > .panel.hidden {
+  display: none;
+}
+
+.qh-panel > .panel-tab-folder {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+  align-items: center;
+  column-gap: 1em;
+}
+
+.panel-tab-folder > .tab {
+  cursor: pointer;
+  color: #d08467;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000;
+}
+
+.panel-tab-folder > .tab.active {
+  color: #ffb827;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -2px -2px 5px rgba(255, 159, 0, 0.4),
+    2px -2px 5px rgba(255, 159, 0, 0.4), -2px 2px 5px rgba(255, 159, 0, 0.4),
+    2px 2px 5px rgba(255, 159, 0, 0.4), 0 0 10px rgba(255, 159, 0, 0.4);
 }

@@ -11,7 +11,7 @@ import {
   SalarySorter,
   UpcomingPotentialSorter
 } from '../data/sort';
-import { CloseButton, Tooltip } from './common';
+import { Tooltip } from './common';
 import { PanelProps } from './panels';
 
 export interface SortProps extends PanelProps {
@@ -25,7 +25,6 @@ export interface SortProps extends PanelProps {
 
 export const SortPanel: React.FC<SortProps> = ({
   visible,
-  close,
   sortConfig: currentSortConfig,
   setSortConfig,
   currentBlessings,
@@ -56,11 +55,9 @@ export const SortPanel: React.FC<SortProps> = ({
     [currentSortConfig, setSortConfig]
   );
 
-  const className = `qh-panel sort ${visible ? 'visible' : 'hidden'}`;
+  const className = `panel sort ${visible ? 'visible' : 'hidden'}`;
   return (
     <div className={className}>
-      <CloseButton close={close} title="Close Sort" />
-      <h2>Sort</h2>
       <p>
         Active sort: {currentSortConfig.sorter.label}{' '}
         {currentSortConfig.direction === 'asc' ? '▲' : '▼'}
