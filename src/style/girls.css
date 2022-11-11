@@ -126,30 +126,39 @@
   height: 40px;
 }
 
+.girlTile > .avatar-area > .lazyload-wrapper > .tile-avatar {
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 0 5px 1px rgba(52, 0, 15, 0.75),
+    inset 0 0 8px rgba(55, 30, 103, 0.4);
+}
+
 .girlTile.starting > .avatar-area > .lazyload-wrapper > .tile-avatar,
 .girlTile.common > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #8d8e9f;
-  /* border-color: lightgrey; */
 }
 
 .girlTile.rare > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #23b56b;
-  /* border-color: greenyellow; */
 }
 
 .girlTile.epic > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-color: #ffb244;
-  /* border-color: gold; */
 }
 
 .girlTile.legendary > .avatar-area > .lazyload-wrapper > .tile-avatar {
+  background-image: url(https://hh2.hh-content.com/legendary.png);
   background-color: #8e36a9;
-  /* border-color: fuchsia; */
 }
 
 .girlTile.mythic > .avatar-area > .lazyload-wrapper > .tile-avatar {
+  background-image: radial-gradient(
+    closest-side at 50% 50%,
+    #f5a866 0,
+    #ec0039 51%,
+    #9e0e27 100%
+  );
   background-color: #ec0039;
-  /* border-color: tomato; */
 }
 
 .girlTile.salary > .avatar-area > .soft_currency {
