@@ -184,6 +184,7 @@
 
 .girlsList {
   overflow: auto;
+  scroll-behavior: smooth;
   padding-left: 10px;
   padding-right: 8px;
 }

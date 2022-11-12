@@ -1,4 +1,10 @@
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState
+} from 'react';
 import LazyLoad from 'react-lazyload';
 import { CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
@@ -50,11 +56,30 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   const placeholder =
     'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
 
+  const tileRef = useRef<HTMLDivElement>(null);
+
+  // Note: this effect may be triggered when the selected girl becomes visible (unfiltered)
+  // (Not necessarily on an explicit selection change).
+  useEffect(() => {
+    if (selected && tileRef.current !== null) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].intersectionRatio < 0.7) {
+          if (selected && tileRef.current !== null) {
+            tileRef.current.scrollIntoView({ block: 'nearest' });
+          }
+        }
+        observer.disconnect(); // One-time trigger
+      });
+      observer.observe(tileRef.current);
+    }
+  }, [selected]);
+
   return (
     <div
       className={allClassNames.join(' ')}
       onClick={onClick}
       title={girl.name}
+      ref={tileRef}
     >
       {children}
       <div className="avatar-area">

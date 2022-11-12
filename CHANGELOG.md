@@ -1,3 +1,7 @@
+## 0.9.7 (Next)
+
+- Selection: Scroll girl into view when changing selection (if girl is not filtered out)
+
 ## 0.9.6 - 2022-11-11
 
 - Style: Reuse rarity-specific backgrounds from the game for girl tiles
