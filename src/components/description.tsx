@@ -18,6 +18,7 @@ import {
   format,
   formatTime,
   GemIcon,
+  getDomain,
   PoseIcon,
   StatsDescriptionTooltip,
   Tooltip
@@ -45,10 +46,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
 }) => {
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
 
-  const host = window.location.host;
-  const domain = host.includes('localhost')
-    ? 'https://www.hentaiheroes.com'
-    : '.';
+  const domain = getDomain();
 
   const selectPose = useCallback(
     (pose: number) => {

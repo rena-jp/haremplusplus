@@ -202,6 +202,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   });
 
   const [showUpgrade, _setShowUpgrade] = useState(true);
+  const [page, setPage] = useState<UpgradePage>('books');
 
   return (
     <>
@@ -255,6 +256,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
             currentGirl={selectedGirl}
             displayedGirls={girls}
             gameAPI={gameAPI}
+            page={page}
+            setPage={setPage}
           />
         </div>
       )}

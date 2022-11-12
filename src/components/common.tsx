@@ -407,3 +407,11 @@ export interface CloseButtonProps {
 export const CloseButton: React.FC<CloseButtonProps> = ({ close, title }) => {
   return <div className="close-popup" onClick={close} title={title}></div>;
 };
+
+export function getDomain(): string {
+  const host = window.location.host;
+  const domain = host.includes('localhost')
+    ? 'https://www.hentaiheroes.com'
+    : '.';
+  return domain;
+}

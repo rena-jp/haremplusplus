@@ -284,6 +284,11 @@
   box-shadow: 0px 0px 7px black;
   padding: 15px;
 
+  /** Layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+
   /** Size */
   height: 50vh;
   width: 70vw;

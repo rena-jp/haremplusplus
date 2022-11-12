@@ -153,3 +153,57 @@ requiring actual content. */
 .element.yellow {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
 }
+
+.tile img.tileImg {
+  background-repeat: no-repeat;
+  background-size: cover;
+  box-shadow: 0 0 5px 1px rgba(52, 0, 15, 0.75),
+    inset 0 0 8px rgba(55, 30, 103, 0.4);
+
+  border: var(--border-width) solid white;
+  border-radius: 10px;
+
+  width: var(--image-size);
+  height: var(--image-size);
+}
+
+.tile.starting img.tileImg,
+.tile.common img.tileImg {
+  background-color: #8d8e9f;
+}
+
+.tile.rare img.tileImg {
+  background-color: #23b56b;
+}
+
+.tile.epic img.tileImg {
+  background-color: #ffb244;
+}
+
+.tile.legendary img.tileImg {
+  background-image: url(https://hh2.hh-content.com/legendary.png);
+  background-color: #8e36a9;
+}
+
+.tile.mythic img.tileImg {
+  background-image: radial-gradient(
+    closest-side at 50% 50%,
+    #f5a866 0,
+    #ec0039 51%,
+    #9e0e27 100%
+  );
+  background-color: #ec0039;
+}
+
+.tile.selected {
+  background-color: #61dafb;
+}
+
+.tile:hover {
+  background-color: pink;
+}
+
+.tile {
+  padding: 10px 10px 0px 10px;
+  border-radius: 10px;
+}

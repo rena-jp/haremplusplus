@@ -1,0 +1,63 @@
+.harem-upgrade {
+  overflow: auto;
+}
+
+.upgrade-items-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 1em;
+}
+
+.itemTile {
+  position: relative;
+}
+
+.itemTile > .item-count {
+  /** TODO: Insert an intermediate div to account for padding. Makes it easier to align with image */
+  position: absolute;
+  bottom: 8px;
+  left: 10px;
+  background-color: #3c1f24;
+  padding: 0 0.2em;
+  border-radius: 3px 3px 3px 3px;
+}
+
+.harem-upgrade-actions {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2em;
+}
+
+.harem-upgrade-actions > .hh-action-button {
+  padding: 0.6em 3em;
+  font-size: 1.2em;
+}
+
+.harem-upgrade-actions > .spacer {
+  margin-left: auto;
+}
+
+.harem-upgrade-pages {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2em;
+  justify-content: center;
+}
+
+.harem-upgrade-pages > * {
+  cursor: pointer;
+  color: #d08467;
+  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    1px -1px 0 #000;
+  font-size: 2em;
+}
+
+.harem-upgrade-pages > .active {
+  cursor: initial;
+  color: #ffb827;
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
+    1px 1px 0 #000, -2px -2px 5px rgba(255, 159, 0, 0.4),
+    2px -2px 5px rgba(255, 159, 0, 0.4), -2px 2px 5px rgba(255, 159, 0, 0.4),
+    2px 2px 5px rgba(255, 159, 0, 0.4), 0 0 10px rgba(255, 159, 0, 0.4);
+}

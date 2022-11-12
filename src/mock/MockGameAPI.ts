@@ -130,11 +130,27 @@ export class MockGameAPI implements GameAPI {
     });
   }
 
-  async useBook(_girl: CommonGirlData, _book: Book): Promise<void> {
+  async useBook(girl: CommonGirlData, book: Book): Promise<void> {
+    console.log(
+      'Use book ',
+      book.label,
+      ' ',
+      book.xp + ' XP',
+      'on girl',
+      girl.name
+    );
     return;
   }
 
-  async useGift(_girl: CommonGirlData, _gift: Gift): Promise<void> {
+  async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {
+    console.log(
+      'Use gift ',
+      gift.label,
+      ' ',
+      gift.aff + ' Aff',
+      'on girl',
+      girl.name
+    );
     return;
   }
   async maxXP(_girl: CommonGirlData): Promise<void> {

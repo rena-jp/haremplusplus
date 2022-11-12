@@ -1,9 +1,4 @@
-.girlTile {
-  position: relative;
-  user-select: none;
-  display: inline-block;
-  text-align: center;
-
+.App.game-extension {
   /*
    * Variable properties
    */
@@ -11,9 +6,17 @@
   --image-size: 125px;
 }
 
+.tile,
+.girlTile {
+  position: relative;
+  user-select: none;
+  display: inline-block;
+  text-align: center;
+}
+
 /** <= 1280px */
 @media only screen and (max-width: 1280px) {
-  .girlTile {
+  .App.game-extension {
     --border-width: 1px;
     --image-size: 55px;
   }
@@ -21,7 +24,7 @@
 
 /** 1281 to 1920 */
 @media only screen and (min-width: 1281px) {
-  .girlTile {
+  .App.game-extension {
     --border-width: 2px;
     --image-size: 75px;
   }
@@ -29,7 +32,7 @@
 
 /** 1921 to 2560 */
 @media only screen and (min-width: 1921px) {
-  .girlTile {
+  .App.game-extension {
     --border-width: 3px;
     --image-size: 120px;
   }
@@ -37,7 +40,7 @@
 
 /** 2561 to >>> */
 @media only screen and (min-width: 2561px) {
-  .girlTile {
+  .App.game-extension {
     --border-width: 4px;
     --image-size: 145px;
   }

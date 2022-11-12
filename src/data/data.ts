@@ -566,15 +566,19 @@ export interface GiftEntry extends ItemEntry<Gift> {
 }
 
 export interface Item {
+  type: string;
   itemId: number;
   label: string;
   rarity: Rarity;
+  icon: string;
 }
 
 export interface Book extends Item {
+  type: 'book';
   xp: number;
 }
 
 export interface Gift extends Item {
+  type: 'gift';
   aff: number;
 }

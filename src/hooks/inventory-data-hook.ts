@@ -10,20 +10,32 @@ import {
 } from '../data/data';
 import { GameInventory, InventoryItem } from '../data/game-data';
 
-export function useInventory(gameAPI: GameAPI): Inventory {
+export interface InventoryResult {
+  inventory: Inventory;
+  loading: boolean;
+}
+
+export function useInventory(gameAPI: GameAPI): InventoryResult {
   const [inventory, setInventory] = useState<Inventory>({
     books: [],
     gifts: []
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
+    setLoading(true);
     gameAPI.getMarketInventory(true).then((gameInv) => {
       const inv = importInventory(gameInv);
       setInventory(inv);
+      setLoading(false);
     });
   }, [gameAPI]);
 
-  return inventory;
+  return {
+    inventory,
+    loading
+  };
 }
 
 function importInventory(gameInventory: GameInventory): Inventory {
@@ -37,7 +49,9 @@ function importBook(potion: InventoryItem): BookEntry {
     itemId: Number(potion.id_item),
     label: potion.item.name,
     rarity: getRarity(potion.item.rarity),
-    xp: Number(potion.item.value)
+    xp: Number(potion.item.value),
+    icon: potion.item.ico,
+    type: 'book'
   };
 
   return {
@@ -52,7 +66,9 @@ function importGift(giftItem: InventoryItem): GiftEntry {
     itemId: Number(giftItem.id_item),
     label: giftItem.item.name,
     rarity: getRarity(giftItem.item.rarity),
-    aff: Number(giftItem.item.value)
+    aff: Number(giftItem.item.value),
+    icon: giftItem.item.ico,
+    type: 'gift'
   };
 
   return {
