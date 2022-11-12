@@ -1,7 +1,8 @@
-import { CommonGirlData, getPoseN } from '../data/data';
+import { Book, CommonGirlData, getPoseN, Gift } from '../data/data';
 import {
   ChangePoseResult,
   GameBlessingData,
+  GameInventory,
   GameQuests,
   GameWindow,
   GemsData,
@@ -314,6 +315,27 @@ export class GameAPIImpl implements GameAPI {
       GemsData.is,
       allowRequest
     );
+  }
+
+  async getMarketInventory(_allowRequest: boolean): Promise<GameInventory> {
+    return {
+      gift: [],
+      potion: []
+    };
+  }
+
+  async useBook(_girl: CommonGirlData, _book: Book): Promise<void> {
+    return;
+  }
+
+  async useGift(_girl: CommonGirlData, _gift: Gift): Promise<void> {
+    return;
+  }
+  async maxXP(_girl: CommonGirlData): Promise<void> {
+    return;
+  }
+  async maxAff(_girl: CommonGirlData): Promise<void> {
+    return;
   }
 
   /**

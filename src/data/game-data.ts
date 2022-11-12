@@ -75,6 +75,14 @@ export type DateString = string;
 export type HtmlString = string;
 export type GirlsDataEntry = OwnedGirlEntry | MissingGirlEntry;
 
+export type GameRarity =
+  | 'starting'
+  | 'common'
+  | 'rare'
+  | 'epic'
+  | 'legendary'
+  | 'mythic';
+
 export interface CommonGirlsDataEntry {
   id_girl: string;
   nb_grades: NumberString;
@@ -84,7 +92,7 @@ export interface CommonGirlsDataEntry {
    * Undefined for girls that are not owned.
    */
   figure?: string;
-  rarity: 'starting' | 'common' | 'rare' | 'epic' | 'legendary' | 'mythic';
+  rarity: GameRarity;
   element: string;
   name: string;
   eye_color1: string;
@@ -440,4 +448,40 @@ export function countGems(data: GemsData): Map<Element, number> {
   result.set(Element.red, Number(data.fire.amount));
   result.set(Element.white, Number(data.light.amount));
   return result;
+}
+
+export interface GameInventory {
+  gift: InventoryItem[];
+  potion: InventoryItem[];
+}
+
+export interface InventoryItem {
+  id_item: NumberString;
+  id_member: NumberString;
+  item: GameItem;
+  price_buy: number;
+  price_sell: number;
+  quantity: NumberString;
+}
+
+export interface GameItem {
+  carac1: NumberString;
+  carac2: NumberString;
+  carac3: NumberString;
+  chance: NumberString;
+  currency: string;
+  damage: NumberString;
+  display_price: number;
+  duration: NumberString;
+  ego: NumberString;
+  endurance: NumberString;
+  ico: string;
+  id_item: NumberString;
+  identifier: string;
+  name: string;
+  price: NumberString;
+  rarity: GameRarity;
+  skin: string;
+  type: string;
+  value: NumberString;
 }

@@ -1,6 +1,7 @@
-import { CommonGirlData, getPoseN } from '../data/data';
+import { Book, CommonGirlData, getPoseN, Gift } from '../data/data';
 import {
   GameBlessingData,
+  GameInventory,
   GameQuests,
   GemsData,
   GemsEntry,
@@ -8,14 +9,16 @@ import {
   GirlsSalaryList
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
-// import girls from './girlsdatalist-full.json';
-// import blessings from './blessings-full.json';
-// import quests from './quests-full.json';
-const girls = {};
-const blessings = { active: [], upcoming: [] };
-const quests = {};
+import girls from './girlsdatalist-full.json';
+import blessings from './blessings-full.json';
+import quests from './quests-full.json';
+import inventory from './inventory.json';
+// const girls = {};
+// const blessings = { active: [], upcoming: [] };
+// const quests = {};
+// const inventory = {gift: [], potion: []};
 
-const MOCK_DELAY = 2500;
+const MOCK_DELAY = 500;
 
 /**
  * Mock implementation of the GameAPI, used to run the game-extension
@@ -117,6 +120,28 @@ export class MockGameAPI implements GameAPI {
         100
       );
     });
+  }
+
+  async getMarketInventory(_allowRequest: boolean): Promise<GameInventory> {
+    return new Promise((resolve, _reject) => {
+      setTimeout(() => {
+        resolve({ ...inventory } as GameInventory);
+      }, MOCK_DELAY + 550);
+    });
+  }
+
+  async useBook(_girl: CommonGirlData, _book: Book): Promise<void> {
+    return;
+  }
+
+  async useGift(_girl: CommonGirlData, _gift: Gift): Promise<void> {
+    return;
+  }
+  async maxXP(_girl: CommonGirlData): Promise<void> {
+    return;
+  }
+  async maxAff(_girl: CommonGirlData): Promise<void> {
+    return;
   }
 
   /**

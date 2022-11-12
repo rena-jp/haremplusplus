@@ -546,3 +546,35 @@ export function getPoseN(avatar: string, pose: number): string {
   }
   return filePath + iconName.substring(0, iconName.length - 1) + `${pose}.png`; // http://..../.../ava1.png
 }
+
+export interface Inventory {
+  books: BookEntry[];
+  gifts: GiftEntry[];
+}
+
+export interface ItemEntry<T extends Item> {
+  count: number;
+  item: T;
+}
+
+export interface BookEntry extends ItemEntry<Book> {
+  book: Book;
+}
+
+export interface GiftEntry extends ItemEntry<Gift> {
+  gift: Gift;
+}
+
+export interface Item {
+  itemId: number;
+  label: string;
+  rarity: Rarity;
+}
+
+export interface Book extends Item {
+  xp: number;
+}
+
+export interface Gift extends Item {
+  aff: number;
+}

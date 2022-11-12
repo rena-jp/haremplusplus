@@ -1,6 +1,7 @@
-import { CommonGirlData } from '../data/data';
+import { Book, CommonGirlData, Gift } from '../data/data';
 import {
   GameBlessingData,
+  GameInventory,
   GameQuests,
   GemsData,
   GirlsDataList,
@@ -20,7 +21,7 @@ export interface GameAPI {
   getGirls(allowRequest: boolean): Promise<GirlsDataList>;
   /**
    * Get the quests list from the game.
-   * @param allowRequest If true, a request may be sent to the server to load the girls.
+   * @param allowRequest If true, a request may be sent to the server to load the quests.
    * If false, this method will only check the current memory (Which would only
    * work on the in-game harem page)
    */
@@ -29,6 +30,17 @@ export interface GameAPI {
    * Returns the current blessings. May send an Ajax request to the server.
    */
   getBlessings(): Promise<GameBlessingData>;
+  /**
+   * Returns the current inventory.
+   * * @param allowRequest If true, a request may be sent to the server to load the inventory.
+   * If false, this method will only check the current memory (Which would only
+   * work on the in-game market page)
+   */
+  getMarketInventory(allowRequest: boolean): Promise<GameInventory>;
+  useBook(girl: CommonGirlData, book: Book): Promise<void>;
+  useGift(girl: CommonGirlData, gift: Gift): Promise<void>;
+  maxXP(girl: CommonGirlData): Promise<void>;
+  maxAff(girl: CommonGirlData): Promise<void>;
   /**
    * Collect salary for the selected girl. If the action succeeds,
    * the callback will be invoked with an updated version of the girls data.
