@@ -250,14 +250,17 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         gameAPI={gameAPI}
         selectGirl={selectGirl}
       />
-      {selectedGirl && showUpgrade && (
+      {selectedGirl && showUpgrade && selectedGirl.own && (
         <div className="harem-upgrade-panel">
           <UpgradePage
             currentGirl={selectedGirl}
             displayedGirls={girls}
+            allGirls={allGirls}
+            show0Pose={show0Pose}
             gameAPI={gameAPI}
             page={page}
             setPage={setPage}
+            selectGirl={selectGirl}
           />
         </div>
       )}
