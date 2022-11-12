@@ -5,9 +5,11 @@ import { getGameWindow } from '../data/game-data';
 
 export async function handleHome(): Promise<void> {
   const showHaremRoot = createHaremContainerRoot();
+  const searchParams = new URLSearchParams(window.location.search);
+
   if (showHaremRoot !== undefined) {
     const root = createRoot();
-    let visible = false;
+    let visible = searchParams.has('harem');
     const updateApp = () => {
       root.render(
         <React.StrictMode>
@@ -20,7 +22,13 @@ export async function handleHome(): Promise<void> {
       updateApp();
     };
     const haremButton = (
-      <a onClick={() => setVisible(true)}>
+      <a
+        onClick={(event) => {
+          setVisible(true);
+          event?.preventDefault();
+        }}
+        href="?harem"
+      >
         <div className="notif-position">
           <span>
             <p>Harem</p>
@@ -32,6 +40,9 @@ export async function handleHome(): Promise<void> {
       </a>
     );
     showHaremRoot.render(haremButton);
+    if (visible) {
+      updateApp();
+    }
   } else {
     console.error(
       "Didn't find toggle-harem. Can't install quick-harem extension."

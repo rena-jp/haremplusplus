@@ -146,11 +146,35 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   const missingGirls = renderedGirls.filter((g) => !g.own);
 
   const [selectedGirl, setSelectedGirl] = useState<CommonGirlData | undefined>(
-    girls.length === 0 ? undefined : girls[0]
+    () => {
+      const searchParams = new URLSearchParams(window.location.search);
+      if (searchParams.has('girl')) {
+        const girlId = searchParams.get('girl');
+        const girl = allGirls.find((girl) => girl.id === girlId);
+        if (girl !== undefined) {
+          return girl;
+        }
+      }
+      return girls.length === 0 ? undefined : girls[0]; // First visible girl
+    }
   );
   const selectGirl = useCallback(
     (girl?: CommonGirlData) => {
       setSelectedGirl(girl);
+
+      // Update the location
+      const params = new URLSearchParams(window.location.search);
+      if (!params.has('harem')) {
+        params.set('harem', '');
+      }
+      if (girl !== undefined) {
+        params.set('girl', girl.id);
+      } else {
+        params.delete('girl');
+      }
+      const url = new URL(window.location.toString());
+      url.search = params.toString();
+      window.history.replaceState('', '', url.toString());
     },
     [setSelectedGirl]
   );

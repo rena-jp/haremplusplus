@@ -1,5 +1,6 @@
 ## 0.9.7 (Next)
 
+- Harem: Add proper link navigation. Supports direct link reference, such as: ./home.html?harem&girl=1
 - Selection: Scroll girl into view when changing selection (if girl is not filtered out)
 
 ## 0.9.6 - 2022-11-11

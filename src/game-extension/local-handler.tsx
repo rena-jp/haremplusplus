@@ -4,9 +4,11 @@ import { GameExtension } from '../components/game-extension';
 
 export async function handleLocal(): Promise<void> {
   const showHarem = getOrCreateShowHarem();
+  const searchParams = new URLSearchParams(window.location.search);
+
   if (showHarem !== undefined) {
     const root = createRoot();
-    let visible = false;
+    let visible = searchParams.has('harem');
     const updateApp = () => {
       root.render(
         <React.StrictMode>
@@ -18,9 +20,13 @@ export async function handleLocal(): Promise<void> {
       visible = newVisible;
       updateApp();
     };
-    showHarem.onclick = () => {
+    showHarem.onclick = (event) => {
       setVisible(true);
+      event.preventDefault();
     };
+    if (visible) {
+      updateApp();
+    }
   } else {
     console.error(
       "Didn't find toggle-harem. Can't install quick-harem extension."
