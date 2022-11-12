@@ -270,3 +270,35 @@
 .blessed {
   color: green;
 }
+
+/**
+ *  Add upgrade page in a slider panel
+ */
+
+.harem-upgrade-panel {
+  /** Appearance */
+  opacity: 98%;
+  background-color: rgb(69, 33, 41);
+  border: 1px solid black;
+  border-radius: 15px;
+  box-shadow: 0px 0px 7px black;
+  padding: 15px;
+
+  /** Size */
+  height: 50vh;
+  width: 70vw;
+
+  /** Position */
+  position: absolute;
+  bottom: 0.5em;
+  left: 50%;
+  z-index: 2;
+  transform: translateX(-50%);
+
+  transition: transform 0.5s ease-in, visibility 0.5s ease-in;
+}
+
+.harem-upgrade-panel.hidden {
+  transform: translateX(-50%) translateY(105%);
+  visibility: hidden;
+}

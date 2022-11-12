@@ -4,6 +4,7 @@ import { GameAPI, SalaryDataListener } from '../api/GameAPI';
 import { BlessingDefinition, CommonGirlData } from '../data/data';
 import { GirlDescription } from './description';
 import { GirlTile } from './girl';
+import { UpgradePage } from './upgrade';
 
 /**
  * Number of girls to be rendered immediately. Should be small (< 100 items)
@@ -200,6 +201,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     forceCheck();
   });
 
+  const [showUpgrade, _setShowUpgrade] = useState(true);
+
   return (
     <>
       <div className="girlsList">
@@ -246,6 +249,15 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         gameAPI={gameAPI}
         selectGirl={selectGirl}
       />
+      {selectedGirl && showUpgrade && (
+        <div className="harem-upgrade-panel">
+          <UpgradePage
+            currentGirl={selectedGirl}
+            displayedGirls={girls}
+            gameAPI={gameAPI}
+          />
+        </div>
+      )}
     </>
   );
 };
