@@ -85,3 +85,24 @@
 .girls-selector .next-girl {
   opacity: 0.6;
 }
+
+.xp-status,
+.aff-status {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9em;
+  column-gap: 1rem;
+  min-height: 4rem;
+  border-block: 1px solid white;
+}
+.xp-status .progress-bar,
+.aff-status .progress-bar {
+  font-size: 0.9em;
+}
+
+.xp-status > span {
+  display: flex;
+  flex-direction: column;
+}

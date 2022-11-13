@@ -415,3 +415,46 @@ export function getDomain(): string {
     : '.';
   return domain;
 }
+
+export interface ProgressBarProps {
+  min: number;
+  max: number;
+  curr: number;
+  extra?: number;
+  label?: string;
+}
+
+export const ProgressBar: React.FC<ProgressBarProps> = ({
+  min,
+  max,
+  curr,
+  extra,
+  label
+}) => {
+  const ratio = Math.min(1, Math.max(0, (curr - min) / (max - min)));
+  const extraValue = curr + (extra ?? 0);
+  const extraRatio = Math.min(1, Math.max(0, (extraValue - min) / (max - min)));
+
+  const classNames = ['progress-bar'];
+  if (ratio === 1) {
+    classNames.push('full');
+  } else if (extraRatio === 1) {
+    classNames.push('extra-full');
+  }
+
+  const mainWidth = Math.floor(ratio * 100);
+  const extraWidth =
+    extraRatio === 1 ? 100 - mainWidth : Math.floor((extraRatio - ratio) * 100);
+
+  return (
+    <div className={classNames.join(' ')}>
+      <div className="main-track" style={{ width: `${mainWidth}%` }}></div>
+      {(extra ?? 0) > 0 ? (
+        <div className="extra-track" style={{ width: `${extraWidth}%` }}></div>
+      ) : null}
+      {label !== undefined ? (
+        <span className="track-label">{label}</span>
+      ) : null}
+    </div>
+  );
+};

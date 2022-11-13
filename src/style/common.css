@@ -207,3 +207,57 @@ requiring actual content. */
   padding: 10px 10px 0px 10px;
   border-radius: 10px;
 }
+
+.progress-bar {
+  background-color: black;
+  border: 1px solid white;
+  position: relative;
+  min-height: 1.2em;
+  width: 14rem;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 0px;
+  padding: 0px;
+
+  --main-track-color: cornflowerblue;
+  --extra-track-color: #23b56b;
+
+  --main-track-color-full: #086335;
+  --main-track-color-extra-full: darkorange;
+  --extra-track-color-extra-full: rgba(255, 140, 0, 0.6);
+
+  --track-radius: 6px;
+
+  border-radius: calc(var(--track-radius) + 1px);
+}
+
+.progress-bar.full {
+  --main-track-color: var(--main-track-color-full);
+}
+
+.progress-bar.extra-full {
+  --main-track-color: var(--main-track-color-extra-full);
+  --extra-track-color: var(--extra-track-color-extra-full);
+}
+
+.progress-bar > .main-track {
+  background-color: var(--main-track-color);
+  border-radius: var(--track-radius) 0 0 var(--track-radius);
+}
+.progress-bar > .main-track,
+.progress-bar > .extra-track {
+  transition: width 0.5s ease-in;
+}
+
+.progress-bar > .extra-track {
+  background-color: var(--extra-track-color);
+  border-radius: 0 var(--track-radius) var(--track-radius) 0;
+}
+
+.progress-bar > .track-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}

@@ -8,9 +8,10 @@ import {
   ItemEntry,
   Rarity
 } from '../data/data';
+import { useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
-import { Tooltip, format, getDomain, GemIcon } from './common';
+import { Tooltip, format, getDomain, GemIcon, ProgressBar } from './common';
 import { SimpleGirlTile } from './girl';
 
 export type UpgradePage = 'books' | 'gifts';
@@ -100,7 +101,6 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
             selectGirl={selectGirl}
             show0Pose={show0Pose}
           />
-          <UpgradeStatus girl={currentGirl} />
           <div className="harem-upgrade-pages">
             <span
               className={`${page === 'books' ? 'active' : 'inactive'}`}
@@ -115,17 +115,16 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
               Gifts
             </span>
           </div>
-          <div className="upgrade-items-list">
-            {items.map((itemEntry) => (
-              <ItemTile
-                itemEntry={itemEntry}
-                girl={currentGirl}
-                selected={selectedItem === itemEntry}
-                select={selectItem}
-                key={itemEntry.item.itemId}
-              />
-            ))}
-          </div>
+          <UpgradeStatus
+            girl={currentGirl}
+            page={page}
+            selectedItem={selectedItem?.item}
+          />
+          <ItemsList
+            items={items}
+            selectedItem={selectedItem}
+            selectItem={selectItem}
+          />
           <div className="harem-upgrade-actions">
             <a
               className="hh-action-button go-to-market"
@@ -157,7 +156,6 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
 
 export interface ItemTileProps {
   itemEntry: ItemEntry<Item>;
-  girl: CommonGirlData;
   selected: boolean;
   select(item: ItemEntry<Item> | undefined): void;
 }
@@ -280,44 +278,94 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
   );
 };
 
-export interface UpgradeStatusProps {
+export interface StatusProps {
   girl: CommonGirlData;
 }
+export interface UpgradeStatusProps extends StatusProps {
+  page: 'books' | 'gifts';
+  selectedItem: Item | undefined;
+}
 
-export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
+export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
+  girl,
+  page,
+  selectedItem
+}) => {
+  const book =
+    selectedItem !== undefined && selectedItem.type === 'book'
+      ? (selectedItem as Book)
+      : undefined;
   return (
     <div className="upgrade-status">
-      <XPStatus girl={girl} />
-      <AffStatus girl={girl} />
+      {page === 'books' ? <XPStatus girl={girl} book={book} /> : null}
+      {page === 'gifts' ? <AffStatus girl={girl} /> : null}
     </div>
   );
 };
 
-export const XPStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
-  const nextLevel = girl.level === 750 ? 'Max' : (girl.level ?? 1) + 1;
-  const nextCap = girl.level === girl.maxLevel ? 'Max' : girl.maxLevel;
+export interface XpStatusProps extends StatusProps {
+  book: Book | undefined;
+}
+
+export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
+  const nextLevel = girl.level === 750 ? 750 : (girl.level ?? 1) + 1;
+  const nextCap = girl.maxLevel!;
+
+  const xpStats = useXpStats(girl);
 
   return (
     <div className="xp-status">
-      <span>
-        XP to Lv. {nextLevel}: {format(girl.gxpToLevel ?? 0)}
-      </span>
-      <span>
-        XP to Lv. {nextCap}: {format(girl.gxpToCap ?? 0)}
-      </span>
-      <span>XP to max level: {format(girl.missingGXP)}</span>
-      <span>
-        Gems to next cap: {format(girl.gemsToCap ?? 0)}
-        <GemIcon element={girl.element} />
-      </span>
-      <span>
-        <div>Test</div>
-      </span>
+      {girl.level! < 750 ? (
+        <span>
+          Lv. {girl.level} to Lv. {nextLevel}:
+          <ProgressBar
+            curr={xpStats.currentXp}
+            min={xpStats.minXp}
+            max={xpStats.maxXp}
+            extra={book?.xp ?? 0}
+            label={
+              girl.level === girl.maxLevel
+                ? 'Max.'
+                : xpStats.maxXp - xpStats.currentXp + ' XP'
+            }
+          />
+        </span>
+      ) : null}
+      {girl.level! < nextCap && nextCap < 750 ? (
+        <span>
+          To Lv. {nextCap}:{' '}
+          <ProgressBar
+            curr={xpStats.currentXp}
+            min={xpStats.minXpToCap}
+            max={xpStats.maxXpToCap}
+            extra={book?.xp ?? 0}
+            label={xpStats.maxXpToCap - xpStats.currentXp + ' XP'}
+          />
+        </span>
+      ) : null}
+      {xpStats.xpToMax > 0 ? (
+        <span>
+          To Lv. 750:{' '}
+          <ProgressBar
+            curr={xpStats.currentXp}
+            min={0}
+            max={xpStats.xpToMax}
+            extra={book?.xp ?? 0}
+            label={xpStats.xpToMax + ' XP'}
+          />
+        </span>
+      ) : null}
+      {/* {girl.gemsToCap ?? 0 > 0 ? (
+        <span>
+          Gems to next cap: {format(girl.gemsToCap ?? 0)}
+          <GemIcon element={girl.element} />
+        </span>
+      ) : null} */}
     </div>
   );
 };
 
-export const AffStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
+export const AffStatus: React.FC<StatusProps> = ({ girl }) => {
   const nextGrade =
     girl.stars === girl.maxStars || girl.upgradeReady ? 'Max' : girl.stars + 1;
   const maxGrade = girl.stars === girl.maxStars ? 'Max' : girl.maxStars;
@@ -329,6 +377,31 @@ export const AffStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
       <span>
         Aff to grade {maxGrade}: {format(girl.missingAff)}
       </span>
+    </div>
+  );
+};
+
+export interface ItemsListProps {
+  items: ItemEntry<Item>[];
+  selectedItem: ItemEntry<Item> | undefined;
+  selectItem(item: ItemEntry<Item>): void;
+}
+
+const ItemsList: React.FC<ItemsListProps> = ({
+  items,
+  selectedItem,
+  selectItem
+}) => {
+  return (
+    <div className="upgrade-items-list">
+      {items.map((itemEntry) => (
+        <ItemTile
+          itemEntry={itemEntry}
+          selected={selectedItem === itemEntry}
+          select={selectItem}
+          key={itemEntry.item.itemId}
+        />
+      ))}
     </div>
   );
 };

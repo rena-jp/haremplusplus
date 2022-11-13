@@ -12,6 +12,7 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
+import { useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
   ElementIcon,
@@ -173,6 +174,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   currentBlessing,
   upcomingBlessing
 }) => {
+  const xpStats = useXpStats(girl);
+
   return (
     <div className="details-section stats">
       <p>Full Name: {girl.fullName}</p>
@@ -224,9 +227,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 /> */}
         </p>
       ) : null}
-      {girl.missingGXP > 0 ? (
+      {xpStats.xpToMax > 0 ? (
         <p>
-          Missing XP: {format(girl.missingGXP)}{' '}
+          Missing XP: {format(xpStats.xpToMax)}{' '}
           {/* <img
                   src="https://hh2.hh-content.com/pictures/items/XP1.png"
                   style={{ height: '4ex' }}

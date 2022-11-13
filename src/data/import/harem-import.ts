@@ -28,7 +28,6 @@ import {
   NumberString
 } from '../game-data';
 import girlsPoses from './poses.json';
-import xpTable from './xp-table-cap.json';
 
 export interface DataFormat {
   blessings: GameBlessingData;
@@ -96,9 +95,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
           : girlData.Affection.left,
       gemsToCap: girlData.awakening_costs,
       upgradeReady: girlData.can_upgrade === true,
-      missingGXP: getMissingGXP(girlData, rarity),
-      gxpToCap: getGXPToCap(girlData),
-      gxpToLevel: girlData.Xp === undefined ? 0 : girlData.Xp?.left,
+      currentGXP: girlData.own ? girlData.Xp.cur : 0,
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.own ? girlData.pay_time : undefined,
       salary: girlData.own ? girlData.salary : undefined,
@@ -271,48 +268,6 @@ function getPose(girlData: GirlsDataEntry): Pose {
     }
   }
   return girlData.figure === undefined ? Pose.unknown : Number(girlData.figure);
-}
-
-function getMissingGXP(girlData: GirlsDataEntry, rarity: Rarity): number {
-  if (Number(girlData.level) === 750) {
-    return 0;
-  }
-
-  let target;
-  switch (rarity) {
-    case Rarity.common:
-    case Rarity.starting:
-      target = 358361;
-      break;
-    case Rarity.rare:
-      target = 429970;
-      break;
-    case Rarity.epic:
-      target = 501554;
-      break;
-    case Rarity.legendary:
-      target = 573149;
-      break;
-    case Rarity.mythic:
-      target = 1432338;
-      break;
-  }
-
-  const current = girlData.own ? girlData.Xp.cur : 0;
-  return Math.max(target - current, 0);
-}
-
-function getGXPToCap(girlData: GirlsDataEntry): number {
-  if (!girlData.own) {
-    return 0;
-  }
-  const rarity = girlData.rarity;
-  const table = xpTable[rarity];
-  const currentLevel = Number(girlData.level);
-  const nextCap = Math.max(250, Math.ceil(currentLevel / 50) * 50);
-  const nextCapIndex = String(nextCap) as keyof typeof table;
-  const targetXP = table[nextCapIndex];
-  return targetXP[0] - girlData.Xp.cur;
 }
 
 function getMissingAff(girlData: GirlsDataEntry, rarity: Rarity): number {

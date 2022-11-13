@@ -15,6 +15,7 @@ import {
   Pose,
   Rarity
 } from '../data/data';
+import { getMissingGXP } from '../hooks/girl-xp-hooks';
 import '../style/harem.css';
 import { ElementIcon, format, GemIcon } from './common';
 import { QuickFilter } from './harem';
@@ -49,13 +50,13 @@ export const Summary: React.FC<SummaryProps> = ({
   const missingGXPAll = format(
     girls
       .filter((girl) => girl.own)
-      .map((girl) => girl.missingGXP)
+      .map((girl) => getMissingGXP(girl))
       .reduce((a, b) => a + b, 0)
   );
   const missingGXPELM = format(
     girls
       .filter((girl) => girl.own && girl.rarity > Rarity.rare)
-      .map((girl) => girl.missingGXP)
+      .map((girl) => getMissingGXP(girl))
       .reduce((a, b) => a + b, 0)
   );
 

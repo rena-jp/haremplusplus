@@ -73,9 +73,7 @@ export interface BaseGirlData {
   missingAff: number;
   affToGrade?: number;
   upgradeReady: boolean;
-  missingGXP: number;
-  gxpToCap?: number;
-  gxpToLevel?: number;
+  currentGXP: number;
   currentIcon: number;
   missingGems: number;
   gemsToCap?: number;

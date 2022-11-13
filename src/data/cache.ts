@@ -4,7 +4,22 @@ import { FilterConfig } from './filters/filter-api';
 import { GameBlessingData, GemsData } from './game-data';
 import { SortConfig } from './sort';
 
-const CACHE = 'harem-cache';
+const DEPRECATED_CACHES = ['harem-cache'];
+const CACHE = 'harem-cache-0.9.7';
+
+async function clearOldCaches(): Promise<void> {
+  for (const deprecatedCache of DEPRECATED_CACHES) {
+    try {
+      if (await caches.has(deprecatedCache)) {
+        console.log('Clear deprecated cache: ', deprecatedCache);
+        caches.delete(deprecatedCache);
+      }
+    } catch (error) {
+      console.error('Failed to clear deprecated cache: ', deprecatedCache);
+    }
+  }
+}
+clearOldCaches();
 
 const GEMS_DATA_REQUEST = 'gemsData.json';
 
