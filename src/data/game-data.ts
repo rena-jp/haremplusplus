@@ -141,7 +141,7 @@ export interface CommonGirlsDataEntry {
   salary_per_hour?: number;
   Xp?: XpEntry;
   own: boolean;
-  awakening_cost?: number;
+  awakening_costs: number;
   ref: RefEntry;
   source?: SourceEntry;
   source_selectors: SourceSelectorsEntry | [];

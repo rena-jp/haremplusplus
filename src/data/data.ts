@@ -71,10 +71,14 @@ export interface BaseGirlData {
   element: Element;
   pose: Pose;
   missingAff: number;
+  affToGrade?: number;
   upgradeReady: boolean;
   missingGXP: number;
+  gxpToCap?: number;
+  gxpToLevel?: number;
   currentIcon: number;
   missingGems: number;
+  gemsToCap?: number;
   fullName: string;
   sources: EventSource[];
   quests: Quest[];

@@ -10,7 +10,7 @@ import {
 } from '../data/data';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
-import { Tooltip, format, getDomain } from './common';
+import { Tooltip, format, getDomain, GemIcon } from './common';
 import { SimpleGirlTile } from './girl';
 
 export type UpgradePage = 'books' | 'gifts';
@@ -60,7 +60,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     } else if (page === 'gifts' && selectedItem.item.type === 'gift') {
       gameAPI.useGift(currentGirl, selectedItem.item as Gift);
     }
-  }, [selectedItem]);
+  }, [selectedItem, currentGirl, gameAPI]);
 
   const max = useCallback(() => {
     if (page === 'books') {
@@ -100,6 +100,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
             selectGirl={selectGirl}
             show0Pose={show0Pose}
           />
+          <UpgradeStatus girl={currentGirl} />
           <div className="harem-upgrade-pages">
             <span
               className={`${page === 'books' ? 'active' : 'inactive'}`}
@@ -217,10 +218,13 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
     return ownedGirls;
   }, [allGirls]);
 
+  // For filtered girls, memoize and do not update: this will ensure the selection remains stable,
+  // even if filters change/a girl being upgraded no longer matches the filters.
+  // This makes the carousel behavior a lot more predictable.
   const ownedDisplayedGirls = useMemo(() => {
     const ownedGirls = displayedGirls.filter((girl) => girl.own);
     return ownedGirls;
-  }, [displayedGirls]);
+  }, []);
 
   let previousGirl: CommonGirlData, nextGirl: CommonGirlData;
   let index = ownedDisplayedGirls.findIndex(
@@ -271,6 +275,59 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
       />
       <span className="girl-rank">
         {rankCount}/{ownedGirlsCount}
+      </span>
+    </div>
+  );
+};
+
+export interface UpgradeStatusProps {
+  girl: CommonGirlData;
+}
+
+export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
+  return (
+    <div className="upgrade-status">
+      <XPStatus girl={girl} />
+      <AffStatus girl={girl} />
+    </div>
+  );
+};
+
+export const XPStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
+  const nextLevel = girl.level === 750 ? 'Max' : (girl.level ?? 1) + 1;
+  const nextCap = girl.level === girl.maxLevel ? 'Max' : girl.maxLevel;
+
+  return (
+    <div className="xp-status">
+      <span>
+        XP to Lv. {nextLevel}: {format(girl.gxpToLevel ?? 0)}
+      </span>
+      <span>
+        XP to Lv. {nextCap}: {format(girl.gxpToCap ?? 0)}
+      </span>
+      <span>XP to max level: {format(girl.missingGXP)}</span>
+      <span>
+        Gems to next cap: {format(girl.gemsToCap ?? 0)}
+        <GemIcon element={girl.element} />
+      </span>
+      <span>
+        <div>Test</div>
+      </span>
+    </div>
+  );
+};
+
+export const AffStatus: React.FC<UpgradeStatusProps> = ({ girl }) => {
+  const nextGrade =
+    girl.stars === girl.maxStars || girl.upgradeReady ? 'Max' : girl.stars + 1;
+  const maxGrade = girl.stars === girl.maxStars ? 'Max' : girl.maxStars;
+  return (
+    <div className="aff-status">
+      <span>
+        Aff to grade {nextGrade}: {format(girl.affToGrade ?? 0)}
+      </span>
+      <span>
+        Aff to grade {maxGrade}: {format(girl.missingAff)}
       </span>
     </div>
   );

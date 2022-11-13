@@ -7,6 +7,15 @@ import partialGirl from './testdata/partialGirl.json';
 import { CommonGirlData } from '../data/data';
 
 describe('Girl Tiles', () => {
+  beforeEach(() => {
+    const mockIntersectionObserver = jest.fn();
+    mockIntersectionObserver.mockReturnValue({
+      observe: jest.fn(),
+      unobserve: jest.fn(),
+      disconnect: jest.fn()
+    });
+    window.IntersectionObserver = mockIntersectionObserver;
+  });
   test('Simple girl tile, owned', () => {
     const { container } = render(
       <SimpleGirlTile

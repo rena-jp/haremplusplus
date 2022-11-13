@@ -1,8 +1,9 @@
-import { Book, CommonGirlData, getPoseN, Gift } from '../data/data';
+import { Book, CommonGirlData, getPoseN, Gift, Rarity } from '../data/data';
 import {
   GameBlessingData,
   GameInventory,
   GameQuests,
+  GameRarity,
   GemsData,
   GemsEntry,
   GirlsDataList,
@@ -13,10 +14,12 @@ import girls from './girlsdatalist-full.json';
 import blessings from './blessings-full.json';
 import quests from './quests-full.json';
 import inventory from './inventory.json';
+import fullXpTable from '../data/import/xp-table-full.json';
 // const girls = {};
 // const blessings = { active: [], upcoming: [] };
 // const quests = {};
-// const inventory = {gift: [], potion: []};
+// const inventory = { gift: [], potion: [] };
+// const fullXpTable = {};
 
 const MOCK_DELAY = 500;
 
@@ -126,19 +129,30 @@ export class MockGameAPI implements GameAPI {
     return new Promise((resolve, _reject) => {
       setTimeout(() => {
         resolve({ ...inventory } as GameInventory);
-      }, MOCK_DELAY + 550);
+      }, 200);
     });
   }
 
   async useBook(girl: CommonGirlData, book: Book): Promise<void> {
-    console.log(
-      'Use book ',
-      book.label,
-      ' ',
-      book.xp + ' XP',
-      'on girl',
-      girl.name
-    );
+    if (!girl.own) {
+      return;
+    }
+
+    const bookValid = girl.level! < girl.maxLevel!;
+    console.log('Book valid: ', bookValid);
+    if (bookValid) {
+      // Mock some values updates to make sure the UI updates properly...
+
+      const xpTable = fullXpTable[gameRarity(girl.rarity)];
+      const currentXP = xpTable[750][0] - girl.missingGXP;
+
+      updateGirlXpStats(currentXP, girl, xpTable, book.xp);
+
+      if (this.updateGirl !== undefined) {
+        this.updateGirl(girl);
+      }
+    }
+
     return;
   }
 
@@ -189,4 +203,32 @@ export class MockGameAPI implements GameAPI {
   removeSalaryDataListener(_listener: SalaryDataListener): void {
     // Not supported in mock
   }
+}
+
+function gameRarity(rarity: Rarity): GameRarity {
+  return Rarity[rarity] as GameRarity;
+}
+
+function updateGirlXpStats(
+  initialXP: number,
+  girl: CommonGirlData,
+  xpTable: GameXPTable,
+  addXp: number
+): void {
+  const currentXP = initialXP + addXp;
+  girl.missingGXP = xpTable['750'][0] - currentXP;
+  for (let i = girl.level!; i <= 750; i++) {
+    const entry = xpTable[String(i)];
+    if (i === 750 || (currentXP >= entry[0] && currentXP < entry[1])) {
+      girl.level = Math.min(i, girl.maxLevel!);
+      break;
+    }
+  }
+  girl.gxpToCap! -= addXp;
+  girl.gxpToLevel =
+    girl.level! === 750 ? 0 : xpTable[String(girl.level! + 1)][0] - currentXP;
+}
+
+interface GameXPTable {
+  [key: string]: number[];
 }

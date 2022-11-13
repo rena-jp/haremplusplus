@@ -255,6 +255,7 @@ function quickEqualGirls(
     girl1.icon === girl2.icon && // Current pose test
     girl1.birthday === girl2.birthday && // Language test. Birthday is more likely to be translated in all languages.
     girl1.variations?.length === girl2.variations?.length &&
-    girl1.pose === girl2.pose // Maybe the pose was unknown, and now it's not
+    girl1.pose === girl2.pose && // Maybe the pose was unknown, and now it's not
+    girl1.gxpToCap !== girl2.gxpToCap // New attributes in 0.9.7
   );
 }

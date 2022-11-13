@@ -16,6 +16,7 @@ export interface InventoryResult {
 }
 
 export function useInventory(gameAPI: GameAPI): InventoryResult {
+  // TODO Update inventory count after using an item
   const [inventory, setInventory] = useState<Inventory>({
     books: [],
     gifts: []

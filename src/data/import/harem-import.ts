@@ -28,6 +28,7 @@ import {
   NumberString
 } from '../game-data';
 import girlsPoses from './poses.json';
+import xpTable from './xp-table-cap.json';
 
 export interface DataFormat {
   blessings: GameBlessingData;
@@ -89,8 +90,15 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       zodiac: getZodiac(girlData),
       element: getElement(girlData),
       missingAff: getMissingAff(girlData, rarity),
+      affToGrade:
+        girlData.can_upgrade === true || girlData.Affection === undefined
+          ? 0
+          : girlData.Affection.left,
+      gemsToCap: girlData.awakening_costs,
       upgradeReady: girlData.can_upgrade === true,
       missingGXP: getMissingGXP(girlData, rarity),
+      gxpToCap: getGXPToCap(girlData),
+      gxpToLevel: girlData.Xp === undefined ? 0 : girlData.Xp?.left,
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.own ? girlData.pay_time : undefined,
       salary: girlData.own ? girlData.salary : undefined,
@@ -292,6 +300,19 @@ function getMissingGXP(girlData: GirlsDataEntry, rarity: Rarity): number {
 
   const current = girlData.own ? girlData.Xp.cur : 0;
   return Math.max(target - current, 0);
+}
+
+function getGXPToCap(girlData: GirlsDataEntry): number {
+  if (!girlData.own) {
+    return 0;
+  }
+  const rarity = girlData.rarity;
+  const table = xpTable[rarity];
+  const currentLevel = Number(girlData.level);
+  const nextCap = Math.max(250, Math.ceil(currentLevel / 50) * 50);
+  const nextCapIndex = String(nextCap) as keyof typeof table;
+  const targetXP = table[nextCapIndex];
+  return targetXP[0] - girlData.Xp.cur;
 }
 
 function getMissingAff(girlData: GirlsDataEntry, rarity: Rarity): number {

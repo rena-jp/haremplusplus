@@ -95,10 +95,11 @@ export type SalaryDataListener = (data: GirlsSalaryList) => void;
 
 const requestsQueue: Promise<unknown>[] = [];
 let lastExecution = 0;
-const MIN_DELAY = 25; /* ms, minimum time between the end of a request and the beginning of the next */
+/** Minimum time between the end of a request and the beginning of the next, in ms */
+const MIN_DELAY = 25;
 
 /**
- * The game server doesn't really like parallel requests, and may
+ * The game server doesn't like parallel requests, and may
  * throw 403 Forbidden as a result. Use this function to queue
  * server requests, ensuring they run sequentially.
  * @param request The request to execute.
