@@ -11,7 +11,14 @@ import {
 import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
-import { Tooltip, format, getDomain, GemIcon, ProgressBar } from './common';
+import {
+  Tooltip,
+  format,
+  getDomain,
+  GemIcon,
+  ProgressBar,
+  CloseButton
+} from './common';
 import { SimpleGirlTile } from './girl';
 
 export type UpgradePage = 'books' | 'gifts';
@@ -25,6 +32,7 @@ export interface UpgradePageProps {
   setPage(page: UpgradePage): void;
   selectGirl(girl: CommonGirlData): void;
   show0Pose: boolean;
+  close(): void;
 }
 
 export const UpgradePage: React.FC<UpgradePageProps> = ({
@@ -35,7 +43,8 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
   page,
   setPage,
   selectGirl,
-  show0Pose
+  show0Pose,
+  close
 }) => {
   const { inventory, loading } = useInventory(gameAPI);
 
@@ -89,6 +98,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
 
   return (
     <div className="harem-upgrade">
+      <CloseButton close={close} />
       <div className="selector-and-upgrade">
         <h2>{currentGirl.name}</h2>
         <GirlsSelector

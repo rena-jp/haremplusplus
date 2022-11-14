@@ -9,15 +9,15 @@ import {
   GirlsSalaryList
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
-import girls from './girlsdatalist-full.json';
-import blessings from './blessings-full.json';
-import quests from './quests-full.json';
-import inventory from './inventory.json';
 import { getLevel } from '../hooks/girl-xp-hooks';
-// const girls = {};
-// const blessings = { active: [], upcoming: [] };
-// const quests = {};
-// const inventory = { gift: [], potion: [] };
+// import girls from './girlsdatalist-full.json';
+// import blessings from './blessings-full.json';
+// import quests from './quests-full.json';
+// import inventory from './inventory.json';
+const girls = {};
+const blessings = { active: [], upcoming: [] };
+const quests = {};
+const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 

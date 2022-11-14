@@ -201,8 +201,17 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     forceCheck();
   });
 
-  const [showUpgrade, _setShowUpgrade] = useState(false);
+  const [showUpgrade, setShowUpgrade] = useState(false);
   const [page, setPage] = useState<UpgradePage>('books');
+
+  const openUpgrade = useCallback((page: UpgradePage) => {
+    setShowUpgrade(true);
+    setPage(page);
+  }, []);
+
+  const closeUpgrade = useCallback(() => {
+    setShowUpgrade(false);
+  }, []);
 
   return (
     <>
@@ -249,6 +258,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         show0Pose={show0Pose}
         gameAPI={gameAPI}
         selectGirl={selectGirl}
+        openUpgrade={openUpgrade}
       />
       {selectedGirl && showUpgrade && selectedGirl.own && (
         <div className="harem-upgrade-panel">
@@ -261,6 +271,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
             page={page}
             setPage={setPage}
             selectGirl={selectGirl}
+            close={closeUpgrade}
           />
         </div>
       )}

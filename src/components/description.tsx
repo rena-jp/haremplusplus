@@ -25,6 +25,7 @@ import {
   Tooltip
 } from './common';
 import { SimpleGirlTile } from './girl';
+import { UpgradePage } from './upgrade';
 
 export interface GirlDescriptionProps {
   allGirls: CommonGirlData[];
@@ -34,6 +35,7 @@ export interface GirlDescriptionProps {
   show0Pose: boolean;
   gameAPI: GameAPI;
   selectGirl(girl: CommonGirlData): void;
+  openUpgrade(page: UpgradePage): void;
 }
 
 export const GirlDescription: React.FC<GirlDescriptionProps> = ({
@@ -43,7 +45,8 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   show0Pose,
   gameAPI,
   allGirls,
-  selectGirl
+  selectGirl,
+  openUpgrade
 }) => {
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
 
@@ -142,6 +145,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                   currentBlessing={activeBlessing}
                   upcomingBlessing={nextBlessing}
                   domain={domain}
+                  openUpgrade={openUpgrade}
                 />
               )}
               <p>
@@ -166,13 +170,15 @@ export interface BlessingSectionProps {
   girl: CommonGirlData;
   currentBlessing: BlessingDefinition[];
   upcomingBlessing: BlessingDefinition[];
+  openUpgrade(page: UpgradePage): void;
 }
 
 export const BlessingSection: React.FC<BlessingSectionProps> = ({
   domain,
   girl,
   currentBlessing,
-  upcomingBlessing
+  upcomingBlessing,
+  openUpgrade
 }) => {
   const xpStats = useXpStats(girl);
 
@@ -253,6 +259,10 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
               href={`${domain}/girl/${girl.id}?resource=experience`}
               target="_blank"
               rel="noreferrer"
+              onClick={(ev) => {
+                ev.preventDefault();
+                openUpgrade('books');
+              }}
             >
               Go to Girl's page
             </a>{' '}
@@ -267,6 +277,10 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
               href={`${domain}/girl/${girl.id}?resource=affection`}
               target="_blank"
               rel="noreferrer"
+              onClick={(ev) => {
+                ev.preventDefault();
+                openUpgrade('gifts');
+              }}
             >
               Go to Girl's page
             </a>{' '}

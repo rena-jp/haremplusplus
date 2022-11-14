@@ -11,8 +11,8 @@ async function clearOldCaches(): Promise<void> {
   for (const deprecatedCache of DEPRECATED_CACHES) {
     try {
       if (await caches.has(deprecatedCache)) {
-        console.log('Clear deprecated cache: ', deprecatedCache);
-        caches.delete(deprecatedCache);
+        console.info('Clear deprecated cache: ', deprecatedCache);
+        await caches.delete(deprecatedCache);
       }
     } catch (error) {
       console.error('Failed to clear deprecated cache: ', deprecatedCache);
