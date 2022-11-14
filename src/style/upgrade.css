@@ -6,11 +6,31 @@
   row-gap: 0.3em;
 }
 
+.harem-upgrade > .items-and-actions {
+  min-height: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+}
+
+.qh-inventory {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.5rem;
+  min-height: 1rem;
+}
+
+.qh-inventory > h3 {
+  margin: 0px;
+  padding: 0px;
+}
+
 .upgrade-items-list {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  column-gap: 1em;
+  column-gap: 0.5rem;
+  row-gap: 0.2em;
   overflow: auto;
   justify-content: center;
 }
@@ -24,6 +44,7 @@
   position: absolute;
   bottom: 8px;
   left: 10px;
+  min-width: 1em;
   background-color: #3c1f24;
   padding: 0 0.2em;
   border-radius: 3px 3px 3px 3px;
@@ -90,6 +111,8 @@
 .aff-status {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  padding-bottom: 0.5rem;
   justify-content: center;
   align-items: center;
   font-size: 0.9em;
@@ -105,4 +128,12 @@
 .xp-status > span {
   display: flex;
   flex-direction: column;
+}
+
+@media screen and (max-height: 500px) {
+  .harem-upgrade {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1em;
+  }
 }

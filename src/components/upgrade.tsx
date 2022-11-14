@@ -8,7 +8,7 @@ import {
   ItemEntry,
   Rarity
 } from '../data/data';
-import { useXpStats } from '../hooks/girl-xp-hooks';
+import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
 import { Tooltip, format, getDomain, GemIcon, ProgressBar } from './common';
@@ -89,67 +89,71 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
 
   return (
     <div className="harem-upgrade">
-      <h2>{currentGirl.name}</h2>
-      {loading ? (
-        <div>Loading inventory...</div>
-      ) : (
-        <>
-          <GirlsSelector
-            currentGirl={currentGirl}
-            displayedGirls={displayedGirls}
-            allGirls={allGirls}
-            selectGirl={selectGirl}
-            show0Pose={show0Pose}
-          />
-          <div className="harem-upgrade-pages">
-            <span
-              className={`${page === 'books' ? 'active' : 'inactive'}`}
-              onClick={() => setPage('books')}
-            >
-              Books
-            </span>
-            <span
-              className={`${page === 'gifts' ? 'active' : 'inactive'}`}
-              onClick={() => setPage('gifts')}
-            >
-              Gifts
-            </span>
-          </div>
-          <UpgradeStatus
-            girl={currentGirl}
-            page={page}
-            selectedItem={selectedItem?.item}
-          />
-          <ItemsList
-            items={items}
-            selectedItem={selectedItem}
-            selectItem={selectItem}
-          />
-          <div className="harem-upgrade-actions">
-            <a
-              className="hh-action-button go-to-market"
-              href={`${domain}/shop.html?type=${marketType}`}
-            >
-              Go to Market
-            </a>
-            <div className="spacer" />
-            <button
-              className="hh-action-button use"
-              onClick={useItem}
-              disabled={!canUseItem}
-            >
-              Use
-            </button>
-            <button
-              className="hh-action-button max"
-              onClick={max}
-              disabled={isMaxed}
-            >
-              Max
-            </button>
-          </div>
-        </>
-      )}
+      <div className="selector-and-upgrade">
+        <h2>{currentGirl.name}</h2>
+        <GirlsSelector
+          currentGirl={currentGirl}
+          displayedGirls={displayedGirls}
+          allGirls={allGirls}
+          selectGirl={selectGirl}
+          show0Pose={show0Pose}
+        />
+        <div className="harem-upgrade-pages">
+          <span
+            className={`${page === 'books' ? 'active' : 'inactive'}`}
+            onClick={() => setPage('books')}
+          >
+            Books
+          </span>
+          <span
+            className={`${page === 'gifts' ? 'active' : 'inactive'}`}
+            onClick={() => setPage('gifts')}
+          >
+            Gifts
+          </span>
+        </div>
+        <UpgradeStatus
+          girl={currentGirl}
+          page={page}
+          selectedItem={selectedItem?.item}
+        />
+      </div>
+      <div className="items-and-actions">
+        {loading ? (
+          <div>Loading inventory...</div>
+        ) : (
+          <>
+            <ItemsList
+              items={items}
+              selectedItem={selectedItem}
+              selectItem={selectItem}
+            />
+            <div className="harem-upgrade-actions">
+              <a
+                className="hh-action-button go-to-market"
+                href={`${domain}/shop.html?type=${marketType}`}
+              >
+                Go to Market
+              </a>
+              <div className="spacer" />
+              <button
+                className="hh-action-button use"
+                onClick={useItem}
+                disabled={!canUseItem}
+              >
+                Use
+              </button>
+              <button
+                className="hh-action-button max"
+                onClick={max}
+                disabled={isMaxed}
+              >
+                Max
+              </button>
+            </div>
+          </>
+        )}
+      </div>
     </div>
   );
 };
@@ -219,10 +223,19 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
   // For filtered girls, memoize and do not update: this will ensure the selection remains stable,
   // even if filters change/a girl being upgraded no longer matches the filters.
   // This makes the carousel behavior a lot more predictable.
-  const ownedDisplayedGirls = useMemo(() => {
+  const carouselGirls = useMemo(() => {
     const ownedGirls = displayedGirls.filter((girl) => girl.own);
     return ownedGirls;
   }, []);
+
+  // We still need to get up-to-date data: retrieve the current girl object
+  // from allGirls, when it is modified.
+  const ownedDisplayedGirls = useMemo(() => {
+    return carouselGirls.map(
+      (carouselGirl) =>
+        allGirls.find((girl) => girl.id === carouselGirl.id) ?? carouselGirl
+    );
+  }, [allGirls, carouselGirls]);
 
   let previousGirl: CommonGirlData, nextGirl: CommonGirlData;
   let index = ownedDisplayedGirls.findIndex(
@@ -308,16 +321,21 @@ export interface XpStatusProps extends StatusProps {
 }
 
 export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
+  const levelReach =
+    book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp);
   const nextLevel = girl.level === 750 ? 750 : (girl.level ?? 1) + 1;
   const nextCap = girl.maxLevel!;
 
   const xpStats = useXpStats(girl);
 
+  const displayTargetLevel =
+    girl.level === nextCap ? nextCap : Math.max(nextLevel, levelReach);
+
   return (
     <div className="xp-status">
       {girl.level! < 750 ? (
         <span>
-          Lv. {girl.level} to Lv. {nextLevel}:
+          Lv. {girl.level} to Lv. {displayTargetLevel}:
           <ProgressBar
             curr={xpStats.currentXp}
             min={xpStats.minXp}
@@ -330,8 +348,13 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
             }
           />
         </span>
-      ) : null}
-      {girl.level! < nextCap && nextCap < 750 ? (
+      ) : (
+        <span>
+          Lv. 750
+          <ProgressBar min={0} max={100} curr={100} label="Max." />
+        </span>
+      )}
+      {girl.level! < nextCap || nextCap < 750 ? (
         <span>
           To Lv. {nextCap}:{' '}
           <ProgressBar
@@ -339,7 +362,11 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
             min={xpStats.minXpToCap}
             max={xpStats.maxXpToCap}
             extra={book?.xp ?? 0}
-            label={xpStats.maxXpToCap - xpStats.currentXp + ' XP'}
+            label={
+              girl.level === nextCap
+                ? 'Max.'
+                : xpStats.maxXpToCap - xpStats.currentXp + ' XP'
+            }
           />
         </span>
       ) : null}
@@ -349,7 +376,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
           <ProgressBar
             curr={xpStats.currentXp}
             min={0}
-            max={xpStats.xpToMax}
+            max={xpStats.currentXp + xpStats.xpToMax}
             extra={book?.xp ?? 0}
             label={xpStats.xpToMax + ' XP'}
           />
@@ -392,16 +419,35 @@ const ItemsList: React.FC<ItemsListProps> = ({
   selectedItem,
   selectItem
 }) => {
+  const totalValue = items
+    .map((item) => getValue(item.item) * item.count)
+    .reduce((a, b) => a + b, 0);
+  const unit =
+    items.length === 0 ? '' : items[0].item.type === 'book' ? 'XP' : 'Aff';
   return (
-    <div className="upgrade-items-list">
-      {items.map((itemEntry) => (
-        <ItemTile
-          itemEntry={itemEntry}
-          selected={selectedItem === itemEntry}
-          select={selectItem}
-          key={itemEntry.item.itemId}
-        />
-      ))}
+    <div className="qh-inventory">
+      <h3>
+        Total: {format(totalValue)} {unit}
+      </h3>
+      <div className="upgrade-items-list">
+        {items.map((itemEntry) => (
+          <ItemTile
+            itemEntry={itemEntry}
+            selected={selectedItem === itemEntry}
+            select={selectItem}
+            key={itemEntry.item.itemId}
+          />
+        ))}
+      </div>
     </div>
   );
 };
+
+function getValue(item: Item): number {
+  if (item.type === 'book') {
+    return (item as Book).xp;
+  } else if (item.type === 'gift') {
+    return (item as Gift).aff;
+  }
+  return 0;
+}

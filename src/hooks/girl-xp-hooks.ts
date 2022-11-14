@@ -96,7 +96,7 @@ export function getMissingGXP(girl: CommonGirlData): number {
     return 0;
   }
 
-  return getGXPToCap(girl, MAX_LEVEL);
+  return getGXPToCap(girl, MAX_LEVEL) - girl.currentGXP;
 }
 
 function gameRarity(rarity: Rarity): GameRarity {

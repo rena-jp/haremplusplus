@@ -223,7 +223,7 @@ requiring actual content. */
   --main-track-color: cornflowerblue;
   --extra-track-color: #23b56b;
 
-  --main-track-color-full: #086335;
+  --main-track-color-full: cornflowerblue;
   --main-track-color-extra-full: darkorange;
   --extra-track-color-extra-full: rgba(255, 140, 0, 0.6);
 
