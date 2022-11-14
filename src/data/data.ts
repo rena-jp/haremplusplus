@@ -26,11 +26,12 @@ export namespace Rarities {
 export type EventSource =
   | 'MP' // Done
   | 'EP' // Done
-  | 'LD'
+  | 'LD' // Done
+  | 'ED' // Done
   | 'MD' // Done
   | 'LC' // Done
-  | 'CE'
-  | 'OD'
+  | 'CE' // Done
+  | 'OD' // Done
   | 'PoP' // Done
   | 'Story' // Done
   | 'CC' // Done
@@ -40,10 +41,10 @@ export type EventSource =
   | 'PoA' // Done
   | 'League' // Done
   | 'Pantheon' // Done
-  | 'GA' // Done. TODO: Replace with Seasonal Event (SE)
   | 'KC' // Done
   | 'PoV' // Done
-  | 'SE' // Done
+  | 'SE' // Done (Probably. Hard to distinguish from CE; use same IDs)
+  | 'Anniv' // Done
   | 'unknown';
 
 export function isEventSource(value: string): value is EventSource {

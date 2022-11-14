@@ -28,6 +28,7 @@ import {
   NumberString
 } from '../game-data';
 import girlsPoses from './poses.json';
+import eventTypes from './events.json';
 
 export interface DataFormat {
   blessings: GameBlessingData;
@@ -240,14 +241,24 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
 
 function getEventTypes(events: number[]): EventSource[] {
   const eventTypes = new Set<EventSource>();
+  if ((events.length === 1 && events[0] === 1) || events[0] === 2) {
+    // SE and CE can't easily be distinguished; they use the same IDs (starting from 1 for SE, from 2 for CE).
+    // At the moment, Seasonal Events don't have revivals, so they only have 1 entry. The first CE girls
+    // have already been revived many times in OD, so they will never have just 1 entry.
+    return ['SE'];
+  }
   events.forEach((eventId) => eventTypes.add(getEventType(eventId)));
   return [...eventTypes];
 }
 
-function getEventType(_eventId: number): EventSource {
+function getEventType(eventId: number): EventSource {
   // TODO... Detect LD/CE/OD Events....
   // Careful: SE and Classic/OD/LD use the same selector (event: [1] may correspond to SE_1 or Classic_1)
   // For owned girls, it's not possible to distinguish SE vs Classic
+  const eventType = eventTypes[String(eventId) as keyof typeof eventTypes];
+  if (eventType !== undefined) {
+    return eventType as EventSource;
+  }
   return 'unknown';
 }
 

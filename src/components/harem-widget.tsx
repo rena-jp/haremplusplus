@@ -201,7 +201,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     forceCheck();
   });
 
-  const [showUpgrade, _setShowUpgrade] = useState(true);
+  const [showUpgrade, _setShowUpgrade] = useState(false);
   const [page, setPage] = useState<UpgradePage>('books');
 
   return (

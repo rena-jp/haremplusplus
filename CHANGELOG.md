@@ -1,5 +1,6 @@
 ## 0.9.7 (Next)
 
+- Data: improve source event support (Classic/Epic/Legendary/Orgy Days, Anniversary, Seasonal)
 - Harem: Add proper link navigation. Supports direct link reference, such as: ./home.html?harem&girl=1
 - Selection: Scroll girl into view when changing selection (if girl is not filtered out)
 
