@@ -344,7 +344,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
             label={
               girl.level === girl.maxLevel
                 ? 'Max.'
-                : xpStats.maxXp - xpStats.currentXp + ' XP'
+                : format(xpStats.maxXp - xpStats.currentXp) + ' XP'
             }
           />
         </span>
@@ -365,7 +365,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
             label={
               girl.level === nextCap
                 ? 'Max.'
-                : xpStats.maxXpToCap - xpStats.currentXp + ' XP'
+                : format(xpStats.maxXpToCap - xpStats.currentXp) + ' XP'
             }
           />
         </span>
@@ -378,7 +378,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
             min={0}
             max={xpStats.currentXp + xpStats.xpToMax}
             extra={book?.xp ?? 0}
-            label={xpStats.xpToMax + ' XP'}
+            label={format(xpStats.xpToMax) + ' XP'}
           />
         </span>
       ) : null}

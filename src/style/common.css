@@ -220,11 +220,22 @@ requiring actual content. */
   gap: 0px;
   padding: 0px;
 
-  --main-track-color: cornflowerblue;
-  --extra-track-color: #23b56b;
+  /**
+  * Raw track: current state, always reflects the current value (Not animated, or very quickly animated)
+  * Main track: animated overlay on the raw track. Due to animation, may not represent the accurate value. 
+  *   Partially transparent, so it doesn't hide the raw track when animating to a smaller size.
+  * Extra track: estimated state after applying the selected item. Optional. Animated.
+  */
 
-  --main-track-color-full: cornflowerblue;
-  --main-track-color-extra-full: darkorange;
+  --main-track-color: rgba(100, 149, 237, 0.6);
+  --extra-track-color: #23b56b;
+  --raw-track-color: rgb(38, 88, 181);
+  /* --raw-track-color-extra-full: rgb(38, 88, 181); */
+  --raw-track-color-extra-full: rgb(209, 125, 22);
+
+  --main-track-color-full: rgba(100, 149, 237, 0.6);
+  --main-track-color-extra-full: rgba(255, 140, 0, 0.6);
+  /* --main-track-color-extra-full: rgba(100, 149, 237, 0.6); */
   --extra-track-color-extra-full: rgba(255, 140, 0, 0.6);
 
   --track-radius: 6px;
@@ -238,12 +249,23 @@ requiring actual content. */
 
 .progress-bar.extra-full {
   --main-track-color: var(--main-track-color-extra-full);
+  --raw-track-color: var(--raw-track-color-extra-full);
+
   --extra-track-color: var(--extra-track-color-extra-full);
 }
 
 .progress-bar > .main-track {
-  background-color: var(--main-track-color);
+  position: absolute;
+  height: 100%;
+  background: var(--main-track-color);
   border-radius: var(--track-radius) 0 0 var(--track-radius);
+}
+.progress-bar > .raw-track {
+  flex-shrink: 0; /* Never shrink, even if the extra track temporarily overflows due to animation */
+  background: var(--raw-track-color);
+  border-radius: var(--track-radius) 0 0 var(--track-radius);
+  /* Very quick animation */
+  transition: width 0.15s linear;
 }
 .progress-bar > .main-track,
 .progress-bar > .extra-track {
@@ -251,7 +273,7 @@ requiring actual content. */
 }
 
 .progress-bar > .extra-track {
-  background-color: var(--extra-track-color);
+  background: var(--extra-track-color);
   border-radius: 0 var(--track-radius) var(--track-radius) 0;
 }
 
