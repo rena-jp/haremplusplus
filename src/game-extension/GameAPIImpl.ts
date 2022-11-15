@@ -317,11 +317,12 @@ export class GameAPIImpl implements GameAPI {
     );
   }
 
-  async getMarketInventory(_allowRequest: boolean): Promise<GameInventory> {
-    return {
-      gift: [],
-      potion: []
-    };
+  async getMarketInventory(allowRequest: boolean): Promise<GameInventory> {
+    return this.requestFromMarket(
+      'player_inventory',
+      GameInventory.is,
+      allowRequest
+    );
   }
 
   async useBook(_girl: CommonGirlData, _book: Book): Promise<void> {
@@ -350,6 +351,48 @@ export class GameAPIImpl implements GameAPI {
     typeTester: (value: unknown) => value is T,
     allowRequest: boolean
   ): Promise<T> {
+    return this.requestFromFrame(
+      () => getOrCreateHaremFrame(),
+      attribute,
+      typeTester,
+      allowRequest
+    );
+  }
+
+  /**
+   * Extract data from the market page.
+   * @param attribute The market property to extract
+   * @param typeTester A type tester, to make sure we return a value of the correct type
+   * @param allowRequest Whether network requests are allowed. This should be false when requesting directly from the harem.html page,
+   * true otherwise (e.g. from the quick-harem on home.html)
+   */
+  private async requestFromMarket<T>(
+    attribute: keyof GameWindow,
+    typeTester: (value: unknown) => value is T,
+    allowRequest: boolean
+  ): Promise<T> {
+    return this.requestFromFrame(
+      () => getOrCreateMarketFrame(),
+      attribute,
+      typeTester,
+      allowRequest
+    );
+  }
+
+  /**
+   * Extract data from the page in the given frame.
+   * @param frameSupplier A function to retrieve the frame
+   * @param attribute The page property to extract
+   * @param typeTester A type tester, to make sure we return a value of the correct type
+   * @param allowRequest Whether network requests are allowed. This should be false when requesting directly from the harem.html page,
+   * true otherwise (e.g. from the quick-harem on home.html)
+   */
+  private async requestFromFrame<T>(
+    frameSupplier: () => Promise<HTMLIFrameElement>,
+    attribute: keyof GameWindow,
+    typeTester: (value: unknown) => value is T,
+    allowRequest: boolean
+  ): Promise<T> {
     // Step 1: Check if the value is available on the current page
     const gameData = getGameWindow()[attribute] as unknown;
     if (typeTester(gameData)) {
@@ -360,17 +403,17 @@ export class GameAPIImpl implements GameAPI {
     if (allowRequest) {
       // Request from harem frame
       try {
-        const haremFrame = await getOrCreateHaremFrame();
-        if (!haremFrame.contentWindow) {
+        const gameFrame = await frameSupplier();
+        if (!gameFrame.contentWindow) {
           console.error('Found frame, but contentWindow is missing?');
           return Promise.reject(
-            'Failed to load requested data from the game. Harem Frame not found or not valid. Data: ' +
+            'Failed to load requested data from the game. Frame not found or not valid. Data: ' +
               attribute
           );
         }
 
         const gameDataPromise = new Promise<T>((resolve, reject) => {
-          if (!haremFrame || !haremFrame.contentWindow) {
+          if (!gameFrame || !gameFrame.contentWindow) {
             reject(
               'Harem Frame is no longer available. Cant load game data...'
             );
@@ -379,7 +422,7 @@ export class GameAPIImpl implements GameAPI {
           let resolved = false;
           const timeout = setTimeout(() => {
             if (!resolved) {
-              haremFrame.contentWindow?.removeEventListener(
+              gameFrame.contentWindow?.removeEventListener(
                 'message',
                 messageListener
               );
@@ -421,7 +464,7 @@ export class GameAPIImpl implements GameAPI {
             type: 'request_game_data',
             attribute: attribute
           };
-          haremFrame.contentWindow?.postMessage(
+          gameFrame.contentWindow?.postMessage(
             requestDataMessage,
             window.location.origin
           );
@@ -430,14 +473,14 @@ export class GameAPIImpl implements GameAPI {
       } catch (error) {
         console.error('Error while trying to load or get the frame: ', error);
         return Promise.reject(
-          'Failed to load gems data from the game. Harem Frame not found or not valid.'
+          'Failed to load gems data from the game. Game Frame not found or not valid.'
         );
       }
     }
 
     // Step 3: Fail...
     return Promise.reject(
-      'Failed to retrieve requested data from the harem page: ' + attribute
+      'Failed to retrieve requested data from the game page: ' + attribute
     );
   }
 
@@ -519,7 +562,7 @@ async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
             haremFrame.onload = () => {
               const final = Date.now();
               const delay = final - initial;
-              console.info('FRAME RELOADED in ', delay, 'ms');
+              console.info('Harem frame reloaded in ', delay, 'ms');
               resolve(haremFrame);
             };
             haremFrame.contentWindow.location.reload();
@@ -538,7 +581,57 @@ async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
             haremFrame.onload = () => {
               const finalLoad = Date.now();
               const loadDelay = finalLoad - initialLoad;
-              console.info('Frame loaded in ', loadDelay, 'ms');
+              console.info('Harem frame loaded in ', loadDelay, 'ms');
+              resolve(haremFrame);
+            };
+          } else {
+            reject('#quick-harem-wrapper not found; abort');
+          }
+        }
+      })
+  );
+}
+
+/**
+ * The GameAPI uses an IFrame to render the market in the background, then extract
+ * inventory data from it once it's ready. This function creates or returns the existing frame.
+ */
+async function getOrCreateMarketFrame(): Promise<HTMLIFrameElement> {
+  const refreshFrame = lastFrameRequest + FRAME_REQUEST_DELAY < Date.now();
+  lastFrameRequest = Date.now();
+
+  return queue(
+    () =>
+      new Promise<HTMLIFrameElement>((resolve, reject) => {
+        let haremFrame = document.getElementById(
+          'market-loader'
+        ) as HTMLIFrameElement;
+        if (haremFrame) {
+          if (refreshFrame && haremFrame.contentWindow) {
+            const initial = Date.now();
+            haremFrame.onload = () => {
+              const final = Date.now();
+              const delay = final - initial;
+              console.info('Market frame reloaded in ', delay, 'ms');
+              resolve(haremFrame);
+            };
+            haremFrame.contentWindow.location.reload();
+          } else {
+            resolve(haremFrame);
+          }
+        } else {
+          const wrapper = document.getElementById('quick-harem-wrapper');
+          if (wrapper) {
+            haremFrame = document.createElement('iframe');
+            haremFrame.setAttribute('id', 'market-loader');
+            haremFrame.setAttribute('src', 'shop.html');
+            haremFrame.setAttribute('style', 'visibility: hidden;');
+            wrapper.appendChild(haremFrame);
+            const initialLoad = Date.now();
+            haremFrame.onload = () => {
+              const finalLoad = Date.now();
+              const loadDelay = finalLoad - initialLoad;
+              console.info('Market frame loaded in ', loadDelay, 'ms');
               resolve(haremFrame);
             };
           } else {

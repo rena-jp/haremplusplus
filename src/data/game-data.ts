@@ -341,6 +341,7 @@ export interface GameWindow extends Window {
   notificationData: {
     [key: string]: string;
   };
+  player_inventory: GameInventory | undefined;
 }
 
 export interface GemsData {
@@ -453,6 +454,15 @@ export function countGems(data: GemsData): Map<Element, number> {
 export interface GameInventory {
   gift: InventoryItem[];
   potion: InventoryItem[];
+}
+
+export namespace GameInventory {
+  export function is(object: unknown): object is GameInventory {
+    if (isUnknownObject(object)) {
+      return Array.isArray(object.gift) && Array.isArray(object.potion);
+    }
+    return false;
+  }
 }
 
 export interface InventoryItem {

@@ -2,23 +2,18 @@ import { HaremData } from '../data/data';
 import {
   GameBlessingData,
   GameQuests,
-  GameWindow,
   GemsData,
   GirlsDataList
 } from '../data/game-data';
 import { DataFormat, toHaremData } from '../data/import/harem-import';
-import {
-  GameAPIImpl,
-  HaremDataResponse,
-  HaremMessage,
-  REQUEST_GIRLS
-} from './GameAPIImpl';
+import { GameAPIImpl, REQUEST_GIRLS } from './GameAPIImpl';
 import {
   loadBlessings,
   persistGemsData,
   persistHaremData
 } from '../data/cache';
 import { MockGameAPI } from '../mock/MockGameAPI';
+import { loadAndDispatch } from './frame-utils';
 
 const gameAPI =
   window.location.host === 'localhost:3000'
@@ -72,54 +67,9 @@ async function updateGemsAndDispatch(): Promise<void> {
 }
 
 async function updateQuestsAndDispatch(): Promise<void> {
-  return loadAndDispatch<GameQuests>('girl_quests', () =>
+  await loadAndDispatch<GameQuests>('girl_quests', () =>
     gameAPI.getQuests(false)
-  ).then();
-}
-
-async function loadAndDispatch<T>(
-  attribute: keyof GameWindow,
-  getter: () => Promise<T>
-): Promise<T> {
-  try {
-    const gameData = await getter();
-    if (window.parent && window.parent !== window) {
-      const dataResponse: HaremDataResponse = {
-        type: 'response_game_data',
-        attribute: attribute,
-        gameData: gameData
-      };
-      window.parent.postMessage(dataResponse, window.location.origin);
-
-      const messageListener = (event: MessageEvent) => {
-        if (event.origin === window.origin) {
-          const message = event.data;
-          if (
-            HaremMessage.isRequest(message) &&
-            message.attribute === attribute &&
-            window.parent &&
-            window.parent !== window
-          ) {
-            const response: HaremDataResponse = {
-              type: 'response_game_data',
-              attribute: attribute,
-              gameData: gameData
-            };
-            window.parent.postMessage(response, window.location.origin);
-          }
-        }
-      };
-      window.addEventListener('message', messageListener);
-    }
-    return gameData;
-  } catch (error) {
-    const message =
-      'Failed to get game data from harem. Attribute: ' +
-      attribute +
-      '. Reason: ';
-    console.error(message, error);
-    return Promise.reject([message, error]);
-  }
+  );
 }
 
 /**
