@@ -495,3 +495,38 @@ export interface GameItem {
   type: string;
   value: NumberString;
 }
+
+export interface SuccessXPResult {
+  success: true;
+  can_pex: boolean;
+  xp: number;
+  level_up: boolean;
+  level: number;
+  girl: unknown | null; // Subset of GirlsDataEntry. Contains updated data about aff/xp status. null when using a single item?
+}
+export interface FailedXPResult {
+  success: false;
+}
+
+export type XPResult = SuccessXPResult | FailedXPResult;
+
+export namespace XPResult {
+  export function is(object: unknown): object is XPResult {
+    if (isUnknownObject(object)) {
+      if (typeof object.success === 'boolean') {
+        if (object.success) {
+          return (
+            typeof object.can_pex === 'boolean' &&
+            typeof object.xp === 'number' &&
+            typeof object.level_up === 'boolean' &&
+            typeof object.level === 'number' &&
+            (isUnknownObject(object.girl) || object.girl === null)
+          );
+        } else {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+}

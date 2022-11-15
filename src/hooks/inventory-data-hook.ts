@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   Book,
@@ -6,13 +6,16 @@ import {
   getRarity,
   Gift,
   GiftEntry,
-  Inventory
+  Inventory,
+  Item,
+  ItemEntry
 } from '../data/data';
 import { GameInventory, InventoryItem } from '../data/game-data';
 
 export interface InventoryResult {
   inventory: Inventory;
   loading: boolean;
+  consumeItem(item: ItemEntry<Item>): void;
 }
 
 export function useInventory(gameAPI: GameAPI): InventoryResult {
@@ -33,9 +36,53 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
     });
   }, [gameAPI]);
 
+  const consumeItem = useCallback(
+    (consumedItem: ItemEntry<Item>) => {
+      setInventory((currentInventory) => {
+        if (consumedItem.count > 0) {
+          const newInventory = {
+            books: [...currentInventory.books],
+            gifts: [...currentInventory.gifts]
+          };
+          if (consumedItem.item.type === 'book') {
+            const bookIndex = newInventory.books.findIndex(
+              (item) => item.item.itemId === consumedItem.item.itemId
+            );
+            if (bookIndex >= 0) {
+              const usedBook = newInventory.books[bookIndex];
+              const newBookEntry = { ...usedBook, count: usedBook.count - 1 };
+              if (newBookEntry.count <= 0) {
+                newInventory.books.splice(bookIndex, 1);
+              } else {
+                newInventory.books[bookIndex] = newBookEntry;
+              }
+            }
+          } else if (consumedItem.item.type === 'gift') {
+            const giftIndex = newInventory.gifts.findIndex(
+              (item) => item.item.itemId === consumedItem.item.itemId
+            );
+            if (giftIndex >= 0) {
+              const usedGift = newInventory.gifts[giftIndex];
+              const newGiftEntry = { ...usedGift, count: usedGift.count - 1 };
+              if (newGiftEntry.count <= 0) {
+                newInventory.gifts.splice(giftIndex, 1);
+              } else {
+                newInventory.gifts[giftIndex] = newGiftEntry;
+              }
+            }
+          }
+          return newInventory;
+        }
+        return inventory;
+      });
+    },
+    [setInventory]
+  );
+
   return {
     inventory,
-    loading
+    loading,
+    consumeItem
   };
 }
 

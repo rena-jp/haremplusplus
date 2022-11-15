@@ -11,14 +11,7 @@ import {
 import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
-import {
-  Tooltip,
-  format,
-  getDomain,
-  GemIcon,
-  ProgressBar,
-  CloseButton
-} from './common';
+import { Tooltip, format, getDomain, ProgressBar, CloseButton } from './common';
 import { SimpleGirlTile } from './girl';
 
 export type UpgradePage = 'books' | 'gifts';
@@ -46,13 +39,22 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
   show0Pose,
   close
 }) => {
-  const { inventory, loading } = useInventory(gameAPI);
+  const { inventory, loading, consumeItem } = useInventory(gameAPI);
 
-  const items = page === 'books' ? inventory.books : inventory.gifts;
+  const items: ItemEntry<Item>[] =
+    page === 'books' ? inventory.books : inventory.gifts;
 
   const [selectedItem, setSelectedItem] = useState<ItemEntry<Item> | undefined>(
     items.length === 0 ? undefined : items[0]
   );
+  if (selectedItem !== undefined && !items.includes(selectedItem)) {
+    const matchingItem = items.find(
+      (item) => item.item.itemId === selectedItem.item.itemId
+    );
+    if (matchingItem !== selectedItem) {
+      setSelectedItem(matchingItem);
+    }
+  }
 
   const selectItem = useCallback(
     (item: ItemEntry<Item> | undefined) => {
@@ -65,6 +67,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     if (selectedItem === undefined) {
       return;
     }
+    consumeItem(selectedItem);
     if (page === 'books' && selectedItem.item.type === 'book') {
       gameAPI.useBook(currentGirl, selectedItem.item as Book);
     } else if (page === 'gifts' && selectedItem.item.type === 'gift') {

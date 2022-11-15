@@ -1,4 +1,4 @@
-import { Book, CommonGirlData, getPoseN, Gift } from '../data/data';
+import { Book, CommonGirlData, getPoseN, Gift, Rarity } from '../data/data';
 import {
   ChangePoseResult,
   GameBlessingData,
@@ -11,9 +11,11 @@ import {
   GirlsSalaryEntry,
   GirlsSalaryList,
   Hero,
-  isUnknownObject
+  isUnknownObject,
+  XPResult
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
+import { getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -325,8 +327,59 @@ export class GameAPIImpl implements GameAPI {
     );
   }
 
-  async useBook(_girl: CommonGirlData, _book: Book): Promise<void> {
+  async useBook(girl: CommonGirlData, book: Book): Promise<void> {
+    if (!girl.own) {
+      return;
+    }
+
+    const missingGXP = getMissingGXP(girl);
+
+    const bookValid =
+      girl.level! < girl.maxLevel! &&
+      (missingGXP >= book.xp || book.rarity < Rarity.mythic); // Mythic books can't overflow
+    // TODO Special case: Mythic book Lv. 350
+    if (bookValid) {
+      const params = {
+        id_girl: girl.id,
+        id_item: book.itemId,
+        action: 'girl_give_xp'
+      };
+      this.updateGirlXpStats(girl, book.xp);
+      const expectedResult = { ...girl };
+      if (this.updateGirl !== undefined) {
+        this.updateGirl(girl);
+      }
+      const result = await this.postRequest(params);
+      if (XPResult.is(result) && result.success) {
+        if (
+          result.xp === expectedResult.currentGXP &&
+          result.level === expectedResult.level
+        ) {
+          // All good, no surprise
+          return;
+        } else {
+          console.warn(
+            'Successfully used book, but got unexpected result. Expected: ',
+            expectedResult.level,
+            expectedResult.currentGXP,
+            book.xp,
+            'was: ',
+            result
+          );
+        }
+      } else {
+        console.warn('Failed to use book: ', result);
+      }
+    } else {
+      console.warn("Can't use this book");
+    }
+
     return;
+  }
+
+  private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
+    girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
+    girl.currentGXP += addXp;
   }
 
   async useGift(_girl: CommonGirlData, _gift: Gift): Promise<void> {
