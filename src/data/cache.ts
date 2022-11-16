@@ -4,8 +4,8 @@ import { FilterConfig } from './filters/filter-api';
 import { GameBlessingData, GemsData } from './game-data';
 import { SortConfig } from './sort';
 
-const DEPRECATED_CACHES = ['harem-cache'];
-const CACHE = 'harem-cache-0.9.7';
+const DEPRECATED_CACHES = ['harem-cache', 'harem-cache-0.9.7'];
+const CACHE = 'harem-cache-0.9.7-dev.1';
 
 async function clearOldCaches(): Promise<void> {
   for (const deprecatedCache of DEPRECATED_CACHES) {

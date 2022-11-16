@@ -8,6 +8,7 @@ import {
   ItemEntry,
   Rarity
 } from '../data/data';
+import { useAffectionStats } from '../hooks/girl-aff-hooks';
 import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
@@ -321,10 +322,14 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
     selectedItem !== undefined && selectedItem.type === 'book'
       ? (selectedItem as Book)
       : undefined;
+  const gift =
+    selectedItem !== undefined && selectedItem.type === 'gift'
+      ? (selectedItem as Gift)
+      : undefined;
   return (
     <div className="upgrade-status">
       {page === 'books' ? <XPStatus girl={girl} book={book} /> : null}
-      {page === 'gifts' ? <AffStatus girl={girl} /> : null}
+      {page === 'gifts' ? <AffStatus girl={girl} gift={gift} /> : null}
     </div>
   );
 };
@@ -405,17 +410,54 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
   );
 };
 
-export const AffStatus: React.FC<StatusProps> = ({ girl }) => {
-  const nextGrade =
-    girl.stars === girl.maxStars || girl.upgradeReady ? 'Max' : girl.stars + 1;
-  const maxGrade = girl.stars === girl.maxStars ? 'Max' : girl.maxStars;
+export interface AffStatusProps extends StatusProps {
+  gift: Gift | undefined;
+}
+
+export const AffStatus: React.FC<AffStatusProps> = ({ girl, gift }) => {
+  const nextGrade = girl.stars + 1;
+
+  const affStats = useAffectionStats(girl);
+
+  const { minAff, maxAff, affToMax, currentAff } = affStats;
+
+  console.log('Min: ', minAff, 'Max: ', maxAff);
+
   return (
     <div className="aff-status">
+      {girl.stars < girl.maxStars ? (
+        <span>
+          Aff. to grade {nextGrade}:
+          <ProgressBar
+            curr={currentAff}
+            min={minAff}
+            max={maxAff}
+            extra={gift?.aff ?? 0}
+            label={
+              girl.stars === girl.maxStars
+                ? 'Max.'
+                : girl.upgradeReady
+                ? 'Ready'
+                : format(affStats.maxAff - affStats.currentAff) + ' Aff'
+            }
+          />
+        </span>
+      ) : null}
       <span>
-        Aff to grade {nextGrade}: {format(girl.affToGrade ?? 0)}
-      </span>
-      <span>
-        Aff to grade {maxGrade}: {format(girl.missingAff)}
+        Aff. to grade {girl.maxStars}:
+        <ProgressBar
+          curr={currentAff}
+          min={0}
+          max={affToMax}
+          extra={gift?.aff ?? 0}
+          label={
+            girl.stars === girl.maxStars
+              ? 'Max.'
+              : currentAff === affToMax
+              ? 'Ready'
+              : format(affStats.affToMax - affStats.currentAff) + ' Aff'
+          }
+        />
       </span>
     </div>
   );

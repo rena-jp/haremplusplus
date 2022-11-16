@@ -90,11 +90,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       zodiac: getZodiac(girlData),
       element: getElement(girlData),
       missingAff: getMissingAff(girlData, rarity),
-      affToGrade:
-        girlData.can_upgrade === true || girlData.Affection === undefined
-          ? 0
-          : girlData.Affection.left,
-      gemsToCap: girlData.awakening_costs,
+      currentAffection: girlData.own ? girlData.Affection.cur : 0,
       upgradeReady: girlData.can_upgrade === true,
       currentGXP: girlData.own ? girlData.Xp.cur : 0,
       currentIcon: getCurrentIcon(girlData.avatar),

@@ -238,6 +238,12 @@ requiring actual content. */
   /* --main-track-color-extra-full: rgba(100, 149, 237, 0.6); */
   --extra-track-color-extra-full: rgba(255, 140, 0, 0.6);
 
+  /** Animation speeds. Raw track should be fast to accurately represent the current value;
+   *  other animations may be slower.
+   */
+  --raw-track-speed: 0.15s;
+  --track-speed: 0.5s;
+
   --track-radius: 6px;
 
   border-radius: calc(var(--track-radius) + 1px);
@@ -260,16 +266,22 @@ requiring actual content. */
   background: var(--main-track-color);
   border-radius: var(--track-radius) 0 0 var(--track-radius);
 }
+
+.progress-bar.full > .main-track,
+.progress-bar.full > .raw-track {
+  border-radius: var(--track-radius);
+}
+
 .progress-bar > .raw-track {
   flex-shrink: 0; /* Never shrink, even if the extra track temporarily overflows due to animation */
   background: var(--raw-track-color);
   border-radius: var(--track-radius) 0 0 var(--track-radius);
   /* Very quick animation */
-  transition: width 0.15s linear;
+  transition: width var(--raw-track-speed) linear;
 }
 .progress-bar > .main-track,
 .progress-bar > .extra-track {
-  transition: width 0.5s ease-in;
+  transition: width var(--track-speed) ease-in;
 }
 
 .progress-bar > .extra-track {

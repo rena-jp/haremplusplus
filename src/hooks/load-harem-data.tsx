@@ -249,7 +249,7 @@ function quickEqualGirls(
   return (
     girl1.shards === girl2.shards && // Owned/Not owned
     girl1.currentGXP === girl2.currentGXP && // Level test
-    girl1.missingAff === girl2.missingAff && // Grade test
+    girl1.currentAffection === girl2.currentAffection && // Grade test
     girl1.stars === girl2.stars && // Unlocked Grade
     girl1.missingGems === girl2.missingGems && // Max level/Awakening test
     girl1.icon === girl2.icon && // Current pose test

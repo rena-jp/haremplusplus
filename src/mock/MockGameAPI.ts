@@ -10,14 +10,15 @@ import {
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel } from '../hooks/girl-xp-hooks';
-// import girls from './girlsdatalist-full.json';
-// import blessings from './blessings-full.json';
-// import quests from './quests-full.json';
-// import inventory from './inventory.json';
-const girls = {};
-const blessings = { active: [], upcoming: [] };
-const quests = {};
-const inventory = { gift: [], potion: [] };
+import girls from './girlsdatalist-full.json';
+import blessings from './blessings-full.json';
+import quests from './quests-full.json';
+import inventory from './inventory.json';
+import { isUpgradeReady } from '../hooks/girl-aff-hooks';
+// const girls = {};
+// const blessings = { active: [], upcoming: [] };
+// const quests = {};
+// const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -150,14 +151,16 @@ export class MockGameAPI implements GameAPI {
   }
 
   async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {
-    console.log(
-      'Use gift ',
-      gift.label,
-      ' ',
-      gift.aff + ' Aff',
-      'on girl',
-      girl.name
-    );
+    if (!girl.own) {
+      return;
+    }
+    const giftValid = girl.stars < girl.maxStars;
+    if (giftValid) {
+      updateGirlAffStats(girl, gift.aff);
+      if (this.updateGirl !== undefined) {
+        this.updateGirl(girl);
+      }
+    }
     return;
   }
   async maxXP(_girl: CommonGirlData): Promise<void> {
@@ -201,4 +204,18 @@ export class MockGameAPI implements GameAPI {
 function updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
   girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
   girl.currentGXP += addXp;
+}
+
+function updateGirlAffStats(girl: CommonGirlData, addAff: number): void {
+  girl.upgradeReady = isUpgradeReady(girl, addAff);
+  girl.currentAffection += addAff;
+  girl.missingAff = Math.max(0, girl.missingAff - addAff);
+  console.log('Upgrade ready: ', girl.upgradeReady);
+  if (girl.upgradeReady) {
+    girl.quests[girl.stars] = {
+      ...girl.quests[girl.stars],
+      ready: true
+    };
+    console.log('Quests: ', girl.quests);
+  }
 }

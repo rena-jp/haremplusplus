@@ -299,7 +299,7 @@
   right: 2rem;
   z-index: 2;
 
-  transition: transform 0.5s ease-in, visibility 0.5s ease-in;
+  /* transition: transform 0.5s ease-in, visibility 0.5s ease-in; */
 }
 
 /** Make the panel full screen on small devices */
@@ -314,7 +314,9 @@
   }
 }
 
-.harem-upgrade-panel.hidden {
+/** At the moment, the panel is not rendered at all when hidden,
+ to force reloading content each time we reopen it. */
+/* .harem-upgrade-panel.hidden {
   transform: translateY(105%);
   visibility: hidden;
-}
+} */

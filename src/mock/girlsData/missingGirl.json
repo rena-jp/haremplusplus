@@ -17,6 +17,7 @@
   "zodiac": 3,
   "element": 2,
   "missingAff": 12285,
+  "currentAffection": 0,
   "upgradeReady": false,
   "currentIcon": 0,
   "currentGXP": 0,
