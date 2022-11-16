@@ -17,7 +17,7 @@ export function useAffectionStats(girl: CommonGirlData): AffStatsResult {
       affToMax: girl.currentAffection + girl.missingAff,
       currentAff: girl.currentAffection
     };
-  }, [girl.currentAffection]);
+  }, [girl.currentAffection, girl.stars]);
   return result;
 }
 

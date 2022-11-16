@@ -504,11 +504,11 @@ export interface SuccessXPResult {
   level: number;
   girl: unknown | null; // Subset of GirlsDataEntry. Contains updated data about aff/xp status. null when using a single item?
 }
-export interface FailedXPResult {
+export interface FailedResult {
   success: false;
 }
 
-export type XPResult = SuccessXPResult | FailedXPResult;
+export type XPResult = SuccessXPResult | FailedResult;
 
 export namespace XPResult {
   export function is(object: unknown): object is XPResult {
@@ -521,6 +521,33 @@ export namespace XPResult {
             typeof object.level_up === 'boolean' &&
             typeof object.level === 'number' &&
             (isUnknownObject(object.girl) || object.girl === null)
+          );
+        } else {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+}
+
+export interface SuccessGiftResult {
+  can_upgrade: { upgradable: true; quest: string } | { upgradable: false };
+  affection: number;
+  success: true;
+}
+
+export type GiftResult = FailedResult | SuccessGiftResult;
+
+export namespace GiftResult {
+  export function is(object: unknown): object is GiftResult {
+    if (isUnknownObject(object)) {
+      if (typeof object.success === 'boolean') {
+        if (object.success) {
+          return (
+            isUnknownObject(object.can_upgrade) &&
+            typeof (object.can_upgrade.upgradable === 'boolean') &&
+            typeof object.affection === 'number'
           );
         } else {
           return true;

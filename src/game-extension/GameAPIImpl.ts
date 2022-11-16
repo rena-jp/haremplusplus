@@ -7,6 +7,7 @@ import {
   GameWindow,
   GemsData,
   getGameWindow,
+  GiftResult,
   GirlsDataList,
   GirlsSalaryEntry,
   GirlsSalaryList,
@@ -16,6 +17,7 @@ import {
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
+import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -382,9 +384,62 @@ export class GameAPIImpl implements GameAPI {
     girl.currentGXP += addXp;
   }
 
-  async useGift(_girl: CommonGirlData, _gift: Gift): Promise<void> {
-    return;
+  async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {
+    // TODO Special case: Mythic gift 2*
+    const missingAff = girl.missingAff;
+    const giftValid =
+      girl.stars < girl.maxStars &&
+      !girl.upgradeReady &&
+      (gift.rarity < Rarity.mythic || gift.aff <= missingAff);
+    if (giftValid) {
+      const params = {
+        action: 'girl_give_affection',
+        id_girl: girl.id,
+        id_item: gift.itemId
+      };
+      this.updateGirlAffStats(girl, gift.aff);
+      const expectedResult = { ...girl };
+      if (this.updateGirl !== undefined) {
+        this.updateGirl(girl);
+      }
+      const result = await this.postRequest(params);
+      if (GiftResult.is(result) && result.success) {
+        if (
+          result.affection === expectedResult.currentAffection &&
+          result.can_upgrade.upgradable === expectedResult.upgradeReady
+        ) {
+          // All good, no surprise
+          return;
+        } else {
+          console.warn(
+            'Successfully used gift, but got unexpected result. Expected: ',
+            expectedResult.currentAffection,
+            expectedResult.upgradeReady,
+            gift.aff,
+            'was: ',
+            result
+          );
+        }
+      } else {
+        console.warn('Failed to use gift: ', result);
+      }
+    } else {
+      console.warn("Can't use this gift");
+    }
   }
+
+  private updateGirlAffStats(girl: CommonGirlData, addAff: number): void {
+    girl.upgradeReady = isUpgradeReady(girl, addAff);
+    girl.currentAffection += addAff;
+    girl.missingAff = Math.max(0, girl.missingAff - addAff);
+    if (girl.upgradeReady) {
+      girl.quests[girl.stars] = {
+        ...girl.quests[girl.stars],
+        ready: true
+      };
+    }
+  }
+
   async maxXP(_girl: CommonGirlData): Promise<void> {
     return;
   }

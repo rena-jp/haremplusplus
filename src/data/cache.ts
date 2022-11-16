@@ -8,7 +8,8 @@ const DEPRECATED_CACHES = [
   'harem-cache',
   'gemsData',
   'haremData',
-  'qh-filters'
+  'qh-filters',
+  'harem-cache-0.9.7'
 ];
 const CACHE = 'harem-cache-0.9.7-dev.1';
 
