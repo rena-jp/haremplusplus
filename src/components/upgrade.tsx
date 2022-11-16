@@ -421,8 +421,6 @@ export const AffStatus: React.FC<AffStatusProps> = ({ girl, gift }) => {
 
   const { minAff, maxAff, affToMax, currentAff } = affStats;
 
-  console.log('Min: ', minAff, 'Max: ', maxAff);
-
   return (
     <div className="aff-status">
       {girl.stars < girl.maxStars ? (
@@ -444,7 +442,11 @@ export const AffStatus: React.FC<AffStatusProps> = ({ girl, gift }) => {
         </span>
       ) : null}
       <span>
-        Aff. to grade {girl.maxStars}:
+        {girl.stars === girl.maxStars ? (
+          <>Grade {girl.maxStars}</>
+        ) : (
+          <>Aff. to grade {girl.maxStars}:</>
+        )}
         <ProgressBar
           curr={currentAff}
           min={0}

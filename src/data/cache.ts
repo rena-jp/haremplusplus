@@ -4,7 +4,12 @@ import { FilterConfig } from './filters/filter-api';
 import { GameBlessingData, GemsData } from './game-data';
 import { SortConfig } from './sort';
 
-const DEPRECATED_CACHES = ['harem-cache', 'harem-cache-0.9.7'];
+const DEPRECATED_CACHES = [
+  'harem-cache',
+  'gemsData',
+  'haremData',
+  'qh-filters'
+];
 const CACHE = 'harem-cache-0.9.7-dev.1';
 
 async function clearOldCaches(): Promise<void> {
@@ -21,7 +26,7 @@ async function clearOldCaches(): Promise<void> {
 }
 clearOldCaches();
 
-const GEMS_DATA_REQUEST = 'gemsData.json';
+const GEMS_DATA_REQUEST = '/gemsData.json';
 
 export async function loadGemsData(): Promise<GemsData> {
   try {
@@ -96,7 +101,7 @@ export async function persistHaremData(harem: HaremData): Promise<void> {
   }
 }
 
-const BLESSINGS_REQUEST = 'blessings.json';
+const BLESSINGS_REQUEST = '/blessings.json';
 
 async function loadBlessingsData(): Promise<GameBlessingData> {
   try {
@@ -174,7 +179,7 @@ export async function loadBlessings(
   }
 }
 
-const FILTERS_REQUEST = 'qh-default-filter';
+const FILTERS_REQUEST = '/qh-default-filter';
 
 export async function persistDefaultFilter(
   filter: FilterConfig | undefined
@@ -222,7 +227,7 @@ export async function loadDefaultFilter(): Promise<FilterConfig> {
   return Promise.reject('Failed to load filters from cache');
 }
 
-const SORT_REQUEST = 'qh-default-sort';
+const SORT_REQUEST = '/qh-default-sort';
 
 export async function persistDefaultSort(
   sort: SortConfig | undefined

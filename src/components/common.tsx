@@ -450,9 +450,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     <div className={classNames.join(' ')}>
       <div className="raw-track" style={{ width: `${mainWidth}%` }}></div>
       <div className="main-track" style={{ width: `${mainWidth}%` }}></div>
-      {(extra ?? 0) > 0 ? (
-        <div className="extra-track" style={{ width: `${extraWidth}%` }}></div>
-      ) : null}
+      <div className="extra-track" style={{ width: `${extraWidth}%` }}></div>
       {label !== undefined ? (
         <span className="track-label">{label}</span>
       ) : null}
