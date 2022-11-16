@@ -26,6 +26,7 @@ export namespace Rarities {
 export type EventSource =
   | 'MP' // Done
   | 'EP' // Done
+  | 'GP' // Done
   | 'LD' // Done
   | 'ED' // Done
   | 'MD' // Done

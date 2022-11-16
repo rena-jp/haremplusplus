@@ -165,27 +165,31 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
     sources.add('MD');
   }
   if (girlData.source_selectors.pachinko) {
-    let isEp = false;
-    let isMp = false;
-    if (girlData.source_selectors.pachinko.length === 2) {
-      isMp = true;
-      isEp = true;
-    } else if (girlData.source?.name === 'pachinko_epic') {
-      isEp = true;
-    } else if (girlData.source_selectors.pachinko.length === 1) {
-      isMp = true;
-    }
+    if (Number(girlData.nb_grades) === 1) {
+      sources.add('GP');
+    } else {
+      let isEp = false;
+      let isMp = false;
+      if (girlData.source_selectors.pachinko.length === 2) {
+        isMp = true;
+        isEp = true;
+      } else if (girlData.source?.name === 'pachinko_epic') {
+        isEp = true;
+      } else if (girlData.source_selectors.pachinko.length === 1) {
+        isMp = true;
+      }
 
-    if (isEp && !isMp) {
-      // console.log('Maybe EP exclusive: ', girlData.name);
-      isMp = true; // FIXME: We don't know if some girls are really EP-Exclusive... Assuming they are not...
-    }
+      if (isEp && !isMp) {
+        // console.log('Maybe EP exclusive: ', girlData.name);
+        isMp = true; // FIXME: We don't know if some girls are really EP-Exclusive... Assuming they are not...
+      }
 
-    if (isEp) {
-      sources.add('EP');
-    }
-    if (isMp) {
-      sources.add('MP');
+      if (isEp) {
+        sources.add('EP');
+      }
+      if (isMp) {
+        sources.add('MP');
+      }
     }
   }
   if (girlData.source_selectors.world) {
