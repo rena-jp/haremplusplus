@@ -1,20 +1,6 @@
 {
   "active": [
     {
-      "title": "Semaine du Marron",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Marron</span> obtiennent <span class=\"blessing-bonus\">+ 30%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667822400,
-      "end_ts": 1668427199
-    },
-    {
-      "title": "Semaine du Commune",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Rareté Commune</span> obtiennent <span class=\"blessing-bonus\">+ 20%</span> de bonus sur tous les attributs.",
-      "start_ts": 1667822400,
-      "end_ts": 1668427199
-    }
-  ],
-  "upcoming": [
-    {
       "title": "Semaine du Vert",
       "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Vert</span> obtiennent <span class=\"blessing-bonus\">+ 35%</span> de bonus sur tous les attributs.",
       "start_ts": 1668427200,
@@ -25,6 +11,20 @@
       "description": "Toutes les filles avec <span class=\"blessing-condition\">Position préférée 69</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
       "start_ts": 1668427200,
       "end_ts": 1669031999
+    }
+  ],
+  "upcoming": [
+    {
+      "title": "Semaine du Rose",
+      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Rose</span> obtiennent <span class=\"blessing-bonus\">+ 25%</span> de bonus sur tous les attributs.",
+      "start_ts": 1669032000,
+      "end_ts": 1669636799
+    },
+    {
+      "title": "Semaine du Commune",
+      "description": "Toutes les filles avec <span class=\"blessing-condition\">Rareté Commune</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
+      "start_ts": 1669032000,
+      "end_ts": 1669636799
     }
   ],
   "success": true

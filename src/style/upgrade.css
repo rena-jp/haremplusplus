@@ -132,6 +132,10 @@
   font-size: 0.9em;
 }
 
+.xp-status .gems-awakening {
+  min-width: 14rem; /* Same size as progress bar, to get more consistent layout */
+}
+
 .xp-status > span {
   display: flex;
   flex-direction: column;
@@ -143,4 +147,122 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1em;
   }
+}
+
+.popup-overlay {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.qh-popup {
+  background-color: rgba(32, 3, 7, 0.95);
+  width: 40vw;
+  height: 50vh;
+  border-radius: 15px;
+  box-shadow: 0px 0px 7px black;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  border: 2px solid #905312;
+}
+
+@media screen and (max-width: 1920px) {
+  .qh-popup {
+    width: 70vw;
+    height: 70vh;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .qh-popup {
+    width: 95vw;
+    height: 95vh;
+  }
+}
+
+.qh-popup > .close-popup {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+}
+
+.awaken-summary {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.3em;
+}
+
+.hh-action-button.awaken {
+  background-image: url('https://hh2.hh-content.com/design/ic_gem.svg');
+  padding: 0.2em;
+  background-size: contain;
+  background-origin: content-box;
+  background-repeat: no-repeat;
+  width: 2em;
+  height: 2em;
+}
+
+.awakening-popup {
+  display: flex;
+  flex-direction: column;
+}
+
+.awakening-popup-content {
+  display: grid;
+  grid-template-columns: 0.5fr 0.7fr;
+  flex-shrink: 1;
+  min-height: 0;
+  overflow: auto;
+  font-size: 1.5em;
+}
+
+.awakening-popup-content > .pose {
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+}
+
+.hh-action-button.do-awaken {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 2rem;
+}
+
+.hh-action-button.do-awaken > .gems-cost {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+}
+
+.awakening-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+  align-items: flex-start;
+}
+
+.awakening-details > h2 {
+  font-size: 2em;
+  color: #ffb827;
+}
+
+.awakening-description {
+  display: flex;
+  flex-direction: row;
+}
+
+.awakening-details .girl-name {
+  color: #ffb827;
+}
+
+.chevron-right {
+  background-image: url(https://hh2.hh-content.com/clubs/ic_FilterBtnUP.png);
+  background-size: contain;
+  background-position: center;
+  background-origin: content-box;
+  align-self: center;
+  background-repeat: no-repeat;
+  transform: rotate(90deg);
+  width: 1.5em;
+  height: 1.5em;
 }

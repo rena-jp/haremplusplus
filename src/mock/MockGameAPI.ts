@@ -11,14 +11,14 @@ import {
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
-// import girls from './girlsdatalist-full.json';
-// import blessings from './blessings-full.json';
-// import quests from './quests-full.json';
-// import inventory from './inventory.json';
-const girls = {};
-const blessings = { active: [], upcoming: [] };
-const quests = {};
-const inventory = { gift: [], potion: [] };
+import girls from './girlsdatalist-full.json';
+import blessings from './blessings-full.json';
+import quests from './quests-full.json';
+import inventory from './inventory.json';
+// const girls = {};
+// const blessings = { active: [], upcoming: [] };
+// const quests = {};
+// const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -146,6 +146,12 @@ export class MockGameAPI implements GameAPI {
       }
     }
 
+    return;
+  }
+
+  async awaken(girl: CommonGirlData): Promise<void> {
+    // TODO
+    console.log('Do Awaken', girl.name);
     return;
   }
 

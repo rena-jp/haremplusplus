@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useContext, useMemo, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   Book,
@@ -12,8 +12,18 @@ import { useAffectionStats } from '../hooks/girl-aff-hooks';
 import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
-import { Tooltip, format, getDomain, ProgressBar, CloseButton } from './common';
+import {
+  Tooltip,
+  format,
+  getDomain,
+  ProgressBar,
+  CloseButton,
+  GemIcon
+} from './common';
 import { SimpleGirlTile } from './girl';
+import Popup from 'reactjs-popup';
+import { useGemsStats } from '../hooks/girl-gems-hooks';
+import { OptionsContext } from '../data/options-context';
 
 export type UpgradePage = 'books' | 'gifts';
 
@@ -76,14 +86,6 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     }
   }, [selectedItem, currentGirl, gameAPI]);
 
-  const max = useCallback(() => {
-    if (page === 'books') {
-      gameAPI.maxXP(currentGirl);
-    } else if (page === 'gifts') {
-      gameAPI.maxAff(currentGirl);
-    }
-  }, []);
-
   const marketType = page === 'books' ? 'potion' : 'gift';
 
   const domain = getDomain();
@@ -130,6 +132,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
           girl={currentGirl}
           page={page}
           selectedItem={selectedItem?.item}
+          gameAPI={gameAPI}
         />
       </div>
       <div className="items-and-actions">
@@ -157,13 +160,8 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
               >
                 Use
               </button>
-              <button
-                className="hh-action-button max"
-                onClick={max}
-                disabled={isMaxed}
-              >
-                Max
-              </button>
+              {page === 'books' ? <MaxXP girl={currentGirl} /> : null}
+              {page === 'gifts' ? <MaxAffection girl={currentGirl} /> : null}
             </div>
           </>
         )}
@@ -307,6 +305,7 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
 
 export interface StatusProps {
   girl: CommonGirlData;
+  gameAPI: GameAPI;
 }
 export interface UpgradeStatusProps extends StatusProps {
   page: 'books' | 'gifts';
@@ -316,7 +315,8 @@ export interface UpgradeStatusProps extends StatusProps {
 export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
   girl,
   page,
-  selectedItem
+  selectedItem,
+  gameAPI
 }) => {
   const book =
     selectedItem !== undefined && selectedItem.type === 'book'
@@ -328,8 +328,12 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
       : undefined;
   return (
     <div className="upgrade-status">
-      {page === 'books' ? <XPStatus girl={girl} book={book} /> : null}
-      {page === 'gifts' ? <AffStatus girl={girl} gift={gift} /> : null}
+      {page === 'books' ? (
+        <XPStatus girl={girl} book={book} gameAPI={gameAPI} />
+      ) : null}
+      {page === 'gifts' ? (
+        <AffStatus girl={girl} gift={gift} gameAPI={gameAPI} />
+      ) : null}
     </div>
   );
 };
@@ -338,19 +342,23 @@ export interface XpStatusProps extends StatusProps {
   book: Book | undefined;
 }
 
-export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
+export const XPStatus: React.FC<XpStatusProps> = ({ girl, book, gameAPI }) => {
   const levelReach =
     book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp);
   const nextLevel = girl.level === 750 ? 750 : (girl.level ?? 1) + 1;
   const nextCap = girl.maxLevel!;
 
   const xpStats = useXpStats(girl);
+  const gemsStats = useGemsStats(girl);
 
   const displayTargetLevel =
     girl.level === nextCap ? nextCap : Math.max(nextLevel, levelReach);
 
   return (
     <div className="xp-status">
+      <Popup>
+        <div>Test popup content</div>
+      </Popup>
       {girl.level! < 750 ? (
         <span>
           Lv. {girl.level} to Lv. {displayTargetLevel}:
@@ -400,12 +408,27 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book }) => {
           />
         </span>
       ) : null}
-      {/* {girl.gemsToCap ?? 0 > 0 ? (
-        <span>
-          Gems to next cap: {format(girl.gemsToCap ?? 0)}
-          <GemIcon element={girl.element} />
-        </span>
-      ) : null} */}
+      {gemsStats.gemsToNextCap > 0 ? (
+        <div className="gems-awakening">
+          <div className="awaken-summary">
+            Gems to next cap: {format(gemsStats.gemsToNextCap ?? 0)}
+            <GemIcon element={girl.element} />
+          </div>
+          {girl.level === girl.maxLevel ? (
+            <Awaken
+              girl={girl}
+              trigger={
+                <button className="hh-action-button awaken">
+                  <Tooltip tooltip={<span>Awaken</span>}>
+                    <div className="filler"></div>
+                  </Tooltip>
+                </button>
+              }
+              gameAPI={gameAPI}
+            />
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };
@@ -508,3 +531,112 @@ function getValue(item: Item): number {
   }
   return 0;
 }
+
+export interface MaxXPProps {
+  girl: CommonGirlData;
+}
+
+export const MaxXP: React.FC<MaxXPProps> = ({ girl }) => {
+  const canXP = girl.own && girl.level! < girl.maxLevel!;
+
+  return (
+    <Popup
+      modal
+      trigger={
+        <button className="hh-action-button max" disabled={!canXP}>
+          Max
+        </button>
+      }
+    >
+      {
+        ((closePopup: () => void) => (
+          <div className="qh-popup max-content-popup">
+            <CloseButton close={closePopup} />
+            <p>Max out XP for girl {girl.name}. Coming soon...</p>
+          </div>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        )) as any
+      }
+    </Popup>
+  );
+};
+
+export interface MaxAffProps {
+  girl: CommonGirlData;
+}
+
+export const MaxAffection: React.FC<MaxAffProps> = ({ girl }) => {
+  const canUpgrade = girl.missingAff > 0 && !girl.upgradeReady;
+  return (
+    <Popup
+      modal
+      trigger={
+        <button className="hh-action-button max" disabled={!canUpgrade}>
+          Max
+        </button>
+      }
+    >
+      <div className="qh-popup max-content-popup">
+        <p>Max out Affection for girl {girl.name}</p>
+        <button onClick={close}>Close me!</button>
+      </div>
+    </Popup>
+  );
+};
+
+export interface AwakenProps {
+  girl: CommonGirlData;
+  trigger?: JSX.Element;
+  gameAPI: GameAPI;
+}
+
+export const Awaken: React.FC<AwakenProps> = ({ girl, trigger, gameAPI }) => {
+  const gemsStats = useGemsStats(girl);
+  const { show0Pose } = useContext(OptionsContext);
+  const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
+  const doAwaken = useCallback(() => {
+    gameAPI.awaken(girl);
+  }, [gameAPI]);
+  return (
+    <Popup modal trigger={trigger}>
+      {
+        ((closePopup: () => void) => (
+          <div className="qh-popup awakening-popup">
+            <CloseButton close={closePopup} />
+            {girl.maxLevel === 750 ? (
+              <div>{girl.name} has already reached max level!</div>
+            ) : (
+              <div className="awakening-popup-content">
+                <div className="pose">
+                  <img src={poseImage} alt={girl.name} />
+                </div>
+                <div className="awakening-details">
+                  <h2>Awakening</h2>
+                  <span>
+                    We can feel something growing - could it be{' '}
+                    <span className="girl-name">{girl.name}</span>'s power?
+                  </span>
+                  <div className="awakening-description">
+                    Max level increase: {girl.maxLevel!}{' '}
+                    <div className="chevron-right" /> {girl.maxLevel! + 50}
+                  </div>
+                  <button
+                    className="hh-action-button do-awaken"
+                    onClick={doAwaken}
+                  >
+                    <span>Awaken</span>
+                    <span className="gems-cost">
+                      {gemsStats.gemsToNextCap}/{gemsStats.currentGems}
+                      <GemIcon element={girl.element} />
+                    </span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        )) as any
+      }
+    </Popup>
+  );
+};

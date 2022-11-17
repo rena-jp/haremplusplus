@@ -39,6 +39,7 @@ export interface GameAPI {
   getMarketInventory(allowRequest: boolean): Promise<GameInventory>;
   useBook(girl: CommonGirlData, book: Book): Promise<void>;
   useGift(girl: CommonGirlData, gift: Gift): Promise<void>;
+  awaken(girl: CommonGirlData): Promise<void>;
   maxXP(girl: CommonGirlData): Promise<void>;
   maxAff(girl: CommonGirlData): Promise<void>;
   /**

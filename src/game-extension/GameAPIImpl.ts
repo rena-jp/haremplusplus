@@ -379,6 +379,11 @@ export class GameAPIImpl implements GameAPI {
     return;
   }
 
+  async awaken(_girl: CommonGirlData): Promise<void> {
+    // TODO
+    return;
+  }
+
   private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
     girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
     girl.currentGXP += addXp;
