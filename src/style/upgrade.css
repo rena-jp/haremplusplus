@@ -222,13 +222,13 @@
   min-width: 0;
 }
 
-.hh-action-button.do-awaken {
+.hh-game-action.do-awaken {
   display: flex;
   flex-direction: column;
   padding: 0.5rem 2rem;
 }
 
-.hh-action-button.do-awaken > .gems-cost {
+.hh-game-action.do-awaken > .gems-cost {
   display: flex;
   flex-direction: row;
   gap: 0.5em;

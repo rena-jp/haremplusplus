@@ -5,7 +5,6 @@ import gemsTable from './data/gems-table.json';
 export interface GemsStats {
   gemsToMax: number;
   gemsToNextCap: number;
-  currentGems: number;
 }
 
 export function useGemsStats(girl: CommonGirlData): GemsStats {
@@ -13,8 +12,7 @@ export function useGemsStats(girl: CommonGirlData): GemsStats {
     const gemsToNextCap = getGemsToCap(girl, girl.maxLevel!);
     return {
       gemsToMax: girl.missingGems,
-      gemsToNextCap,
-      currentGems: -6999
+      gemsToNextCap
     };
   }, [girl.level, girl.maxLevel]);
 }

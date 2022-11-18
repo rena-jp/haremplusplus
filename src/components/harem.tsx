@@ -1,5 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
-import { BlessingDefinition, BlessingType, CommonGirlData } from '../data/data';
+import {
+  BlessingDefinition,
+  BlessingType,
+  CommonGirlData,
+  Element
+} from '../data/data';
 import '../style/harem.css';
 import '../style/controls.css';
 import { Summary } from './summary';
@@ -26,6 +31,8 @@ export interface HaremProps {
   gameAPI: GameAPI;
   options: HaremOptions;
   close(): void;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
 /**
@@ -46,7 +53,9 @@ export const Harem: React.FC<HaremProps> = ({
   loading,
   refresh,
   close,
-  options
+  options,
+  gemsCount,
+  consumeGems
 }) => {
   const tabs = useMemo<Tab[]>(() => {
     const summary: Tab = { id: 'summary', label: 'Summary' };
@@ -163,6 +172,7 @@ export const Harem: React.FC<HaremProps> = ({
               toggle0Pose={toggle0Pose}
               toggleTab={togglePanel}
               isOpenTab={activeTab !== undefined}
+              gemsCount={gemsCount}
             />
             <HaremWidget
               allGirls={allGirls}
@@ -172,6 +182,8 @@ export const Harem: React.FC<HaremProps> = ({
               show0Pose={is0Pose}
               visible={haremVisible}
               gameAPI={gameAPI}
+              gemsCount={gemsCount}
+              consumeGems={consumeGems}
             />
           </div>
         </OptionsContext.Provider>

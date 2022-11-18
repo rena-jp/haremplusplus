@@ -11,14 +11,15 @@ import {
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
-import girls from './girlsdatalist-full.json';
-import blessings from './blessings-full.json';
-import quests from './quests-full.json';
-import inventory from './inventory.json';
-// const girls = {};
-// const blessings = { active: [], upcoming: [] };
-// const quests = {};
-// const inventory = { gift: [], potion: [] };
+import { getGemsToCap } from '../hooks/girl-gems-hooks';
+// import girls from './girlsdatalist-full.json';
+// import blessings from './blessings-full.json';
+// import quests from './quests-full.json';
+// import inventory from './inventory.json';
+const girls = {};
+const blessings = { active: [], upcoming: [] };
+const quests = {};
+const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -150,9 +151,23 @@ export class MockGameAPI implements GameAPI {
   }
 
   async awaken(girl: CommonGirlData): Promise<void> {
-    // TODO
-    console.log('Do Awaken', girl.name);
-    return;
+    if (!girl.own) {
+      throw new Error("Can't awaken a girl before obtaining her!");
+    }
+    if ((girl.maxLevel ?? 0) >= 750) {
+      throw new Error('Max level is already reached!');
+    }
+
+    const maxLevel = girl.maxLevel ?? 250;
+    const gemsUsed = getGemsToCap(girl, maxLevel);
+
+    // Update girl level/maxLevel
+    girl.missingGems -= gemsUsed;
+    girl.maxLevel = maxLevel + 50;
+    girl.level = getLevel(girl, 0);
+    if (this.updateGirl) {
+      this.updateGirl(girl);
+    }
   }
 
   async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {

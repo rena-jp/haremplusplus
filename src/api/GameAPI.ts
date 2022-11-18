@@ -37,10 +37,32 @@ export interface GameAPI {
    * work on the in-game market page)
    */
   getMarketInventory(allowRequest: boolean): Promise<GameInventory>;
+  /**
+   * Use a book to increase the XP of the selected girl.
+   * @param girl
+   * @param book
+   */
   useBook(girl: CommonGirlData, book: Book): Promise<void>;
+  /**
+   * Use a gift to increase the Affection of the selected girl.
+   * @param girl
+   * @param gift
+   */
   useGift(girl: CommonGirlData, gift: Gift): Promise<void>;
+  /**
+   * Awaken the selected girl.
+   * @param girl
+   */
   awaken(girl: CommonGirlData): Promise<void>;
+  /**
+   * Max out the XP of the selected girl.
+   * @param girl
+   */
   maxXP(girl: CommonGirlData): Promise<void>;
+  /**
+   * Max out the Affection of the selected girl.
+   * @param girl
+   */
   maxAff(girl: CommonGirlData): Promise<void>;
   /**
    * Collect salary for the selected girl. If the action succeeds,

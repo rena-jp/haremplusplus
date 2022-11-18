@@ -67,3 +67,19 @@ button.toggle.pressed {
   );
   color: darkgray;
 }
+
+.hh-game-action {
+  box-shadow: 0 3px 0 rgba(23, 33, 7, 0.6), inset 0 3px 0 #95ed3f;
+  border: 1px solid #000;
+  background-image: linear-gradient(to top, #619f00 0, #570 100%);
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.hh-game-action:active {
+  outline: 0;
+  box-shadow: unset;
+  /* transform: translateY(-1px); */
+  transition: box-shadow 90ms ease-in-out;
+}

@@ -31,7 +31,7 @@ export function useXpStats(girl: CommonGirlData): XpStatsResult {
       maxXpToCap: getGXPToCap(girl, nextCap),
       xpToMax: getMissingGXP(girl)
     };
-  }, [currentXp, girl.rarity]);
+  }, [currentXp, girl.rarity, girl.level, girl.maxLevel]);
 }
 
 function getXpRange(

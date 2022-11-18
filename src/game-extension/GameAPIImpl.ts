@@ -13,11 +13,13 @@ import {
   GirlsSalaryList,
   Hero,
   isUnknownObject,
+  RequestResult,
   XPResult
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
+import { getGemsToCap } from '../hooks/girl-gems-hooks';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -379,9 +381,33 @@ export class GameAPIImpl implements GameAPI {
     return;
   }
 
-  async awaken(_girl: CommonGirlData): Promise<void> {
-    // TODO
-    return;
+  async awaken(girl: CommonGirlData): Promise<void> {
+    if (!girl.own) {
+      throw new Error("Can't awaken a girl before obtaining her!");
+    }
+    if ((girl.maxLevel ?? 0) >= 750) {
+      throw new Error('Max level is already reached!');
+    }
+
+    const maxLevel = girl.maxLevel ?? 250;
+    const gemsUsed = getGemsToCap(girl, maxLevel);
+
+    // Update girl level/maxLevel
+    girl.missingGems -= gemsUsed;
+    girl.maxLevel = maxLevel + 50;
+    girl.level = getLevel(girl, 0);
+    if (this.updateGirl) {
+      this.updateGirl(girl);
+    }
+
+    const params = {
+      action: 'awaken_girl',
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(params);
+    if (RequestResult.is(result) && !result.success) {
+      console.warn(`Failed to awaken ${girl.name}. Result: `, result);
+    }
   }
 
   private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {

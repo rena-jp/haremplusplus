@@ -1,8 +1,6 @@
-import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { GameAPI } from '../api/GameAPI';
-import { loadGemsData, persistGemsData } from '../data/cache';
 import { Element } from '../data/data';
-import { countGems } from '../data/game-data';
 import { FiltersContext } from '../hooks/filter-hooks';
 import { CloseButton, GemsCount, Tooltip } from './common';
 import { QuickFilter } from './harem';
@@ -26,6 +24,7 @@ export interface HaremToolbarProps {
   close?: () => void;
   toggleTab(): void;
   isOpenTab: boolean;
+  gemsCount: Map<Element, number>;
 }
 
 export const HaremToolbar: React.FC<HaremToolbarProps> = ({
@@ -35,12 +34,12 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   clearQuickFilters,
   show0Pose,
   toggle0Pose,
-  gameAPI,
   loading,
   refresh,
   close,
   toggleTab,
-  isOpenTab
+  isOpenTab,
+  gemsCount
 }) => {
   const {
     activeFilter,
@@ -53,30 +52,6 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   } = useContext(FiltersContext);
 
   const filterLabel = useMemo(() => activeFilter.label, [activeFilter]);
-
-  const [gemsCount, setGemsCount] = useState<Map<Element, number>>(new Map());
-  useEffect(() => {
-    // Immediately load gems data from cache (if available), then load
-    // gems data from the game (To ensure up-to-date data)
-    loadGemsData()
-      .then((gemsData) => setGemsCount(countGems(gemsData)))
-      .catch(() => undefined)
-      .then(() => gameAPI.getGemsData(true))
-      .then((data) => {
-        persistGemsData(data);
-        setGemsCount(countGems(data));
-      });
-  }, [gameAPI]);
-
-  const refreshAll = useCallback(async () => {
-    try {
-      await refresh();
-    } catch {
-      // Ignore
-    }
-    const gemsData = await gameAPI.getGemsData(true);
-    setGemsCount(countGems(gemsData));
-  }, [refresh, gameAPI]);
 
   return (
     <div className="harem-toolbar">
@@ -150,7 +125,7 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
 
       <button
         className="hh-action-button refresh"
-        onClick={refreshAll}
+        onClick={refresh}
         disabled={loading}
       >
         <Tooltip tooltip={<span>{loading ? 'Refreshing...' : 'Refresh'}</span>}>

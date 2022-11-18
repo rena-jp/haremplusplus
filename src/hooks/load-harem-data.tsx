@@ -7,14 +7,26 @@ import {
   useState
 } from 'react';
 import { GameAPI } from '../api/GameAPI';
-import { loadBlessings, loadHaremData, persistHaremData } from '../data/cache';
+import {
+  loadBlessings,
+  loadGemsData,
+  loadHaremData,
+  persistGemsData,
+  persistHaremData
+} from '../data/cache';
 import {
   BlessingDefinition,
   CommonGirlData,
+  Element,
   HaremData,
   replace
 } from '../data/data';
-import { GameBlessingData, GameQuests, GirlsDataList } from '../data/game-data';
+import {
+  countGems,
+  GameBlessingData,
+  GameQuests,
+  GirlsDataList
+} from '../data/game-data';
 import { DataFormat, toHaremData } from '../data/import/harem-import';
 
 export interface LoadHaremDataProps {
@@ -27,6 +39,8 @@ export interface LoadHaremDataResult {
   currentBlessings?: BlessingDefinition[];
   upcomingBlessings?: BlessingDefinition[];
   refresh(): Promise<void>;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
   loading: boolean;
 }
 
@@ -82,6 +96,35 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     gameAPI.setUpdateGirl(updateGirl);
   }, [gameAPI, updateGirl]);
 
+  const [gemsCount, setGemsCount] = useState<Map<Element, number>>(new Map());
+  const consumeGems = useCallback(
+    (element: Element, gems: number) => {
+      setGemsCount((previousCount) => {
+        const gemsCount = previousCount.get(element);
+        if (gemsCount) {
+          // TODO Update cache
+          const newCount = gemsCount - gems;
+          previousCount.set(element, newCount);
+        }
+        return new Map(previousCount);
+      });
+    },
+    [setGemsCount]
+  );
+
+  useEffect(() => {
+    // Immediately load gems data from cache (if available), then load
+    // gems data from the game (To ensure up-to-date data)
+    loadGemsData()
+      .then((gemsData) => setGemsCount(countGems(gemsData)))
+      .catch(() => undefined)
+      .then(() => gameAPI.getGemsData(true))
+      .then((data) => {
+        persistGemsData(data);
+        setGemsCount(countGems(data));
+      });
+  }, []);
+
   const refresh = useCallback<() => Promise<void>>(async () => {
     if (loadingData.current) {
       return Promise.reject('Refresh is already in progress');
@@ -105,13 +148,18 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
         .catch((reason) => {
           console.warn('Failed to get girls quests: ', reason);
         });
-      await Promise.allSettled([loadGirls, loadQuests]);
+
+      const loadGemsData = gameAPI.getGemsData(true).then((data) => {
+        persistGemsData(data);
+        setGemsCount(countGems(data));
+      });
+      await Promise.allSettled([loadGirls, loadQuests, loadGemsData]);
     } catch (error) {
       console.warn('Error while refreshing: ', error);
     }
 
     setLoadingData(false);
-  }, []);
+  }, [gameAPI]);
 
   // Immediately load the data, only once.
   useEffect(() => {
@@ -185,7 +233,9 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     currentBlessings,
     upcomingBlessings,
     refresh,
-    loading
+    loading,
+    gemsCount,
+    consumeGems
   };
 
   return children(result);
@@ -251,7 +301,7 @@ function quickEqualGirls(
     girl1.currentGXP === girl2.currentGXP && // Level test
     girl1.currentAffection === girl2.currentAffection && // Grade test
     girl1.stars === girl2.stars && // Unlocked Grade
-    girl1.missingGems === girl2.missingGems && // Max level/Awakening test
+    girl1.maxLevel === girl2.maxLevel && // Max level/Awakening test
     girl1.icon === girl2.icon && // Current pose test
     girl1.birthday === girl2.birthday && // Language test. Birthday is more likely to be translated in all languages.
     girl1.variations?.length === girl2.variations?.length &&

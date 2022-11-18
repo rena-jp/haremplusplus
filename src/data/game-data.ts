@@ -496,6 +496,19 @@ export interface GameItem {
   value: NumberString;
 }
 
+export interface RequestResult {
+  success: boolean;
+}
+
+export namespace RequestResult {
+  export function is(object: unknown): object is RequestResult {
+    if (isUnknownObject(object)) {
+      return typeof object.success === 'boolean';
+    }
+    return false;
+  }
+}
+
 export interface SuccessXPResult {
   success: true;
   can_pex: boolean;

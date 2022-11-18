@@ -46,7 +46,9 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
           allGirls,
           currentBlessings,
           upcomingBlessings,
-          refresh
+          refresh,
+          gemsCount,
+          consumeGems
         }) => {
           const haremReady =
             options &&
@@ -67,6 +69,8 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
                   loading={loading}
                   options={options}
                   close={hide}
+                  gemsCount={gemsCount}
+                  consumeGems={consumeGems}
                 />
               ) : (
                 <Loading loading={loading} />

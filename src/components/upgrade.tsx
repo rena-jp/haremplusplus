@@ -3,6 +3,7 @@ import { GameAPI } from '../api/GameAPI';
 import {
   Book,
   CommonGirlData,
+  Element,
   Gift,
   Item,
   ItemEntry,
@@ -37,6 +38,8 @@ export interface UpgradePageProps {
   selectGirl(girl: CommonGirlData): void;
   show0Pose: boolean;
   close(): void;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
 export const UpgradePage: React.FC<UpgradePageProps> = ({
@@ -48,7 +51,9 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
   setPage,
   selectGirl,
   show0Pose,
-  close
+  close,
+  gemsCount,
+  consumeGems
 }) => {
   const { inventory, loading, consumeItem } = useInventory(gameAPI);
 
@@ -133,6 +138,8 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
           page={page}
           selectedItem={selectedItem?.item}
           gameAPI={gameAPI}
+          gemsCount={gemsCount}
+          consumeGems={consumeGems}
         />
       </div>
       <div className="items-and-actions">
@@ -310,13 +317,17 @@ export interface StatusProps {
 export interface UpgradeStatusProps extends StatusProps {
   page: 'books' | 'gifts';
   selectedItem: Item | undefined;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
 export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
   girl,
   page,
   selectedItem,
-  gameAPI
+  gameAPI,
+  gemsCount,
+  consumeGems
 }) => {
   const book =
     selectedItem !== undefined && selectedItem.type === 'book'
@@ -329,7 +340,13 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
   return (
     <div className="upgrade-status">
       {page === 'books' ? (
-        <XPStatus girl={girl} book={book} gameAPI={gameAPI} />
+        <XPStatus
+          girl={girl}
+          book={book}
+          gameAPI={gameAPI}
+          gemsCount={gemsCount}
+          consumeGems={consumeGems}
+        />
       ) : null}
       {page === 'gifts' ? (
         <AffStatus girl={girl} gift={gift} gameAPI={gameAPI} />
@@ -340,9 +357,17 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
 
 export interface XpStatusProps extends StatusProps {
   book: Book | undefined;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
-export const XPStatus: React.FC<XpStatusProps> = ({ girl, book, gameAPI }) => {
+export const XPStatus: React.FC<XpStatusProps> = ({
+  girl,
+  book,
+  gameAPI,
+  gemsCount,
+  consumeGems
+}) => {
   const levelReach =
     book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp);
   const nextLevel = girl.level === 750 ? 750 : (girl.level ?? 1) + 1;
@@ -425,6 +450,8 @@ export const XPStatus: React.FC<XpStatusProps> = ({ girl, book, gameAPI }) => {
                 </button>
               }
               gameAPI={gameAPI}
+              gemsCount={gemsCount}
+              consumeGems={consumeGems}
             />
           ) : null}
         </div>
@@ -588,15 +615,26 @@ export interface AwakenProps {
   girl: CommonGirlData;
   trigger?: JSX.Element;
   gameAPI: GameAPI;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
-export const Awaken: React.FC<AwakenProps> = ({ girl, trigger, gameAPI }) => {
+export const Awaken: React.FC<AwakenProps> = ({
+  girl,
+  trigger,
+  gameAPI,
+  gemsCount,
+  consumeGems
+}) => {
   const gemsStats = useGemsStats(girl);
   const { show0Pose } = useContext(OptionsContext);
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
+  const currentGems = gemsCount.get(girl.element) ?? 0;
   const doAwaken = useCallback(() => {
-    gameAPI.awaken(girl);
-  }, [gameAPI]);
+    gameAPI
+      .awaken(girl)
+      .then(() => consumeGems(girl.element, gemsStats.gemsToNextCap));
+  }, [gameAPI, gemsStats, gemsStats.gemsToNextCap]);
   return (
     <Popup modal trigger={trigger}>
       {
@@ -621,12 +659,16 @@ export const Awaken: React.FC<AwakenProps> = ({ girl, trigger, gameAPI }) => {
                     <div className="chevron-right" /> {girl.maxLevel! + 50}
                   </div>
                   <button
-                    className="hh-action-button do-awaken"
-                    onClick={doAwaken}
+                    className="hh-game-action do-awaken"
+                    onClick={() => {
+                      doAwaken();
+                      closePopup();
+                    }}
+                    disabled={gemsStats.gemsToNextCap > currentGems}
                   >
                     <span>Awaken</span>
                     <span className="gems-cost">
-                      {gemsStats.gemsToNextCap}/{gemsStats.currentGems}
+                      {gemsStats.gemsToNextCap}/{currentGems}
                       <GemIcon element={girl.element} />
                     </span>
                   </button>

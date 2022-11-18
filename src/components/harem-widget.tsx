@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
-import { BlessingDefinition, CommonGirlData } from '../data/data';
+import { BlessingDefinition, CommonGirlData, Element } from '../data/data';
 import { GirlDescription } from './description';
 import { GirlTile } from './girl';
 import { UpgradePage } from './upgrade';
@@ -36,6 +36,8 @@ export interface HaremWidgetProps {
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
   gameAPI: GameAPI;
+  gemsCount: Map<Element, number>;
+  consumeGems(element: Element, gems: number): void;
 }
 
 export const HaremWidget: React.FC<HaremWidgetProps> = ({
@@ -44,7 +46,9 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   show0Pose,
   currentBlessings,
   upcomingBlessings,
-  gameAPI
+  gameAPI,
+  gemsCount,
+  consumeGems
 }) => {
   // On initial rendering, start with a small batch of girls.
   const [renderedGirls, setRenderedGirls] = useState<CommonGirlData[]>(
@@ -272,6 +276,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
             setPage={setPage}
             selectGirl={selectGirl}
             close={closeUpgrade}
+            gemsCount={gemsCount}
+            consumeGems={consumeGems}
           />
         </div>
       )}
