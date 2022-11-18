@@ -185,6 +185,7 @@ export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
             count={gemsCount.get(element) ?? 0}
           />
         ))}
+        <hr />
         <GemsCountEntry
           key="rainbow"
           element="rainbow"

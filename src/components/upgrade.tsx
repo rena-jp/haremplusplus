@@ -668,7 +668,7 @@ export const Awaken: React.FC<AwakenProps> = ({
                   >
                     <span>Awaken</span>
                     <span className="gems-cost">
-                      {gemsStats.gemsToNextCap}/{currentGems}
+                      {format(gemsStats.gemsToNextCap)}/{format(currentGems)}
                       <GemIcon element={girl.element} />
                     </span>
                   </button>

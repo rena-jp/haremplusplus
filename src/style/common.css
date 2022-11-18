@@ -9,6 +9,12 @@
   gap: 5px;
 }
 
+.gems-count-details > hr {
+  align-self: stretch;
+  margin: 0; /** Margin not compatible with Flex stretch */
+  color: rgb(209, 125, 22);
+}
+
 .gems-count-details > span {
   display: flex;
   flex-direction: row;
