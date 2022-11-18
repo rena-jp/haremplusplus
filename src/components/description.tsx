@@ -5,6 +5,7 @@ import {
   CommonGirlData,
   EyeColor,
   getBlessedStats,
+  getSourceLabel,
   HairColor,
   matchesBlessings,
   Pose,
@@ -290,7 +291,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       ) : null}
       <p>
         Sources:{' '}
-        {girl.sources.length === 0 ? 'unknown' : girl.sources.join(', ')}
+        {girl.sources.length === 0
+          ? 'Unknown'
+          : girl.sources.map((es) => getSourceLabel(es)).join(', ')}
       </p>
     </div>
   );

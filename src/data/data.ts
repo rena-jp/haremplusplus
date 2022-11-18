@@ -585,3 +585,54 @@ export interface Gift extends Item {
   type: 'gift';
   aff: number;
 }
+
+export function getSourceLabel(source: EventSource): string {
+  switch (source) {
+    case 'Anniv':
+      return 'Anniversary';
+    case 'BB':
+      return 'Boss Bang';
+    case 'CC':
+      return 'Club Champion';
+    case 'CE':
+      return 'Classic Event';
+    case 'Champion':
+      return 'Champion';
+    case 'ED':
+      return 'Epic Days';
+    case 'EP':
+      return 'Epic Pachinko';
+    case 'GP':
+      return 'Great Pachinko';
+    case 'KC':
+      return 'Kinky Cumpetition';
+    case 'LC':
+      return 'Legendary Contest';
+    case 'LD':
+      return 'Legendary Days';
+    case 'League':
+      return 'League';
+    case 'MD':
+      return 'Mythic Days';
+    case 'MP':
+      return 'Mythic Pachinko';
+    case 'OD':
+      return 'Orgy Days';
+    case 'Pantheon':
+      return 'Pantheon';
+    case 'PoA':
+      return 'Path of Attraction';
+    case 'PoP':
+      return 'Places of Power';
+    case 'PoV':
+      return 'Path of Valor';
+    case 'SE':
+      return 'Seasonal Event';
+    case 'Season':
+      return 'Season';
+    case 'Story':
+      return 'Story';
+    case 'unknown':
+      return 'Unknown';
+  }
+}
