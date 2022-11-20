@@ -1,4 +1,4 @@
-import { Book, CommonGirlData, Gift } from '../data/data';
+import { Book, CommonGirlData, Gift, QuestData } from '../data/data';
 import {
   GameBlessingData,
   GameInventory,
@@ -55,6 +55,12 @@ export interface GameAPI {
    */
   awaken(girl: CommonGirlData): Promise<void>;
   /**
+   * Upgrade the girl to the next grade
+   * @param girl The girl to upgrade
+   * @param questId The id of the upgrade quest
+   */
+  upgrade(girl: CommonGirlData, questId: number): Promise<boolean>;
+  /**
    * Max out the XP of the selected girl.
    * @param girl
    */
@@ -72,6 +78,17 @@ export interface GameAPI {
    * or false if it was unsuccessful.
    */
   collectSalary(girl: CommonGirlData): Promise<boolean>;
+  /**
+   * Return the quest data (dialogue, cost, image...) for upgrading a girl (or viewing a past scene)
+   * @param girl
+   * @param step
+   * @param allowRequest
+   */
+  getQuestStep(
+    girl: CommonGirlData,
+    step: number,
+    allowRequest: boolean
+  ): Promise<QuestData>;
   /**
    * Return the current salary data for all girls
    */

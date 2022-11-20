@@ -1,4 +1,11 @@
-import { Book, CommonGirlData, getPoseN, Gift, Rarity } from '../data/data';
+import {
+  Book,
+  CommonGirlData,
+  getPoseN,
+  Gift,
+  QuestData,
+  Rarity
+} from '../data/data';
 import {
   ChangePoseResult,
   GameBlessingData,
@@ -13,7 +20,10 @@ import {
   GirlsSalaryList,
   Hero,
   isUnknownObject,
+  QuestStatus,
   RequestResult,
+  toQuestData,
+  UpgradeResult,
   XPResult
 } from '../data/game-data';
 import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
@@ -154,6 +164,59 @@ export class GameAPIImpl implements GameAPI {
 
   async getQuests(allowRequest: boolean): Promise<GameQuests> {
     return this.requestFromHarem('girl_quests', GameQuests.is, allowRequest);
+  }
+
+  getQuestStep(
+    girl: CommonGirlData,
+    _step: number,
+    _allowRequest: boolean
+  ): Promise<QuestData> {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        const questData = {
+          id: 970,
+          currentStepId: 1,
+          steps: [
+            {
+              num_step: 1,
+              portrait: '/img/quests/p/20401321/p.png',
+              picture: '/img/quests/970/1/1600x/QGrade 1.jpg',
+              item: null,
+              cost: { $: 72000, HC: 72 },
+              win: [
+                [
+                  'grade',
+                  '116',
+                  '1',
+                  'Salem',
+                  'https://hh.hh-content.com/pictures/girls/116/ico1.png',
+                  '\u2605\u2606\u2606'
+                ]
+              ],
+              dialogue:
+                'To use my magic, I gather my power from manly men. And I need to collect a lot of it!',
+              end: true
+            }
+          ],
+          tutorialData: {
+            q1: 1,
+            q2: 2,
+            q3: 3,
+            qFA: 3,
+            sFA: 24,
+            content: 'otaku'
+          },
+          status: 'todo' as QuestStatus,
+          questNavData: { next: '971' },
+          questGradeData: ['116', '1'],
+          questType: 'girl_grade',
+          questWin: { grade: ['116', '1'] },
+          quest_fullscreen: 1,
+          angel_enabled: ''
+        };
+        resolve(toQuestData(girl.id, questData));
+      }, 400);
+    });
   }
 
   async getBlessings(): Promise<GameBlessingData> {
@@ -408,6 +471,42 @@ export class GameAPIImpl implements GameAPI {
     if (RequestResult.is(result) && !result.success) {
       console.warn(`Failed to awaken ${girl.name}. Result: `, result);
     }
+  }
+
+  async upgrade(girl: CommonGirlData, questId: number): Promise<boolean> {
+    if (girl.stars < girl.maxStars && girl.upgradeReady) {
+      // class=Quest&action=next&id_quest=10600
+      const params = {
+        class: 'Quest',
+        action: 'next',
+        id_quest: questId
+      };
+      const result = await this.postRequest(params);
+      if (UpgradeResult.is(result) && result.success) {
+        // We could also read the new value from the result... (changes.soft_currency)
+        const newSoftCurrency = result.changes.soft_currency;
+        if (newSoftCurrency !== undefined) {
+          this.getHero().update('soft_currency', newSoftCurrency, false);
+        }
+        // TODO Get the actual avatar from the result. Only update
+        // if this is valid.
+        const currentQuest = girl.stars;
+        girl.stars++;
+        girl.currentIcon = girl.stars;
+        girl.poseImage = getPoseN(girl.poseImage, girl.stars);
+        girl.upgradeReady = false;
+        girl.upgradeReady = isUpgradeReady(girl, 0);
+        girl.quests[currentQuest].done = true;
+        girl.quests[currentQuest].ready = false;
+        if (girl.stars < girl.maxStars) {
+          girl.quests[currentQuest + 1].ready = girl.upgradeReady;
+        }
+        if (this.updateGirl) {
+          this.updateGirl(girl);
+        }
+      }
+    }
+    return true;
   }
 
   private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {

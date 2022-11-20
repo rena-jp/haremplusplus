@@ -25,6 +25,7 @@ import { SimpleGirlTile } from './girl';
 import Popup from 'reactjs-popup';
 import { useGemsStats } from '../hooks/girl-gems-hooks';
 import { OptionsContext } from '../data/options-context';
+import { SceneViewer } from './scenes';
 
 export type UpgradePage = 'books' | 'gifts';
 
@@ -464,7 +465,11 @@ export interface AffStatusProps extends StatusProps {
   gift: Gift | undefined;
 }
 
-export const AffStatus: React.FC<AffStatusProps> = ({ girl, gift }) => {
+export const AffStatus: React.FC<AffStatusProps> = ({
+  girl,
+  gift,
+  gameAPI
+}) => {
   const nextGrade = girl.stars + 1;
 
   const affStats = useAffectionStats(girl);
@@ -511,6 +516,21 @@ export const AffStatus: React.FC<AffStatusProps> = ({ girl, gift }) => {
           }
         />
       </span>
+      {girl.upgradeReady ? (
+        <Popup modal trigger={<button className="hh-action-button">Up</button>}>
+          {
+            ((close: () => void) => (
+              <SceneViewer
+                girl={girl}
+                scene={girl.stars}
+                gameAPI={gameAPI}
+                close={close}
+              />
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            )) as any
+          }
+        </Popup>
+      ) : null}
     </div>
   );
 };

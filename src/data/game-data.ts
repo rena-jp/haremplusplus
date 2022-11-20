@@ -1,4 +1,4 @@
-import { Element } from './data';
+import { Element, QuestData } from './data';
 
 export interface GameBlessingData {
   active: GameBlessing[];
@@ -301,6 +301,8 @@ export interface GameQuestList {
   [key: string]: GameQuest | undefined;
 }
 
+export type QuestStatus = 'done' | 'todo' | 'later';
+
 /**
  * Quest details (Upgrade scene)
  */
@@ -310,7 +312,7 @@ export interface GameQuest {
   type: 'girl_grade';
   name: string;
   num_step: 255;
-  status: 'done' | 'todo' | 'later';
+  status: QuestStatus;
   url: string;
   begin_step: 1;
 }
@@ -501,7 +503,7 @@ export interface RequestResult {
 }
 
 export namespace RequestResult {
-  export function is(object: unknown): object is RequestResult {
+  export function is(object: unknown): object is RequestResult & UnknownObject {
     if (isUnknownObject(object)) {
       return typeof object.success === 'boolean';
     }
@@ -569,4 +571,67 @@ export namespace GiftResult {
     }
     return false;
   }
+}
+
+export interface GameQuestStep {
+  id: number;
+  currentStepId: number;
+  steps: GameQuestStepData[];
+  tutorialData: unknown;
+  status: QuestStatus;
+  questNavData: unknown;
+  questGradeData: unknown[];
+  questType: string;
+  questWin: unknown;
+  quest_fullscreen: unknown;
+  angel_enabled: unknown; // WTF?
+}
+
+export interface GameQuestStepData {
+  num_step: number;
+  portrait: string;
+  picture: string;
+  item: null;
+  cost: { $: number; HC: number };
+  win: unknown[]; // Don't care
+  dialogue: string;
+  end: boolean;
+}
+
+export interface UpgradeResult extends RequestResult {
+  success: true;
+  next_step: unknown;
+  changes: {
+    soft_currency?: number;
+    hard_currency?: number;
+  };
+}
+
+export namespace UpgradeResult {
+  export function is(object: unknown): object is UpgradeResult {
+    if (RequestResult.is(object)) {
+      return (
+        Array.isArray(object.changes) &&
+        isUnknownObject(object.next_step) &&
+        isUnknownObject(object.changes)
+      );
+    }
+    return false;
+  }
+}
+
+export function toQuestData(
+  girlId: string,
+  gameQuestStep: GameQuestStep
+): QuestData {
+  const data = gameQuestStep.steps[0];
+  return {
+    girlId,
+    questId: gameQuestStep.id,
+    cost: data.cost.$,
+    dialogue: data.dialogue,
+    portrait: data.portrait,
+    scene: data.picture,
+    step: gameQuestStep.currentStepId
+  };
 }

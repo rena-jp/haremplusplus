@@ -636,3 +636,13 @@ export function getSourceLabel(source: EventSource): string {
       return 'Unknown';
   }
 }
+
+export interface QuestData {
+  girlId: string;
+  questId: number;
+  step: number;
+  scene: string;
+  dialogue: string;
+  portrait: string;
+  cost: number;
+}
