@@ -35,14 +35,13 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
   }, [girl, gameAPI, sceneData]);
   return (
     <div className="qh-scene-viewer">
-      {close !== undefined ? <CloseButton close={close} /> : null}
       {sceneData === undefined ? (
         <div className="loader">Loading...</div>
       ) : (
         <div className="qh-scene-content">
           <div
             className="qh-scene-area"
-            style={{ backgroundImage: `url('${sceneData.scene}')` }}
+            style={{ backgroundImage: `url('${sceneData.sceneFull}')` }}
           >
             {/* <img className="qh-scene" src={sceneData.scene} /> */}
             {showText ? (
@@ -55,11 +54,14 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
               onClick={() => setShowText(!showText)}
             ></button>
           </div>
-          <button className="hh-game-action" onClick={doUpgrade}>
-            {format(sceneData.cost)}
-          </button>
+          {sceneData.cost !== undefined ? (
+            <button className="hh-game-action" onClick={doUpgrade}>
+              {format(sceneData.cost)}
+            </button>
+          ) : null}
         </div>
       )}
+      {close !== undefined ? <CloseButton close={close} /> : null}
     </div>
   );
 };

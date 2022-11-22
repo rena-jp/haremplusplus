@@ -641,8 +641,11 @@ export interface QuestData {
   girlId: string;
   questId: number;
   step: number;
+  /** Scene image (800x?)*/
   scene: string;
+  /** High quality scene image (1600x) */
+  sceneFull: string;
   dialogue: string;
-  portrait: string;
-  cost: number;
+  portrait?: string;
+  cost?: number;
 }

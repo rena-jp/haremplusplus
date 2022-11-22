@@ -11,6 +11,7 @@ import {
   GameBlessingData,
   GameInventory,
   GameQuests,
+  GameQuestStep,
   GameWindow,
   GemsData,
   getGameWindow,
@@ -166,57 +167,21 @@ export class GameAPIImpl implements GameAPI {
     return this.requestFromHarem('girl_quests', GameQuests.is, allowRequest);
   }
 
-  getQuestStep(
+  async getQuestStep(
     girl: CommonGirlData,
-    _step: number,
-    _allowRequest: boolean
+    step: number,
+    allowRequest: boolean
   ): Promise<QuestData> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        const questData = {
-          id: 970,
-          currentStepId: 1,
-          steps: [
-            {
-              num_step: 1,
-              portrait: '/img/quests/p/20401321/p.png',
-              picture: '/img/quests/970/1/1600x/QGrade 1.jpg',
-              item: null,
-              cost: { $: 72000, HC: 72 },
-              win: [
-                [
-                  'grade',
-                  '116',
-                  '1',
-                  'Salem',
-                  'https://hh.hh-content.com/pictures/girls/116/ico1.png',
-                  '\u2605\u2606\u2606'
-                ]
-              ],
-              dialogue:
-                'To use my magic, I gather my power from manly men. And I need to collect a lot of it!',
-              end: true
-            }
-          ],
-          tutorialData: {
-            q1: 1,
-            q2: 2,
-            q3: 3,
-            qFA: 3,
-            sFA: 24,
-            content: 'otaku'
-          },
-          status: 'todo' as QuestStatus,
-          questNavData: { next: '971' },
-          questGradeData: ['116', '1'],
-          questType: 'girl_grade',
-          questWin: { grade: ['116', '1'] },
-          quest_fullscreen: 1,
-          angel_enabled: ''
-        };
-        resolve(toQuestData(girl.id, questData));
-      }, 400);
-    });
+    const quest = girl.quests[step];
+    const questId = quest.idQuest;
+    const gameQuestData = await this.requestFromFrame(
+      () => getOrCreateUpgradeFrame(questId),
+      'questData',
+      GameQuestStep.is,
+      allowRequest
+    );
+    const result = toQuestData(girl.id, gameQuestData);
+    return result;
   }
 
   async getBlessings(): Promise<GameBlessingData> {
@@ -787,47 +752,7 @@ const FRAME_REQUEST_DELAY = 2000; /* 2 seconds */
 async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
   const refreshFrame = lastFrameRequest + FRAME_REQUEST_DELAY < Date.now();
   lastFrameRequest = Date.now();
-
-  return queue(
-    () =>
-      new Promise<HTMLIFrameElement>((resolve, reject) => {
-        let haremFrame = document.getElementById(
-          'harem-loader'
-        ) as HTMLIFrameElement;
-        if (haremFrame) {
-          if (refreshFrame && haremFrame.contentWindow) {
-            const initial = Date.now();
-            haremFrame.onload = () => {
-              const final = Date.now();
-              const delay = final - initial;
-              console.info('Harem frame reloaded in ', delay, 'ms');
-              resolve(haremFrame);
-            };
-            haremFrame.contentWindow.location.reload();
-          } else {
-            resolve(haremFrame);
-          }
-        } else {
-          const wrapper = document.getElementById('quick-harem-wrapper');
-          if (wrapper) {
-            haremFrame = document.createElement('iframe');
-            haremFrame.setAttribute('id', 'harem-loader');
-            haremFrame.setAttribute('src', 'harem.html');
-            haremFrame.setAttribute('style', 'visibility: hidden;');
-            wrapper.appendChild(haremFrame);
-            const initialLoad = Date.now();
-            haremFrame.onload = () => {
-              const finalLoad = Date.now();
-              const loadDelay = finalLoad - initialLoad;
-              console.info('Harem frame loaded in ', loadDelay, 'ms');
-              resolve(haremFrame);
-            };
-          } else {
-            reject('#quick-harem-wrapper not found; abort');
-          }
-        }
-      })
-  );
+  return getOrCreateFrame('harem-frame', 'harem.html', refreshFrame);
 }
 
 /**
@@ -835,22 +760,44 @@ async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
  * inventory data from it once it's ready. This function creates or returns the existing frame.
  */
 async function getOrCreateMarketFrame(): Promise<HTMLIFrameElement> {
-  const refreshFrame = lastFrameRequest + FRAME_REQUEST_DELAY < Date.now();
-  lastFrameRequest = Date.now();
+  return getOrCreateFrame('market-frame', 'shop.html', true);
+}
 
+async function getOrCreateUpgradeFrame(
+  questId: number
+): Promise<HTMLIFrameElement> {
+  // This frame is a bit special: the URL is different for each girl, so we need
+  // to change the frame src each time, and refresh it.
+  // Optional: we could dispose the frame after using it, but we don't cache the quest
+  // data, so we'd have to reload it again. Probably easier to just keep the frame around...
+  return getOrCreateFrame(
+    `upgrade-frame-${questId}`,
+    `quest/${questId}`,
+    false
+  );
+}
+
+/**
+ * The GameAPI uses hidden IFrames to render various game pages in the background, then extract
+ * data from it once it's ready. This function creates or returns the existing frame for the specified
+ * page.
+ */
+async function getOrCreateFrame(
+  id: string,
+  url: string,
+  refreshFrame: boolean
+): Promise<HTMLIFrameElement> {
   return queue(
     () =>
       new Promise<HTMLIFrameElement>((resolve, reject) => {
-        let haremFrame = document.getElementById(
-          'market-loader'
-        ) as HTMLIFrameElement;
+        let haremFrame = document.getElementById(id) as HTMLIFrameElement;
         if (haremFrame) {
           if (refreshFrame && haremFrame.contentWindow) {
             const initial = Date.now();
             haremFrame.onload = () => {
               const final = Date.now();
               const delay = final - initial;
-              console.info('Market frame reloaded in ', delay, 'ms');
+              console.info(`${id} frame reloaded in ${delay} ms`);
               resolve(haremFrame);
             };
             haremFrame.contentWindow.location.reload();
@@ -861,15 +808,15 @@ async function getOrCreateMarketFrame(): Promise<HTMLIFrameElement> {
           const wrapper = document.getElementById('quick-harem-wrapper');
           if (wrapper) {
             haremFrame = document.createElement('iframe');
-            haremFrame.setAttribute('id', 'market-loader');
-            haremFrame.setAttribute('src', 'shop.html');
+            haremFrame.setAttribute('id', id);
+            haremFrame.setAttribute('src', url);
             haremFrame.setAttribute('style', 'visibility: hidden;');
             wrapper.appendChild(haremFrame);
             const initialLoad = Date.now();
             haremFrame.onload = () => {
               const finalLoad = Date.now();
               const loadDelay = finalLoad - initialLoad;
-              console.info('Market frame loaded in ', loadDelay, 'ms');
+              console.info(`${id} frame loaded in ${loadDelay}ms`);
               resolve(haremFrame);
             };
           } else {

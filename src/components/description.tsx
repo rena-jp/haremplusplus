@@ -1,4 +1,5 @@
 import { ReactNode, useCallback, useMemo, useState } from 'react';
+import Popup from 'reactjs-popup';
 import { GameAPI } from '../api/GameAPI';
 import {
   BlessingDefinition,
@@ -13,6 +14,7 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
+import { GameAPIImpl } from '../game-extension/GameAPIImpl';
 import { useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
@@ -26,6 +28,7 @@ import {
   Tooltip
 } from './common';
 import { SimpleGirlTile } from './girl';
+import { SceneViewer } from './scenes';
 import { UpgradePage } from './upgrade';
 
 export interface GirlDescriptionProps {
@@ -97,9 +100,9 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               </RarityColorText>
               <ElementIcon element={girl.element} />
               <ScenesBrowser
-                girlId={girl.id}
+                girl={girl}
                 quests={girl.quests}
-                stars={girl.maxStars}
+                gameAPI={gameAPI}
                 domain={domain}
               />
             </div>
@@ -428,20 +431,22 @@ const PoseSelector: React.FC<PoseSelectorProps> = ({
 };
 
 interface ScenesBrowserProps {
-  girlId: string;
+  girl: CommonGirlData;
   quests: Quest[];
   domain: string;
-  stars: number;
+  gameAPI: GameAPI;
 }
 
 const ScenesBrowser: React.FC<ScenesBrowserProps> = ({
   quests,
   domain,
-  girlId,
-  stars
+  girl,
+  gameAPI
 }) => {
   const displayQuests: (Quest | undefined)[] =
-    quests.length < stars ? Array(stars).fill(undefined) : quests;
+    quests.length < girl.maxStars
+      ? Array(girl.maxStars).fill(undefined)
+      : quests;
 
   return (
     <span className="scenes-browser">
@@ -449,7 +454,9 @@ const ScenesBrowser: React.FC<ScenesBrowserProps> = ({
         <QuestStep
           quest={quest}
           domain={domain}
-          girlId={girlId}
+          step={index}
+          girl={girl}
+          gameAPI={gameAPI}
           key={quest?.idQuest ?? index}
         />
       ))}
@@ -458,12 +465,20 @@ const ScenesBrowser: React.FC<ScenesBrowserProps> = ({
 };
 
 interface QuestStepProps {
-  girlId: string;
+  girl: CommonGirlData;
+  gameAPI: GameAPI;
   quest?: Quest;
+  step: number;
   domain: string;
 }
 
-const QuestStep: React.FC<QuestStepProps> = ({ quest, domain, girlId }) => {
+const QuestStep: React.FC<QuestStepProps> = ({
+  quest,
+  domain,
+  girl,
+  step,
+  gameAPI
+}) => {
   if (quest) {
     const imgSrc = quest.ready
       ? 'https://hh2.hh-content.com/design_v2/affstar_upgrade.png'
@@ -474,11 +489,47 @@ const QuestStep: React.FC<QuestStepProps> = ({ quest, domain, girlId }) => {
     const link =
       quest.done || quest.ready
         ? `quest/${quest.idQuest}`
-        : `girl/${girlId}?resource=affection`;
+        : `girl/${girl.id}?resource=affection`;
+
+    const [openUpgradePopup, setOpenUpgradePopup] = useState(false);
+
     return (
-      <a href={`${domain}/${link}`} target="_blank" rel="noreferrer">
-        {img}
-      </a>
+      <>
+        <a
+          href={`${domain}/${link}`}
+          target="_blank"
+          rel="noreferrer"
+          onClick={(ev) => {
+            if (quest.ready || quest.done) {
+              // If the quest is ready or done, show the scene in a popup (Unless
+              // the user explicitly opens link in a new tab).
+              // Otherwise, simply link to the girl page to spend gifts.
+              setOpenUpgradePopup(true);
+              ev.preventDefault();
+            }
+          }}
+        >
+          {img}
+        </a>
+        {quest.ready || quest.done ? (
+          <Popup
+            modal
+            open={openUpgradePopup}
+            onClose={() => setOpenUpgradePopup(false)}
+          >
+            {
+              <SceneViewer
+                girl={girl}
+                scene={step}
+                gameAPI={gameAPI}
+                close={() => {
+                  setOpenUpgradePopup(false);
+                }}
+              />
+            }
+          </Popup>
+        ) : null}
+      </>
     );
   } else {
     return <img src="https://hh2.hh-content.com/design_v2/affstar_empty.png" />;

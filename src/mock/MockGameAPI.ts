@@ -12,14 +12,14 @@ import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
 import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
-import girls from './girlsdatalist-full.json';
-import blessings from './blessings-full.json';
-import quests from './quests-full.json';
-import inventory from './inventory.json';
-// const girls = {};
-// const blessings = { active: [], upcoming: [] };
-// const quests = {};
-// const inventory = { gift: [], potion: [] };
+// import girls from './girlsdatalist-full.json';
+// import blessings from './blessings-full.json';
+// import quests from './quests-full.json';
+// import inventory from './inventory.json';
+const girls = {};
+const blessings = { active: [], upcoming: [] };
+const quests = {};
+const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -67,16 +67,29 @@ export class MockGameAPI implements GameAPI {
   ): Promise<QuestData> {
     return new Promise((accept) => {
       setTimeout(() => {
-        accept({
-          girlId: girl.id,
-          questId: girl.quests[step].idQuest,
-          cost: 90000000,
-          dialogue:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
-          portrait: girl.poseImage,
-          scene: '/img/SalemGrade 1.jpg', // Scene images are blocked outside of the game; use a local img
-          step: step
-        });
+        if (girl.quests[step].done) {
+          accept({
+            girlId: girl.id,
+            questId: girl.quests[step].idQuest,
+            dialogue:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            scene: '/img/SalemGrade 1.jpg', // Scene images are blocked outside of the game; use a local img,
+            sceneFull: '/img/SalemGrade 1.jpg',
+            step: step
+          });
+        } else {
+          accept({
+            girlId: girl.id,
+            questId: girl.quests[step].idQuest,
+            cost: 90000000,
+            dialogue:
+              'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            portrait: girl.poseImage,
+            scene: '/img/SalemGrade 1.jpg', // Scene images are blocked outside of the game; use a local img,
+            sceneFull: '/img/SalemGrade 1.jpg',
+            step: step
+          });
+        }
       }, 400);
     });
   }

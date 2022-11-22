@@ -344,6 +344,11 @@ export interface GameWindow extends Window {
     [key: string]: string;
   };
   player_inventory: GameInventory | undefined;
+
+  // Note: this isn't actually a global variable. The quest_handler
+  // exposes it at runtime. It may not be immediately available.
+  setQuestData?(questData: GameQuestStep): void;
+  questData?: GameQuestStep;
 }
 
 export interface GemsData {
@@ -576,7 +581,7 @@ export namespace GiftResult {
 export interface GameQuestStep {
   id: number;
   currentStepId: number;
-  steps: GameQuestStepData[];
+  steps: GameQuestStepData[] | string[][];
   tutorialData: unknown;
   status: QuestStatus;
   questNavData: unknown;
@@ -584,7 +589,7 @@ export interface GameQuestStep {
   questType: string;
   questWin: unknown;
   quest_fullscreen: unknown;
-  angel_enabled: unknown; // WTF?
+  angel_enabled: unknown; // Tutorial
 }
 
 export interface GameQuestStepData {
@@ -592,10 +597,24 @@ export interface GameQuestStepData {
   portrait: string;
   picture: string;
   item: null;
-  cost: { $: number; HC: number };
+  cost?: { $: number; HC: number };
   win: unknown[]; // Don't care
   dialogue: string;
   end: boolean;
+}
+
+export namespace GameQuestStep {
+  export function is(object: unknown): object is GameQuestStep {
+    if (isUnknownObject(object)) {
+      return (
+        typeof object.id === 'number' &&
+        typeof object.currentStepId === 'number' &&
+        Array.isArray(object.steps) &&
+        object.questType === 'girl_grade'
+      );
+    }
+    return false;
+  }
 }
 
 export interface UpgradeResult extends RequestResult {
@@ -625,13 +644,36 @@ export function toQuestData(
   gameQuestStep: GameQuestStep
 ): QuestData {
   const data = gameQuestStep.steps[0];
-  return {
-    girlId,
-    questId: gameQuestStep.id,
-    cost: data.cost.$,
-    dialogue: data.dialogue,
-    portrait: data.portrait,
-    scene: data.picture,
-    step: gameQuestStep.currentStepId
-  };
+  if (Array.isArray(data)) {
+    // For some reason, the scene picture is not directly part of the data when the scene
+    // has already been unlocked (past scenes). We need to rebuild it...
+    // In this case, there is also no cost and no portrait.
+    const scene = `/img/quests/${gameQuestStep.id}/1/800x/${data[2]}.jpg`;
+    return {
+      girlId,
+      questId: gameQuestStep.id,
+      dialogue: data[0],
+      scene,
+      sceneFull: resizeScene(scene),
+      step: gameQuestStep.currentStepId
+    };
+  } else {
+    return {
+      girlId,
+      questId: gameQuestStep.id,
+      cost: data.cost?.$,
+      dialogue: data.dialogue,
+      portrait: data.portrait,
+      scene: data.picture,
+      sceneFull: resizeScene(data.picture),
+      step: gameQuestStep.currentStepId
+    };
+  }
+}
+
+function resizeScene(picture: string): string {
+  if (picture.includes('/800x/')) {
+    return picture.replace('/800x/', '/1600x/');
+  }
+  return picture;
 }
