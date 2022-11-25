@@ -1,0 +1,131 @@
+.qh-scene-viewer {
+  width: 98vw;
+  height: 98vh;
+  background-color: rgb(69, 33, 41);
+  border-radius: 15px;
+  box-shadow: 0px 0px 7px black;
+}
+
+.qh-scene-viewer {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.qh-scene-viewer > h2 {
+  font-size: 1.5em;
+  padding-inline: 2em;
+}
+
+.qh-scene-viewer > .close-popup {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+}
+
+.qh-scene-content {
+  min-height: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+  overflow: clip;
+}
+
+.qh-scene-content > .qh-scene-area {
+  position: relative;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: 3px 3px 1em 3px;
+}
+
+.qh-scene-area > img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  filter: drop-shadow(0px 3px 0px white) drop-shadow(0px -3px 0px white)
+    drop-shadow(-3px 0px 0px white) drop-shadow(3px 0px 0px white);
+}
+
+.qh-scene-content > button.hh-game-action {
+  min-width: fit-content;
+  padding-inline: 0.5em;
+  width: 10%;
+  min-height: 4em;
+  font-size: 1.5em;
+  align-self: flex-end;
+  margin: 1.5rem;
+  flex-grow: 0;
+}
+
+/* .qh-scene-area > img {
+    border-radius: 15px 0px 0px 15px;
+    max-width: 100%;
+  } */
+
+.qh-scene-area > .overlay {
+  position: absolute;
+}
+
+.qh-scene-area > .qh-scene-dialogue {
+  bottom: 1rem;
+  left: 50%;
+  width: 80%;
+  transform: translateX(-50%);
+  font-size: 2em;
+  text-shadow: 0 0 10px #000;
+  font-family: Kalam, cursive;
+}
+
+.qh-scene-area > .toggle-text {
+  bottom: 2rem;
+  right: calc(10% - 4rem);
+  background-image: url(https://hh2.hh-content.com/quest/ic_eyeclosed.svg);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-width: 4rem;
+  min-height: 4rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0; /** Only visible on :hover, see below */
+  transition: opacity 0.3s ease-in;
+}
+
+.qh-scene-area:hover > .toggle-text {
+  opacity: 1;
+}
+.qh-scene-area > .toggle-text.show {
+  background-image: url(https://hh2.hh-content.com/quest/ic_eyeopen.svg);
+}
+
+/** Attempt to keep the dialogue on top of the image on large screen ratios */
+
+@media (min-aspect-ratio: 21/9) {
+  .qh-scene-area > .qh-scene-dialogue {
+    width: 60%;
+  }
+  .qh-scene-area > .toggle-text {
+    right: calc(18% - 4rem);
+  }
+}
+
+@media (min-aspect-ratio: 26/9) {
+  .qh-scene-area > .qh-scene-dialogue {
+    width: 40%;
+  }
+  .qh-scene-area > .toggle-text {
+    right: calc(28% - 4rem);
+  }
+}
+
+@media (min-aspect-ratio: 36/9) {
+  .qh-scene-area > .qh-scene-dialogue {
+    width: 20%;
+  }
+  .qh-scene-area > .toggle-text {
+    right: calc(38% - 4rem);
+  }
+}

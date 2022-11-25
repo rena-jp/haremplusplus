@@ -21,7 +21,6 @@ import {
   GirlsSalaryList,
   Hero,
   isUnknownObject,
-  QuestStatus,
   RequestResult,
   toQuestData,
   UpgradeResult,
