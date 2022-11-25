@@ -447,17 +447,15 @@ export class GameAPIImpl implements GameAPI {
       };
       const result = await this.postRequest(params);
       if (UpgradeResult.is(result) && result.success) {
-        // We could also read the new value from the result... (changes.soft_currency)
         const newSoftCurrency = result.changes.soft_currency;
         if (newSoftCurrency !== undefined) {
           this.getHero().update('soft_currency', newSoftCurrency, false);
         }
-        // TODO Get the actual avatar from the result. Only update
-        // if this is valid.
         const currentQuest = girl.stars;
         girl.stars++;
         girl.currentIcon = girl.stars;
         girl.poseImage = getPoseN(girl.poseImage, girl.stars);
+        girl.icon = getPoseN(girl.icon, girl.stars);
         girl.upgradeReady = false;
         girl.upgradeReady = isUpgradeReady(girl, 0);
         girl.quests[currentQuest].done = true;
@@ -465,12 +463,15 @@ export class GameAPIImpl implements GameAPI {
         if (girl.stars < girl.maxStars) {
           girl.quests[currentQuest + 1].ready = girl.upgradeReady;
         }
-        if (this.updateGirl) {
+        if (this.updateGirl !== undefined) {
           this.updateGirl(girl);
         }
+        return true;
+      } else {
+        console.error('Unexpected result when upgrading the girl: ', result);
       }
     }
-    return true;
+    return false;
   }
 
   private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {

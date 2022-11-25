@@ -630,9 +630,7 @@ export namespace UpgradeResult {
   export function is(object: unknown): object is UpgradeResult {
     if (RequestResult.is(object)) {
       return (
-        Array.isArray(object.changes) &&
-        isUnknownObject(object.next_step) &&
-        isUnknownObject(object.changes)
+        isUnknownObject(object.next_step) && isUnknownObject(object.changes)
       );
     }
     return false;
