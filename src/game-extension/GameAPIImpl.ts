@@ -4,7 +4,9 @@ import {
   getPoseN,
   Gift,
   QuestData,
-  Rarity
+  Rarity,
+  SPECIAL_MYTHIC_BOOK_ID,
+  SPECIAL_MYTHIC_GIFT_ID
 } from '../data/data';
 import {
   ChangePoseResult,
@@ -362,13 +364,18 @@ export class GameAPIImpl implements GameAPI {
     if (!girl.own) {
       return;
     }
+    // TODO Special case: Mythic book Lv. 350
+    if (book.itemId === SPECIAL_MYTHIC_BOOK_ID) {
+      console.warn('Special Mythic Book is not supported yet.');
+      return;
+    }
 
     const missingGXP = getMissingGXP(girl);
 
     const bookValid =
       girl.level! < girl.maxLevel! &&
       (missingGXP >= book.xp || book.rarity < Rarity.mythic); // Mythic books can't overflow
-    // TODO Special case: Mythic book Lv. 350
+
     if (bookValid) {
       const params = {
         id_girl: girl.id,
@@ -484,7 +491,16 @@ export class GameAPIImpl implements GameAPI {
   }
 
   async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {
+    if (!girl.own) {
+      return;
+    }
+
     // TODO Special case: Mythic gift 2*
+    if (gift.itemId === SPECIAL_MYTHIC_GIFT_ID) {
+      console.warn('Special Mythic Gift not supported yet');
+      return;
+    }
+
     const missingAff = girl.missingAff;
     const giftValid =
       girl.stars < girl.maxStars &&

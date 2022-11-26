@@ -649,3 +649,6 @@ export interface QuestData {
   portrait?: string;
   cost?: number;
 }
+
+export const SPECIAL_MYTHIC_BOOK_ID = 631;
+export const SPECIAL_MYTHIC_GIFT_ID = 627;

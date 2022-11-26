@@ -7,7 +7,9 @@ import {
   Gift,
   Item,
   ItemEntry,
-  Rarity
+  Rarity,
+  SPECIAL_MYTHIC_BOOK_ID,
+  SPECIAL_MYTHIC_GIFT_ID
 } from '../data/data';
 import { useAffectionStats } from '../hooks/girl-aff-hooks';
 import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
@@ -117,7 +119,12 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     ((selectedItem.item.type === 'book' && page === 'books') ||
       (selectedItem.item.type === 'gift' && page === 'gifts'));
 
-  const canUseItem = validItemType && !isMaxed;
+  // TODO Support special mythic book (lvl 350) and gift (2*)
+  const supportedItem =
+    selectedItem?.item.itemId !== SPECIAL_MYTHIC_BOOK_ID &&
+    selectedItem?.item.itemId !== SPECIAL_MYTHIC_GIFT_ID;
+
+  const canUseItem = validItemType && !isMaxed && supportedItem;
 
   return (
     <div className="harem-upgrade">
