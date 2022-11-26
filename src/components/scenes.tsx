@@ -64,8 +64,6 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
 
   const goToScene = useCallback(
     (toScene: number) => {
-      console.log('Go to scene: ', toScene);
-      setScene(toScene);
       const quest = girl.quests[toScene];
       const questId = quest.idQuest;
       const sceneImage = `/img/quests/${questId}/1/1600x/${questId}.jpg`;
@@ -73,6 +71,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
       setSceneData(undefined);
       setSceneText('...');
       setCanUnlock(quest.ready);
+      setScene(toScene);
     },
     [girl]
   );

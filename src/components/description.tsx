@@ -14,7 +14,6 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
-import { GameAPIImpl } from '../game-extension/GameAPIImpl';
 import { useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
