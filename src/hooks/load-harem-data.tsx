@@ -82,15 +82,28 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
 
   const [gameQuests, setGameQuests] = useState<GameQuests | undefined>();
 
-  const updateGirl = useCallback((girl: CommonGirlData) => {
-    if (allGirls.current !== undefined) {
-      const newGirl: CommonGirlData = { ...girl };
-      replace(allGirls.current, newGirl);
-      setAllGirls([...allGirls.current]);
-    } else {
-      console.warn('Tried to update girl data, but data is not loaded yet');
-    }
-  }, []);
+  const updateGirl = useCallback(
+    (girl: CommonGirlData) => {
+      if (allGirls.current !== undefined) {
+        const newGirl: CommonGirlData = { ...girl };
+        replace(allGirls.current, newGirl);
+        const newAllGirls = [...allGirls.current];
+        setAllGirls(newAllGirls);
+        // Also update the cache after each update
+        if (currentBlessings !== undefined && upcomingBlessings !== undefined) {
+          const haremData: HaremData = {
+            activeBlessing: currentBlessings,
+            nextBlessing: upcomingBlessings,
+            allGirls: newAllGirls
+          };
+          persistHaremData(haremData);
+        }
+      } else {
+        console.warn('Tried to update girl data, but data is not loaded yet');
+      }
+    },
+    [currentBlessings, upcomingBlessings]
+  );
 
   useMemo(() => {
     gameAPI.setUpdateGirl(updateGirl);
