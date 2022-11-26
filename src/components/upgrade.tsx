@@ -614,7 +614,7 @@ export const MaxXP: React.FC<MaxXPProps> = ({ girl }) => {
         ((closePopup: () => void) => (
           <div className="qh-popup max-content-popup">
             <CloseButton close={closePopup} />
-            <p>Max out XP for girl {girl.name}. Coming soon...</p>
+            <p>Max out XP for girl {girl.name}. Coming soon... Maybe?</p>
           </div>
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
         )) as any
@@ -638,10 +638,15 @@ export const MaxAffection: React.FC<MaxAffProps> = ({ girl }) => {
         </button>
       }
     >
-      <div className="qh-popup max-content-popup">
-        <p>Max out Affection for girl {girl.name}</p>
-        <button onClick={close}>Close me!</button>
-      </div>
+      {
+        ((close: () => void) => (
+          <div className="qh-popup max-content-popup">
+            <CloseButton close={close} />
+            <p>Max out Affection for girl {girl.name}. Coming soon... Maybe?</p>
+          </div>
+          // eslint-disable-next-line
+        )) as any
+      }
     </Popup>
   );
 };
