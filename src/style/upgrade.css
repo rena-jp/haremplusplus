@@ -134,6 +134,7 @@
 
 .xp-status .gems-awakening {
   min-width: 14rem; /* Same size as progress bar, to get more consistent layout */
+  margin-top: 0.5em;
 }
 
 .xp-status > span {
@@ -192,14 +193,33 @@
   gap: 0.3em;
 }
 
-.hh-action-button.awaken {
+button.awaken {
   background-image: url('https://hh2.hh-content.com/design/ic_gem.svg');
   padding: 0.2em;
   background-size: contain;
+  background-position: center;
   background-origin: content-box;
   background-repeat: no-repeat;
-  width: 2em;
-  height: 2em;
+  cursor: pointer;
+}
+
+button.awaken.overlay {
+  background-image: url('https://hh2.hh-content.com/design/ic_gem.svg'),
+    linear-gradient(to top, #008ed5 0, #05719c 100%);
+  border-radius: 100%;
+  background-origin: content-box, border-box;
+  border: none;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateX(30%) translateY(-50%);
+  width: 1.5rem;
+  height: 1.5rem;
+  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+}
+
+button.awaken.overlay:active {
+  box-shadow: none;
 }
 
 .awakening-popup {
@@ -265,4 +285,32 @@
   transform: rotate(90deg);
   width: 1.5em;
   height: 1.5em;
+}
+
+button.upgrade.overlay {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateX(30%) translateY(-50%);
+  background-image: url(https://hh2.hh-content.com/design_v2/upgrade_icn.png),
+    linear-gradient(to top, #008ed5 0, #05719c 100%);
+
+  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  border: 1px solid #000;
+  border-radius: 100%;
+
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-origin: content-box, border-box;
+  padding: 0.2em;
+
+  width: 1.5rem;
+  height: 1.5rem;
+
+  cursor: pointer;
+}
+
+button.upgrade.overlay:active {
+  box-shadow: none;
 }

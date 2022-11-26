@@ -380,6 +380,24 @@ export const XPStatus: React.FC<XpStatusProps> = ({
   const displayTargetLevel =
     girl.level === nextCap ? nextCap : Math.max(nextLevel, levelReach);
 
+  const currentLevel = girl.level ?? 0;
+  const awakenOverlay =
+    currentLevel === girl.maxLevel && currentLevel < 750 ? (
+      <Awaken
+        girl={girl}
+        trigger={
+          <button className="awaken overlay">
+            <Tooltip tooltip={<span>Awaken</span>}>
+              <div className="filler"></div>
+            </Tooltip>
+          </button>
+        }
+        gameAPI={gameAPI}
+        gemsCount={gemsCount}
+        consumeGems={consumeGems}
+      />
+    ) : null;
+
   return (
     <div className="xp-status">
       <Popup>
@@ -419,6 +437,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
                 ? 'Max.'
                 : format(xpStats.maxXpToCap - xpStats.currentXp) + ' XP'
             }
+            overlay={awakenOverlay}
           />
         </span>
       ) : null}
@@ -440,21 +459,6 @@ export const XPStatus: React.FC<XpStatusProps> = ({
             Gems to next cap: {format(gemsStats.gemsToNextCap ?? 0)}
             <GemIcon element={girl.element} />
           </div>
-          {girl.level === girl.maxLevel ? (
-            <Awaken
-              girl={girl}
-              trigger={
-                <button className="hh-action-button awaken">
-                  <Tooltip tooltip={<span>Awaken</span>}>
-                    <div className="filler"></div>
-                  </Tooltip>
-                </button>
-              }
-              gameAPI={gameAPI}
-              gemsCount={gemsCount}
-              consumeGems={consumeGems}
-            />
-          ) : null}
         </div>
       ) : null}
     </div>
@@ -476,6 +480,31 @@ export const AffStatus: React.FC<AffStatusProps> = ({
 
   const { minAff, maxAff, affToMax, currentAff } = affStats;
 
+  const upgradeOverlay = girl.upgradeReady ? (
+    <Popup
+      modal
+      trigger={
+        <button className="upgrade overlay">
+          <Tooltip tooltip={<span>Upgrade</span>}>
+            <div className="filler"></div>
+          </Tooltip>
+        </button>
+      }
+    >
+      {
+        ((close: () => void) => (
+          <SceneViewer
+            girl={girl}
+            scene={girl.stars}
+            gameAPI={gameAPI}
+            close={close}
+          />
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        )) as any
+      }
+    </Popup>
+  ) : null;
+
   return (
     <div className="aff-status">
       {girl.stars < girl.maxStars ? (
@@ -493,6 +522,7 @@ export const AffStatus: React.FC<AffStatusProps> = ({
                 ? 'Ready'
                 : format(affStats.maxAff - affStats.currentAff) + ' Aff'
             }
+            overlay={upgradeOverlay}
           />
         </span>
       ) : null}
@@ -516,21 +546,6 @@ export const AffStatus: React.FC<AffStatusProps> = ({
           }
         />
       </span>
-      {girl.upgradeReady ? (
-        <Popup modal trigger={<button className="hh-action-button">Up</button>}>
-          {
-            ((close: () => void) => (
-              <SceneViewer
-                girl={girl}
-                scene={girl.stars}
-                gameAPI={gameAPI}
-                close={close}
-              />
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            )) as any
-          }
-        </Popup>
-      ) : null}
     </div>
   );
 };

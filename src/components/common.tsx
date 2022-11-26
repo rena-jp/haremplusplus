@@ -423,6 +423,7 @@ export interface ProgressBarProps {
   curr: number;
   extra?: number;
   label?: string;
+  overlay?: ReactNode;
 }
 
 export const ProgressBar: React.FC<ProgressBarProps> = ({
@@ -430,7 +431,8 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   max,
   curr,
   extra,
-  label
+  label,
+  overlay
 }) => {
   const ratio = Math.min(1, Math.max(0, (curr - min) / (max - min)));
   const extraValue = curr + (extra ?? 0);
@@ -455,6 +457,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
       {label !== undefined ? (
         <span className="track-label">{label}</span>
       ) : null}
+      {overlay !== undefined ? overlay : null}
     </div>
   );
 };
