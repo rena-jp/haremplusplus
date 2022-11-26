@@ -149,9 +149,11 @@
   width: 1.5em;
 }
 
-.harem-toolbar > .filter-sort-icon {
+.harem-toolbar > .spacer {
   margin-left: auto; /* Push to the end of the toolbar */
+}
 
+.harem-toolbar > .filter-sort-icon {
   padding: 0.3rem;
 }
 

@@ -134,14 +134,37 @@ export interface GameAPI {
    * Get the current amount of currency owned by the player
    */
   getCurrency(): number;
+
+  /**
+   * Install a listener to be notified when requests are processed.
+   * @param listener the listener.
+   */
+  addRequestListener(listener: RequestListener): void;
+
+  /**
+   * Remove a request listener.
+   * @param listener the listener.
+   */
+  removeRequestListener(listener: RequestListener): void;
 }
 
 export type SalaryDataListener = (data: GirlsSalaryList) => void;
 
+export type RequestListener = (event: RequestEvent) => void;
+
+export type RequestEventType = 'queued' | 'started' | 'completed';
+
+export interface RequestEvent {
+  type: RequestEventType;
+  success: boolean;
+  pendingRequests: number;
+  duration?: number; // If type==='completed', delay between 'queued' and 'completed' events
+}
+
 const requestsQueue: Promise<unknown>[] = [];
 let lastExecution = 0;
 /** Minimum time between the end of a request and the beginning of the next, in ms */
-const MIN_DELAY = 25;
+const MIN_DELAY = 0;
 
 /**
  * The game server doesn't like parallel requests, and may

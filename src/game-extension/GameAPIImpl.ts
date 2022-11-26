@@ -28,7 +28,14 @@ import {
   UpgradeResult,
   XPResult
 } from '../data/game-data';
-import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
+import {
+  GameAPI,
+  queue,
+  RequestEvent,
+  RequestEventType,
+  RequestListener,
+  SalaryDataListener
+} from '../api/GameAPI';
 import { getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
@@ -72,6 +79,8 @@ export namespace HaremMessage {
 
 export class GameAPIImpl implements GameAPI {
   private salaryListeners: SalaryDataListener[] = [];
+  private requestListeners = new Set<RequestListener>();
+  private reqCount = 0;
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {
     this.installRequestsListener();
@@ -299,7 +308,10 @@ export class GameAPIImpl implements GameAPI {
   async postRequest(params: HHAction): Promise<unknown> {
     // Throttle the request. Ensure all requests are executed sequentially,
     // to avoid triggerring Error 500.
+    const start = Date.now();
+    this.fireRequestEvent('queued');
     return queue(async () => {
+      this.fireRequestEvent('started');
       const action = this.paramsToString(params);
       const response = await fetch('/ajax.php', {
         headers: {
@@ -312,9 +324,11 @@ export class GameAPIImpl implements GameAPI {
       });
       if (response.ok && response.status === 200) {
         const responseJson = await response.json();
+        this.fireRequestEvent('completed', true, start);
         return responseJson;
       } else if (response.status === 403) {
         console.error('!!!ERROR 403!!! Slow down...');
+        this.fireRequestEvent('completed', false, start);
         throw response;
       }
     });
@@ -723,6 +737,43 @@ export class GameAPIImpl implements GameAPI {
     const index = this.salaryListeners.indexOf(listener);
     if (index >= 0) {
       this.salaryListeners.splice(index, 1);
+    }
+  }
+
+  addRequestListener(listener: RequestListener): void {
+    this.requestListeners.add(listener);
+  }
+
+  removeRequestListener(listener: RequestListener): void {
+    this.requestListeners.delete(listener);
+  }
+
+  private fireRequestEvent(
+    type: RequestEventType,
+    success = true,
+    start?: number
+  ): void {
+    if (this.requestListeners.size === 0) {
+      return;
+    }
+    if (type === 'queued') {
+      this.reqCount++;
+    }
+    if (type === 'completed') {
+      this.reqCount--;
+    }
+    const delay =
+      type === 'completed' && start !== undefined
+        ? Date.now() - start
+        : undefined;
+    const event: RequestEvent = {
+      type,
+      success,
+      pendingRequests: this.reqCount,
+      duration: delay
+    };
+    for (const listener of this.requestListeners) {
+      listener(event);
     }
   }
 

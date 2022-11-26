@@ -8,7 +8,14 @@ import {
   GirlsDataList,
   GirlsSalaryList
 } from '../data/game-data';
-import { GameAPI, queue, SalaryDataListener } from '../api/GameAPI';
+import {
+  GameAPI,
+  queue,
+  RequestEvent,
+  RequestEventType,
+  RequestListener,
+  SalaryDataListener
+} from '../api/GameAPI';
 import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
@@ -30,6 +37,9 @@ const MOCK_DELAY = 500;
  * the real game.
  */
 export class MockGameAPI implements GameAPI {
+  private requestListeners = new Set<RequestListener>();
+  private reqCount = 0;
+
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {}
 
   setUpdateGirl(updateGirl: (girl: CommonGirlData) => void): void {
@@ -37,25 +47,34 @@ export class MockGameAPI implements GameAPI {
   }
 
   async getGirls(): Promise<GirlsDataList> {
+    this.fireRequestEvent('queued');
     return new Promise((resolve, _reject) => {
+      this.fireRequestEvent('started');
       setTimeout(() => {
         resolve({ ...girls } as unknown as GirlsDataList); // Trust me bro.
+        this.fireRequestEvent('completed');
       }, MOCK_DELAY);
     });
   }
 
   async getBlessings(): Promise<GameBlessingData> {
+    this.fireRequestEvent('queued');
     return new Promise((resolve, _reject) => {
+      this.fireRequestEvent('started');
       setTimeout(() => {
+        this.fireRequestEvent('completed');
         resolve({ ...blessings });
       }, MOCK_DELAY + 200);
     });
   }
 
   async getQuests(): Promise<GameQuests> {
+    this.fireRequestEvent('queued');
     return new Promise((resolve, _reject) => {
+      this.fireRequestEvent('started');
       setTimeout(() => {
         resolve({ ...quests } as unknown as GameQuests);
+        this.fireRequestEvent('completed');
       }, MOCK_DELAY + 400);
     });
   }
@@ -65,10 +84,12 @@ export class MockGameAPI implements GameAPI {
     step: number,
     _allowRequest: boolean
   ): Promise<QuestData> {
-    return new Promise((accept) => {
+    this.fireRequestEvent('queued');
+    return new Promise((resolve) => {
+      this.fireRequestEvent('started');
       setTimeout(() => {
         if (girl.quests[step].done) {
-          accept({
+          resolve({
             girlId: girl.id,
             questId: girl.quests[step].idQuest,
             dialogue:
@@ -78,7 +99,7 @@ export class MockGameAPI implements GameAPI {
             step: step
           });
         } else {
-          accept({
+          resolve({
             girlId: girl.id,
             questId: girl.quests[step].idQuest,
             cost: 70000,
@@ -89,6 +110,7 @@ export class MockGameAPI implements GameAPI {
             sceneFull: '/img/SalemGrade 1.jpg',
             step: step
           });
+          this.fireRequestEvent('completed');
         }
       }, 400);
     });
@@ -141,21 +163,22 @@ export class MockGameAPI implements GameAPI {
         }
       };
     }
+    this.fireRequestEvent('queued');
     return new Promise((resolve) => {
-      setTimeout(
-        () =>
-          resolve({
-            darkness: entry(1000),
-            fire: entry(49555),
-            light: entry(15000),
-            nature: entry(2750),
-            psychic: entry(42),
-            stone: entry(12500),
-            sun: entry(9001),
-            water: entry(30000 + Math.ceil(Math.random() * 69999))
-          }),
-        100
-      );
+      this.fireRequestEvent('started');
+      setTimeout(() => {
+        resolve({
+          darkness: entry(1000),
+          fire: entry(49555),
+          light: entry(15000),
+          nature: entry(2750),
+          psychic: entry(42),
+          stone: entry(12500),
+          sun: entry(9001),
+          water: entry(30000 + Math.ceil(Math.random() * 69999))
+        });
+        this.fireRequestEvent('completed');
+      }, 100);
     });
   }
 
@@ -172,14 +195,22 @@ export class MockGameAPI implements GameAPI {
       return;
     }
 
-    const bookValid = girl.level! < girl.maxLevel!;
-    if (bookValid) {
-      updateGirlXpStats(girl, book.xp);
+    const success = Math.random() > 0.05;
+    this.mockRequest(
+      () => {
+        const bookValid = girl.level! < girl.maxLevel!;
+        if (bookValid) {
+          updateGirlXpStats(girl, book.xp);
 
-      if (this.updateGirl !== undefined) {
-        this.updateGirl(girl);
-      }
-    }
+          if (this.updateGirl !== undefined) {
+            this.updateGirl(girl);
+          }
+        }
+        return undefined;
+      },
+      success,
+      150
+    );
 
     return;
   }
@@ -238,6 +269,8 @@ export class MockGameAPI implements GameAPI {
     if (!girl.own) {
       return;
     }
+    this.fireRequestEvent('queued');
+    this.fireRequestEvent('started');
     const giftValid = girl.stars < girl.maxStars;
     if (giftValid) {
       updateGirlAffStats(girl, gift.aff);
@@ -245,6 +278,7 @@ export class MockGameAPI implements GameAPI {
         this.updateGirl(girl);
       }
     }
+    this.fireRequestEvent('completed');
     return;
   }
   async maxXP(_girl: CommonGirlData): Promise<void> {
@@ -258,6 +292,34 @@ export class MockGameAPI implements GameAPI {
     return 45000000;
   }
 
+  addRequestListener(listener: RequestListener): void {
+    this.requestListeners.add(listener);
+  }
+
+  removeRequestListener(listener: RequestListener): void {
+    this.requestListeners.delete(listener);
+  }
+
+  private fireRequestEvent(type: RequestEventType, success = true): void {
+    if (this.requestListeners.size === 0) {
+      return;
+    }
+    if (type === 'queued') {
+      this.reqCount++;
+    }
+    if (type === 'completed') {
+      this.reqCount--;
+    }
+    const event: RequestEvent = {
+      type,
+      success,
+      pendingRequests: this.reqCount
+    };
+    for (const listener of this.requestListeners) {
+      listener(event);
+    }
+  }
+
   /**
    * Mock a request execution that takes 100ms to execute, then
    * returns the result.
@@ -265,17 +327,24 @@ export class MockGameAPI implements GameAPI {
    * @param result A provider for the result to be returned upon request success
    * @param success A boolean indicating if the mock request should be successful. If false, the promise will be rejected.
    */
-  private async mockRequest<T>(result: () => T, success = true): Promise<T> {
+  private async mockRequest<T>(
+    result: () => T,
+    success = true,
+    delay = 100
+  ): Promise<T> {
+    this.fireRequestEvent('queued');
     return queue(
       () =>
         new Promise<T>((resolve, reject) => {
+          this.fireRequestEvent('started');
           setTimeout(() => {
+            this.fireRequestEvent('completed', success);
             if (success) {
               resolve(result());
             } else {
               reject('Mock Error');
             }
-          }, 100);
+          }, delay);
         })
     );
   }

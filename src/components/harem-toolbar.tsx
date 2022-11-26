@@ -4,6 +4,8 @@ import { Element } from '../data/data';
 import { FiltersContext } from '../hooks/filter-hooks';
 import { CloseButton, GemsCount, Tooltip } from './common';
 import { QuickFilter } from './harem';
+import { RequestsMonitor } from './requests-monitor';
+import { PulseLoader } from 'react-spinners';
 
 export interface HaremToolbarProps {
   gameAPI: GameAPI;
@@ -39,7 +41,8 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   close,
   toggleTab,
   isOpenTab,
-  gemsCount
+  gemsCount,
+  gameAPI
 }) => {
   const {
     activeFilter,
@@ -112,6 +115,27 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         <GemsCount gemsCount={gemsCount} />
       </div>
 
+      <div className="spacer" />
+      <RequestsMonitor
+        gameAPI={gameAPI}
+        error={() => (
+          <Tooltip
+            tooltip={<span>An error occurred while executing an action.</span>}
+          >
+            <div>⚠️</div>
+          </Tooltip>
+        )}
+      >
+        {(requests) => (
+          <div className="requests-tracker">
+            <Tooltip tooltip={<span>Pending requests: {requests}</span>}>
+              <div>
+                <PulseLoader color="#b77905" />
+              </div>
+            </Tooltip>
+          </div>
+        )}
+      </RequestsMonitor>
       <button
         className={`hh-action-button filter-sort-icon ${
           isOpenTab ? 'open' : 'closed'
