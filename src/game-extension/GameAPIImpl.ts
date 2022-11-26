@@ -474,6 +474,10 @@ export class GameAPIImpl implements GameAPI {
     return false;
   }
 
+  getCurrency(): number {
+    return this.getHero().infos.soft_currency;
+  }
+
   private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
     girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
     girl.currentGXP += addXp;

@@ -417,9 +417,17 @@ export interface Hero {
 // Properties of game object "window.Hero.infos"
 export interface HeroInfos {
   Xp: unknown;
-  // etc.
+  xp: number;
+  id: number;
   level: number;
   name: string;
+  soft_currency: number;
+  hard_currency: number;
+  carac1: number;
+  carac2: number;
+  carac3: number;
+  caracs: unknown;
+  // etc.
 }
 
 export function getGameWindow(): GameWindow {

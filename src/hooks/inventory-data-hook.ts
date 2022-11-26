@@ -15,7 +15,7 @@ import { GameInventory, InventoryItem } from '../data/game-data';
 export interface InventoryResult {
   inventory: Inventory;
   loading: boolean;
-  consumeItem(item: ItemEntry<Item>): void;
+  consumeItem(item: ItemEntry<Item>): ItemEntry<Item>[];
 }
 
 export function useInventory(gameAPI: GameAPI): InventoryResult {
@@ -38,12 +38,13 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
 
   const consumeItem = useCallback(
     (consumedItem: ItemEntry<Item>) => {
+      let newInventory: Inventory | undefined;
       setInventory((currentInventory) => {
+        newInventory = {
+          books: [...currentInventory.books],
+          gifts: [...currentInventory.gifts]
+        };
         if (consumedItem.count > 0) {
-          const newInventory = {
-            books: [...currentInventory.books],
-            gifts: [...currentInventory.gifts]
-          };
           if (consumedItem.item.type === 'book') {
             const bookIndex = newInventory.books.findIndex(
               (item) => item.item.itemId === consumedItem.item.itemId
@@ -75,6 +76,11 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
         }
         return inventory;
       });
+      return newInventory === undefined
+        ? []
+        : consumedItem.item.type === 'book'
+        ? newInventory.books
+        : newInventory.gifts;
     },
     [setInventory]
   );

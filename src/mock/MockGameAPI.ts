@@ -81,7 +81,7 @@ export class MockGameAPI implements GameAPI {
           accept({
             girlId: girl.id,
             questId: girl.quests[step].idQuest,
-            cost: 90000000,
+            cost: 70000,
             dialogue:
               'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             portrait: girl.poseImage,
@@ -198,7 +198,7 @@ export class MockGameAPI implements GameAPI {
     // Update girl level/maxLevel
     girl.missingGems -= gemsUsed;
     girl.maxLevel = maxLevel + 50;
-    girl.level = getLevel(girl, 0);
+    girl.level = Math.min(getLevel(girl, 0), girl.maxLevel);
     if (this.updateGirl) {
       this.updateGirl(girl);
     }
@@ -230,7 +230,7 @@ export class MockGameAPI implements GameAPI {
         } else {
           resolve(false);
         }
-      }, 500)
+      }, 300)
     );
   }
 
@@ -252,6 +252,10 @@ export class MockGameAPI implements GameAPI {
   }
   async maxAff(_girl: CommonGirlData): Promise<void> {
     return;
+  }
+
+  getCurrency(): number {
+    return 45000000;
   }
 
   /**

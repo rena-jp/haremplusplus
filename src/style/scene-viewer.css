@@ -48,21 +48,62 @@
     drop-shadow(-3px 0px 0px white) drop-shadow(3px 0px 0px white);
 }
 
-.qh-scene-content > button.hh-game-action {
+.qh-scene-content > .side-bar {
   min-width: fit-content;
-  padding-inline: 0.5em;
   width: 10%;
-  min-height: 4em;
-  font-size: 1.5em;
-  align-self: flex-end;
-  margin: 1.5rem;
-  flex-grow: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-end;
+
+  row-gap: 1rem;
+  padding: 1rem;
 }
 
-/* .qh-scene-area > img {
-    border-radius: 15px 0px 0px 15px;
-    max-width: 100%;
-  } */
+.qh-scene-content > .side-bar > .navigate {
+  display: flex;
+  flex-direction: row;
+  column-gap: 2em;
+  justify-content: center;
+}
+
+.qh-scene-content > .side-bar > .navigate > button {
+  width: 4em;
+  height: 4em;
+  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  border: 1px solid #000;
+  border-radius: 100%;
+
+  padding: 0.5em;
+
+  background-position: center;
+  background-size: contain;
+  background-origin: content-box, border-box;
+  background-repeat: no-repeat;
+
+  cursor: pointer;
+}
+
+.qh-scene-content > .side-bar > .navigate > button:active {
+  box-shadow: none;
+}
+
+.qh-scene-content > .side-bar > .navigate > button.previous {
+  background-image: url(https://hh2.hh-content.com/design/ic_arrow-left-ffffff.svg),
+    linear-gradient(to top, #008ed5 0, #05719c 100%);
+}
+.qh-scene-content > .side-bar > .navigate > button.next {
+  background-image: url(https://hh2.hh-content.com/design/ic_arrow-right-ffffff.svg),
+    linear-gradient(to top, #008ed5 0, #05719c 100%);
+}
+
+.qh-scene-content > .side-bar > button.hh-game-action {
+  min-width: fit-content;
+  padding-inline: 0.5em;
+  min-height: 4em;
+  font-size: 1.5em;
+}
 
 .qh-scene-area > .overlay {
   position: absolute;
@@ -99,6 +140,22 @@
 }
 .qh-scene-area > .toggle-text.show {
   background-image: url(https://hh2.hh-content.com/quest/ic_eyeopen.svg);
+}
+
+button.hh-game-action.upgrade {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5em;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1em;
+}
+
+button.hh-game-action.upgrade > .currency-icon {
+  background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
+  background-size: cover;
+  width: 1.5em;
+  height: 1.5em;
 }
 
 /** Attempt to keep the dialogue on top of the image on large screen ratios */

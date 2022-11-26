@@ -84,13 +84,24 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     if (selectedItem === undefined) {
       return;
     }
-    consumeItem(selectedItem);
+    const selectionIndex = items.indexOf(selectedItem);
+    const selectionCount = selectedItem.count;
+    const newItems = consumeItem(selectedItem);
     if (page === 'books' && selectedItem.item.type === 'book') {
       gameAPI.useBook(currentGirl, selectedItem.item as Book);
     } else if (page === 'gifts' && selectedItem.item.type === 'gift') {
       gameAPI.useGift(currentGirl, selectedItem.item as Gift);
     }
-  }, [selectedItem, currentGirl, gameAPI]);
+    if (selectionCount - 1 <= 0) {
+      const nextItem =
+        newItems.length === 0
+          ? undefined
+          : newItems.length <= selectionIndex
+          ? newItems[newItems.length - 1]
+          : newItems[selectionIndex];
+      selectItem(nextItem);
+    }
+  }, [selectedItem, selectItem, currentGirl, gameAPI]);
 
   const marketType = page === 'books' ? 'potion' : 'gift';
 

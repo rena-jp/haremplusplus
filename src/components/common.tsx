@@ -112,6 +112,19 @@ export function format(value: number): string {
   return new Intl.NumberFormat().format(value);
 }
 
+export function formatCost(cost: number): string {
+  if (cost > 1000000000) {
+    return (cost / 1000000000).toFixed(1) + 'B';
+  }
+  if (cost > 1000000) {
+    return (cost / 1000000).toFixed(1) + 'M';
+  }
+  if (cost > 10000) {
+    return (cost / 1000).toFixed(1) + 'k';
+  }
+  return String(cost);
+}
+
 export function firstToUpper(value: string): string {
   if (value.length === 0) {
     return value;

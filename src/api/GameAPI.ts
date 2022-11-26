@@ -129,6 +129,11 @@ export interface GameAPI {
    * @param listener
    */
   removeSalaryDataListener(listener: SalaryDataListener): void;
+
+  /**
+   * Get the current amount of currency owned by the player
+   */
+  getCurrency(): number;
 }
 
 export type SalaryDataListener = (data: GirlsSalaryList) => void;
