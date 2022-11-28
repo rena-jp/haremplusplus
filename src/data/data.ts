@@ -46,6 +46,7 @@ export type EventSource =
   | 'PoV' // Done
   | 'SE' // Done (Probably. Hard to distinguish from CE; use same IDs)
   | 'Anniv' // Done
+  | 'CbC' // Done
   | 'unknown';
 
 export function isEventSource(value: string): value is EventSource {
@@ -632,6 +633,8 @@ export function getSourceLabel(source: EventSource): string {
       return 'Season';
     case 'Story':
       return 'Story';
+    case 'CbC':
+      return 'Cumback Contest';
     case 'unknown':
       return 'Unknown';
   }

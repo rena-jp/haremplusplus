@@ -231,6 +231,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
   if (girlData.source && girlData.source.name === 'seasonal_event') {
     sources.add('SE');
   }
+  if (girlData.source_selectors.cumback_contest) {
+    sources.add('CbC');
+  }
   if (girlData.source_selectors.event) {
     getEventTypes(girlData.source_selectors.event).forEach((source) =>
       sources.add(source)
