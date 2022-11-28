@@ -100,7 +100,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('Couleur des yeux', Blessing.EyeColor);
   allPrefixes.set('Couleur de cheveux', Blessing.HairColor);
   allPrefixes.set('Signe astrologique', Blessing.Zodiac);
-  allPrefixes.set('Elément', Blessing.Element);
+  allPrefixes.set('Élément', Blessing.Element);
   allPrefixes.set('Rareté', Blessing.Rarity);
 
   // EN
@@ -118,7 +118,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('Augenfarbe', Blessing.EyeColor);
   allPrefixes.set('Haarfarbe', Blessing.HairColor);
   allPrefixes.set('Sternzeichen', Blessing.Zodiac);
-  allPrefixes.set('TODO-DEElement', Blessing.Element); //TODO
+  allPrefixes.set('Element', Blessing.Element);
   allPrefixes.set('Seltenheit', Blessing.Rarity);
 
   // ES
@@ -127,7 +127,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('Color de Ojos', Blessing.EyeColor);
   allPrefixes.set('Color de Cabello', Blessing.HairColor);
   allPrefixes.set('Signo zodiacal', Blessing.Zodiac);
-  allPrefixes.set('TODO-ESElement', Blessing.Element); //TODO
+  allPrefixes.set('Elemento', Blessing.Element);
   allPrefixes.set('Rareza', Blessing.Rarity);
 
   // IT
@@ -136,7 +136,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('Colore degli occhi', Blessing.EyeColor);
   allPrefixes.set('Colore dei capelli', Blessing.HairColor);
   allPrefixes.set('Segno zodiacale', Blessing.Zodiac);
-  allPrefixes.set('TODO-ITElement', Blessing.Element); //TODO
+  allPrefixes.set('Elemento', Blessing.Element);
   allPrefixes.set('Rarità', Blessing.Rarity);
 
   // JP
@@ -145,7 +145,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('目の色', Blessing.EyeColor);
   allPrefixes.set('髪の色', Blessing.HairColor);
   allPrefixes.set('Zodiac sign', Blessing.Zodiac);
-  allPrefixes.set('TODO-JPElement', Blessing.Element); //TODO
+  allPrefixes.set('Element', Blessing.Element);
   allPrefixes.set('希少さ', Blessing.Rarity);
 
   // RU
@@ -154,7 +154,7 @@ function extractBlessingFromCondition(
   allPrefixes.set('Цвет глаз', Blessing.EyeColor);
   allPrefixes.set('Цвет волос', Blessing.HairColor);
   allPrefixes.set('Знак зодиака', Blessing.Zodiac);
-  allPrefixes.set('TODO-RUElement', Blessing.Element); //TODO
+  allPrefixes.set('Element', Blessing.Element);
   allPrefixes.set('Редкость', Blessing.Rarity);
 
   for (const prefix of allPrefixes.keys()) {
