@@ -101,7 +101,7 @@ body.qh-local {
   padding: 3px; */
 }
 
-.rare-blessing > .total {
+.rare-blessing > span > .total {
   color: #c93e3e;
   font-weight: bold;
 }
