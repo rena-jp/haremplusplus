@@ -1,9 +1,17 @@
-## 0.9.7 (Next)
+## 0.10.0 (Next)
 
-- Add UI to upgrade girls directly from the Harem (GXP/Awakening, Affection)
+- Update unknown poses for new girls
+- Blessings: Properly support element blessings in all languages
+- Requests: Add a spinner while the requests queue is busy, and icon when an error occurs
+- Fix pachinko pools: don't consider 1\* Girls as part of the "Mythic Pachinko" pool
+- Add UI to upgrade girls directly from the Harem (GXP/Awakening, Affection/Upgrade)
 - Data: improve source event support (Classic/Epic/Legendary/Orgy Days, Anniversary, Seasonal)
 - Harem: Add proper link navigation. Supports direct link reference, such as: ./home.html?harem&girl=1
 - Selection: Scroll girl into view when changing selection (if girl is not filtered out)
+
+### 0.10.0 Known issues
+
+- Special mythic items (Level 350 Book, 2\* Gift) are currently not supported. The "Use" button will be disabled.
 
 ## 0.9.6 - 2022-11-11
 

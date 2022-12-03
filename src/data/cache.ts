@@ -9,9 +9,10 @@ const DEPRECATED_CACHES = [
   'gemsData',
   'haremData',
   'qh-filters',
-  'harem-cache-0.9.7'
+  'harem-cache-0.9.7',
+  'harem-cache-0.9.7-dev.1'
 ];
-const CACHE = 'harem-cache-0.9.7-dev.1';
+const CACHE = 'harem-cache-0.10.0';
 
 async function clearOldCaches(): Promise<void> {
   for (const deprecatedCache of DEPRECATED_CACHES) {
