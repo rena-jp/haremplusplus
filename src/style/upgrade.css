@@ -271,7 +271,7 @@ button.awaken.overlay:active {
   flex-direction: row;
 }
 
-.awakening-details .girl-name {
+.awakening-details .highlight-value {
   color: #ffb827;
 }
 
@@ -313,4 +313,50 @@ button.upgrade.overlay {
 
 button.upgrade.overlay:active {
   box-shadow: none;
+}
+
+.max-content-popup {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.2em;
+}
+
+.max-content-popup > h2 {
+  font-size: 1.5em;
+  border-bottom: 1px solid #8e0333;
+  padding-bottom: 0.6em;
+}
+
+.max-content-popup > .qh-inventory {
+  padding-top: 1em;
+  flex-grow: 1;
+}
+
+.max-content-popup > .note {
+  border-block: 1px solid #8e0333;
+  text-align: center;
+  padding-block: 1em;
+}
+
+.max-content-popup > .note > .value {
+  color: #ffb918;
+}
+
+.max-out-actions {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  column-gap: 2em;
+  row-gap: 1em;
+  justify-content: center;
+}
+
+.max-out-actions > span {
+  flex-basis: 100%;
+  text-align: center;
+}
+
+.max-out-actions button {
+  min-width: 8rem;
+  min-height: 4rem;
 }

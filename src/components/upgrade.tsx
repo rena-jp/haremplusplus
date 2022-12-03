@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   Book,
@@ -12,7 +12,11 @@ import {
   SPECIAL_MYTHIC_GIFT_ID
 } from '../data/data';
 import { useAffectionStats } from '../hooks/girl-aff-hooks';
-import { getLevel, useXpStats } from '../hooks/girl-xp-hooks';
+import {
+  getAwakeningThreshold,
+  getLevel,
+  useXpStats
+} from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
 import {
@@ -58,7 +62,10 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
   gemsCount,
   consumeGems
 }) => {
-  const { inventory, loading, consumeItem } = useInventory(gameAPI);
+  const { inventory, loading, consumeItem, consumeItems } =
+    useInventory(gameAPI);
+
+  // TODO Update items after calling consumeItems? Probably not necessary; inventory will be updated, and we don't need preserve the selection
 
   const items: ItemEntry<Item>[] =
     page === 'books' ? inventory.books : inventory.gifts;
@@ -154,6 +161,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
         </div>
         <UpgradeStatus
           girl={currentGirl}
+          allGirls={allGirls}
           page={page}
           selectedItem={selectedItem?.item}
           gameAPI={gameAPI}
@@ -186,8 +194,22 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
               >
                 Use
               </button>
-              {page === 'books' ? <MaxXP girl={currentGirl} /> : null}
-              {page === 'gifts' ? <MaxAffection girl={currentGirl} /> : null}
+              {page === 'books' ? (
+                <MaxXP
+                  girl={currentGirl}
+                  gameAPI={gameAPI}
+                  items={items}
+                  consumeItems={consumeItems}
+                />
+              ) : null}
+              {page === 'gifts' ? (
+                <MaxAffection
+                  girl={currentGirl}
+                  gameAPI={gameAPI}
+                  items={items}
+                  consumeItems={consumeItems}
+                />
+              ) : null}
             </div>
           </>
         )}
@@ -334,6 +356,7 @@ export interface StatusProps {
   gameAPI: GameAPI;
 }
 export interface UpgradeStatusProps extends StatusProps {
+  allGirls: CommonGirlData[];
   page: 'books' | 'gifts';
   selectedItem: Item | undefined;
   gemsCount: Map<Element, number>;
@@ -342,6 +365,7 @@ export interface UpgradeStatusProps extends StatusProps {
 
 export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
   girl,
+  allGirls,
   page,
   selectedItem,
   gameAPI,
@@ -361,6 +385,7 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
       {page === 'books' ? (
         <XPStatus
           girl={girl}
+          allGirls={allGirls}
           book={book}
           gameAPI={gameAPI}
           gemsCount={gemsCount}
@@ -375,6 +400,7 @@ export const UpgradeStatus: React.FC<UpgradeStatusProps> = ({
 };
 
 export interface XpStatusProps extends StatusProps {
+  allGirls: CommonGirlData[];
   book: Book | undefined;
   gemsCount: Map<Element, number>;
   consumeGems(element: Element, gems: number): void;
@@ -382,6 +408,7 @@ export interface XpStatusProps extends StatusProps {
 
 export const XPStatus: React.FC<XpStatusProps> = ({
   girl,
+  allGirls,
   book,
   gameAPI,
   gemsCount,
@@ -403,6 +430,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
     currentLevel === girl.maxLevel && currentLevel < 750 ? (
       <Awaken
         girl={girl}
+        allGirls={allGirls}
         trigger={
           <button className="awaken overlay">
             <Tooltip tooltip={<span>Awaken</span>}>
@@ -614,9 +642,17 @@ function getValue(item: Item): number {
 
 export interface MaxXPProps {
   girl: CommonGirlData;
+  items: ItemEntry<Item>[];
+  gameAPI: GameAPI;
+  consumeItems(items: ItemEntry<Item>[]): void;
 }
 
-export const MaxXP: React.FC<MaxXPProps> = ({ girl }) => {
+export const MaxXP: React.FC<MaxXPProps> = ({
+  girl,
+  items,
+  gameAPI,
+  consumeItems
+}) => {
   const canXP = girl.own && girl.level! < girl.maxLevel!;
 
   return (
@@ -629,12 +665,16 @@ export const MaxXP: React.FC<MaxXPProps> = ({ girl }) => {
       }
     >
       {
-        ((closePopup: () => void) => (
-          <div className="qh-popup max-content-popup">
-            <CloseButton close={closePopup} />
-            <p>Max out XP for girl {girl.name}. Coming soon... Maybe?</p>
-          </div>
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        ((close: () => void) => (
+          <MaxItems
+            gameAPI={gameAPI}
+            girl={girl}
+            items={items}
+            close={close}
+            type="book"
+            consumeItems={consumeItems}
+          />
+          // eslint-disable-next-line
         )) as any
       }
     </Popup>
@@ -643,9 +683,17 @@ export const MaxXP: React.FC<MaxXPProps> = ({ girl }) => {
 
 export interface MaxAffProps {
   girl: CommonGirlData;
+  gameAPI: GameAPI;
+  items: ItemEntry<Item>[];
+  consumeItems(items: ItemEntry<Item>[]): void;
 }
 
-export const MaxAffection: React.FC<MaxAffProps> = ({ girl }) => {
+export const MaxAffection: React.FC<MaxAffProps> = ({
+  girl,
+  gameAPI,
+  items,
+  consumeItems
+}) => {
   const canUpgrade = girl.missingAff > 0 && !girl.upgradeReady;
   return (
     <Popup
@@ -658,10 +706,14 @@ export const MaxAffection: React.FC<MaxAffProps> = ({ girl }) => {
     >
       {
         ((close: () => void) => (
-          <div className="qh-popup max-content-popup">
-            <CloseButton close={close} />
-            <p>Max out Affection for girl {girl.name}. Coming soon... Maybe?</p>
-          </div>
+          <MaxItems
+            gameAPI={gameAPI}
+            girl={girl}
+            items={items}
+            close={close}
+            type="gift"
+            consumeItems={consumeItems}
+          />
           // eslint-disable-next-line
         )) as any
       }
@@ -669,8 +721,143 @@ export const MaxAffection: React.FC<MaxAffProps> = ({ girl }) => {
   );
 };
 
+interface MaxItemsProps {
+  girl: CommonGirlData;
+  gameAPI: GameAPI;
+  items: ItemEntry<Item>[];
+  type: 'book' | 'gift';
+  close(): void;
+  consumeItems(items: ItemEntry<Item>[]): void;
+}
+
+const MaxItems: React.FC<MaxItemsProps> = ({
+  girl,
+  items,
+  gameAPI,
+  type,
+  close,
+  consumeItems
+}) => {
+  const [usedItems, setUsedItems] = useState<ItemEntry<Item>[] | undefined>(
+    undefined
+  );
+  const [excess, setExcess] = useState(0);
+  const [ready, setReady] = useState(false);
+
+  const stat = type === 'book' ? 'experience' : 'affection';
+
+  useEffect(() => {
+    async function requestItems(): Promise<void> {
+      try {
+        const usedItems = await gameAPI.requestMaxOut(girl, type);
+        if (usedItems.selection.length === 0) {
+          setUsedItems([]);
+        }
+        const newUsedItems = [];
+        for (const item of usedItems.selection) {
+          const itemEntry = items.find((i) => i.item.itemId === item.id);
+          if (itemEntry === undefined) {
+            throw new Error(
+              'Failed to find item in current inventory: ' +
+                JSON.stringify(item)
+            );
+          }
+          const useEntry = {
+            item: itemEntry?.item,
+            count: item.count
+          };
+          newUsedItems.push(useEntry);
+        }
+        setUsedItems(newUsedItems);
+        setExcess(usedItems.excess);
+      } catch (error) {
+        console.log('Error: ', error);
+      }
+
+      setReady(true);
+    }
+    requestItems();
+  }, []);
+
+  const confirm = useCallback(() => {
+    async function confirmMaxOut() {
+      const appliedItems = await gameAPI.confirmMaxOut(girl, type);
+      const consumedItems: ItemEntry<Item>[] = [];
+      for (const item of appliedItems.selection) {
+        const itemEntry = items.find((i) => i.item.itemId === item.id);
+        if (itemEntry === undefined) {
+          throw new Error(
+            'Failed to find item in current inventory: ' + JSON.stringify(item)
+          );
+        }
+        const useEntry = {
+          item: itemEntry?.item,
+          count: item.count
+        };
+        consumedItems.push(useEntry);
+      }
+      consumeItems(consumedItems);
+    }
+    confirmMaxOut();
+    close();
+  }, [gameAPI]);
+
+  const message =
+    excess < 0 ? (
+      <>
+        You are about to use all these items even though they are not enough to
+        fill the whole {stat} bar
+      </>
+    ) : (
+      <>Filling your {stat} bar will cost you:</>
+    );
+
+  const isMaxed =
+    (type === 'book' && girl.maxLevel === 750) ||
+    (type === 'gift' && girl.stars === girl.maxStars - 1);
+
+  return (
+    <div className="qh-popup max-content-popup">
+      <CloseButton close={close} />
+      {ready && usedItems === undefined ? <p>An error occurred.</p> : null}
+      {ready && usedItems !== undefined ? (
+        <>
+          <h2>{message}</h2>
+          <ItemsList
+            items={usedItems}
+            selectedItem={undefined}
+            selectItem={() => {
+              /* No selection */
+            }}
+          />
+          {isMaxed && excess > 0 ? (
+            <p className="note">
+              Note: <span className="value">{excess}</span> {stat} will be lost
+              using these items!
+            </p>
+          ) : null}
+          <div className="max-out-actions">
+            <span>Do you want to proceed?</span>
+            <button
+              className="hh-game-action confirm-max-out"
+              onClick={confirm}
+            >
+              Yes
+            </button>
+            <button className="hh-action-button cancel-max-out" onClick={close}>
+              No
+            </button>
+          </div>
+        </>
+      ) : null}
+      {!ready ? <p>Loading items...</p> : null}
+    </div>
+  );
+};
+
 export interface AwakenProps {
   girl: CommonGirlData;
+  allGirls: CommonGirlData[];
   trigger?: JSX.Element;
   gameAPI: GameAPI;
   gemsCount: Map<Element, number>;
@@ -679,6 +866,7 @@ export interface AwakenProps {
 
 export const Awaken: React.FC<AwakenProps> = ({
   girl,
+  allGirls,
   trigger,
   gameAPI,
   gemsCount,
@@ -693,6 +881,19 @@ export const Awaken: React.FC<AwakenProps> = ({
       .awaken(girl)
       .then(() => consumeGems(girl.element, gemsStats.gemsToNextCap));
   }, [gameAPI, gemsStats, gemsStats.gemsToNextCap]);
+  const nextAwakeningLevel =
+    girl.maxLevel === 750 || girl.maxLevel === undefined
+      ? undefined
+      : girl.maxLevel + 50;
+  const minGirlsToAwaken =
+    nextAwakeningLevel === undefined
+      ? 0
+      : getAwakeningThreshold(nextAwakeningLevel);
+  const currentGirls = allGirls
+    .filter((g) => g.own)
+    .filter((ownedGirl) => ownedGirl.level! >= (girl.maxLevel ?? 0)).length;
+  const canAwaken =
+    currentGirls >= minGirlsToAwaken && gemsStats.gemsToNextCap <= currentGems;
   return (
     <Popup modal trigger={trigger}>
       {
@@ -710,7 +911,10 @@ export const Awaken: React.FC<AwakenProps> = ({
                   <h2>Awakening</h2>
                   <span>
                     We can feel something growing - could it be{' '}
-                    <span className="girl-name">{girl.name}</span>'s power?
+                    <span className="highlight-value girl-name">
+                      {girl.name}
+                    </span>
+                    's power?
                   </span>
                   <div className="awakening-description">
                     Max level increase: {girl.maxLevel!}{' '}
@@ -722,7 +926,7 @@ export const Awaken: React.FC<AwakenProps> = ({
                       doAwaken();
                       closePopup();
                     }}
-                    disabled={gemsStats.gemsToNextCap > currentGems}
+                    disabled={!canAwaken}
                   >
                     <span>Awaken</span>
                     <span className="gems-cost">
@@ -730,6 +934,17 @@ export const Awaken: React.FC<AwakenProps> = ({
                       <GemIcon element={girl.element} />
                     </span>
                   </button>
+                  {currentGirls < minGirlsToAwaken ? (
+                    <div>
+                      You need{' '}
+                      <span className="highlight-value">
+                        {minGirlsToAwaken - currentGirls}
+                      </span>{' '}
+                      more girls on level{' '}
+                      <span className="highlight-value">{girl.maxLevel}</span>{' '}
+                      in order to Awaken.
+                    </div>
+                  ) : null}
                 </div>
               </div>
             )}

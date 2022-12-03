@@ -50,6 +50,29 @@ export interface GameAPI {
    */
   useGift(girl: CommonGirlData, gift: Gift): Promise<void>;
   /**
+   * Request "max out" for XP or Affection. This will return a list
+   * of items necessary to max out XP/Affection for the selected girl.
+   * This action doesn't apply any change (See #confirmMaxOut()).
+   * @param girl The girl to max out
+   * @param type The type of items to use ('book' for XP, 'gift' for Affection)
+   * @return The list of items that will be used to max out the selected stat
+   */
+  requestMaxOut(
+    girl: CommonGirlData,
+    type: 'book' | 'gift'
+  ): Promise<MaxOutItems>;
+  /**
+   * Max out the XP or Affection of the selected girl. Items will be consumed.
+   *
+   * @param girl  The girl to max out
+   * @param type The type of items to use ('book' for XP, 'gift' for Affection)
+   * @return The list of items that were consumed by this action.
+   */
+  confirmMaxOut(
+    girl: CommonGirlData,
+    type: 'book' | 'gift'
+  ): Promise<MaxOutItems>;
+  /**
    * Awaken the selected girl.
    * @param girl
    */
@@ -60,16 +83,6 @@ export interface GameAPI {
    * @param questId The id of the upgrade quest
    */
   upgrade(girl: CommonGirlData, questId: number): Promise<boolean>;
-  /**
-   * Max out the XP of the selected girl.
-   * @param girl
-   */
-  maxXP(girl: CommonGirlData): Promise<void>;
-  /**
-   * Max out the Affection of the selected girl.
-   * @param girl
-   */
-  maxAff(girl: CommonGirlData): Promise<void>;
   /**
    * Collect salary for the selected girl. If the action succeeds,
    * the callback will be invoked with an updated version of the girls data.
@@ -213,4 +226,14 @@ export async function queue<T>(request: () => Promise<T>): Promise<T> {
     });
   requestsQueue.push(result);
   return await result;
+}
+
+export interface MaxOutItems {
+  excess: number;
+  selection: ItemSelection[];
+}
+
+export interface ItemSelection {
+  id: number;
+  count: number;
 }

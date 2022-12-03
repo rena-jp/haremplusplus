@@ -10,6 +10,7 @@ import {
 } from '../data/game-data';
 import {
   GameAPI,
+  MaxOutItems,
   queue,
   RequestEvent,
   RequestEventType,
@@ -19,6 +20,7 @@ import {
 import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
+// import girls from './girlsDataList-test.json';
 // import girls from './girlsdatalist-full.json';
 // import blessings from './blessings-full.json';
 // import quests from './quests-full.json';
@@ -215,6 +217,105 @@ export class MockGameAPI implements GameAPI {
     return;
   }
 
+  async requestMaxOut(
+    girl: CommonGirlData,
+    type: 'gift' | 'book'
+  ): Promise<MaxOutItems> {
+    if (type === 'book' && girl.level === girl.maxLevel) {
+      throw new Error('Girl XP is already maxed out');
+    }
+    if (type === 'gift' && girl.stars === girl.maxStars) {
+      throw new Error('Girl Affection is already maxed out');
+    }
+    return this.mockRequest(
+      () => {
+        if (type === 'gift') {
+          const result: MaxOutItems = {
+            excess: 12,
+            selection: [
+              {
+                id: 184,
+                count: 30
+              }
+            ]
+          };
+          return result;
+        } else if (type === 'book') {
+          const result: MaxOutItems = {
+            excess: 37,
+            selection: [
+              {
+                id: 323,
+                count: 2
+              },
+              {
+                id: 321,
+                count: 1
+              },
+              {
+                id: 51,
+                count: 1
+              },
+              { id: 48, count: 1 },
+              { id: 52, count: 1 }
+            ]
+          };
+          return result;
+        }
+        throw new Error('Invalid item type: ' + type);
+      },
+      true,
+      200
+    );
+  }
+
+  async confirmMaxOut(
+    girl: CommonGirlData,
+    type: 'book' | 'gift'
+  ): Promise<MaxOutItems> {
+    console.log('Max out: ', type, girl.name);
+    return this.mockRequest(
+      () => {
+        if (type === 'gift') {
+          const result: MaxOutItems = {
+            excess: 12,
+            selection: [
+              {
+                id: 184,
+                count: 30
+              }
+            ]
+          };
+          return result;
+        } else if (type === 'book') {
+          const result: MaxOutItems = {
+            excess: 37,
+            selection: [
+              {
+                id: 323,
+                count: 2
+              },
+              {
+                id: 321,
+                count: 1
+              },
+              {
+                id: 51,
+                count: 1
+              },
+              { id: 48, count: 1 },
+              { id: 52, count: 1 }
+            ]
+          };
+          return result;
+        }
+        throw new Error('Invalid item type: ' + type);
+      },
+      true,
+      200
+    );
+  }
+
   async awaken(girl: CommonGirlData): Promise<void> {
     if (!girl.own) {
       throw new Error("Can't awaken a girl before obtaining her!");
@@ -279,12 +380,6 @@ export class MockGameAPI implements GameAPI {
       }
     }
     this.fireRequestEvent('completed');
-    return;
-  }
-  async maxXP(_girl: CommonGirlData): Promise<void> {
-    return;
-  }
-  async maxAff(_girl: CommonGirlData): Promise<void> {
     return;
   }
 

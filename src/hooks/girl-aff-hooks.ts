@@ -21,7 +21,10 @@ export function useAffectionStats(girl: CommonGirlData): AffStatsResult {
   return result;
 }
 
-function getAffRange(girl: CommonGirlData): { min: number; max: number } {
+export function getAffRange(girl: CommonGirlData): {
+  min: number;
+  max: number;
+} {
   const star = girl.stars;
   const multiplier = getAffMultiplier(girl.rarity);
   if (star === girl.maxStars) {

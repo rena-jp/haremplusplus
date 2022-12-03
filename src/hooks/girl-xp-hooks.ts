@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { CommonGirlData, Rarity } from '../data/data';
 import { GameRarity } from '../data/game-data';
 import fullXpTable from './data/xp-table-full.json';
+import awakeningData from './data/awakening.json';
 
 const MAX_LEVEL = 750;
 const MIN_LEVEL_CAP = 250;
@@ -76,7 +77,7 @@ function getXpEntry(level: number, girl: CommonGirlData) {
   return xpTable[levelKey];
 }
 
-function getGXPToCap(girl: CommonGirlData, cap?: number): number {
+export function getGXPToCap(girl: CommonGirlData, cap?: number): number {
   if (!girl.own) {
     return 0;
   }
@@ -101,4 +102,19 @@ export function getMissingGXP(girl: CommonGirlData): number {
 
 function gameRarity(rarity: Rarity): GameRarity {
   return Rarity[rarity] as GameRarity;
+}
+
+/**
+ * Return the number of girls required to awaken toward the specified
+ * level.
+ * @param level The awakening level (upper bound). For example,
+ * "750" represents awakening from level 700 to 750.
+ */
+export function getAwakeningThreshold(level: number): number {
+  for (const entry of awakeningData) {
+    if (entry.cap_level === level) {
+      return entry.girls_required;
+    }
+  }
+  throw new Error('Unexpected awakening level: ' + level);
 }

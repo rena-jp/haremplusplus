@@ -1,0 +1,13 @@
+[
+  { "girls_required": 0, "cost": 0, "cap_level": 250 },
+  { "girls_required": 20, "cost": 40, "cap_level": 300 },
+  { "girls_required": 25, "cost": 60, "cap_level": 350 },
+  { "girls_required": 30, "cost": 80, "cap_level": 400 },
+  { "girls_required": 35, "cost": 100, "cap_level": 450 },
+  { "girls_required": 40, "cost": 125, "cap_level": 500 },
+  { "girls_required": 50, "cost": 150, "cap_level": 550 },
+  { "girls_required": 60, "cost": 200, "cap_level": 600 },
+  { "girls_required": 70, "cost": 275, "cap_level": 650 },
+  { "girls_required": 85, "cost": 350, "cap_level": 700 },
+  { "girls_required": 100, "cost": 500, "cap_level": 750 }
+]

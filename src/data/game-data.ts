@@ -683,3 +683,33 @@ function resizeScene(picture: string): string {
   }
   return picture;
 }
+
+export interface MaxOutResult extends RequestResult {
+  selection: { [key: string]: number };
+  excess: number;
+  success: true;
+}
+export interface MaxOutConfirmResult extends MaxOutResult {
+  girlData: unknown;
+}
+
+export namespace MaxOutResult {
+  export function is(object: unknown): object is MaxOutResult {
+    if (isUnknownObject(object)) {
+      return (
+        object.success === true &&
+        typeof object.excess === 'number' &&
+        isUnknownObject(object.selection)
+      );
+    }
+    return false;
+  }
+
+  export function isConfirm(object: unknown): object is MaxOutConfirmResult {
+    return (
+      isUnknownObject(object) &&
+      isUnknownObject(object.girl_data) &&
+      MaxOutResult.is(object)
+    );
+  }
+}

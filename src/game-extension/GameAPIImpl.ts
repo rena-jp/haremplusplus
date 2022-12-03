@@ -23,6 +23,7 @@ import {
   GirlsSalaryList,
   Hero,
   isUnknownObject,
+  MaxOutResult,
   RequestResult,
   toQuestData,
   UpgradeResult,
@@ -30,14 +31,16 @@ import {
 } from '../data/game-data';
 import {
   GameAPI,
+  ItemSelection,
+  MaxOutItems,
   queue,
   RequestEvent,
   RequestEventType,
   RequestListener,
   SalaryDataListener
 } from '../api/GameAPI';
-import { getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
-import { isUpgradeReady } from '../hooks/girl-aff-hooks';
+import { getGXPToCap, getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
+import { getAffRange, isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
 
 export const REQUEST_GIRLS = 'request_girls';
@@ -557,6 +560,63 @@ export class GameAPIImpl implements GameAPI {
     }
   }
 
+  async requestMaxOut(
+    girl: CommonGirlData,
+    type: 'book' | 'gift'
+  ): Promise<MaxOutItems> {
+    const params = {
+      action: 'get_girl_fill_items',
+      type: type === 'gift' ? 'gift' : 'potion',
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(params);
+    if (MaxOutResult.is(result)) {
+      return toMaxOutItems(result);
+    }
+    throw new Error(
+      'Failed to get the items list to max out the girl. Result: ' +
+        JSON.stringify(result)
+    );
+  }
+
+  async confirmMaxOut(
+    girl: CommonGirlData,
+    type: 'book' | 'gift'
+  ): Promise<MaxOutItems> {
+    const action = type === 'book' ? 'fill_girl_xp' : 'fill_girl_affection';
+    const params = {
+      action,
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(params);
+    if (MaxOutResult.isConfirm(result)) {
+      const items = toMaxOutItems(result);
+      // TODO Update girl...
+      const excess = result.excess; // Excess may be negative if we don't reach next cap
+      if (type === 'book') {
+        const levelCap = girl.maxLevel ?? 250;
+        const xpToCap = getGXPToCap(girl, levelCap) - girl.currentGXP;
+        const extraXp = xpToCap + excess;
+        this.updateGirlXpStats(girl, extraXp);
+      } else {
+        const affectionRange = getAffRange(girl);
+        const affToGrade = affectionRange.max - girl.currentAffection;
+        this.updateGirlAffStats(girl, affToGrade + excess);
+      }
+      if (this.updateGirl) {
+        this.updateGirl(girl);
+      }
+      // Find how much XP / Aff is required to next threshold
+      // Add excess
+      // Update girl XP/Aff (+ grade, level, as necessary)
+
+      return items;
+    }
+    throw new Error(
+      'Failed to max out the girl. Result: ' + JSON.stringify(result)
+    );
+  }
+
   private updateGirlAffStats(girl: CommonGirlData, addAff: number): void {
     girl.upgradeReady = isUpgradeReady(girl, addAff);
     girl.currentAffection += addAff;
@@ -567,13 +627,6 @@ export class GameAPIImpl implements GameAPI {
         ready: true
       };
     }
-  }
-
-  async maxXP(_girl: CommonGirlData): Promise<void> {
-    return;
-  }
-  async maxAff(_girl: CommonGirlData): Promise<void> {
-    return;
   }
 
   /**
@@ -950,4 +1003,20 @@ function refreshSalaryManager(
   salarySum.text(collectStr + ' ' + amountTxt);
 
   gameWindow.Collect.changeDisableBtnState(newAmount <= 0);
+}
+
+function toMaxOutItems(result: MaxOutResult): MaxOutItems {
+  const excess = result.excess;
+  const selection: ItemSelection[] = Object.keys(result.selection).map(
+    (key) => {
+      return {
+        id: Number(key),
+        count: result.selection[key]
+      };
+    }
+  );
+  return {
+    excess,
+    selection
+  };
 }
