@@ -148,7 +148,7 @@ export const Summary: React.FC<SummaryProps> = ({
         />
         <div className="resources-summary">
           <p>
-            Total missing Aff:{' '}
+            Total missing Affection:{' '}
             {missingAffAll > missingAffELM ? (
               <>
                 <span title="Epic, Legendary & Mythic">{missingAffELM}</span>{' '}
@@ -159,7 +159,7 @@ export const Summary: React.FC<SummaryProps> = ({
             )}
           </p>
           <p>
-            Total missing GXP:{' '}
+            Total missing Girls XP:{' '}
             <span title="Epic, Legendary & Mythic">{missingGXPELM}</span> (
             <span title="All rarities">{missingGXPAll}</span>)
           </p>
