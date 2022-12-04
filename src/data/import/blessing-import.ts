@@ -170,7 +170,6 @@ function extractBlessingFromCondition(
           blessingValue: value
         };
       }
-      break;
     }
   }
   console.error('Failed to parse blessing condition: ', condition);
