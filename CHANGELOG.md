@@ -1,4 +1,8 @@
-## 0.10.0 (Next)
+## 0.10.1 - 2022-12-05
+
+- Fix Element blessing import in ES/IT languages
+
+## 0.10.0 - 2022-12-04
 
 - Update unknown poses for new girls
 - Blessings: Properly support element blessings in all languages
