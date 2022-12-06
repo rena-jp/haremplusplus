@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import { CommonGirlData, QuestData } from '../data/data';
 import { CloseButton, formatCost } from './common';
@@ -26,12 +26,29 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
     const quest = girl.quests[scene];
     return quest.ready;
   });
-  const [image, setImage] = useState(() => {
+
+  const [checkedImage, setCheckedImage] = useState('');
+  const setImage = useCallback(
+    (image: string, check?: boolean) => {
+      if (check !== false) {
+        checkImage(image).then((valid) => {
+          if (valid) {
+            setCheckedImage(image);
+          }
+        });
+      } else {
+        setCheckedImage(image);
+      }
+    },
+    [setCheckedImage]
+  );
+
+  useLayoutEffect(() => {
     const quest = girl.quests[scene];
     const questId = quest.idQuest;
     const sceneImage = `/img/quests/${questId}/1/1600x/${questId}.jpg`;
-    return sceneImage;
-  });
+    setImage(sceneImage);
+  }, []);
 
   useEffect(() => {
     let apply = true;
@@ -39,7 +56,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
       // Ignore changes if we requested a different scene in the meantime
       if (apply) {
         setSceneData(questData);
-        setImage(questData.sceneFull);
+        setImage(questData.sceneFull, false); // This is the actual image from the game data; no need to check it
         setSceneText(questData.dialogue);
         setCanUnlock(questData.cost !== undefined);
       }
@@ -94,7 +111,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
       <h2>{girl.name}</h2>
       <div className="qh-scene-content">
         <div className="qh-scene-area">
-          <img className="qh-scene" src={image} />
+          <img className="qh-scene" src={checkedImage} />
           {showText ? (
             <span className="qh-scene-dialogue overlay">{sceneText}</span>
           ) : null}
@@ -136,3 +153,17 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
     </div>
   );
 };
+
+/**
+ * To speed up rendering, we try to guess the scene image before
+ * fully loading the scene data. However, this approach doesn't work
+ * for older scenes, and we'll reference an image that doesn't exist.
+ * This function is use to check if an image is a valid scene before
+ * displaying it.
+ * @param imageSource the src of the image to check
+ */
+async function checkImage(imageSource: string): Promise<boolean> {
+  const data = await fetch(imageSource, { cache: 'force-cache' });
+  const blob = await data.blob();
+  return blob.type !== 'image/svg+xml'; // Game uses SVG to display an error-image
+}

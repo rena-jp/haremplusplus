@@ -1,3 +1,7 @@
+## 0.10.2 (Next)
+
+- Avoid rendering invalid images for older scenes
+
 ## 0.10.1 - 2022-12-05
 
 - Fix Element blessing import in ES/IT languages
