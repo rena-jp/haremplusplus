@@ -6,7 +6,7 @@ import '../style/game-ext-local.css';
 import { GameAPIImpl } from '../game-extension/GameAPIImpl';
 import { MockGameAPI } from '../mock/MockGameAPI';
 import { GameAPI } from '../api/GameAPI';
-import { TooltipConfiguration } from './common';
+import { CloseButton, TooltipConfiguration } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 
@@ -73,7 +73,7 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
                   consumeGems={consumeGems}
                 />
               ) : (
-                <Loading loading={loading} />
+                <Loading loading={loading} close={hide} />
               )}
             </>
           );
@@ -83,7 +83,10 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
   );
 };
 
-const Loading: React.FC<{ loading: boolean }> = ({ loading }) => {
+const Loading: React.FC<{ loading: boolean; close(): void }> = ({
+  loading,
+  close
+}) => {
   // If loading takes less than 150ms, do not display anything
   const [displayLoadingText, setDisplayLoadingText] = useState(false);
   useEffect(() => {
@@ -110,7 +113,13 @@ const Loading: React.FC<{ loading: boolean }> = ({ loading }) => {
           )}
         </>
       ) : (
-        <p>Loading is complete, but no girls were found :(</p>
+        <div className="harem-popup-error">
+          <CloseButton close={close} />
+          <p>Loading is complete, but no girls were found :(</p>
+          <p>
+            <a href="harem.html">Open original Harem</a>
+          </p>
+        </div>
       )}
     </div>
   );

@@ -47,3 +47,13 @@
   vertical-align: initial;
   box-sizing: initial;
 }
+
+.harem-popup-error {
+  position: relative;
+}
+
+.harem-popup-error > .close-popup {
+  position: absolute;
+  right: 1rem;
+  top: 0;
+}
