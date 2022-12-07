@@ -70,7 +70,11 @@ export function isUnknownObject(value: unknown): value is UnknownObject {
   return !!value && typeof value === 'object';
 }
 
-export type NumberString = string;
+/**
+ * A value that represents a number. In Json, may be serialized
+ * either as a string or a number, depending on KK's mood.
+ */
+export type NumberString = string | number;
 export type DateString = string;
 export type HtmlString = string;
 export type GirlsDataEntry = OwnedGirlEntry | MissingGirlEntry;
@@ -84,7 +88,7 @@ export type GameRarity =
   | 'mythic';
 
 export interface CommonGirlsDataEntry {
-  id_girl: NumberString | number;
+  id_girl: NumberString;
   nb_grades: NumberString;
   class: NumberString;
   /**
@@ -216,7 +220,7 @@ export interface RefEntry {
   hobbies: HobbiesEntry;
   anniv: string;
   zodiac: string;
-  variations: string[];
+  variations: NumberString[];
 }
 
 export interface HobbiesEntry {

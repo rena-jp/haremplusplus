@@ -1,6 +1,10 @@
+## 0.10.3 - 2022-12-07
+
+- Update Game Data types to match the new girls data API (Fix variations)
+
 ## 0.10.2 - 2022-12-07
 
-- Update Game Data types to match the new girls data API
+- Update Game Data types to match the new girls data API (Fix salaries)
 - Avoid rendering invalid images for older scenes
 
 ## 0.10.1 - 2022-12-05
