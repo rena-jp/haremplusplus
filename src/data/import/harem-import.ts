@@ -68,7 +68,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
     const girlData = girlsDataList[key];
     const rarity = getRarity(girlData.rarity);
     const baseCommonGirl: BaseGirlData = {
-      id: girlData.id_girl,
+      id: String(girlData.id_girl),
       name: girlData.name,
       icon: girlData.ico,
       icon0: get0Pose(girlData.ico),

@@ -84,7 +84,7 @@ export type GameRarity =
   | 'mythic';
 
 export interface CommonGirlsDataEntry {
-  id_girl: string;
+  id_girl: NumberString | number;
   nb_grades: NumberString;
   class: NumberString;
   /**
