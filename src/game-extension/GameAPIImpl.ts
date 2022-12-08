@@ -914,34 +914,34 @@ async function getOrCreateFrame(
   return queue(
     () =>
       new Promise<HTMLIFrameElement>((resolve, reject) => {
-        let haremFrame = document.getElementById(id) as HTMLIFrameElement;
-        if (haremFrame) {
-          if (refreshFrame && haremFrame.contentWindow) {
+        let frame = document.getElementById(id) as HTMLIFrameElement;
+        if (frame) {
+          if (refreshFrame && frame.contentWindow) {
             const initial = Date.now();
-            haremFrame.onload = () => {
+            frame.onload = () => {
               const final = Date.now();
               const delay = final - initial;
               console.info(`${id} frame reloaded in ${delay} ms`);
-              resolve(haremFrame);
+              resolve(frame);
             };
-            haremFrame.contentWindow.location.reload();
+            frame.contentWindow.location.reload();
           } else {
-            resolve(haremFrame);
+            resolve(frame);
           }
         } else {
           const wrapper = document.getElementById('quick-harem-wrapper');
           if (wrapper) {
-            haremFrame = document.createElement('iframe');
-            haremFrame.setAttribute('id', id);
-            haremFrame.setAttribute('src', url);
-            haremFrame.setAttribute('style', 'visibility: hidden;');
-            wrapper.appendChild(haremFrame);
+            frame = document.createElement('iframe');
+            frame.setAttribute('id', id);
+            frame.setAttribute('src', url);
+            frame.setAttribute('style', 'display: none;');
+            wrapper.appendChild(frame);
             const initialLoad = Date.now();
-            haremFrame.onload = () => {
+            frame.onload = () => {
               const finalLoad = Date.now();
               const loadDelay = finalLoad - initialLoad;
               console.info(`${id} frame loaded in ${loadDelay}ms`);
-              resolve(haremFrame);
+              resolve(frame);
             };
           } else {
             reject('#quick-harem-wrapper not found; abort');

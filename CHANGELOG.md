@@ -1,3 +1,8 @@
+## 0.10.4 (NEXT)
+
+- Avoid rendering hidden frames (improve performances)
+- Update texts in Summary and girl description
+
 ## 0.10.3 - 2022-12-07
 
 - Update Game Data types to match the new girls data API (Fix variations)
