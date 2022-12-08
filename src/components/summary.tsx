@@ -13,11 +13,12 @@ import {
   getMatchingGirls,
   HairColor,
   Pose,
+  Poses,
   Rarity
 } from '../data/data';
 import { getMissingGXP } from '../hooks/girl-xp-hooks';
 import '../style/harem.css';
-import { ElementIcon, format, GemIcon } from './common';
+import { ElementIcon, format, GemIcon, PoseIcon, Tooltip } from './common';
 import { QuickFilter } from './harem';
 import { PanelProps } from './panels';
 
@@ -194,7 +195,7 @@ export const BlessingSummaries: React.FC<BlessingSummariesProps> = ({
   return (
     <div className="blessings-summary">
       {[...blessings.entries()].map(([type, list]) => (
-        <div key={`cat_${Blessing[type]}`}>
+        <div key={`cat_${Blessing[type]}`} className={`cat_${Blessing[type]}`}>
           {list.map((blessing) => (
             <BlessingSummary
               key={getBlessingKey(blessing)}
@@ -348,6 +349,20 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
       <span className="element-blessing">
         <ElementIcon element={blessing.blessingValue as Element} />
       </span>
+    ) : blessing.blessing === Blessing.Pose ? (
+      <span className="pose-blessing">
+        <Tooltip
+          tooltip={
+            <span>{Poses.toDisplayString(blessing.blessingValue as Pose)}</span>
+          }
+        >
+          {blessing.blessingValue === Pose.unknown ? (
+            <span className="unknown-pose">?</span>
+          ) : (
+            <PoseIcon pose={blessing.blessingValue as Pose} />
+          )}
+        </Tooltip>
+      </span>
     ) : (
       <span className="color">
         {Blessings.toString(blessing.blessing)}{' '}
@@ -357,6 +372,7 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
       </span>
     );
   const styles: string[] = [];
+  styles.push('blessing-summary-entry');
 
   const rarity = blessing.blessing === Blessing.Rarity;
   const unknownPose =

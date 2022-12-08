@@ -73,6 +73,7 @@ requiring actual content. */
 }
 
 .pose-icon {
+  display: inline-block;
   background-size: cover;
   width: 3.5em;
   height: 3.5em;

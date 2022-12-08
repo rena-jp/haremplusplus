@@ -21,6 +21,10 @@ export namespace Rarities {
   export function fromString(rarity: keyof typeof Rarity): Rarity {
     return Rarity[rarity];
   }
+
+  export function toDisplayString(rarity: Rarity): string {
+    return firstToUpper(toString(rarity));
+  }
 }
 
 export type EventSource =
@@ -213,6 +217,27 @@ export namespace Poses {
   export function toString(pose: Pose): string {
     return Pose[pose];
   }
+
+  export function toDisplayString(pose: Pose): string {
+    switch (pose) {
+      case Pose.doggie:
+        return 'Doggie style';
+      case Pose.indian:
+        return 'Indian Headstand';
+      case Pose.sixnine:
+        return '69';
+      case Pose.splitting:
+        return 'Splitting Bamboo';
+      case Pose.suspended:
+        return 'Suspended Congress';
+      case Pose.nosedive:
+        return 'Nose Dive';
+      case Pose.jackhammer:
+        return 'Jack Hammer';
+      default:
+        return firstToUpper(toString(pose));
+    }
+  }
 }
 
 export enum Element {
@@ -278,10 +303,21 @@ export namespace Blessings {
     blessing: Blessing,
     blessingValue: HairColor | Rarity | EyeColor | Zodiac | Pose | Element
   ): string {
-    if (blessing === Blessing.Zodiac) {
-      return Zodiacs.toDisplayString(blessingValue as Zodiac);
+    switch (blessing) {
+      case Blessing.Zodiac:
+        return Zodiacs.toDisplayString(blessingValue as Zodiac);
+      case Blessing.EyeColor:
+        return EyeColors.toDisplayString(blessingValue as EyeColor);
+      case Blessing.HairColor:
+        return HairColors.toDisplayString(blessingValue as HairColor);
+      case Blessing.Pose:
+        return Poses.toDisplayString(blessingValue as Pose);
+      case Blessing.Rarity:
+        return Rarities.toDisplayString(blessingValue as Rarity);
+      case Blessing.Element:
+      default:
+        return stringValue(blessing, blessingValue);
     }
-    return stringValue(blessing, blessingValue);
   }
 
   export function getBlessingValue(
@@ -369,6 +405,40 @@ export namespace Zodiacs {
   export function toDisplayString(zodiac: Zodiac): string {
     const name = Zodiac[zodiac];
     return Symbols[zodiac] + ' ' + firstToUpper(name);
+  }
+}
+
+export namespace EyeColors {
+  export function toDisplayString(eyeColor: EyeColor): string {
+    switch (eyeColor) {
+      case EyeColor.darkPink:
+        return 'Dark Pink';
+      default:
+        return firstToUpper(toString(eyeColor));
+    }
+  }
+
+  export function toString(eyeColor: EyeColor): string {
+    return EyeColor[eyeColor];
+  }
+}
+
+export namespace HairColors {
+  export function toDisplayString(hairColor: HairColor): string {
+    switch (hairColor) {
+      case HairColor.darkBlond:
+        return 'Dark Blond';
+      case HairColor.darkPink:
+        return 'Dark Pink';
+      case HairColor.strawberryBlond:
+        return 'Strawberry Blond';
+      default:
+        return firstToUpper(toString(hairColor));
+    }
+  }
+
+  export function toString(hairColor: HairColor): string {
+    return HairColor[hairColor];
   }
 }
 

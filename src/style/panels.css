@@ -181,3 +181,35 @@
   column-gap: 0.8em;
   align-items: center;
 }
+
+.blessing-summary-entry.Pose {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5em;
+  align-items: center;
+}
+
+.blessing-summary-entry.Pose span {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.blessing-summary-entry.Pose .unknown-pose {
+  width: 1.8em;
+  height: 1.8em;
+  text-align: center;
+  display: inline-block;
+  vertical-align: center;
+  line-height: 1.8em;
+}
+
+.blessing-summary-entry.Pose .pose-icon {
+  width: 2.5em;
+  height: 2.5em;
+  /* 
+  Pose images have a large margin ; reduce it to avoid
+  large gaps between summary entries 
+  */
+  margin: -0.35em;
+}

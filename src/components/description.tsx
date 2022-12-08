@@ -267,9 +267,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 openUpgrade('books');
               }}
             >
-              Go to Girl's page
-            </a>{' '}
-            (Books)
+              Give books
+            </a>
           </p>
           {/* 
                   https://www.hentaiheroes.com/girl/${girl.id}?resource=affection
@@ -285,9 +284,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 openUpgrade('gifts');
               }}
             >
-              Go to Girl's page
-            </a>{' '}
-            (Gifts)
+              Give gifts
+            </a>
           </p>
         </>
       ) : null}
