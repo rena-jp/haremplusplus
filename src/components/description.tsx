@@ -5,9 +5,11 @@ import {
   BlessingDefinition,
   CommonGirlData,
   EyeColor,
+  EyeColors,
   getBlessedStats,
   getSourceLabel,
   HairColor,
+  HairColors,
   matchesBlessings,
   Pose,
   Quest,
@@ -208,10 +210,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       <p className="color">
         Hair Color:{' '}
         {girl.hairColor
-          .map((c) => HairColor[c])
           .map<ReactNode>((color) => (
-            <span key={color} className={color}>
-              {color}
+            <span key={color} className={HairColor[color]}>
+              {HairColors.toDisplayString(color)}
             </span>
           ))
           .reduce((a, b) => [a, ' & ', b])}
@@ -219,10 +220,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       <p className="color">
         Eye Color:{' '}
         {girl.eyeColor
-          .map((c) => EyeColor[c])
           .map<ReactNode>((color) => (
-            <span key={color} className={color}>
-              {color}
+            <span key={color} className={EyeColor[color]}>
+              {EyeColors.toDisplayString(color)}
             </span>
           ))
           .reduce((a, b) => [a, ' & ', b])}
