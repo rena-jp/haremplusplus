@@ -252,8 +252,10 @@ export const ItemTile: React.FC<ItemTileProps> = ({
       place="top"
     >
       <div className={classNames.join(' ')} onClick={() => select(itemEntry)}>
-        <img src={item.icon} alt={item.label} className="tileImg" />
-        <span className="item-count">{itemEntry.count}</span>
+        <div className="tile-image-area">
+          <img src={item.icon} alt={item.label} className="tileImg" />
+          <span className="item-count">{itemEntry.count}</span>
+        </div>
       </div>
     </Tooltip>
   );

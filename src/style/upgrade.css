@@ -42,15 +42,14 @@
   justify-content: center;
 }
 
-.itemTile {
+.itemTile > .tile-image-area {
   position: relative;
 }
 
-.itemTile > .item-count {
-  /** TODO: Insert an intermediate div to account for padding. Makes it easier to align with image */
+.itemTile > .tile-image-area > .item-count {
   position: absolute;
-  bottom: 8px;
-  left: 10px;
+  bottom: 0px;
+  left: 0px;
   min-width: 1em;
   background-color: #3c1f24;
   padding: 0 0.2em;

@@ -1,5 +1,6 @@
 ## 0.10.4 (NEXT)
 
+- Minor style improvements
 - Avoid rendering hidden frames (improve performances)
 - Update texts in Summary and girl description
 

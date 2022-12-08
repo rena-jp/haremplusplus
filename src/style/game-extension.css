@@ -44,7 +44,7 @@
 
 .game-extension * {
   /** Override the general style rule from the game, that uses a global bottom v-align */
-  vertical-align: initial;
+  vertical-align: auto;
   box-sizing: initial;
 }
 
