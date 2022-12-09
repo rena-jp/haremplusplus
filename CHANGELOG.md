@@ -1,4 +1,4 @@
-## 0.10.4 (NEXT)
+## 0.10.4 - 2022-12-09
 
 - Minor style improvements
 - Avoid rendering hidden frames (improve performances)
