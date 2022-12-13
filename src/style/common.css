@@ -215,7 +215,7 @@ requiring actual content. */
   border-radius: 10px;
 }
 
-.progress-bar {
+.qh-progress-bar {
   background-color: black;
   border: 1px solid white;
   position: relative;
@@ -256,47 +256,47 @@ requiring actual content. */
   border-radius: calc(var(--track-radius) + 1px);
 }
 
-.progress-bar.full {
+.qh-progress-bar.full {
   --main-track-color: var(--main-track-color-full);
 }
 
-.progress-bar.extra-full {
+.qh-progress-bar.extra-full {
   --main-track-color: var(--main-track-color-extra-full);
   --raw-track-color: var(--raw-track-color-extra-full);
 
   --extra-track-color: var(--extra-track-color-extra-full);
 }
 
-.progress-bar > .main-track {
+.qh-progress-bar > .main-track {
   position: absolute;
   height: 100%;
   background: var(--main-track-color);
   border-radius: var(--track-radius) 0 0 var(--track-radius);
 }
 
-.progress-bar.full > .main-track,
-.progress-bar.full > .raw-track {
+.qh-progress-bar.full > .main-track,
+.qh-progress-bar.full > .raw-track {
   border-radius: var(--track-radius);
 }
 
-.progress-bar > .raw-track {
+.qh-progress-bar > .raw-track {
   flex-shrink: 0; /* Never shrink, even if the extra track temporarily overflows due to animation */
   background: var(--raw-track-color);
   border-radius: var(--track-radius) 0 0 var(--track-radius);
   /* Very quick animation */
   transition: width var(--raw-track-speed) linear;
 }
-.progress-bar > .main-track,
-.progress-bar > .extra-track {
+.qh-progress-bar > .main-track,
+.qh-progress-bar > .extra-track {
   transition: width var(--track-speed) ease-in;
 }
 
-.progress-bar > .extra-track {
+.qh-progress-bar > .extra-track {
   background: var(--extra-track-color);
   border-radius: 0 var(--track-radius) var(--track-radius) 0;
 }
 
-.progress-bar > .track-label {
+.qh-progress-bar > .track-label {
   position: absolute;
   left: 50%;
   top: 50%;

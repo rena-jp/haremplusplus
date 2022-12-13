@@ -126,8 +126,8 @@
   min-height: 4rem;
   border-block: 1px solid white;
 }
-.xp-status .progress-bar,
-.aff-status .progress-bar {
+.xp-status .qh-progress-bar,
+.aff-status .qh-progress-bar {
   font-size: 0.9em;
 }
 

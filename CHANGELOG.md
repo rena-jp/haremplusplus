@@ -1,5 +1,6 @@
 ## 0.10.5 (NEXT)
 
+- Fix a CSS conflict with in-game progress bars
 - Update unknown poses
 
 ## 0.10.4 - 2022-12-09

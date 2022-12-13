@@ -451,7 +451,7 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   const extraValue = curr + (extra ?? 0);
   const extraRatio = Math.min(1, Math.max(0, (extraValue - min) / (max - min)));
 
-  const classNames = ['progress-bar'];
+  const classNames = ['qh-progress-bar'];
   if (ratio === 1) {
     classNames.push('full');
   } else if (extraRatio === 1) {
