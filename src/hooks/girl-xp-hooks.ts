@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
-import { CommonGirlData, Rarity } from '../data/data';
+import {
+  Book,
+  CommonGirlData,
+  Rarity,
+  SPECIAL_MYTHIC_BOOK_ID
+} from '../data/data';
 import { GameRarity } from '../data/game-data';
 import fullXpTable from './data/xp-table-full.json';
 import awakeningData from './data/awakening.json';
@@ -8,31 +13,129 @@ const MAX_LEVEL = 750;
 const MIN_LEVEL_CAP = 250;
 
 export interface XpStatsResult {
+  // Girl stats
+  /**
+   * Current girl XP
+   */
   currentXp: number;
+  /**
+   * Min XP from current level to next level
+   */
   minXp: number;
+  /**
+   * Max XP from current level to next level
+   */
   maxXp: number;
+  /**
+   * Min XP from current level cap to next level cap
+   */
   minXpToCap: number;
+  /**
+   * Max XP from current level cap to next level cap
+   */
   maxXpToCap: number;
+  /**
+   * Remaining XP to reach the maximum level
+   */
   xpToMax: number;
+  // Book stats
+  /**
+   * Whether the current book can be used (false if book is undefined)
+   */
+  canUse: boolean;
+  /**
+   * Xp gain, when using the current book (0 if book is undefined)
+   */
+  xpGain: number;
+  /**
+   * Level reached when using the current book (current level if book is undefined)
+   */
+  level: number;
+  /**
+   * Level cap reached when using the current book (current level if book is undefined)
+   */
+  maxLevel: number;
 }
 
-export function useXpStats(girl: CommonGirlData): XpStatsResult {
+export function useXpStats(
+  girl: CommonGirlData,
+  book: Book | undefined
+): XpStatsResult {
+  const currentXp = girl.currentGXP;
+  return useMemo(() => {
+    return getXpStats(girl, book);
+  }, [currentXp, girl.rarity, girl.level, girl.maxLevel, book]);
+}
+
+export function getXpStats(
+  girl: CommonGirlData,
+  book: Book | undefined
+): XpStatsResult {
   const currentXp = girl.currentGXP;
 
-  return useMemo(() => {
-    const xpRange = getXpRange(girl.level ?? 0, girl);
+  const xpRange = getXpRange(girl.level ?? 0, girl);
 
-    const nextCap = girl.maxLevel ?? MIN_LEVEL_CAP;
-    const previousCap = nextCap === MIN_LEVEL_CAP ? 0 : nextCap - 50;
+  const nextCap = girl.maxLevel ?? MIN_LEVEL_CAP;
+  const previousCap = nextCap === MIN_LEVEL_CAP ? 0 : nextCap - 50;
+
+  const xpToMax = getMissingGXP(girl);
+
+  if (book !== undefined && book.itemId === SPECIAL_MYTHIC_BOOK_ID) {
+    const canUse = girl.level !== undefined && girl.level < 350;
+
+    if (canUse) {
+      const xpTo350 = getGXPToCap(girl, 350);
+      return {
+        currentXp,
+        minXp: xpRange.min,
+        maxXp: xpRange.max,
+        minXpToCap: getGXPToCap(girl, previousCap),
+        maxXpToCap: getGXPToCap(girl, 350),
+        xpToMax,
+        canUse,
+        xpGain: xpTo350 - girl.currentGXP,
+        level: 350,
+        maxLevel: 350
+      };
+    } else {
+      return {
+        currentXp,
+        minXp: xpRange.min,
+        maxXp: xpRange.max,
+        minXpToCap: getGXPToCap(girl, previousCap),
+        maxXpToCap: getGXPToCap(girl, nextCap),
+        xpToMax,
+        canUse,
+        level: girl.level ?? 0,
+        maxLevel: girl.maxLevel ?? 250,
+        xpGain: 0
+      };
+    }
+  } else {
+    let overflow = false;
+    if (book !== undefined) {
+      overflow =
+        book.rarity === Rarity.mythic &&
+        book.type === 'book' &&
+        book.xp > xpToMax;
+    }
+
+    const canXP = girl.own && girl.level! < girl.maxLevel!;
+    const canUse = book !== undefined && canXP && !overflow;
+
     return {
       currentXp,
       minXp: xpRange.min,
       maxXp: xpRange.max,
       minXpToCap: getGXPToCap(girl, previousCap),
       maxXpToCap: getGXPToCap(girl, nextCap),
-      xpToMax: getMissingGXP(girl)
+      xpToMax,
+      canUse,
+      level: book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp),
+      maxLevel: girl.maxLevel ?? 250,
+      xpGain: book?.xp ?? 0
     };
-  }, [currentXp, girl.rarity, girl.level, girl.maxLevel]);
+  }
 }
 
 function getXpRange(

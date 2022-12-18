@@ -1,24 +1,63 @@
 import { useMemo } from 'react';
-import { CommonGirlData, Rarity } from '../data/data';
+import {
+  CommonGirlData,
+  Gift,
+  Rarity,
+  SPECIAL_MYTHIC_GIFT_ID
+} from '../data/data';
 
 export interface AffStatsResult {
   minAff: number;
   maxAff: number;
   affToMax: number;
   currentAff: number;
+  canUse: boolean;
 }
 
-export function useAffectionStats(girl: CommonGirlData): AffStatsResult {
+export function useAffectionStats(
+  girl: CommonGirlData,
+  gift: Gift | undefined
+): AffStatsResult {
   const result = useMemo(() => {
-    const affRange = getAffRange(girl);
+    return getAffectionStats(girl, gift);
+  }, [girl.currentAffection, girl.stars]);
+  return result;
+}
+
+export function getAffectionStats(
+  girl: CommonGirlData,
+  gift: Gift | undefined
+): AffStatsResult {
+  const affRange = getAffRange(girl);
+
+  if (gift !== undefined && gift.itemId === SPECIAL_MYTHIC_GIFT_ID) {
+    // TODO Implement mythic gift
     return {
       minAff: affRange.min,
       maxAff: affRange.max,
       affToMax: girl.currentAffection + girl.missingAff,
-      currentAff: girl.currentAffection
+      currentAff: girl.currentAffection,
+      canUse: false
     };
-  }, [girl.currentAffection, girl.stars]);
-  return result;
+  } else {
+    let overflow = false;
+    if (gift !== undefined) {
+      overflow =
+        gift.rarity === Rarity.mythic &&
+        gift.type === 'gift' &&
+        gift.aff > girl.missingAff;
+    }
+    const canUpgrade = girl.missingAff > 0 && !girl.upgradeReady;
+    const canUse = canUpgrade && !overflow;
+
+    return {
+      minAff: affRange.min,
+      maxAff: affRange.max,
+      affToMax: girl.currentAffection + girl.missingAff,
+      currentAff: girl.currentAffection,
+      canUse
+    };
+  }
 }
 
 export function getAffRange(girl: CommonGirlData): {

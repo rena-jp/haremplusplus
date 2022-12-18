@@ -185,7 +185,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   upcomingBlessing,
   openUpgrade
 }) => {
-  const xpStats = useXpStats(girl);
+  const xpStats = useXpStats(girl, undefined);
 
   return (
     <div className="details-section stats">

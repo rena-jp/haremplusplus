@@ -21,14 +21,14 @@ import { getLevel } from '../hooks/girl-xp-hooks';
 import { isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToCap } from '../hooks/girl-gems-hooks';
 // import girls from './girlsDataList-test.json';
-// import girls from './girlsdatalist-full.json';
-// import blessings from './blessings-full.json';
-// import quests from './quests-full.json';
-// import inventory from './inventory.json';
-const girls = {};
-const blessings = { active: [], upcoming: [] };
-const quests = {};
-const inventory = { gift: [], potion: [] };
+import girls from './girlsdatalist-full.json';
+import blessings from './blessings-full.json';
+import quests from './quests-full.json';
+import inventory from './inventory.json';
+// const girls = {};
+// const blessings = { active: [], upcoming: [] };
+// const quests = {};
+// const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -197,7 +197,8 @@ export class MockGameAPI implements GameAPI {
       return;
     }
 
-    const success = Math.random() > 0.05;
+    // const success = Math.random() > 0.05;
+    const success = true;
     this.mockRequest(
       () => {
         const bookValid = girl.level! < girl.maxLevel!;
@@ -211,7 +212,7 @@ export class MockGameAPI implements GameAPI {
         return undefined;
       },
       success,
-      150
+      75
     );
 
     return;

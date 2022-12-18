@@ -125,6 +125,10 @@ export interface Quest {
  * GirlData, imported from the game (harem)
  */
 export interface CommonGirlData extends BaseGirlData {
+  /**
+   * The current (base) stats for the girl. Includes bonus
+   * from level and stars, but ignores blessings.
+   */
   stats?: Stats;
 }
 
@@ -655,6 +659,22 @@ export interface Book extends Item {
 export interface Gift extends Item {
   type: 'gift';
   aff: number;
+}
+
+export function isBook(item: Item | undefined): item is Book {
+  return item !== undefined && item.type === 'book';
+}
+
+export function isGift(item: Item | undefined): item is Gift {
+  return item !== undefined && item.type === 'gift';
+}
+
+export function asBook(item: Item | undefined): Book | undefined {
+  return isBook(item) ? item : undefined;
+}
+
+export function asGift(item: Item | undefined): Gift | undefined {
+  return isGift(item) ? item : undefined;
 }
 
 export function getSourceLabel(source: EventSource): string {

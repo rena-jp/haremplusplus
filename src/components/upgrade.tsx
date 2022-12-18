@@ -1,15 +1,17 @@
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
+  asBook,
+  asGift,
   Book,
   CommonGirlData,
   Element,
   Gift,
+  isBook,
+  isGift,
   Item,
   ItemEntry,
-  Rarity,
-  SPECIAL_MYTHIC_BOOK_ID,
-  SPECIAL_MYTHIC_GIFT_ID
+  Rarity
 } from '../data/data';
 import { useAffectionStats } from '../hooks/girl-aff-hooks';
 import {
@@ -82,6 +84,9 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     }
   }
 
+  const xpStats = useXpStats(currentGirl, asBook(selectedItem?.item));
+  const affStats = useAffectionStats(currentGirl, asGift(selectedItem?.item));
+
   const selectItem = useCallback(
     (item: ItemEntry<Item> | undefined) => {
       setSelectedItem(item);
@@ -96,10 +101,10 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
     const selectionIndex = items.indexOf(selectedItem);
     const selectionCount = selectedItem.count;
     const newItems = consumeItem(selectedItem);
-    if (page === 'books' && selectedItem.item.type === 'book') {
-      gameAPI.useBook(currentGirl, selectedItem.item as Book);
-    } else if (page === 'gifts' && selectedItem.item.type === 'gift') {
-      gameAPI.useGift(currentGirl, selectedItem.item as Gift);
+    if (page === 'books' && isBook(selectedItem.item)) {
+      gameAPI.useBook(currentGirl, selectedItem.item);
+    } else if (page === 'gifts' && isGift(selectedItem.item)) {
+      gameAPI.useGift(currentGirl, selectedItem.item);
     }
     if (selectionCount - 1 <= 0) {
       const nextItem =
@@ -116,22 +121,9 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
 
   const domain = getDomain();
 
-  const canXP = currentGirl.own && currentGirl.level! < currentGirl.maxLevel!;
-  const canUpgrade = currentGirl.missingAff > 0 && !currentGirl.upgradeReady;
-  const isMaxed =
-    (page === 'books' && !canXP) || (page === 'gifts' && !canUpgrade);
-
-  const validItemType =
-    selectedItem !== undefined &&
-    ((selectedItem.item.type === 'book' && page === 'books') ||
-      (selectedItem.item.type === 'gift' && page === 'gifts'));
-
-  // TODO Support special mythic book (lvl 350) and gift (2*)
-  const supportedItem =
-    selectedItem?.item.itemId !== SPECIAL_MYTHIC_BOOK_ID &&
-    selectedItem?.item.itemId !== SPECIAL_MYTHIC_GIFT_ID;
-
-  const canUseItem = validItemType && !isMaxed && supportedItem;
+  const canUseItem =
+    (page === 'books' && xpStats.canUse) ||
+    (page === 'gifts' && affStats.canUse);
 
   return (
     <div className="harem-upgrade">
@@ -416,13 +408,12 @@ export const XPStatus: React.FC<XpStatusProps> = ({
   gemsCount,
   consumeGems
 }) => {
-  const levelReach =
-    book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp);
   const nextLevel = girl.level === 750 ? 750 : (girl.level ?? 1) + 1;
-  const nextCap = girl.maxLevel!;
 
-  const xpStats = useXpStats(girl);
+  const xpStats = useXpStats(girl, book);
   const gemsStats = useGemsStats(girl);
+  const levelReach = xpStats.level;
+  const nextCap = xpStats.maxLevel;
 
   const displayTargetLevel =
     girl.level === nextCap ? nextCap : Math.max(nextLevel, levelReach);
@@ -458,7 +449,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
             curr={xpStats.currentXp}
             min={xpStats.minXp}
             max={xpStats.maxXp}
-            extra={book?.xp ?? 0}
+            extra={xpStats.xpGain}
             label={
               girl.level === girl.maxLevel
                 ? 'Max.'
@@ -479,7 +470,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
             curr={xpStats.currentXp}
             min={xpStats.minXpToCap}
             max={xpStats.maxXpToCap}
-            extra={book?.xp ?? 0}
+            extra={xpStats.xpGain}
             label={
               girl.level === nextCap
                 ? 'Max.'
@@ -496,7 +487,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
             curr={xpStats.currentXp}
             min={0}
             max={xpStats.currentXp + xpStats.xpToMax}
-            extra={book?.xp ?? 0}
+            extra={xpStats.xpGain}
             label={format(xpStats.xpToMax) + ' XP'}
           />
         </span>
@@ -524,7 +515,7 @@ export const AffStatus: React.FC<AffStatusProps> = ({
 }) => {
   const nextGrade = girl.stars + 1;
 
-  const affStats = useAffectionStats(girl);
+  const affStats = useAffectionStats(girl, gift);
 
   const { minAff, maxAff, affToMax, currentAff } = affStats;
 

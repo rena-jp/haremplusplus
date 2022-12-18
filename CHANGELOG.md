@@ -1,3 +1,8 @@
+## 0.10.6 (NEXT)
+
+- Support Mythic Grimoire and Mythic Lingerie
+- Prevent using Mythic Gifts/Books if they overflow
+
 ## 0.10.5 - 2022-12-13
 
 - Fix a CSS conflict with in-game progress bars
