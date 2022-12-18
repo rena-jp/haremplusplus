@@ -9,7 +9,7 @@ export interface GemsStats {
 
 export function useGemsStats(girl: CommonGirlData): GemsStats {
   return useMemo(() => {
-    const gemsToNextCap = getGemsToCap(girl, girl.maxLevel!);
+    const gemsToNextCap = getGemsToAwaken(girl, girl.maxLevel!);
     return {
       gemsToMax: girl.missingGems,
       gemsToNextCap
@@ -17,7 +17,10 @@ export function useGemsStats(girl: CommonGirlData): GemsStats {
   }, [girl.level, girl.maxLevel]);
 }
 
-export function getGemsToCap(girl: CommonGirlData, maxLevel: number): number {
+export function getGemsToAwaken(
+  girl: CommonGirlData,
+  maxLevel: number
+): number {
   if (maxLevel < 750) {
     const multiplier = getRarityMultiplier(girl.rarity);
     const nextCap = maxLevel + 50;
@@ -27,6 +30,15 @@ export function getGemsToCap(girl: CommonGirlData, maxLevel: number): number {
     return (gemsToNext - gemsToPrevious) * multiplier;
   }
   return 0;
+}
+
+export function getGemsToCap(girl: CommonGirlData, cap: number): number {
+  const currentCap = girl.maxLevel ?? 250;
+  const multiplier = getRarityMultiplier(girl.rarity);
+  const gemsToPrevious =
+    gemsTable[String(currentCap) as keyof typeof gemsTable];
+  const gemsToNext = gemsTable[String(cap) as keyof typeof gemsTable];
+  return (gemsToNext - gemsToPrevious) * multiplier;
 }
 
 function getRarityMultiplier(rarity: Rarity): number {

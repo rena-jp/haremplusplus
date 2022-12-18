@@ -1,13 +1,4 @@
-import {
-  Book,
-  CommonGirlData,
-  getPoseN,
-  Gift,
-  QuestData,
-  Rarity,
-  SPECIAL_MYTHIC_BOOK_ID,
-  SPECIAL_MYTHIC_GIFT_ID
-} from '../data/data';
+import { Book, CommonGirlData, getPoseN, Gift, QuestData } from '../data/data';
 import {
   ChangePoseResult,
   GameBlessingData,
@@ -39,9 +30,13 @@ import {
   RequestListener,
   SalaryDataListener
 } from '../api/GameAPI';
-import { getGXPToCap, getLevel, getMissingGXP } from '../hooks/girl-xp-hooks';
-import { getAffRange, isUpgradeReady } from '../hooks/girl-aff-hooks';
-import { getGemsToCap } from '../hooks/girl-gems-hooks';
+import { getGXPToCap, getLevel, getXpStats } from '../hooks/girl-xp-hooks';
+import {
+  getAffectionStats,
+  getAffRange,
+  isUpgradeReady
+} from '../hooks/girl-aff-hooks';
+import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -381,17 +376,10 @@ export class GameAPIImpl implements GameAPI {
     if (!girl.own) {
       return;
     }
-    // TODO Special case: Mythic book Lv. 350
-    if (book.itemId === SPECIAL_MYTHIC_BOOK_ID) {
-      console.warn('Special Mythic Book is not supported yet.');
-      return;
-    }
 
-    const missingGXP = getMissingGXP(girl);
+    const xpStats = getXpStats(girl, book);
 
-    const bookValid =
-      girl.level! < girl.maxLevel! &&
-      (missingGXP >= book.xp || book.rarity < Rarity.mythic); // Mythic books can't overflow
+    const bookValid = xpStats.canUse;
 
     if (bookValid) {
       const params = {
@@ -399,7 +387,7 @@ export class GameAPIImpl implements GameAPI {
         id_item: book.itemId,
         action: 'girl_give_xp'
       };
-      this.updateGirlXpStats(girl, book.xp);
+      this.updateGirlWithBook(girl, book);
       const expectedResult = { ...girl };
       if (this.updateGirl !== undefined) {
         this.updateGirl(girl);
@@ -441,12 +429,12 @@ export class GameAPIImpl implements GameAPI {
     }
 
     const maxLevel = girl.maxLevel ?? 250;
-    const gemsUsed = getGemsToCap(girl, maxLevel);
+    const gemsUsed = getGemsToAwaken(girl, maxLevel);
 
     // Update girl level/maxLevel
     girl.missingGems -= gemsUsed;
     girl.maxLevel = maxLevel + 50;
-    girl.level = getLevel(girl, 0);
+    girl.level = Math.min(getLevel(girl, 0), girl.maxLevel);
     if (this.updateGirl) {
       this.updateGirl(girl);
     }
@@ -502,7 +490,21 @@ export class GameAPIImpl implements GameAPI {
     return this.getHero().infos.soft_currency;
   }
 
-  private updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
+  private updateGirlWithBook(girl: CommonGirlData, book: Book) {
+    const xpStats = getXpStats(girl, book);
+    this.updateGirlXpStats(girl, xpStats.xpGain, xpStats.maxLevel);
+  }
+
+  private updateGirlXpStats(
+    girl: CommonGirlData,
+    addXp: number,
+    maxLevel?: number
+  ): void {
+    if (maxLevel !== undefined) {
+      const gemsUsed = getGemsToCap(girl, maxLevel);
+      girl.maxLevel = maxLevel;
+      girl.missingGems -= gemsUsed;
+    }
     girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
     girl.currentGXP += addXp;
   }
@@ -512,24 +514,15 @@ export class GameAPIImpl implements GameAPI {
       return;
     }
 
-    // TODO Special case: Mythic gift 2*
-    if (gift.itemId === SPECIAL_MYTHIC_GIFT_ID) {
-      console.warn('Special Mythic Gift not supported yet');
-      return;
-    }
+    const affStats = getAffectionStats(girl, gift);
 
-    const missingAff = girl.missingAff;
-    const giftValid =
-      girl.stars < girl.maxStars &&
-      !girl.upgradeReady &&
-      (gift.rarity < Rarity.mythic || gift.aff <= missingAff);
-    if (giftValid) {
+    if (affStats.canUse) {
       const params = {
         action: 'girl_give_affection',
         id_girl: girl.id,
         id_item: gift.itemId
       };
-      this.updateGirlAffStats(girl, gift.aff);
+      this.updateGirlWithGift(girl, gift);
       const expectedResult = { ...girl };
       if (this.updateGirl !== undefined) {
         this.updateGirl(girl);
@@ -615,6 +608,11 @@ export class GameAPIImpl implements GameAPI {
     throw new Error(
       'Failed to max out the girl. Result: ' + JSON.stringify(result)
     );
+  }
+
+  private updateGirlWithGift(girl: CommonGirlData, gift: Gift): void {
+    const affStats = getAffectionStats(girl, gift);
+    this.updateGirlAffStats(girl, affStats.affGain);
   }
 
   private updateGirlAffStats(girl: CommonGirlData, addAff: number): void {

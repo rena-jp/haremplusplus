@@ -14,11 +14,7 @@ import {
   Rarity
 } from '../data/data';
 import { useAffectionStats } from '../hooks/girl-aff-hooks';
-import {
-  getAwakeningThreshold,
-  getLevel,
-  useXpStats
-} from '../hooks/girl-xp-hooks';
+import { getAwakeningThreshold, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
 import {
@@ -513,9 +509,8 @@ export const AffStatus: React.FC<AffStatusProps> = ({
   gift,
   gameAPI
 }) => {
-  const nextGrade = girl.stars + 1;
-
   const affStats = useAffectionStats(girl, gift);
+  const nextGrade = affStats.targetGrade;
 
   const { minAff, maxAff, affToMax, currentAff } = affStats;
 
@@ -553,7 +548,7 @@ export const AffStatus: React.FC<AffStatusProps> = ({
             curr={currentAff}
             min={minAff}
             max={maxAff}
-            extra={gift?.aff ?? 0}
+            extra={affStats.affGain}
             label={
               girl.stars === girl.maxStars
                 ? 'Max.'
@@ -575,7 +570,7 @@ export const AffStatus: React.FC<AffStatusProps> = ({
           curr={currentAff}
           min={0}
           max={affToMax}
-          extra={gift?.aff ?? 0}
+          extra={affStats.affGain}
           label={
             girl.stars === girl.maxStars
               ? 'Max.'

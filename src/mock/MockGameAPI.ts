@@ -17,18 +17,18 @@ import {
   RequestListener,
   SalaryDataListener
 } from '../api/GameAPI';
-import { getLevel } from '../hooks/girl-xp-hooks';
-import { isUpgradeReady } from '../hooks/girl-aff-hooks';
-import { getGemsToCap } from '../hooks/girl-gems-hooks';
+import { getLevel, getXpStats } from '../hooks/girl-xp-hooks';
+import { getAffectionStats, isUpgradeReady } from '../hooks/girl-aff-hooks';
+import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
 // import girls from './girlsDataList-test.json';
-import girls from './girlsdatalist-full.json';
-import blessings from './blessings-full.json';
-import quests from './quests-full.json';
-import inventory from './inventory.json';
-// const girls = {};
-// const blessings = { active: [], upcoming: [] };
-// const quests = {};
-// const inventory = { gift: [], potion: [] };
+// import girls from './girlsdatalist-full.json';
+// import blessings from './blessings-full.json';
+// import quests from './quests-full.json';
+// import inventory from './inventory.json';
+const girls = {};
+const blessings = { active: [], upcoming: [] };
+const quests = {};
+const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 
@@ -196,26 +196,22 @@ export class MockGameAPI implements GameAPI {
     if (!girl.own) {
       return;
     }
+    const xpStats = getXpStats(girl, book);
+    if (xpStats.canUse) {
+      updateGirlWithBook(girl, book);
 
-    // const success = Math.random() > 0.05;
-    const success = true;
-    this.mockRequest(
+      if (this.updateGirl !== undefined) {
+        this.updateGirl(girl);
+      }
+    }
+
+    await this.mockRequest(
       () => {
-        const bookValid = girl.level! < girl.maxLevel!;
-        if (bookValid) {
-          updateGirlXpStats(girl, book.xp);
-
-          if (this.updateGirl !== undefined) {
-            this.updateGirl(girl);
-          }
-        }
         return undefined;
       },
-      success,
+      true,
       75
     );
-
-    return;
   }
 
   async requestMaxOut(
@@ -326,7 +322,7 @@ export class MockGameAPI implements GameAPI {
     }
 
     const maxLevel = girl.maxLevel ?? 250;
-    const gemsUsed = getGemsToCap(girl, maxLevel);
+    const gemsUsed = getGemsToAwaken(girl, maxLevel);
 
     // Update girl level/maxLevel
     girl.missingGems -= gemsUsed;
@@ -373,9 +369,9 @@ export class MockGameAPI implements GameAPI {
     }
     this.fireRequestEvent('queued');
     this.fireRequestEvent('started');
-    const giftValid = girl.stars < girl.maxStars;
-    if (giftValid) {
-      updateGirlAffStats(girl, gift.aff);
+    const affStats = getAffectionStats(girl, gift);
+    if (affStats.canUse) {
+      updateGirlAffStats(girl, gift);
       if (this.updateGirl !== undefined) {
         this.updateGirl(girl);
       }
@@ -454,15 +450,30 @@ export class MockGameAPI implements GameAPI {
   }
 }
 
-function updateGirlXpStats(girl: CommonGirlData, addXp: number): void {
+function updateGirlWithBook(girl: CommonGirlData, book: Book) {
+  const xpStats = getXpStats(girl, book);
+  updateGirlXpStats(girl, xpStats.xpGain, xpStats.maxLevel);
+}
+
+function updateGirlXpStats(
+  girl: CommonGirlData,
+  addXp: number,
+  maxLevel?: number
+): void {
+  if (maxLevel !== undefined) {
+    const gemsUsed = getGemsToCap(girl, maxLevel);
+    girl.maxLevel = maxLevel;
+    girl.missingGems -= gemsUsed;
+  }
   girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
   girl.currentGXP += addXp;
 }
 
-function updateGirlAffStats(girl: CommonGirlData, addAff: number): void {
-  girl.upgradeReady = isUpgradeReady(girl, addAff);
-  girl.currentAffection += addAff;
-  girl.missingAff = Math.max(0, girl.missingAff - addAff);
+function updateGirlAffStats(girl: CommonGirlData, gift: Gift): void {
+  const affStats = getAffectionStats(girl, gift);
+  girl.upgradeReady = isUpgradeReady(girl, affStats.affGain);
+  girl.currentAffection += affStats.affGain;
+  girl.missingAff = Math.max(0, girl.missingAff - affStats.affGain);
   if (girl.upgradeReady) {
     girl.quests[girl.stars] = {
       ...girl.quests[girl.stars],

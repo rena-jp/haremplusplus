@@ -13,7 +13,10 @@ const MAX_LEVEL = 750;
 const MIN_LEVEL_CAP = 250;
 
 export interface XpStatsResult {
+  //
   // Girl stats
+  //
+
   /**
    * Current girl XP
    */
@@ -38,7 +41,11 @@ export interface XpStatsResult {
    * Remaining XP to reach the maximum level
    */
   xpToMax: number;
+
+  //
   // Book stats
+  //
+
   /**
    * Whether the current book can be used (false if book is undefined)
    */
@@ -81,7 +88,13 @@ export function getXpStats(
   const xpToMax = getMissingGXP(girl);
 
   if (book !== undefined && book.itemId === SPECIAL_MYTHIC_BOOK_ID) {
-    const canUse = girl.level !== undefined && girl.level < 350;
+    // FIXME: The game seems to use weird restrictions regarding where/when
+    // mythic books can be used. It is not (always?) enabled on girls above
+    // level 250. For now, only allow using this book on low level girls (Players
+    // can still fall back to the original Girl Page to use them in more
+    // specific cases)
+    const canUse = girl.level !== undefined && girl.level < 100;
+    // const canUse = girl.level !== undefined && girl.level < 350;
 
     if (canUse) {
       const xpTo350 = getGXPToCap(girl, 350);
@@ -114,10 +127,7 @@ export function getXpStats(
   } else {
     let overflow = false;
     if (book !== undefined) {
-      overflow =
-        book.rarity === Rarity.mythic &&
-        book.type === 'book' &&
-        book.xp > xpToMax;
+      overflow = book.rarity === Rarity.mythic && book.xp > xpToMax;
     }
 
     const canXP = girl.own && girl.level! < girl.maxLevel!;

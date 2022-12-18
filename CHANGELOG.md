@@ -1,5 +1,6 @@
 ## 0.10.6 (NEXT)
 
+- Fix a bug where the level was incorrectly displayed after awakening
 - Support Mythic Grimoire and Mythic Lingerie
 - Prevent using Mythic Gifts/Books if they overflow
 

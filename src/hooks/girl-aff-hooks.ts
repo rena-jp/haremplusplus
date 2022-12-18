@@ -7,11 +7,41 @@ import {
 } from '../data/data';
 
 export interface AffStatsResult {
+  //
+  // Girl stats
+  //
+  /**
+   * Min affection from current grade to next grade
+   */
   minAff: number;
+  /**
+   * Max affection from current grade to next grade
+   */
   maxAff: number;
+  /**
+   * Remaining Affection to reach the maximum grade
+   */
   affToMax: number;
+  /**
+   * Current girl Affection
+   */
   currentAff: number;
+  //
+  // Gift stats
+  //
+
+  /**
+   * Whether the current gift can be used (false if gift is undefined)
+   */
   canUse: boolean;
+  /**
+   * Affection gain, when using the current gift (0 if gift is undefined)
+   */
+  affGain: number;
+  /**
+   * Grade reached when using the current gift (current grade if gift is undefined)
+   */
+  targetGrade: number;
 }
 
 export function useAffectionStats(
@@ -20,7 +50,7 @@ export function useAffectionStats(
 ): AffStatsResult {
   const result = useMemo(() => {
     return getAffectionStats(girl, gift);
-  }, [girl.currentAffection, girl.stars]);
+  }, [girl.currentAffection, girl.stars, gift?.itemId]);
   return result;
 }
 
@@ -29,23 +59,41 @@ export function getAffectionStats(
   gift: Gift | undefined
 ): AffStatsResult {
   const affRange = getAffRange(girl);
+  const targetGrade = Math.min(girl.stars + 1, girl.maxStars);
 
   if (gift !== undefined && gift.itemId === SPECIAL_MYTHIC_GIFT_ID) {
-    // TODO Implement mythic gift
-    return {
-      minAff: affRange.min,
-      maxAff: affRange.max,
-      affToMax: girl.currentAffection + girl.missingAff,
-      currentAff: girl.currentAffection,
-      canUse: false
-    };
+    const multiplier = getAffMultiplier(girl.rarity);
+    const targetAff = getStarValue(2) * multiplier;
+
+    // FIXME check the game restrictions for using mythic gifts
+    const canUse = girl.currentAffection < getStarValue(1) * multiplier;
+    // const canUse = girl.currentAffection < targetAff * multiplier;
+
+    if (canUse) {
+      return {
+        minAff: affRange.min,
+        maxAff: targetAff,
+        affToMax: girl.currentAffection + girl.missingAff,
+        currentAff: girl.currentAffection,
+        canUse,
+        affGain: targetAff - girl.currentAffection,
+        targetGrade: 2
+      };
+    } else {
+      return {
+        minAff: affRange.min,
+        maxAff: affRange.max,
+        affToMax: girl.currentAffection + girl.missingAff,
+        currentAff: girl.currentAffection,
+        canUse,
+        affGain: 0,
+        targetGrade
+      };
+    }
   } else {
     let overflow = false;
     if (gift !== undefined) {
-      overflow =
-        gift.rarity === Rarity.mythic &&
-        gift.type === 'gift' &&
-        gift.aff > girl.missingAff;
+      overflow = gift.rarity === Rarity.mythic && gift.aff > girl.missingAff;
     }
     const canUpgrade = girl.missingAff > 0 && !girl.upgradeReady;
     const canUse = canUpgrade && !overflow;
@@ -55,7 +103,9 @@ export function getAffectionStats(
       maxAff: affRange.max,
       affToMax: girl.currentAffection + girl.missingAff,
       currentAff: girl.currentAffection,
-      canUse
+      canUse,
+      affGain: gift?.aff ?? 0,
+      targetGrade
     };
   }
 }
