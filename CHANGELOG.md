@@ -1,6 +1,7 @@
 ## 0.10.6 - 2022-12-19
 
 - Update unknown poses
+- Add icons to 'Give Books' and 'Give Gifts' actions
 - Fix a bug where the level was incorrectly displayed after awakening
 - Support Mythic Grimoire and Mythic Lingerie
 - Prevent using Mythic Gifts/Books if they overflow
