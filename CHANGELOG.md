@@ -4,6 +4,13 @@
 - Support Mythic Grimoire and Mythic Lingerie
 - Prevent using Mythic Gifts/Books if they overflow
 
+### 0.10.6 Known issues
+
+- After leveling up or upgrading a girl, stats are not properly updated. Workaround: hit the refresh lemon!
+- Usage of Mythic Grimoire and Mythic Lingerie are restricted to low-level and 0-grade girls (respectively). These restrictions are different
+  from the actual game restrictions, because it is unclear in which conditions the game actually allows using these 2 items. Workaround: you may
+  open the "Give Book" or "Give Gift" links in a new tab and use the in-game page to use these items.
+
 ## 0.10.5 - 2022-12-13
 
 - Fix a CSS conflict with in-game progress bars

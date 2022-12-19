@@ -19,7 +19,8 @@ import {
   CommonGirlData,
   Element,
   HaremData,
-  replace
+  replace,
+  Stats
 } from '../data/data';
 import {
   countGems,
@@ -318,6 +319,15 @@ function quickEqualGirls(
     girl1.icon === girl2.icon && // Current pose test
     girl1.birthday === girl2.birthday && // Language test. Birthday is more likely to be translated in all languages.
     girl1.variations?.length === girl2.variations?.length &&
-    girl1.pose === girl2.pose // Maybe the pose was unknown, and now it's not
+    girl1.pose === girl2.pose && // Maybe the pose was unknown, and now it's not
+    equalStats(girl1.stats, girl2.stats) // Workaround for stats refresh issue; also accounts for stats that may be adjusted after BC
+  );
+}
+
+function equalStats(stats1?: Stats, stats2?: Stats): boolean {
+  return (
+    stats1?.charm === stats2?.charm &&
+    stats1?.hardcore === stats2?.hardcore &&
+    stats1?.knowhow === stats2?.knowhow
   );
 }
