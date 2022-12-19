@@ -19,11 +19,13 @@ import {
 import { useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
+  BookIcon,
   ElementIcon,
   format,
   formatTime,
   GemIcon,
   getDomain,
+  GiftIcon,
   PoseIcon,
   StatsDescriptionTooltip,
   Tooltip
@@ -260,14 +262,14 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           <p>
             <a
               href={`${domain}/girl/${girl.id}?resource=experience`}
-              target="_blank"
               rel="noreferrer"
+              className="icon-link"
               onClick={(ev) => {
                 ev.preventDefault();
                 openUpgrade('books');
               }}
             >
-              Give books
+              Give books <BookIcon />
             </a>
           </p>
           {/* 
@@ -277,14 +279,14 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           <p>
             <a
               href={`${domain}/girl/${girl.id}?resource=affection`}
-              target="_blank"
               rel="noreferrer"
+              className="icon-link"
               onClick={(ev) => {
                 ev.preventDefault();
                 openUpgrade('gifts');
               }}
             >
-              Give gifts
+              Give gifts <GiftIcon />
             </a>
           </p>
         </>

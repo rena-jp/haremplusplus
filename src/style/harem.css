@@ -273,6 +273,17 @@
   color: green;
 }
 
+.icon-link {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.5em;
+  align-items: center;
+}
+
+.icon-link > img {
+  height: 1.5em;
+}
+
 /**
  *  Add upgrade page in a slider panel
  */

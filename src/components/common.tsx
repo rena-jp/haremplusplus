@@ -474,3 +474,13 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
     </div>
   );
 };
+
+export const BookIcon: React.FC<{ item?: number }> = ({ item }) => {
+  const icon = item === undefined ? 'XP2' : `XP${item}`;
+  return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
+};
+
+export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
+  const icon = item === undefined ? 'K2' : `K${item}`;
+  return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
+};
