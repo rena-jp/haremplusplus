@@ -66,7 +66,8 @@ export function getAffectionStats(
     const targetAff = getStarValue(2) * multiplier;
 
     // FIXME check the game restrictions for using mythic gifts
-    const canUse = girl.currentAffection < getStarValue(1) * multiplier;
+    const canUse =
+      girl.maxStars > 1 && girl.currentAffection < getStarValue(1) * multiplier;
     // const canUse = girl.currentAffection < targetAff * multiplier;
 
     if (canUse) {
