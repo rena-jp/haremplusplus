@@ -1,5 +1,6 @@
-## 0.10.7 (NEXT)
+## 0.10.7 - 2022-12-22
 
+- Update unknown poses
 - Update events list
 - Update restrictions for using Mythic Lingerie: prevent using on 1\* girls.
 
