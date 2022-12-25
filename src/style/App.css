@@ -84,7 +84,7 @@ body.qh-local {
   padding: 1rem;
 }
 
-.missing-girls-blessing > .owned {
+.missing-girls-blessing > span > .owned {
   color: #c93e3e;
   font-weight: bold;
 }

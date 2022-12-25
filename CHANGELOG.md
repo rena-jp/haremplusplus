@@ -1,5 +1,6 @@
 ## 0.10.8 (NEXT)
 
+- Fix a style issue for rare/missing blessings in Summary
 - (Tentatively) fix a conflict with HH++ about harem link ordering
 
 ## 0.10.7 - 2022-12-22
