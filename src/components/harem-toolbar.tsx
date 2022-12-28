@@ -1,4 +1,4 @@
-import { useContext, useMemo } from 'react';
+import { ReactNode, useContext, useMemo } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import { Element } from '../data/data';
 import { FiltersContext } from '../hooks/filter-hooks';
@@ -6,6 +6,8 @@ import { CloseButton, GemsCount, Tooltip } from './common';
 import { QuickFilter } from './harem';
 import { RequestsMonitor } from './requests-monitor';
 import { PulseLoader } from 'react-spinners';
+import { Filter } from '../data/filters/filter-api';
+import { BlessingAttributeDescription } from './summary';
 
 export interface HaremToolbarProps {
   gameAPI: GameAPI;
@@ -53,8 +55,6 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
     clearFilters,
     isDefaultFilter
   } = useContext(FiltersContext);
-
-  const filterLabel = useMemo(() => activeFilter.label, [activeFilter]);
 
   return (
     <div className="harem-toolbar">
@@ -160,12 +160,129 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         <CloseButton title="Close harem" close={close} />
       )}
       <div className="break" />
+      <FiltersDescription
+        filter={activeFilter}
+        quickFilters={activeQuickFilters}
+        visibleGirlsCount={visibleGirlsCount}
+        totalGirlsCount={totalGirlsCount}
+      />
+    </div>
+  );
+};
+
+export interface FiltersDescriptionProps {
+  filter: Filter;
+  quickFilters: QuickFilter[];
+  visibleGirlsCount: number;
+  totalGirlsCount: number;
+}
+
+export const FiltersDescription: React.FC<FiltersDescriptionProps> = ({
+  filter,
+  quickFilters,
+  visibleGirlsCount,
+  totalGirlsCount
+}) => {
+  const filterLabel = useMemo(() => filter.label, [filter]);
+  return (
+    <Tooltip
+      tooltip={
+        <DetailedFiltersDescription
+          filter={filter}
+          quickFilters={quickFilters}
+          totalGirlsCount={totalGirlsCount}
+          visibleGirlsCount={visibleGirlsCount}
+        />
+      }
+    >
       <div className="active-filter">
         Active Filter: {filterLabel}{' '}
         <span className="filter-girls-count">
           ({visibleGirlsCount}/{totalGirlsCount})
         </span>
       </div>
+    </Tooltip>
+  );
+};
+
+export const DetailedFiltersDescription: React.FC<FiltersDescriptionProps> = ({
+  filter,
+  quickFilters,
+  visibleGirlsCount,
+  totalGirlsCount
+}) => {
+  return (
+    <div>
+      <p>
+        Filter: <FilterDescription filter={filter} />
+      </p>
+      <p>
+        Quick Filters: <QuickFilterDescription quickFilters={quickFilters} />
+      </p>
+      <p>
+        Matched girls: {visibleGirlsCount}/{totalGirlsCount}
+      </p>
     </div>
+  );
+};
+
+interface FilterDescriptionProps {
+  filter: Filter;
+}
+
+const FilterDescription: React.FC<FilterDescriptionProps> = ({ filter }) => {
+  const labels = filter.label.split('&').map((f) => f.trim());
+  return (
+    <>
+      {labels.reduce<ReactNode>(
+        (a, b) =>
+          a === 'None'
+            ? b
+            : [
+                a,
+                <>
+                  {' '}
+                  &<br />
+                </>,
+                b
+              ],
+        'None'
+      )}
+    </>
+  );
+};
+
+interface QuickFilterDescriptionProps {
+  quickFilters: QuickFilter[];
+}
+
+const QuickFilterDescription: React.FC<QuickFilterDescriptionProps> = ({
+  quickFilters
+}) => {
+  return (
+    <>
+      {quickFilters
+        .map<ReactNode>((f) => (
+          <BlessingAttributeDescription
+            blessing={f.blessing.blessing}
+            blessingValue={f.blessing.blessingValue}
+          />
+        ))
+        .reduce<ReactNode>(
+          (a, b) =>
+            a === 'None'
+              ? b
+              : [
+                  a,
+                  <>
+                    {' '}
+                    OR
+                    <br />
+                  </>,
+                  b
+                ],
+          'None'
+        )}
+    </>
   );
 };

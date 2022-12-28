@@ -857,8 +857,6 @@ export function isShardsCategory(value: string): value is ShardsCategory {
   );
 }
 
-export type FilterOperator = 'and' | 'or';
-
 export class RootFilter extends AbstractFilter {
   private static ID = 'root';
   id = RootFilter.ID;

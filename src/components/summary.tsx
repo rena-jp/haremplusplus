@@ -257,19 +257,31 @@ export const BlessingItem: React.FC<BlessingItemProps> = ({
   return (
     <>
       {blessing.map((definition, i) => {
-        const name = Blessings.toString(definition.blessing);
-        const value = Blessings.stringValue(
-          definition.blessing,
-          definition.blessingValue
-        );
         const bonus = definition.blessingBonus;
         return (
           <p key={i} onClick={() => toggleFilter(definition)}>
-            {name} {value}: {bonus}%
+            <BlessingAttributeDescription
+              blessing={definition.blessing}
+              blessingValue={definition.blessingValue}
+            />{' '}
+            : {bonus}%
           </p>
         );
       })}
     </>
+  );
+};
+
+export const BlessingAttributeDescription: React.FC<BlessingType> = ({
+  blessing,
+  blessingValue
+}) => {
+  const name = Blessings.toString(blessing);
+  const value = Blessings.stringValue(blessing, blessingValue);
+  return (
+    <span>
+      {name} {value}
+    </span>
   );
 };
 
