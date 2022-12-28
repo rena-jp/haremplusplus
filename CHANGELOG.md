@@ -1,4 +1,4 @@
-## 0.10.8 (NEXT)
+## 0.10.8 - 2022-12-28
 
 - Update unknown poses
 - Add harem level/ego bonus to the Summary panel
