@@ -18,7 +18,14 @@ import {
 } from '../data/data';
 import { getMissingGXP } from '../hooks/girl-xp-hooks';
 import '../style/harem.css';
-import { ElementIcon, format, GemIcon, PoseIcon, Tooltip } from './common';
+import {
+  EgoIcon,
+  ElementIcon,
+  format,
+  GemIcon,
+  PoseIcon,
+  Tooltip
+} from './common';
 import { QuickFilter } from './harem';
 import { PanelProps } from './panels';
 
@@ -100,12 +107,22 @@ export const Summary: React.FC<SummaryProps> = ({
   const missingMp = ownedMP - totalMp;
 
   const className = `panel summary ${visible ? 'visible' : 'hidden'}`;
+  const haremLevel = allGirls
+    .filter((girl) => girl.own)
+    .map((girl) => girl.level ?? 0)
+    .reduce((a, b) => a + b, 0);
+  const egoBonus = Math.round(Math.sqrt(haremLevel) * 50);
 
   return (
     <div className={className}>
       <div className="summary-content">
         <p>
           Total girls: {owned}/{total} ({missing}) {pct}% <br />
+          Harem level: {format(haremLevel)}{' '}
+          <span className="ego-bonus">
+            (+{format(egoBonus)} <EgoIcon />)
+          </span>
+          <br />
           Epic Pachinko: {ownedEP}/{totalEp} ({missingEp}) <br />
           Mythic Pachinko: {ownedMP}/{totalMp} ({missingMp})
         </p>

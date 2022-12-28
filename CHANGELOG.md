@@ -1,5 +1,6 @@
 ## 0.10.8 (NEXT)
 
+- Add harem level/ego bonus to the Summary panel
 - Fix a style issue for rare/missing blessings in Summary
 - (Tentatively) fix a conflict with HH++ about harem link ordering
 

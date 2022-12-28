@@ -213,3 +213,14 @@
   */
   margin: -0.35em;
 }
+
+.summary-content > p > .ego-bonus {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.summary-content > p > .ego-bonus > .ego-icon {
+  height: 1.25em;
+  margin-left: 0.4em;
+}

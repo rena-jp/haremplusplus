@@ -484,3 +484,12 @@ export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'K2' : `K${item}`;
   return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
 };
+
+export const EgoIcon = () => {
+  return (
+    <img
+      src="https://hh2.hh-content.com/pictures/misc/items_icons/4.png"
+      className="ego-icon"
+    />
+  );
+};
