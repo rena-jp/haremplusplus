@@ -1,4 +1,4 @@
-## 0.10.9 (NEXT)
+## 0.10.9 - 2023-01-10
 
 - Update events and unknown poses
 
