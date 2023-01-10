@@ -18,7 +18,7 @@ export const PoPTeams: React.FC<PoPTeamsProps> = ({
   activeBlessing
 }) => {
   const [places, setPlaces] = useState<number[]>([3, 3, 3]);
-  const [level, setLevel] = useState(14);
+  const [level, setLevel] = useState(15);
   const targetValue = useMemo(() => getTargetValue(level), [level]);
   const updatePlaces = useCallback(
     (index: number, value: number) => {
