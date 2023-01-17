@@ -333,3 +333,7 @@
   transform: translateY(105%);
   visibility: hidden;
 } */
+
+.lore > p > .soft_currency {
+  display: inline-block;
+}

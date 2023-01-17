@@ -1,3 +1,7 @@
+## 0.10.10 (NEXT)
+
+- Add currency icon to the salary in girl's description
+
 ## 0.10.9 - 2023-01-10
 
 - Update events and unknown poses

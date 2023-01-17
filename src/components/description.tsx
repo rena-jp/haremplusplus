@@ -27,6 +27,7 @@ import {
   getDomain,
   GiftIcon,
   PoseIcon,
+  SalaryIcon,
   StatsDescriptionTooltip,
   Tooltip
 } from './common';
@@ -330,7 +331,8 @@ export const LoreSection: React.FC<LoreSectionProps> = ({ girl }) => {
       ) : null}
       <>
         <p>
-          Salary: {format(girl.salary!)} ({formatTime(girl.salaryTime!)})
+          Salary: {format(girl.salary!)} <SalaryIcon /> (
+          {formatTime(girl.salaryTime!)})
         </p>
       </>
     </div>

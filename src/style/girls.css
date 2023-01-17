@@ -164,14 +164,17 @@
   background-color: #ec0039;
 }
 
-.girlTile.salary > .avatar-area > .soft_currency {
-  background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
-  background-size: cover;
-  width: 45px;
-  height: 45px;
+.girlTile > .avatar-area > .soft_currency {
   position: absolute;
+  width: 2em;
+  height: 2em;
   bottom: -10px;
   left: -5px;
+  visibility: hidden;
+}
+
+.girlTile.salary > .avatar-area > .soft_currency {
+  visibility: visible;
 }
 
 .girlTile > .upgrade-girl {

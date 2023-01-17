@@ -109,6 +109,10 @@ const Loading: React.FC<{ loading: boolean; close(): void }> = ({
                 device to increase performances. Dependending on the browser,
                 private mode may or may not allow storing any local data.
               </p>
+              <p>
+                For Nutaku players on Firefox, this extension also won't be able
+                to access the local data cache, and will thus not work properly.
+              </p>
             </>
           )}
         </>

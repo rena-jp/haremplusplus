@@ -302,3 +302,10 @@ requiring actual content. */
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
 }
+
+.soft_currency {
+  background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
+  background-size: cover;
+  width: 1.5em;
+  height: 1.5em;
+}

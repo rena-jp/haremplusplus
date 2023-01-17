@@ -281,6 +281,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           />
         </div>
       )}
+      {/* <PoPTeams girls={allGirls} activeBlessing={currentBlessings} /> */}
     </>
   );
 };
