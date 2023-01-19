@@ -1,5 +1,6 @@
 ## 0.10.10 (NEXT)
 
+- Update events and unknown poses
 - Add more details about missing gems on Girl's Description page
 - Fix a display issue in Awakening cost when switching girls
 - Add currency icon to the salary in girl's description
