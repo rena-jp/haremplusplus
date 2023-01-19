@@ -16,6 +16,7 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
+import { getGemsToAwaken, useGemsStats } from '../hooks/girl-gems-hooks';
 import { useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
@@ -248,12 +249,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 /> */}
         </p>
       ) : null}
-      {girl.missingGems > 0 ? (
-        <p className="missing-gems">
-          Missing Gems: {format(girl.missingGems)}{' '}
-          <GemIcon element={girl.element} />
-        </p>
-      ) : null}
+      <MissingGemsEntry girl={girl} />
       {girl.own ? (
         <>
           {/* 
@@ -298,6 +294,59 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           ? 'Unknown'
           : girl.sources.map((es) => getSourceLabel(es)).join(', ')}
       </p>
+    </div>
+  );
+};
+
+interface MissingGemsEntry {
+  girl: CommonGirlData;
+}
+
+const MissingGemsEntry: React.FC<MissingGemsEntry> = ({ girl }) => {
+  const gemsStats = useGemsStats(girl);
+  return gemsStats.gemsToMax > 0 ? (
+    gemsStats.gemsToMax > gemsStats.gemsToNextCap ? (
+      <p className="missing-gems">
+        <Tooltip tooltip={<MissingGemsDetails girl={girl} />}>
+          Missing gems: {format(gemsStats.gemsToMax)}{' '}
+          <GemIcon element={girl.element} />
+        </Tooltip>
+      </p>
+    ) : (
+      <p className="missing-gems">
+        Missing gems: {format(gemsStats.gemsToMax)}{' '}
+        <GemIcon element={girl.element} />
+      </p>
+    )
+  ) : null;
+};
+
+const MissingGemsDetails: React.FC<MissingGemsEntry> = ({ girl }) => {
+  const levels = [];
+  for (let i = girl.maxLevel ?? 250; i < 750; i += 50) {
+    levels.push(i);
+  }
+  return (
+    <div className="missing-gems-details">
+      {levels.map((levelCap) => {
+        const targetCap = levelCap + 50;
+        const gems = getGemsToAwaken(girl, levelCap);
+        return (
+          <>
+            <div>To Lv. {targetCap}:</div>
+            <div className="gems-count">{format(gems)}</div>
+            <div>
+              <GemIcon element={girl.element} />
+            </div>
+          </>
+        );
+      })}
+      <div className="row-separator" />
+      <div>Total:</div>
+      <div className="gems-count">{format(girl.missingGems)}</div>
+      <div>
+        <GemIcon element={girl.element} />
+      </div>
     </div>
   );
 };
