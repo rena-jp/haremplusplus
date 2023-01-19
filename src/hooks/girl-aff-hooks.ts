@@ -50,7 +50,7 @@ export function useAffectionStats(
 ): AffStatsResult {
   const result = useMemo(() => {
     return getAffectionStats(girl, gift);
-  }, [girl.currentAffection, girl.stars, gift?.itemId]);
+  }, [girl, girl.currentAffection, girl.stars, gift?.itemId]);
   return result;
 }
 
