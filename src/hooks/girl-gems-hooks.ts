@@ -14,7 +14,7 @@ export function useGemsStats(girl: CommonGirlData): GemsStats {
       gemsToMax: girl.missingGems,
       gemsToNextCap
     };
-  }, [girl.level, girl.maxLevel]);
+  }, [girl, girl.level, girl.maxLevel]);
 }
 
 export function getGemsToAwaken(

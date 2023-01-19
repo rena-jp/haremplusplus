@@ -1,5 +1,6 @@
 ## 0.10.10 (NEXT)
 
+- Fix a display issue in Awakening cost when switching girls
 - Add currency icon to the salary in girl's description
 
 ## 0.10.9 - 2023-01-10
