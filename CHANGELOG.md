@@ -1,4 +1,4 @@
-## 0.10.10 (NEXT)
+## 0.10.10 - 2023-01-20
 
 - Update events and unknown poses
 - Add more details about missing gems on Girl's Description page
