@@ -158,11 +158,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                 />
               )}
               <p>
-                <a
-                  href={`${domain}/harem/${girl.id}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
+                <a href={`${domain}/harem/${girl.id}`} rel="noreferrer">
                   Go to original Harem
                 </a>
               </p>
@@ -547,7 +543,6 @@ const QuestStep: React.FC<QuestStepProps> = ({
       <>
         <a
           href={`${domain}/${link}`}
-          target="_blank"
           rel="noreferrer"
           onClick={(ev) => {
             if (quest.ready || quest.done) {
