@@ -1,3 +1,8 @@
+## 0.11.0 - 2023-01-25
+
+- Update hero currency attribute to match game API change (Fix an issue where upgrading a girl wasn't possible)
+- Allow opening links in the current tab, as Nutaku doesn't support links to new tab
+
 ## 0.10.10 - 2023-01-20
 
 - Update events and unknown poses
