@@ -411,6 +411,7 @@ export interface Collect {
  */
 export interface Hero {
   caracs: string[];
+  currencies: Currencies;
   energies: unknown;
   energy_fields: unknown;
   infos: HeroInfos;
@@ -425,13 +426,19 @@ export interface HeroInfos {
   id: number;
   level: number;
   name: string;
-  soft_currency: number;
-  hard_currency: number;
   carac1: number;
   carac2: number;
   carac3: number;
   caracs: unknown;
   // etc.
+}
+
+export interface Currencies {
+  frames: number;
+  soft_currency: number;
+  hard_currency: number;
+  sultry_coins: number;
+  ticket: number;
 }
 
 export function getGameWindow(): GameWindow {

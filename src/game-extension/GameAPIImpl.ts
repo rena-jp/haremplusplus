@@ -487,7 +487,7 @@ export class GameAPIImpl implements GameAPI {
   }
 
   getCurrency(): number {
-    return this.getHero().infos.soft_currency;
+    return this.getHero().currencies.soft_currency;
   }
 
   private updateGirlWithBook(girl: CommonGirlData, book: Book) {
