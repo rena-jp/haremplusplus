@@ -46,7 +46,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
   useLayoutEffect(() => {
     const quest = girl.quests[scene];
     const questId = quest.idQuest;
-    const sceneImage = `/img/quests/${questId}/1/1600x/${questId}.jpg`;
+    const sceneImage = `/img/quests/${questId}/1/1600x900cut/${questId}.jpg`;
     setImage(sceneImage);
   }, []);
 
@@ -83,7 +83,9 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
     (toScene: number) => {
       const quest = girl.quests[toScene];
       const questId = quest.idQuest;
-      const sceneImage = `/img/quests/${questId}/1/1600x/${questId}.jpg`;
+      // /img/quests/1002156/1/1600x/1002156.jpg  // Old format
+      // /img/quests/1002156/1/1600x900cut/1002156.jpg // New format
+      const sceneImage = `/img/quests/${questId}/1/1600x900cut/${questId}.jpg`;
       setImage(sceneImage);
       setSceneData(undefined);
       setSceneText('...');

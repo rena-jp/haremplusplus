@@ -1,3 +1,7 @@
+## 0.11.1 (NEXT)
+
+- Fix low-resolution images on girls upgrade scenes
+
 ## 0.11.0 - 2023-01-25
 
 - Update hero currency attribute to match game API change (Fix an issue where upgrading a girl wasn't possible)

@@ -665,7 +665,7 @@ export function toQuestData(
     // For some reason, the scene picture is not directly part of the data when the scene
     // has already been unlocked (past scenes). We need to rebuild it...
     // In this case, there is also no cost and no portrait.
-    const scene = `/img/quests/${gameQuestStep.id}/1/800x/${data[2]}.jpg`;
+    const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${data[2]}.jpg`;
     return {
       girlId,
       questId: gameQuestStep.id,
@@ -689,8 +689,15 @@ export function toQuestData(
 }
 
 function resizeScene(picture: string): string {
+  // picture may use different formats:
+  // /img/quests/1002156/1/800x/1002156.jpg  // Half size, old
+  // /img/quests/1002156/1/1600x/1002156.jpg  // Full size, old
+  // /img/quests/1002156/1/800x450cut/1002156.jpg // Half size, new
+  // /img/quests/1002156/1/1600x900cut/1002156.jpg // Full size, new
   if (picture.includes('/800x/')) {
     return picture.replace('/800x/', '/1600x/');
+  } else if (picture.includes('/800x450cut/')) {
+    return picture.replace('/800x450cut/', '/1600x900cut/');
   }
   return picture;
 }
