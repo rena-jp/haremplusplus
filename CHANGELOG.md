@@ -1,4 +1,4 @@
-## 0.11.1 (NEXT)
+## 0.11.1 - 2023-02-04
 
 - Update events and unknown poses
 - Add more details about missing XP and Affection on Girl's Description page
