@@ -128,6 +128,43 @@ export function getAffRange(girl: CommonGirlData): {
   }
 }
 
+/**
+ * @param girl
+ * @param star
+ * @returns the affection required to reach the given star (or next star, if star parameter is unspecified).
+ * This is a fixed value that doesn't depend on the girl's current affection
+ */
+export function getTargetAffection(
+  girl: CommonGirlData,
+  star?: number
+): number {
+  const baseValue = getStarValue(star ?? girl.stars);
+  const multiplier = getAffMultiplier(girl.rarity);
+  return baseValue * multiplier;
+}
+
+/**
+ * @param girl
+ * @param star
+ * @return the missing affection towards the given star, from the previous star.
+ * This is a dynamic value that varies based on the girl's current affection
+ */
+export function getMissingAffection(
+  girl: CommonGirlData,
+  star: number
+): number {
+  const previousValue = getTargetAffection(girl, star - 1);
+  const targetValue = getTargetAffection(girl, star);
+  const gradeValue = targetValue - previousValue;
+  if (girl.currentAffection > previousValue) {
+    // Next grade: deduce current affection (Result may be negative if Affection was overspent)
+    const progress = girl.currentAffection - previousValue;
+    return gradeValue - progress;
+  } else {
+    return gradeValue;
+  }
+}
+
 function getStarValue(star: number): number {
   switch (star) {
     case 0:

@@ -16,8 +16,9 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
+import { getMissingAffection } from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, useGemsStats } from '../hooks/girl-gems-hooks';
-import { useXpStats } from '../hooks/girl-xp-hooks';
+import { getMissingGXPToCap, useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
 import {
   BookIcon,
@@ -185,8 +186,6 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   upcomingBlessing,
   openUpgrade
 }) => {
-  const xpStats = useXpStats(girl, undefined);
-
   return (
     <div className="details-section stats">
       <p>Full Name: {girl.fullName}</p>
@@ -227,24 +226,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           ))
           .reduce((a, b) => [a, ' & ', b])}
       </p>
-      {girl.missingAff > 0 ? (
-        <p>
-          Missing Affection: {format(girl.missingAff)}{' '}
-          {/* <img
-                  src="https://hh2.hh-content.com/pictures/items/K1.png"
-                  style={{ height: '4ex' }}
-                /> */}
-        </p>
-      ) : null}
-      {xpStats.xpToMax > 0 ? (
-        <p>
-          Missing XP: {format(xpStats.xpToMax)}{' '}
-          {/* <img
-                  src="https://hh2.hh-content.com/pictures/items/XP1.png"
-                  style={{ height: '4ex' }}
-                /> */}
-        </p>
-      ) : null}
+      <MissingAffEntry girl={girl} />
+      <MissingGXPEntry girl={girl} />
       <MissingGemsEntry girl={girl} />
       {girl.own ? (
         <>
@@ -294,11 +277,40 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   );
 };
 
-interface MissingGemsEntry {
+interface GirlStatsEntry {
   girl: CommonGirlData;
 }
 
-const MissingGemsEntry: React.FC<MissingGemsEntry> = ({ girl }) => {
+const MissingAffEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
+  return girl.missingAff > 0 ? (
+    <p>
+      <Tooltip tooltip={<MissingAffDetails girl={girl} />}>
+        Missing Affection: {format(girl.missingAff)}{' '}
+      </Tooltip>
+      {/* <img
+            src="https://hh2.hh-content.com/pictures/items/K1.png"
+            style={{ height: '4ex' }}
+          /> */}
+    </p>
+  ) : null;
+};
+
+const MissingGXPEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
+  const xpStats = useXpStats(girl, undefined);
+  return xpStats.xpToMax > 0 ? (
+    <p>
+      <Tooltip tooltip={<MissingGXPDetails girl={girl} />}>
+        Missing XP: {format(xpStats.xpToMax)}{' '}
+      </Tooltip>
+      {/* <img
+              src="https://hh2.hh-content.com/pictures/items/XP1.png"
+              style={{ height: '4ex' }}
+            /> */}
+    </p>
+  ) : null;
+};
+
+const MissingGemsEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
   const gemsStats = useGemsStats(girl);
   return gemsStats.gemsToMax > 0 ? (
     gemsStats.gemsToMax > gemsStats.gemsToNextCap ? (
@@ -317,7 +329,55 @@ const MissingGemsEntry: React.FC<MissingGemsEntry> = ({ girl }) => {
   ) : null;
 };
 
-const MissingGemsDetails: React.FC<MissingGemsEntry> = ({ girl }) => {
+const MissingAffDetails: React.FC<GirlStatsEntry> = ({ girl }) => {
+  const grades: number[] = [];
+  for (let i = girl.stars; i < girl.maxStars; i++) {
+    grades.push(i + 1);
+  }
+  return (
+    <div className="missing-aff-details">
+      {grades.map((grade) => {
+        const missingAff = getMissingAffection(girl, grade);
+        return (
+          <>
+            <div>To Grade {grade}:</div>
+            <div className="missing-affection">{format(missingAff)}</div>
+          </>
+        );
+      })}
+      <div className="row-separator" />
+      <div>Total:</div>
+      <div className="missing-affection">{format(girl.missingAff)}</div>
+    </div>
+  );
+};
+
+const MissingGXPDetails: React.FC<GirlStatsEntry> = ({ girl }) => {
+  const levels = [];
+  for (let i = girl.maxLevel ?? 250; i <= 750; i += 50) {
+    levels.push(i);
+  }
+  const xpStats = useXpStats(girl, undefined);
+  return (
+    <div className="missing-gxp-details">
+      {levels.map((levelCap) => {
+        const targetCap = levelCap;
+        const gxp = getMissingGXPToCap(girl, levelCap);
+        return (
+          <>
+            <div>To Lv. {targetCap}:</div>
+            <div className="missing-gxp">{format(gxp)}</div>
+          </>
+        );
+      })}
+      <div className="row-separator" />
+      <div>Total:</div>
+      <div className="missing-gxp">{format(xpStats.xpToMax)}</div>
+    </div>
+  );
+};
+
+const MissingGemsDetails: React.FC<GirlStatsEntry> = ({ girl }) => {
   const levels = [];
   for (let i = girl.maxLevel ?? 250; i < 750; i += 50) {
     levels.push(i);

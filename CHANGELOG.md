@@ -1,5 +1,6 @@
 ## 0.11.1 (NEXT)
 
+- Add more details about missing XP and Affection on Girl's Description page
 - Fix low-resolution images on girls upgrade scenes
 
 ## 0.11.0 - 2023-01-25

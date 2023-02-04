@@ -213,6 +213,29 @@ export function getMissingGXP(girl: CommonGirlData): number {
   return getGXPToCap(girl, MAX_LEVEL) - girl.currentGXP;
 }
 
+/**
+ *
+ * @param girl
+ * @param levelCap
+ * @return The amount of GXP required to reach the specified cap, compared to the previous cap.
+ * Current girl XP will be deduced.
+ */
+export function getMissingGXPToCap(
+  girl: CommonGirlData,
+  levelCap: number
+): number {
+  const previousCap = levelCap === 250 ? 0 : levelCap - 50;
+  const xpToPreviousCap = getGXPToCap(girl, previousCap);
+  const xpToCap = getGXPToCap(girl, levelCap);
+  const capXpValue = xpToCap - xpToPreviousCap;
+  if (girl.currentGXP > xpToPreviousCap) {
+    const progress = girl.currentGXP - xpToPreviousCap;
+    return capXpValue - progress;
+  } else {
+    return capXpValue;
+  }
+}
+
 function gameRarity(rarity: Rarity): GameRarity {
   return Rarity[rarity] as GameRarity;
 }

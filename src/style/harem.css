@@ -338,19 +338,33 @@
   display: inline-block;
 }
 
-.missing-gems-details {
+.missing-gems-details,
+.missing-aff-details,
+.missing-gxp-details {
   display: grid;
-  grid-template-columns: repeat(3, auto);
   column-gap: 0.5em;
 }
 
-.missing-gems-details > .row-separator {
+.missing-aff-details,
+.missing-gxp-details {
+  grid-template-columns: repeat(2, auto);
+}
+
+.missing-gems-details {
+  grid-template-columns: repeat(3, auto);
+}
+
+.missing-gems-details > .row-separator,
+.missing-aff-details > .row-separator,
+.missing-gxp-details > .row-separator {
   grid-column-start: 1;
-  grid-column-end: 4;
+  grid-column-end: -1;
   margin-block: 0.5rem;
   border-bottom: 1px solid goldenrod;
 }
 
-.missing-gems-details > .gems-count {
+.missing-gems-details > .gems-count,
+.missing-aff-details > .missing-affection,
+.missing-gxp-details > .missing-gxp {
   text-align: right;
 }
