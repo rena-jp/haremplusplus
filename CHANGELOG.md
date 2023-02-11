@@ -1,4 +1,4 @@
-## 0.11.2 - 2023-04-11
+## 0.11.2 - 2023-02-11
 
 - Update events and unknown poses
 - Fix a bug in Search field, when new girls are added to the game without being fully specified (empty name)
