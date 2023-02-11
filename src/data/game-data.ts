@@ -211,13 +211,13 @@ export interface XpEntry {
 export interface RefEntry {
   id_girl_ref: string;
   id_girl_clicker?: string;
-  full_name: string;
-  desc: string;
-  location: string;
+  full_name: string | null;
+  desc: string | null;
+  location: string | null;
   career: string;
   eyes: HtmlString;
   hair: HtmlString;
-  hobbies: HobbiesEntry;
+  hobbies: HobbiesEntry | [];
   anniv: string;
   zodiac: string;
   variations: NumberString[];

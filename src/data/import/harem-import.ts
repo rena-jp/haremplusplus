@@ -101,17 +101,23 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
         girlData.own ? girlData.level_cap : 250
       ),
       quests: getQuests(quests, girlData),
-      fullName: girlData.ref.full_name,
-      bio: girlData.ref.desc,
+      fullName: girlData.ref.full_name ?? '',
+      bio: girlData.ref.desc ?? '',
       sources: getSources(girlData),
       variations: girlData.ref.variations.map((v) => String(v)),
       // Lore
-      location: girlData.ref.location,
+      location: girlData.ref.location ?? '',
       career: girlData.ref.career,
-      hobby: girlData.ref.hobbies.hobby,
+      hobby: Array.isArray(girlData.ref.hobbies)
+        ? ''
+        : girlData.ref.hobbies.hobby,
       birthday: girlData.ref.anniv,
-      favoriteFood: girlData.ref.hobbies.food,
-      fetish: girlData.ref.hobbies.fetish
+      favoriteFood: Array.isArray(girlData.ref.hobbies)
+        ? ''
+        : girlData.ref.hobbies.food,
+      fetish: Array.isArray(girlData.ref.hobbies)
+        ? ''
+        : girlData.ref.hobbies.fetish
     };
 
     const commonGirl: CommonGirlData = {
@@ -233,6 +239,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
   }
   if (girlData.source_selectors.cumback_contest) {
     sources.add('CbC');
+  }
+  if (girlData.source_selectors.double_penetration) {
+    sources.add('DP');
   }
   if (girlData.source_selectors.event) {
     getEventTypes(girlData.source_selectors.event).forEach((source) =>
