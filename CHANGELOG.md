@@ -1,5 +1,6 @@
 ## 0.11.3 (NEXT)
 
+- Fix a minor display bug when rendering the harem, where top girls in the list might not be immediately visible
 - Improve market-upgrade display for a wider range of screen sizes
 - Add a filter for shards in the 40-99 range (eligible for SM Shop)
 

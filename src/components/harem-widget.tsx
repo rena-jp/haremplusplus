@@ -50,9 +50,19 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   gemsCount,
   consumeGems
 }) => {
+  // Sort girls by owned/not owned, to ensure we render owned girls first (avoid weird
+  // initial display on small harems with few owned girls).
+  // Owned/Not owned girls are rendered in two separate groups anyway, so this won't cause
+  // conflicts with user sorting choices.
+  const groupedGirls = useMemo(() => {
+    const result = [...girls];
+    result.sort((a, b) => (a.own === b.own ? 0 : a.own ? -1 : 1));
+    return result;
+  }, [girls]);
+
   // On initial rendering, start with a small batch of girls.
   const [renderedGirls, setRenderedGirls] = useState<CommonGirlData[]>(
-    girls.slice(0, INITIAL_RENDERED_GIRLS)
+    groupedGirls.slice(0, INITIAL_RENDERED_GIRLS)
   );
   const [initialRender, setInitialRender] = useState(true);
 
@@ -105,7 +115,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   // When removing girls, it's okay to simply refresh immediately,
   // as it's a lot faster to remove elements than to create them.
   useEffect(() => {
-    if (renderedGirls.length < girls.length) {
+    if (renderedGirls.length < groupedGirls.length) {
       // Use a slightly longer delay between the first update and the next ones,
       // to make sure the page has enough time to render a valid initial
       // state before we stress is with a thousand items.
@@ -113,7 +123,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       const timeout = setTimeout(() => {
         setInitialRender(false);
         setRenderedGirls(
-          girls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
+          groupedGirls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
         );
       }, delay);
       return () => {
@@ -122,7 +132,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     } else {
       setRenderedGirls(girls);
     }
-  }, [girls, renderedGirls]);
+  }, [groupedGirls, renderedGirls]);
 
   // Render a subset of the girls, until all of them are displayed
   // When removing girls, it's okay to simply refresh immediately,
@@ -136,7 +146,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       const timeout = setTimeout(() => {
         setInitialRender(false);
         setRenderedGirls(
-          girls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
+          groupedGirls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
         );
       }, delay);
       return () => {
@@ -160,7 +170,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           return girl;
         }
       }
-      return girls.length === 0 ? undefined : girls[0]; // First visible girl
+      return groupedGirls.length === 0 ? undefined : groupedGirls[0]; // First visible girl
     }
   );
   const selectGirl = useCallback(
