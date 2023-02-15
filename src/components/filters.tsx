@@ -390,6 +390,10 @@ const ShardsForm: React.FC<FormProps> = ({
         description: 'Filters girls with 1-99 Shards'
       },
       {
+        label: '40+ Shards',
+        description: 'Filters girls with 40-99 Shards (Eligible in SM shop)'
+      },
+      {
         label: 'No Shards',
         description: 'Filters girls with No Shards'
       }
@@ -401,7 +405,7 @@ const ShardsForm: React.FC<FormProps> = ({
     if (values.every((v) => !v)) {
       return undefined;
     }
-    return new ShardsMultiFilter(values[0], values[1], values[2]);
+    return new ShardsMultiFilter(values[0], values[1], values[3], values[2]);
   }, []);
 
   const getValues = useCallback((filter: Filter) => {
@@ -410,7 +414,8 @@ const ShardsForm: React.FC<FormProps> = ({
       if (filter !== undefined) {
         values[0] = filter.allShards;
         values[1] = filter.someShards;
-        values[2] = filter.noShards;
+        values[3] = filter.noShards;
+        values[2] = filter.smShards;
         return values;
       }
     }

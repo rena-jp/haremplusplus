@@ -495,6 +495,8 @@ export class ShardsFilter extends AbstractFilter {
         ? 'Owned girls'
         : shards === 'noshards'
         ? 'Girls with 0 shard'
+        : shards === '40shards'
+        ? 'Girl with 40-99 shards'
         : 'Girls with some shards';
   }
 
@@ -506,6 +508,8 @@ export class ShardsFilter extends AbstractFilter {
         return girl.shards > 0 && girl.shards < 100;
       case 'noshards':
         return girl.shards === 0;
+      case '40shards':
+        return girl.shards >= 40 && girl.shards < 100;
       default:
         return false;
     }
@@ -538,7 +542,8 @@ export class ShardsMultiFilter extends AbstractFilter {
   constructor(
     public allShards: boolean,
     public someShards: boolean,
-    public noShards: boolean
+    public noShards: boolean,
+    public smShards: boolean
   ) {
     super();
     if (allShards) {
@@ -549,6 +554,9 @@ export class ShardsMultiFilter extends AbstractFilter {
     }
     if (noShards) {
       this.filters.push(new ShardsFilter('noshards'));
+    }
+    if (smShards) {
+      this.filters.push(new ShardsFilter('40shards'));
     }
     this.orFilter =
       this.filters.length === 0 ? undefined : or('', ...this.filters);
@@ -563,7 +571,8 @@ export class ShardsMultiFilter extends AbstractFilter {
     return {
       allShards: this.allShards,
       someShards: this.someShards,
-      noShards: this.noShards
+      noShards: this.noShards,
+      smShards: this.smShards
     };
   }
 
@@ -573,12 +582,14 @@ export class ShardsMultiFilter extends AbstractFilter {
       const allShards = booleanParam(config, 'allShards');
       const someShards = booleanParam(config, 'someShards');
       const noShards = booleanParam(config, 'noShards');
+      const smShards = booleanParam(config, 'smShards') ?? false;
       if (
         allShards !== undefined &&
         someShards !== undefined &&
-        noShards !== undefined
+        noShards !== undefined &&
+        smShards !== undefined
       ) {
-        return new ShardsMultiFilter(allShards, someShards, noShards);
+        return new ShardsMultiFilter(allShards, someShards, noShards, smShards);
       }
       return undefined;
     }
@@ -849,11 +860,18 @@ export function isBlessingFilterConfig(
   return value === 'current' || value === 'upcoming' || value === 'none';
 }
 
-export type ShardsCategory = 'allshards' | 'noshards' | 'someshards';
+export type ShardsCategory =
+  | 'allshards'
+  | 'noshards'
+  | 'someshards'
+  | '40shards';
 
 export function isShardsCategory(value: string): value is ShardsCategory {
   return (
-    value === 'allshards' || value === 'noshards' || value === 'someshards'
+    value === 'allshards' ||
+    value === 'noshards' ||
+    value === 'someshards' ||
+    value === '40shards'
   );
 }
 

@@ -1,3 +1,7 @@
+## 0.11.3 (NEXT)
+
+- Add a filter for shards in the 40-99 range (eligible for SM Shop)
+
 ## 0.11.2 - 2023-02-11
 
 - Update events and unknown poses
