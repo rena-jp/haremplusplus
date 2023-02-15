@@ -1,5 +1,6 @@
 ## 0.11.3 (NEXT)
 
+- Improve market-upgrade display for a wider range of screen sizes
 - Add a filter for shards in the 40-99 range (eligible for SM Shop)
 
 ## 0.11.2 - 2023-02-11

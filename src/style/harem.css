@@ -303,27 +303,30 @@
   justify-content: stretch;
 
   /** Size */
-  height: 80vh;
-  width: 30vw;
+  box-sizing: border-box;
+  width: calc(100vw - 1rem - 30px);
+  height: calc(100vh - 1rem - 30px);
 
-  /** Position */
+  /* Position */
   position: absolute;
   bottom: 0.5rem;
-  right: 2rem;
+  right: 0.5rem;
+  margin: 0px;
   z-index: 2;
 
   /* transition: transform 0.5s ease-in, visibility 0.5s ease-in; */
 }
 
-/** Make the panel full screen on small devices */
-@media screen and (max-width: 900px) {
+/** Anchor the panel to the right on larger devices */
+@media screen and (min-width: 901px) and (min-height: 741px) {
   .harem-upgrade-panel {
-    box-sizing: border-box;
-    width: calc(100vw - 1rem - 30px);
-    height: calc(100vh - 1rem - 30px);
+    /** Size */
+    height: 80vh;
+    width: 30vw;
+
+    /** Position */
     bottom: 0.5rem;
-    right: 0.5rem;
-    margin: 0px;
+    right: 2rem;
   }
 }
 
