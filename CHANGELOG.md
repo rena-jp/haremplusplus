@@ -1,4 +1,4 @@
-## 0.11.3 (NEXT)
+## 0.11.3 - 2023-02-15
 
 - Fix a minor display bug when rendering the harem, where top girls in the list might not be immediately visible
 - Improve market-upgrade display for a wider range of screen sizes
