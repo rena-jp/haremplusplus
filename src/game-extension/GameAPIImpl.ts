@@ -434,7 +434,8 @@ export class GameAPIImpl implements GameAPI {
     // Update girl level/maxLevel
     girl.missingGems -= gemsUsed;
     girl.maxLevel = maxLevel + 50;
-    girl.level = Math.min(getLevel(girl, 0), girl.maxLevel);
+    const newLevel = Math.min(getLevel(girl, 0), girl.maxLevel);
+    this.setGirlLevel(girl, newLevel);
     if (this.updateGirl) {
       this.updateGirl(girl);
     }
@@ -505,8 +506,23 @@ export class GameAPIImpl implements GameAPI {
       girl.maxLevel = maxLevel;
       girl.missingGems -= gemsUsed;
     }
-    girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
+
+    const newLevel = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
     girl.currentGXP += addXp;
+
+    this.setGirlLevel(girl, newLevel);
+  }
+
+  private setGirlLevel(girl: CommonGirlData, level: number): void {
+    const previousLevel = girl.level ?? 1;
+    girl.level = level;
+
+    // Update the stats of the girl after she gains some levels
+    if (level != previousLevel && girl.stats !== undefined) {
+      girl.stats.hardcore = (girl.stats.hardcore / previousLevel) * level;
+      girl.stats.charm = (girl.stats.charm / previousLevel) * level;
+      girl.stats.knowhow = (girl.stats.knowhow / previousLevel) * level;
+    }
   }
 
   async useGift(girl: CommonGirlData, gift: Gift): Promise<void> {

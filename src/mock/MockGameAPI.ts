@@ -327,7 +327,9 @@ export class MockGameAPI implements GameAPI {
     // Update girl level/maxLevel
     girl.missingGems -= gemsUsed;
     girl.maxLevel = maxLevel + 50;
-    girl.level = Math.min(getLevel(girl, 0), girl.maxLevel);
+    const newLevel = Math.min(getLevel(girl, 0), girl.maxLevel);
+    setGirlLevel(girl, newLevel);
+
     if (this.updateGirl) {
       this.updateGirl(girl);
     }
@@ -465,8 +467,22 @@ function updateGirlXpStats(
     girl.maxLevel = maxLevel;
     girl.missingGems -= gemsUsed;
   }
-  girl.level = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
+
+  const newLevel = Math.min(getLevel(girl, addXp), girl.maxLevel ?? 250);
   girl.currentGXP += addXp;
+  setGirlLevel(girl, newLevel);
+}
+
+function setGirlLevel(girl: CommonGirlData, level: number): void {
+  const previousLevel = girl.level ?? 1;
+  girl.level = level;
+
+  // Update the stats of the girl after she gains some levels
+  if (level != previousLevel && girl.stats !== undefined) {
+    girl.stats.hardcore = (girl.stats.hardcore / previousLevel) * level;
+    girl.stats.charm = (girl.stats.charm / previousLevel) * level;
+    girl.stats.knowhow = (girl.stats.knowhow / previousLevel) * level;
+  }
 }
 
 function updateGirlAffStats(girl: CommonGirlData, gift: Gift): void {

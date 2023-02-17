@@ -1,3 +1,7 @@
+## 0.11.4 (NEXT)
+
+- Fix: Properly update girl stats after leveling up (books or awakening)
+
 ## 0.11.3 - 2023-02-15
 
 - Fix a minor display bug when rendering the harem, where top girls in the list might not be immediately visible
