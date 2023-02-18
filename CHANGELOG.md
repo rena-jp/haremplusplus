@@ -1,5 +1,6 @@
 ## 0.11.4 (NEXT)
 
+- Fix: Properly update sort (by current/upcoming potential) when blessings change
 - Fix: Properly update girl stats after leveling up (books or awakening)
 
 ## 0.11.3 - 2023-02-15

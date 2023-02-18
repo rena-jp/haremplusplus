@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { BlessingDefinition } from '../data/data';
 import {
   BasePotentialSorter,
@@ -48,6 +48,20 @@ export const SortPanel: React.FC<SortProps> = ({
       UpcomingPotentialSorter(upcomingBlessings)
     ];
   }, [currentBlessings, upcomingBlessings]);
+
+  // When the sorter definitions change (= new blessings), update
+  // the active sort config to pick the new version.
+  useEffect(() => {
+    console.log('Refresh sort configurations (due to blessings change?)');
+    const config = allSorters.find((conf) => conf.id === currentSortConfig.id);
+    if (config !== undefined) {
+      const updatedConfig = {
+        ...config,
+        direction: currentSortConfig.direction
+      };
+      setSortConfig(updatedConfig);
+    }
+  }, [allSorters]);
 
   const configureSort = useCallback(
     (sorter: ConfiguredSort) =>
