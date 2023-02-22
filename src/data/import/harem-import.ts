@@ -243,6 +243,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
   if (girlData.source_selectors.double_penetration) {
     sources.add('DP');
   }
+  if (girlData.source_selectors.seasonal_event) {
+    sources.add('SE');
+  }
   if (girlData.source_selectors.event) {
     getEventTypes(girlData.source_selectors.event).forEach((source) =>
       sources.add(source)
@@ -253,12 +256,6 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
 
 function getEventTypes(events: number[]): EventSource[] {
   const eventTypes = new Set<EventSource>();
-  if ((events.length === 1 && events[0] === 1) || events[0] === 2) {
-    // SE and CE can't easily be distinguished; they use the same IDs (starting from 1 for SE, from 2 for CE).
-    // At the moment, Seasonal Events don't have revivals, so they only have 1 entry. The first CE girls
-    // have already been revived many times in OD, so they will never have just 1 entry.
-    return ['SE'];
-  }
   events.forEach((eventId) => eventTypes.add(getEventType(eventId)));
   return [...eventTypes];
 }
