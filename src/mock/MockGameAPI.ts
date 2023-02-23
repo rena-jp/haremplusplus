@@ -20,6 +20,7 @@ import {
 import { getLevel, getXpStats } from '../hooks/girl-xp-hooks';
 import { getAffectionStats, isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
+import { roundValue } from '../data/common';
 // import girls from './girlsDataList-test.json';
 // import girls from './girlsdatalist-full.json';
 // import blessings from './blessings-full.json';
@@ -479,9 +480,13 @@ function setGirlLevel(girl: CommonGirlData, level: number): void {
 
   // Update the stats of the girl after she gains some levels
   if (level != previousLevel && girl.stats !== undefined) {
-    girl.stats.hardcore = (girl.stats.hardcore / previousLevel) * level;
-    girl.stats.charm = (girl.stats.charm / previousLevel) * level;
-    girl.stats.knowhow = (girl.stats.knowhow / previousLevel) * level;
+    girl.stats.hardcore = roundValue(
+      (girl.stats.hardcore / previousLevel) * level
+    );
+    girl.stats.charm = roundValue((girl.stats.charm / previousLevel) * level);
+    girl.stats.knowhow = roundValue(
+      (girl.stats.knowhow / previousLevel) * level
+    );
   }
 }
 

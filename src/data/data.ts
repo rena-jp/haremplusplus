@@ -1,4 +1,5 @@
 import { firstToUpper } from '../components/common';
+import { roundValue } from './common';
 
 export enum Rarity {
   starting,
@@ -580,7 +581,7 @@ export function getNormalizedPower(
   );
   const multiplier = getBlessingMultiplier(girl, blessings);
   const total = basePower * multiplier;
-  const roundedTotal = parseFloat(total.toFixed(3));
+  const roundedTotal = roundValue(total);
   return roundedTotal;
 }
 

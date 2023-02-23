@@ -1,3 +1,4 @@
+import { roundValue } from '../common';
 import {
   BlessingDefinition,
   CommonGirlData,
@@ -444,7 +445,7 @@ export class MinimumPotentialFilter extends AbstractFilter {
     );
 
     // Round to a few decimal places; otherwise girls at 24.999999999 power may be excluded from a >= 25 filter
-    const totalValue = parseFloat(total.toFixed(4));
+    const totalValue = roundValue(total, 5);
 
     return totalValue >= this.threshold;
   }
