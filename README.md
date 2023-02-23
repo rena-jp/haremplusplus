@@ -19,8 +19,7 @@ This project provides a userscript (To be used with Tampermonkey, or similar bro
 
 ## Known issues
 
-- The current script only supports the main server and the test server. Related games and other servers are **not** supported at the moment.
-  - Nutaku is _partially_ supported. The script doesn't work on Nutaku when using Firefox, as cache won't be supported.
+- The current script only supports the main server and the test server, as well as Nutaku. Related games and other servers are **not** supported at the moment.
 - The script was developped for usage with Desktop-based Browsers. Mobile platforms are **not** supported at the moment. Recommended resolution is 1280x720 or higher.
 - The script reads data from the game with your current configured language. However, UI Elements are displayed in English. Other languages are **not** supported at the moment.
 - The script relies on the browser cache feature to speed up rendering. As such, Cache must be enabled on your browser in order for the script to work properly. All popular browsers should support Cache. However, when using Private Navigation, Cache may be disabled. This is especially the case with Firefox. When using Firefox in Private Navigation mode, the Cache is disabled, and the script won't be able to save any data. As such, loading the harem won't be any faster than using the original game (It will probably be even slower).
