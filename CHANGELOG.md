@@ -1,5 +1,6 @@
 ## 0.11.4 (NEXT)
 
+- Tentative fix: avoid 403 error/popup while loading the harem data
 - Improve detection of Seasonal Event girls
 - Fix: Properly update sort (by current/upcoming potential) when blessings change
 - Fix: Properly update girl stats after leveling up (books or awakening)

@@ -930,43 +930,50 @@ async function getOrCreateFrame(
   url: string,
   refreshFrame: boolean
 ): Promise<HTMLIFrameElement> {
-  return queue(
-    () =>
-      new Promise<HTMLIFrameElement>((resolve, reject) => {
-        let frame = document.getElementById(id) as HTMLIFrameElement;
-        if (frame) {
-          if (refreshFrame && frame.contentWindow) {
-            const initial = Date.now();
-            frame.onload = () => {
-              const final = Date.now();
-              const delay = final - initial;
-              console.info(`${id} frame reloaded in ${delay} ms`);
-              resolve(frame);
-            };
-            frame.contentWindow.location.reload();
-          } else {
+  return queue(() =>
+    new Promise<HTMLIFrameElement>((resolve, reject) => {
+      // Tentative fix: attempt to prevent the game from dispatching
+      // a process_rewards_queue request while the (harem) frame is loading,
+      // which would likely cause a 403 error
+      getGameWindow().loadingAnimation.isLoading = true;
+
+      let frame = document.getElementById(id) as HTMLIFrameElement;
+      if (frame) {
+        if (refreshFrame && frame.contentWindow) {
+          const initial = Date.now();
+          frame.onload = () => {
+            const final = Date.now();
+            const delay = final - initial;
+            console.info(`${id} frame reloaded in ${delay} ms`);
             resolve(frame);
-          }
+          };
+          frame.contentWindow.location.reload();
         } else {
-          const wrapper = document.getElementById('quick-harem-wrapper');
-          if (wrapper) {
-            frame = document.createElement('iframe');
-            frame.setAttribute('id', id);
-            frame.setAttribute('src', url);
-            frame.setAttribute('style', 'display: none;');
-            wrapper.appendChild(frame);
-            const initialLoad = Date.now();
-            frame.onload = () => {
-              const finalLoad = Date.now();
-              const loadDelay = finalLoad - initialLoad;
-              console.info(`${id} frame loaded in ${loadDelay}ms`);
-              resolve(frame);
-            };
-          } else {
-            reject('#quick-harem-wrapper not found; abort');
-          }
+          resolve(frame);
         }
-      })
+      } else {
+        const wrapper = document.getElementById('quick-harem-wrapper');
+        if (wrapper) {
+          frame = document.createElement('iframe');
+          frame.setAttribute('id', id);
+          frame.setAttribute('src', url);
+          frame.setAttribute('style', 'display: none;');
+          wrapper.appendChild(frame);
+          const initialLoad = Date.now();
+          frame.onload = () => {
+            const finalLoad = Date.now();
+            const loadDelay = finalLoad - initialLoad;
+            console.info(`${id} frame loaded in ${loadDelay}ms`);
+            resolve(frame);
+          };
+        } else {
+          reject('#quick-harem-wrapper not found; abort');
+        }
+      }
+    }).then((res) => {
+      getGameWindow().loadingAnimation.isLoading = false;
+      return res;
+    })
   );
 }
 

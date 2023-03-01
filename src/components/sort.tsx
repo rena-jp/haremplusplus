@@ -52,7 +52,6 @@ export const SortPanel: React.FC<SortProps> = ({
   // When the sorter definitions change (= new blessings), update
   // the active sort config to pick the new version.
   useEffect(() => {
-    console.log('Refresh sort configurations (due to blessings change?)');
     const config = allSorters.find((conf) => conf.id === currentSortConfig.id);
     if (config !== undefined) {
       const updatedConfig = {

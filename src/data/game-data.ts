@@ -353,6 +353,7 @@ export interface GameWindow extends Window {
   // exposes it at runtime. It may not be immediately available.
   setQuestData?(questData: GameQuestStep): void;
   questData?: GameQuestStep;
+  loadingAnimation: { isLoading: boolean };
 }
 
 export interface GemsData {
