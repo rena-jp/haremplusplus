@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
-import { getGameWindow } from '../data/game-data';
 
 export async function handleHome(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
@@ -19,7 +18,7 @@ export async function handleHome(): Promise<void> {
     visible = newVisible;
     updateApp();
   };
-  const haremLink = getGameWindow().$("a[rel='harem']");
+  const haremLink = window.$("a[rel='harem']");
   haremLink.on('click', (event: MouseEvent) => {
     setVisible(true);
     event?.preventDefault();

@@ -5,9 +5,7 @@ import {
   GameInventory,
   GameQuests,
   GameQuestStep,
-  GameWindow,
   GemsData,
-  getGameWindow,
   GiftResult,
   GirlsDataList,
   GirlsSalaryEntry,
@@ -45,12 +43,12 @@ export type RESPONSE_GAME_DATA = 'response_game_data';
 
 export interface HaremDataRequest {
   type: REQUEST_GAME_DATA;
-  attribute: keyof GameWindow;
+  attribute: keyof Window;
 }
 
 export interface HaremDataResponse {
   type: RESPONSE_GAME_DATA;
-  attribute: keyof GameWindow;
+  attribute: keyof Window;
   gameData: unknown;
 }
 
@@ -93,7 +91,7 @@ export class GameAPIImpl implements GameAPI {
     // Step 1: Check if the girls data list is already present in the memory.
     // This would only be the case on the harem page.
 
-    const gameGirlsObjects = getGameWindow().girlsDataList as unknown;
+    const gameGirlsObjects = window.girlsDataList;
     let gameGirls: GirlsDataList | undefined = undefined;
     if (GirlsDataList.isFullHaremData(gameGirlsObjects)) {
       gameGirls = gameGirlsObjects;
@@ -196,7 +194,7 @@ export class GameAPIImpl implements GameAPI {
   async getBlessings(): Promise<GameBlessingData> {
     // First, check if the blessings data is already available in memory
 
-    const blessingData = getGameWindow().blessings_data;
+    const blessingData = window.blessings_data;
     if (GameBlessingData.is(blessingData)) {
       return blessingData;
     }
@@ -334,7 +332,7 @@ export class GameAPIImpl implements GameAPI {
   }
 
   getSalaryData(): GirlsSalaryList {
-    const salaryManager = getGameWindow().GirlSalaryManager;
+    const salaryManager = window.GirlSalaryManager;
     const girlsMap = salaryManager.girlsMap;
     const result: GirlsSalaryList = {};
     for (const girlId in girlsMap) {
@@ -656,7 +654,7 @@ export class GameAPIImpl implements GameAPI {
    * true otherwise (e.g. from the quick-harem on home.html)
    */
   private async requestFromHarem<T>(
-    attribute: keyof GameWindow,
+    attribute: keyof Window,
     typeTester: (value: unknown) => value is T,
     allowRequest: boolean
   ): Promise<T> {
@@ -676,7 +674,7 @@ export class GameAPIImpl implements GameAPI {
    * true otherwise (e.g. from the quick-harem on home.html)
    */
   private async requestFromMarket<T>(
-    attribute: keyof GameWindow,
+    attribute: keyof Window,
     typeTester: (value: unknown) => value is T,
     allowRequest: boolean
   ): Promise<T> {
@@ -698,12 +696,12 @@ export class GameAPIImpl implements GameAPI {
    */
   private async requestFromFrame<T>(
     frameSupplier: () => Promise<HTMLIFrameElement>,
-    attribute: keyof GameWindow,
+    attribute: keyof Window,
     typeTester: (value: unknown) => value is T,
     allowRequest: boolean
   ): Promise<T> {
     // Step 1: Check if the value is available on the current page
-    const gameData = getGameWindow()[attribute] as unknown;
+    const gameData = window[attribute];
     if (typeTester(gameData)) {
       return gameData;
     }
@@ -798,7 +796,7 @@ export class GameAPIImpl implements GameAPI {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHero(): Hero {
-    return getGameWindow().Hero;
+    return window.Hero;
   }
 
   addSalaryDataListener(listener: SalaryDataListener): void {
@@ -852,7 +850,7 @@ export class GameAPIImpl implements GameAPI {
   private installRequestsListener(): void {
     // Intercept responses to ajax requests. For now, this is used to refresh
     // harem salary data when "Collect all" is used from the home page.
-    getGameWindow()
+    window
       .$(document)
       .ajaxComplete((event: unknown, request: unknown, settings: unknown) => {
         this.handleRequest(event, request, settings);
@@ -935,7 +933,7 @@ async function getOrCreateFrame(
       // Tentative fix: attempt to prevent the game from dispatching
       // a process_rewards_queue request while the (harem) frame is loading,
       // which would likely cause a 403 error
-      getGameWindow().loadingAnimation.isLoading = true;
+      window.loadingAnimation.isLoading = true;
 
       let frame = document.getElementById(id) as HTMLIFrameElement;
       if (frame) {
@@ -971,7 +969,7 @@ async function getOrCreateFrame(
         }
       }
     }).then((res) => {
-      getGameWindow().loadingAnimation.isLoading = false;
+      window.loadingAnimation.isLoading = false;
       return res;
     })
   );
@@ -999,10 +997,9 @@ function refreshSalaryManager(
 ): void {
   // Refresh the salaryManager (Used to update the collectButton when girls are ready,
   // including the Tooltips)
-  const salaryManager = getGameWindow().GirlSalaryManager;
+  const salaryManager = window.GirlSalaryManager;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ownedGirls: { [key: string]: any } = {};
-  const gameWindow = getGameWindow();
 
   girlSalaryEntry.pay_in = salaryTime + 10;
 
@@ -1011,24 +1008,24 @@ function refreshSalaryManager(
   // introduce (minor) delay inconsistencies in the timers.
 
   for (const girlId in salaryData) {
-    ownedGirls[girlId] = new gameWindow.Girl(salaryData[girlId]);
+    ownedGirls[girlId] = new window.Girl(salaryData[girlId]);
     ownedGirls[girlId]['gId'] = parseInt(girlId, 10);
   }
   salaryManager.init(ownedGirls, true);
 
   // Refresh the collect all button
-  const collectButton = gameWindow.$('#collect_all');
+  const collectButton = window.$('#collect_all');
   const salarySum = collectButton.find('.sum');
   const newAmount = Math.max(
     0,
     parseInt(salarySum.attr('amount'), 10) - girlSalaryEntry.salary
   );
   salarySum.attr('amount', newAmount);
-  const collectStr = gameWindow.GT.design.harem_collect;
-  const amountTxt = gameWindow.number_format_lang(newAmount, 0);
+  const collectStr = window.GT.design.harem_collect;
+  const amountTxt = window.number_format_lang(newAmount, 0);
   salarySum.text(collectStr + ' ' + amountTxt);
 
-  gameWindow.Collect.changeDisableBtnState(newAmount <= 0);
+  window.Collect.changeDisableBtnState(newAmount <= 0);
 }
 
 function toMaxOutItems(result: MaxOutResult): MaxOutItems {

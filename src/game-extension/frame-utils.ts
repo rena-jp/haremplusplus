@@ -1,8 +1,7 @@
-import { GameWindow } from '../data/game-data';
 import { HaremDataResponse, HaremMessage } from './GameAPIImpl';
 
 export async function loadAndDispatch<T>(
-  attribute: keyof GameWindow,
+  attribute: keyof Window,
   getter: () => Promise<T>
 ): Promise<T> {
   try {

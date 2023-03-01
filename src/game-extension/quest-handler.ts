@@ -1,9 +1,8 @@
-import { getGameWindow } from '../data/game-data';
 import { loadAndDispatch } from './frame-utils';
 
 export async function handleQuest(): Promise<void> {
   await handleQuestData();
-  await loadAndDispatch('questData', async () => getGameWindow().questData);
+  await loadAndDispatch('questData', async () => window.questData);
 }
 
 // The questData object is not exposed. Create a copy of the script
@@ -25,9 +24,8 @@ async function handleQuestData(): Promise<void> {
 
         // Execute a script that exposes the questData value
         return new Promise((resolve) => {
-          const gameWindow = getGameWindow();
-          gameWindow.setQuestData = (data) => {
-            gameWindow.questData = data;
+          window.setQuestData = (data) => {
+            window.questData = data;
             resolve();
           };
           eval(updatedContent);

@@ -321,39 +321,41 @@ export interface GameQuest {
   begin_step: 1;
 }
 
-export interface GameWindow extends Window {
-  girlsDataList: GirlsDataList | GirlsSalaryList;
-  girl_quests: GameQuests | undefined;
-  player_gems_amount: GemsData;
-  Hero: Hero;
-  blessings_data: unknown;
-  GirlSalaryManager: GirlSalaryManager;
-  Collect: Collect;
-  /**
-   * Predefined js class
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Girl: any;
-  /**
-   * JQuery
-   */
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  $: any;
-  /**
-   * Game Translation object
-   */
-  GT: GT;
-  number_format_lang(value: number, decimals?: number): string;
-  notificationData: {
-    [key: string]: string;
-  };
-  player_inventory: GameInventory | undefined;
+declare global {
+  export interface Window {
+    girlsDataList: GirlsDataList | GirlsSalaryList;
+    girl_quests: GameQuests | undefined;
+    player_gems_amount: GemsData;
+    Hero: Hero;
+    blessings_data: unknown;
+    GirlSalaryManager: GirlSalaryManager;
+    Collect: Collect;
+    /**
+     * Predefined js class
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    Girl: any;
+    /**
+     * JQuery
+     */
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    $: any;
+    /**
+     * Game Translation object
+     */
+    GT: GT;
+    number_format_lang(value: number, decimals?: number): string;
+    notificationData: {
+      [key: string]: string;
+    };
+    player_inventory: GameInventory | undefined;
 
-  // Note: this isn't actually a global variable. The quest_handler
-  // exposes it at runtime. It may not be immediately available.
-  setQuestData?(questData: GameQuestStep): void;
-  questData?: GameQuestStep;
-  loadingAnimation: { isLoading: boolean };
+    // Note: this isn't actually a global variable. The quest_handler
+    // exposes it at runtime. It may not be immediately available.
+    setQuestData?(questData: GameQuestStep): void;
+    questData?: GameQuestStep;
+    loadingAnimation: { isLoading: boolean };
+  }
 }
 
 export interface GemsData {
@@ -440,10 +442,6 @@ export interface Currencies {
   hard_currency: number;
   sultry_coins: number;
   ticket: number;
-}
-
-export function getGameWindow(): GameWindow {
-  return window as unknown as GameWindow;
 }
 
 export interface ChangePoseResult {
