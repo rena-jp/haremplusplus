@@ -1,5 +1,6 @@
 import { firstToUpper } from '../components/common';
 import { roundValue } from './common';
+import { isUnknownObject } from './game-data';
 
 export enum Rarity {
   starting,
@@ -256,6 +257,8 @@ export enum Element {
   white,
   dark
 }
+
+export type TeamElement = 'rainbow' | Element;
 
 export namespace Blessings {
   export function values(): Blessing[] {
@@ -745,6 +748,30 @@ export interface QuestData {
   dialogue: string;
   portrait?: string;
   cost?: number;
+}
+
+export interface Team {
+  teamId: string;
+  girlIds: string[];
+  active: boolean;
+}
+
+export namespace Team {
+  export function is(value: unknown): value is Team {
+    if (isUnknownObject(value)) {
+      return (
+        typeof value.teamId === 'string' &&
+        Array.isArray(value.girlIds) &&
+        value.girlIds.every((id) => typeof id === 'string') &&
+        typeof value.active === 'boolean'
+      );
+    }
+    return false;
+  }
+
+  export function isArray(value: unknown): value is Team[] {
+    return Array.isArray(value) && value.every(is);
+  }
 }
 
 export const SPECIAL_MYTHIC_BOOK_ID = 631;

@@ -13,7 +13,7 @@ import { Tab, TabFolder } from './tabs';
 import { FiltersPanel } from './filters';
 import { SortPanel } from './sort';
 import { HaremOptions } from '../data/options';
-import { HaremWidget } from './harem-widget';
+import { HaremMode, HaremWidget } from './harem-widget';
 import { HaremToolbar } from './harem-toolbar';
 import { useQuickFilters } from '../hooks/quick-filter-hooks';
 import { useSorter } from '../hooks/sort-hooks';
@@ -105,6 +105,8 @@ export const Harem: React.FC<HaremProps> = ({
 
   const [displayedTab, setDisplayedTab] = useState(activeTab);
 
+  const [haremMode, setHaremMode] = useState<HaremMode>('standard');
+
   // When hiding the entire tabs panel, keep the current tab displayed (to avoid content disappearing
   // while the panel is sliding away)
   if (activeTab !== undefined && activeTab !== displayedTab) {
@@ -124,6 +126,8 @@ export const Harem: React.FC<HaremProps> = ({
       toggleTab(activeTab);
     }
   }, [tabs, toggleTab, activeTab]);
+
+  const classNames = ['qh-harem', haremMode];
 
   return (
     <>
@@ -158,7 +162,7 @@ export const Harem: React.FC<HaremProps> = ({
               isDefaultSort={sorterState.isDefaultSort}
             />
           </TabFolder>
-          <div className="qh-harem">
+          <div className={classNames.join(' ')}>
             <HaremToolbar
               gameAPI={gameAPI}
               loading={loading}
@@ -173,6 +177,8 @@ export const Harem: React.FC<HaremProps> = ({
               toggleTab={togglePanel}
               isOpenTab={activeTab !== undefined}
               gemsCount={gemsCount}
+              haremMode={haremMode}
+              setHaremMode={setHaremMode}
             />
             <HaremWidget
               allGirls={allGirls}
@@ -184,6 +190,8 @@ export const Harem: React.FC<HaremProps> = ({
               gameAPI={gameAPI}
               gemsCount={gemsCount}
               consumeGems={consumeGems}
+              haremMode={haremMode}
+              setHaremMode={setHaremMode}
             />
           </div>
         </OptionsContext.Provider>

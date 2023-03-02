@@ -1,0 +1,92 @@
+.girl-tooltip {
+  padding: 1em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: fit-content;
+  row-gap: 0.5rem;
+}
+
+.girl-tooltip.show-border {
+  border: 2px solid white;
+  border-radius: 1em;
+}
+
+.element-and-pose {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  --var-icon-size: 3.5em;
+}
+
+.element-and-pose > .element {
+  /** 
+  Pose icon has extra margin compared to element icon. Use a smaller 
+  Element icon to make them similar 
+  */
+  width: calc(0.657 * var(--var-icon-size));
+  height: calc(0.657 * var(--var-icon-size));
+}
+
+.element-and-pose > .pose-icon {
+  width: var(--var-icon-size);
+  height: var(--var-icon-size);
+}
+
+.girl-tooltip > h2,
+.girl-tooltip > h3 {
+  padding: 0;
+  margin: 0;
+}
+
+.girl-tooltip.common,
+.girl-tooltip.starting {
+  border-color: #8d8e9f;
+}
+
+.girl-tooltip.rare {
+  border-color: #23b56b;
+}
+
+.girl-tooltip.epic {
+  border-color: #ffb244;
+}
+
+.girl-tooltip.legendary {
+  border-color: #8e36a9;
+}
+
+.girl-tooltip.mythic {
+  border-color: #ec0039;
+}
+
+.girl-tooltip.common > .qh-girl-name,
+.girl-tooltip.starting > .qh-girl-name {
+  color: #8d8e9f;
+}
+
+.girl-tooltip.rare > .qh-girl-name {
+  color: #23b56b;
+}
+
+.girl-tooltip.epic > .qh-girl-name {
+  color: #ffb244;
+}
+
+.girl-tooltip.legendary > .qh-girl-name {
+  color: #8e36a9;
+}
+
+.girl-tooltip.mythic > .qh-girl-name {
+  color: #ec0039;
+}
+
+.girl-tooltip > .grade {
+  width: 100%;
+  height: 2.2rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  justify-content: center;
+}

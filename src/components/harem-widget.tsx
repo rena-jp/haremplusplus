@@ -1,9 +1,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
-import { BlessingDefinition, CommonGirlData, Element } from '../data/data';
+import {
+  BlessingDefinition,
+  CommonGirlData,
+  Element,
+  Team
+} from '../data/data';
 import { GirlDescription } from './description';
 import { GirlTile } from './girl';
+import { Teams } from './teams';
 import { UpgradePage } from './upgrade';
 
 /**
@@ -38,6 +44,8 @@ export interface HaremWidgetProps {
   gameAPI: GameAPI;
   gemsCount: Map<Element, number>;
   consumeGems(element: Element, gems: number): void;
+  haremMode: HaremMode;
+  setHaremMode: (mode: HaremMode) => void;
 }
 
 export const HaremWidget: React.FC<HaremWidgetProps> = ({
@@ -48,7 +56,9 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   upcomingBlessings,
   gameAPI,
   gemsCount,
-  consumeGems
+  consumeGems,
+  haremMode,
+  setHaremMode
 }) => {
   // Sort girls by owned/not owned, to ensure we render owned girls first (avoid weird
   // initial display on small harems with few owned girls).
@@ -227,6 +237,11 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     setShowUpgrade(false);
   }, []);
 
+  const [teams, setTeams] = useState<Team[]>([]);
+  useEffect(() => {
+    gameAPI.getTeams().then(setTeams);
+  }, [gameAPI]);
+
   return (
     <>
       <div className="girlsList">
@@ -264,13 +279,23 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           ))}
         </div>
       </div>
+      {haremMode === 'edit-teams' ? (
+        <Teams
+          allGirls={allGirls}
+          selectedGirl={selectedGirl}
+          teams={teams}
+          close={() => setHaremMode('standard')}
+          show0Pose={show0Pose}
+          currentBlessings={currentBlessings}
+          upcomingBlessings={upcomingBlessings}
+        />
+      ) : null}
       <GirlDescription
         allGirls={allGirls}
         girl={selectedGirl}
         activeBlessing={currentBlessings}
         nextBlessing={upcomingBlessings}
         show0Pose={show0Pose}
-        gameAPI={gameAPI}
         selectGirl={selectGirl}
         openUpgrade={openUpgrade}
       />
@@ -295,3 +320,5 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     </>
   );
 };
+
+export type HaremMode = 'standard' | 'edit-teams';

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HaremGirlTile, SimpleGirlTile } from '../components/girl';
 
@@ -9,9 +9,16 @@ import ownedMythicData from './girlsData/ownedMythic.json';
 import upgradeReadyData from './girlsData/upgradeReady.json';
 import loadingImgData from './girlsData/loadingImg.json';
 import invalidImgData from './girlsData/invalidImg.json';
-import { CommonGirlData } from '../data/data';
+import { CommonGirlData, Team } from '../data/data';
 
 import './style/mockStyle.css';
+import { GirlTooltip } from '../components/girl-tooltip';
+import { MockGameAPI } from './MockGameAPI';
+import { GameAPI } from '../api/GameAPI';
+import { LoadHaremData } from '../hooks/load-harem-data';
+import { Teams } from '../components/teams';
+import { TooltipConfiguration } from '../components/common';
+import { GameAPIContext } from '../data/game-api-context';
 
 const ownedGirl = ownedGirlData as CommonGirlData;
 const missingGirl = missingGirlData as CommonGirlData;
@@ -140,3 +147,53 @@ function createRoot(): ReactDOM.Root {
   const root = ReactDOM.createRoot(quickHaremWrapper);
   return root;
 }
+
+export function handleTestGirlTooltip() {
+  const root = createRoot();
+
+  const content = (
+    <div>
+      <GirlTooltip girl={ownedGirl} classNames={['show-border']} />
+      <GirlTooltip girl={missingGirl} classNames={['show-border']} />
+    </div>
+  );
+
+  root.render(content);
+}
+
+export function handleTestTeams() {
+  const root = createRoot();
+  const mockAPI = new MockGameAPI();
+
+  const content = <TeamsTest gameAPI={mockAPI} />;
+
+  root.render(content);
+}
+
+const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
+  const [teams, setTeams] = useState<Team[] | undefined>(undefined);
+  useEffect(() => {
+    gameAPI.getTeams().then(setTeams);
+  }, []);
+  return (
+    <div style={{ pointerEvents: 'initial' }}>
+      <TooltipConfiguration />
+      <GameAPIContext.Provider value={{ gameAPI }}>
+        <LoadHaremData gameAPI={gameAPI}>
+          {({ allGirls }) => {
+            return teams !== undefined && allGirls !== undefined ? (
+              <Teams
+                allGirls={allGirls}
+                teams={teams}
+                selectedGirl={undefined}
+                show0Pose={false}
+                currentBlessings={[]}
+                upcomingBlessings={[]}
+              />
+            ) : null;
+          }}
+        </LoadHaremData>
+      </GameAPIContext.Provider>
+    </div>
+  );
+};

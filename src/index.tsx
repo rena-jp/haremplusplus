@@ -2,7 +2,11 @@ import './style/index.css';
 import { handleHarem } from './game-extension/harem-handler';
 import { handleHome } from './game-extension/home-handler';
 import { handleLocal } from './game-extension/local-handler';
-import { handleTestTiles } from './mock/test-handler';
+import {
+  handleTestGirlTooltip,
+  handleTestTeams,
+  handleTestTiles
+} from './mock/test-handler';
 import { handleMarket } from './game-extension/market-handler';
 import { handleQuest } from './game-extension/quest-handler';
 
@@ -26,6 +30,10 @@ else if (window.location.pathname.startsWith('/quest/')) {
 else if (window.location.host === 'localhost:3000') {
   if (window.location.search.includes('testTiles')) {
     handleTestTiles();
+  } else if (window.location.search.includes('girlTooltip')) {
+    handleTestGirlTooltip();
+  } else if (window.location.search.includes('teams')) {
+    handleTestTeams();
   } else {
     handleLocal();
   }

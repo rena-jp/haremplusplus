@@ -1,4 +1,11 @@
-import { Book, CommonGirlData, getPoseN, Gift, QuestData } from '../data/data';
+import {
+  Book,
+  CommonGirlData,
+  getPoseN,
+  Gift,
+  QuestData,
+  Team
+} from '../data/data';
 import {
   ChangePoseResult,
   GameBlessingData,
@@ -26,7 +33,8 @@ import {
   RequestEvent,
   RequestEventType,
   RequestListener,
-  SalaryDataListener
+  SalaryDataListener,
+  TeamStats
 } from '../api/GameAPI';
 import { getGXPToCap, getLevel, getXpStats } from '../hooks/girl-xp-hooks';
 import {
@@ -816,6 +824,25 @@ export class GameAPIImpl implements GameAPI {
 
   removeRequestListener(listener: RequestListener): void {
     this.requestListeners.delete(listener);
+  }
+
+  async getTeams(): Promise<Team[]> {
+    return []; // TODO
+  }
+
+  async setTeam(_team: Team): Promise<void> {
+    // TODO
+  }
+
+  async getTeamStats(_team: Team): Promise<TeamStats> {
+    // TODO
+    return {
+      damage: 0,
+      defense: 0,
+      ego: 0,
+      chance: 0,
+      totalPower: 0
+    };
   }
 
   private fireRequestEvent(

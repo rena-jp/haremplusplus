@@ -18,6 +18,10 @@
   font-size: 0.8em;
 }
 
+.hh-action-button.active {
+  background: rgba(60, 60, 60, 0.7);
+}
+
 .hh-action-button:hover {
   border: 1px solid #edb273;
 }

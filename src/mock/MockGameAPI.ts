@@ -1,4 +1,11 @@
-import { Book, CommonGirlData, getPoseN, Gift, QuestData } from '../data/data';
+import {
+  Book,
+  CommonGirlData,
+  getPoseN,
+  Gift,
+  QuestData,
+  Team
+} from '../data/data';
 import {
   GameBlessingData,
   GameInventory,
@@ -15,7 +22,8 @@ import {
   RequestEvent,
   RequestEventType,
   RequestListener,
-  SalaryDataListener
+  SalaryDataListener,
+  TeamStats
 } from '../api/GameAPI';
 import { getLevel, getXpStats } from '../hooks/girl-xp-hooks';
 import { getAffectionStats, isUpgradeReady } from '../hooks/girl-aff-hooks';
@@ -393,6 +401,146 @@ export class MockGameAPI implements GameAPI {
 
   removeRequestListener(listener: RequestListener): void {
     this.requestListeners.delete(listener);
+  }
+
+  private teams: Team[] | undefined;
+
+  async getTeams(): Promise<Team[]> {
+    return new Promise((resolve) => {
+      if (this.teams !== undefined) {
+        resolve(this.teams);
+      } else {
+        setTimeout(() => {
+          this.teams = [
+            {
+              girlIds: ['948443498', '886658459', '861690823', '690645314'],
+              teamId: '3680617',
+              active: true
+            },
+            {
+              girlIds: [
+                '886658459',
+                '861690823',
+                '690645314',
+                '948443498',
+                '249762992',
+                '98',
+                '1247315'
+              ],
+              teamId: '3680618',
+              active: true
+            },
+            {
+              girlIds: [],
+              teamId: '368',
+              active: true
+            },
+            {
+              girlIds: [],
+              teamId: '369',
+              active: true
+            },
+            {
+              girlIds: [],
+              teamId: '370',
+              active: true
+            },
+            {
+              girlIds: [],
+              teamId: '371',
+              active: true
+            },
+            {
+              girlIds: [],
+              teamId: '372',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '373',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '374',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '375',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '376',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '377',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '378',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '379',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '380',
+              active: false
+            },
+            {
+              girlIds: [],
+              teamId: '381',
+              active: false
+            }
+          ];
+          resolve(this.teams);
+        }, 1000);
+      }
+    });
+  }
+
+  async setTeam(team: Team): Promise<void> {
+    if (this.teams === undefined) {
+      this.teams = await this.getTeams();
+    }
+    const currentTeam = this.teams.findIndex((t) => t.teamId === team.teamId);
+    if (currentTeam >= 0) {
+      this.teams[currentTeam] = team;
+    } else {
+      this.teams.push(team);
+    }
+  }
+
+  async getTeamStats(team: Team): Promise<TeamStats> {
+    if (team.girlIds.length > 0) {
+      return new Promise((resolve, _reject) => {
+        setTimeout(() => {
+          resolve({
+            damage: 100000,
+            defense: 53000,
+            ego: 700000,
+            chance: 96000,
+            totalPower: 175000
+          });
+        }, 150);
+      });
+    } else {
+      return {
+        damage: 0,
+        defense: 0,
+        ego: 0,
+        chance: 0,
+        totalPower: 0
+      };
+    }
   }
 
   private fireRequestEvent(type: RequestEventType, success = true): void {

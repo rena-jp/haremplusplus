@@ -25,6 +25,9 @@ export interface SimpleGirlTileProps extends GirlTileProps {
   classNames?: string[];
 }
 
+/**
+ * A girl tile with element and grade.
+ */
 export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   girl,
   selected,
@@ -35,18 +38,81 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   classNames,
   lazy
 }) => {
-  const rarityCss = Rarity[girl.rarity];
+  const avatarOverlayWithElement = (
+    <>
+      {avatarOverlay}
+      <ElementIcon element={girl.element} />
+    </>
+  );
 
-  const allClassNames = ['girlTile', rarityCss];
+  const bottom = (
+    <Grade
+      stars={girl.stars}
+      maxStars={girl.maxStars}
+      currentStar={girl.currentIcon}
+    />
+  );
+
+  return (
+    <BaseGirlTile
+      girl={girl}
+      onClick={onClick}
+      avatarOverlay={avatarOverlayWithElement}
+      bottom={bottom}
+      selected={selected}
+      children={children}
+      classNames={classNames}
+      lazy={lazy}
+      show0Pose={show0Pose}
+    />
+  );
+};
+
+export interface BaseGirlTileProps {
+  girl: CommonGirlData | undefined;
+  onClick: () => void;
+  children?: ReactNode;
+  avatarOverlay?: ReactNode;
+  bottom?: ReactNode;
+  classNames?: string[];
+  selected?: boolean;
+  show0Pose?: boolean;
+  lazy?: boolean;
+}
+
+/**
+ * Base component showing the girl's avatar, with a rarity background.
+ * The component can be extended in various ways with additional overlays.
+ *
+ * If the girl is not specified, an empty tile (with no rarity background and
+ * no avatar) will be displayed.
+ */
+export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
+  girl,
+  onClick,
+  children,
+  avatarOverlay,
+  bottom,
+  classNames,
+  selected,
+  show0Pose,
+  lazy
+}) => {
+  const allClassNames = ['girlTile'];
+  if (girl !== undefined) {
+    const rarityCss = Rarity[girl.rarity];
+    allClassNames.push(rarityCss);
+    allClassNames.push(girl.own ? 'owned' : 'not-owned');
+  }
   if (classNames) {
     allClassNames.push(...classNames);
   }
-  if (selected) {
+  if (selected === true) {
     allClassNames.push('selected');
   }
-  allClassNames.push(girl.own ? 'owned' : 'not-owned');
 
-  const icon = show0Pose ? girl.icon0 : girl.icon;
+  const icon =
+    girl === undefined ? '' : show0Pose === true ? girl.icon0 : girl.icon;
 
   /**
    * Use a 1x1 transparent image as placeholder. This will force proper image layout during image loading,
@@ -78,7 +144,7 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
     <div
       className={allClassNames.join(' ')}
       onClick={onClick}
-      title={girl.name}
+      title={girl?.name}
       ref={tileRef}
     >
       {children}
@@ -87,8 +153,8 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
           placeholder={
             <img
               src={placeholder}
-              alt={girl.name}
-              title={girl.name}
+              alt={girl?.name}
+              title={girl?.name}
               className="tile-avatar placeholder"
             />
           }
@@ -96,19 +162,14 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
         >
           <img
             src={icon}
-            alt={girl.name}
-            title={girl.name}
+            alt={girl?.name}
+            title={girl?.name}
             className="tile-avatar"
           />
         </WrappedImage>
-        <ElementIcon element={girl.element} />
         {avatarOverlay}
       </div>
-      <Grade
-        stars={girl.stars}
-        maxStars={girl.maxStars}
-        currentStar={girl.currentIcon}
-      />
+      {bottom}
     </div>
   );
 };
@@ -144,6 +205,9 @@ export interface HaremGirlTileProps extends GirlTileProps {
   selectGirl(girl: CommonGirlData): void;
 }
 
+/**
+ * The girl tile shown in the harem list. Includes level, element and grade.
+ */
 export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   girl,
   selected,

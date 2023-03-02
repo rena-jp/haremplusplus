@@ -1,4 +1,10 @@
-import { ReactNode, useCallback, useMemo, useState } from 'react';
+import React, {
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState
+} from 'react';
 import Popup from 'reactjs-popup';
 import { GameAPI } from '../api/GameAPI';
 import {
@@ -16,6 +22,7 @@ import {
   Stats,
   Zodiacs
 } from '../data/data';
+import { GameAPIContext } from '../data/game-api-context';
 import { getMissingAffection } from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, useGemsStats } from '../hooks/girl-gems-hooks';
 import { getMissingGXPToCap, useXpStats } from '../hooks/girl-xp-hooks';
@@ -43,7 +50,6 @@ export interface GirlDescriptionProps {
   activeBlessing: BlessingDefinition[];
   nextBlessing: BlessingDefinition[];
   show0Pose: boolean;
-  gameAPI: GameAPI;
   selectGirl(girl: CommonGirlData): void;
   openUpgrade(page: UpgradePage): void;
 }
@@ -53,12 +59,12 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   activeBlessing,
   nextBlessing,
   show0Pose,
-  gameAPI,
   allGirls,
   selectGirl,
   openUpgrade
 }) => {
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
+  const gameAPI = useContext(GameAPIContext).gameAPI!;
 
   const domain = getDomain();
 
@@ -364,10 +370,10 @@ const MissingGXPDetails: React.FC<GirlStatsEntry> = ({ girl }) => {
         const targetCap = levelCap;
         const gxp = getMissingGXPToCap(girl, levelCap);
         return (
-          <>
+          <React.Fragment key={levelCap}>
             <div>To Lv. {targetCap}:</div>
             <div className="missing-gxp">{format(gxp)}</div>
-          </>
+          </React.Fragment>
         );
       })}
       <div className="row-separator" />
@@ -388,13 +394,13 @@ const MissingGemsDetails: React.FC<GirlStatsEntry> = ({ girl }) => {
         const targetCap = levelCap + 50;
         const gems = getGemsToAwaken(girl, levelCap);
         return (
-          <>
+          <React.Fragment key={targetCap}>
             <div>To Lv. {targetCap}:</div>
             <div className="gems-count">{format(gems)}</div>
             <div>
               <GemIcon element={girl.element} />
             </div>
-          </>
+          </React.Fragment>
         );
       })}
       <div className="row-separator" />

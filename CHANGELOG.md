@@ -1,3 +1,7 @@
+## 0.11.5 (NEXT)
+
+- ...
+
 ## 0.11.4 - 2023-03-02
 
 - Tentative fix: avoid 403 error/popup while loading the harem data

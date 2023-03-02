@@ -376,15 +376,9 @@ export const StatsList: React.FC<StatsProps> = ({
   return (
     <div className={`stats-list${blessed ? ' blessed' : ''}`}>
       <span className="potential">{potential}</span>{' '}
-      <span className="stat hc-stat">
-        <StatIcon statClass={Class.Hardcore} /> {format(stats.hardcore)}
-      </span>{' '}
-      <span className="stat ch-stat">
-        <StatIcon statClass={Class.Charm} /> {format(stats.charm)}
-      </span>{' '}
-      <span className="stat kh-stat">
-        <StatIcon statClass={Class.Knowhow} /> {format(stats.knowhow)}
-      </span>{' '}
+      <span className="stat hc-stat">{format(stats.hardcore)}</span>{' '}
+      <span className="stat ch-stat">{format(stats.charm)}</span>{' '}
+      <span className="stat kh-stat">{format(stats.knowhow)}</span>{' '}
     </div>
   );
 };

@@ -160,6 +160,9 @@ requiring actual content. */
 .element.yellow {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
 }
+.element.rainbow {
+  background-image: url('https://hh2.hh-content.com/pictures/girls_elements/Multicolored.png');
+}
 
 .tile img.tileImg {
   background-repeat: no-repeat;
@@ -185,6 +188,39 @@ requiring actual content. */
 
 .tile.epic img.tileImg {
   background-color: #ffb244;
+}
+
+.rarity-bg.legendary {
+  background-image: url(https://hh2.hh-content.com/legendary.png);
+  background-color: #8e36a9;
+}
+
+.rarity-bg.starting,
+.rarity-bg.common {
+  background-color: #8d8e9f;
+}
+
+.rarity-bg.rare {
+  background-color: #23b56b;
+}
+
+.rarity-bg.epic {
+  background-color: #ffb244;
+}
+
+.rarity-bg.legendary {
+  background-image: url(https://hh2.hh-content.com/legendary.png);
+  background-color: #8e36a9;
+}
+
+.rarity-bg.mythic {
+  background-image: radial-gradient(
+    closest-side at 50% 50%,
+    #f5a866 0,
+    #ec0039 51%,
+    #9e0e27 100%
+  );
+  background-color: #ec0039;
 }
 
 .tile.legendary img.tileImg {
@@ -308,4 +344,23 @@ requiring actual content. */
   background-size: cover;
   width: 1.5em;
   height: 1.5em;
+}
+
+.stats-list > .stat {
+  background-size: 1.2em 1.2em;
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 1.4em;
+}
+
+.stats-list > .stat.hc-stat {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/1.png);
+}
+
+.stats-list > .stat.ch-stat {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/2.png);
+}
+
+.stats-list > .stat.kh-stat {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/3.png);
 }

@@ -1,4 +1,4 @@
-import { Book, CommonGirlData, Gift, QuestData } from '../data/data';
+import { Book, CommonGirlData, Gift, QuestData, Team } from '../data/data';
 import {
   GameBlessingData,
   GameInventory,
@@ -159,7 +159,32 @@ export interface GameAPI {
    * @param listener the listener.
    */
   removeRequestListener(listener: RequestListener): void;
+
+  /**
+   * Get the list of teams.
+   */
+  getTeams(): Promise<Team[]>;
+
+  /**
+   * Update the specified team.
+   * @param team the team to update.
+   */
+  setTeam(team: Team): Promise<void>;
+
+  /**
+   * Request current stats for the given team.
+   * @param team the team
+   */
+  getTeamStats(team: Team): Promise<TeamStats>;
 }
+
+export type TeamStats = {
+  ego: number;
+  damage: number;
+  defense: number;
+  chance: number;
+  totalPower: number;
+};
 
 export type SalaryDataListener = (data: GirlsSalaryList) => void;
 

@@ -8,6 +8,7 @@ import { RequestsMonitor } from './requests-monitor';
 import { PulseLoader } from 'react-spinners';
 import { Filter } from '../data/filters/filter-api';
 import { BlessingAttributeDescription } from './summary';
+import { HaremMode } from './harem-widget';
 
 export interface HaremToolbarProps {
   gameAPI: GameAPI;
@@ -29,6 +30,8 @@ export interface HaremToolbarProps {
   toggleTab(): void;
   isOpenTab: boolean;
   gemsCount: Map<Element, number>;
+  haremMode: HaremMode;
+  setHaremMode(mode: HaremMode): void;
 }
 
 export const HaremToolbar: React.FC<HaremToolbarProps> = ({
@@ -44,7 +47,9 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   toggleTab,
   isOpenTab,
   gemsCount,
-  gameAPI
+  gameAPI,
+  haremMode,
+  setHaremMode
 }) => {
   const {
     activeFilter,
@@ -113,6 +118,22 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
       </div>
       <div className="owned-gems-summary">
         <GemsCount gemsCount={gemsCount} />
+      </div>
+      <div className="edit-teams">
+        <button
+          className={`hh-action-button${
+            haremMode === 'edit-teams' ? ' active' : ''
+          }`}
+          onClick={() => {
+            if (haremMode === 'edit-teams') {
+              setHaremMode('standard');
+            } else {
+              setHaremMode('edit-teams');
+            }
+          }}
+        >
+          Edit teams
+        </button>
       </div>
 
       <div className="spacer" />
