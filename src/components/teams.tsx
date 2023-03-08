@@ -3,13 +3,18 @@ import '../style/teams.css';
 import '../style/common.css';
 import { CloseButton, ElementIcon, format, getDomain, Tooltip } from './common';
 import { GirlTooltip } from './girl-tooltip';
-import { useCallback, useContext, useLayoutEffect, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useState
+} from 'react';
 import { TeamStats, useTeamStats } from '../hooks/team-hooks';
 import { BaseGirlTile } from './girl';
 import { GameAPIContext } from '../data/game-api-context';
 
 export interface TeamsProps {
-  teams: Team[];
   allGirls: CommonGirlData[];
   selectedGirl: CommonGirlData | undefined;
   close?: () => void;
@@ -19,7 +24,6 @@ export interface TeamsProps {
 }
 
 export const Teams: React.FC<TeamsProps> = ({
-  teams,
   allGirls,
   selectedGirl,
   close,
@@ -27,6 +31,13 @@ export const Teams: React.FC<TeamsProps> = ({
   currentBlessings,
   upcomingBlessings
 }) => {
+  const gameAPI = useContext(GameAPIContext).gameAPI!;
+
+  const [teams, setTeams] = useState<Team[]>([]);
+  useEffect(() => {
+    gameAPI.getTeams().then(setTeams);
+  }, [gameAPI]);
+
   const [team, setTeam] = useState<Team | undefined>();
   const editTeam = useCallback(
     (team: Team) => {
@@ -35,7 +46,6 @@ export const Teams: React.FC<TeamsProps> = ({
     [setTeam]
   );
 
-  const gameAPI = useContext(GameAPIContext).gameAPI!;
   const saveAndClose = useCallback(
     (team: Team) => {
       gameAPI.setTeam(team).then(() => setTeam(undefined));

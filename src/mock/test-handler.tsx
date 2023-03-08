@@ -171,20 +171,15 @@ export function handleTestTeams() {
 }
 
 const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
-  const [teams, setTeams] = useState<Team[] | undefined>(undefined);
-  useEffect(() => {
-    gameAPI.getTeams().then(setTeams);
-  }, []);
   return (
     <div style={{ pointerEvents: 'initial' }}>
       <TooltipConfiguration />
       <GameAPIContext.Provider value={{ gameAPI }}>
         <LoadHaremData gameAPI={gameAPI}>
           {({ allGirls }) => {
-            return teams !== undefined && allGirls !== undefined ? (
+            return allGirls !== undefined ? (
               <Teams
                 allGirls={allGirls}
-                teams={teams}
                 selectedGirl={undefined}
                 show0Pose={false}
                 currentBlessings={[]}

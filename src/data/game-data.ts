@@ -1,4 +1,4 @@
-import { Element, QuestData } from './data';
+import { Element, QuestData, Team } from './data';
 
 export interface GameBlessingData {
   active: GameBlessing[];
@@ -355,6 +355,7 @@ declare global {
     setQuestData?(questData: GameQuestStep): void;
     questData?: GameQuestStep;
     loadingAnimation: { isLoading: boolean };
+    teams?: Team[];
   }
 }
 

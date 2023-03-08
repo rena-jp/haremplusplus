@@ -694,6 +694,19 @@ export class GameAPIImpl implements GameAPI {
     );
   }
 
+  private async requestFromTeams<T>(
+    attribute: keyof Window,
+    typeTester: (value: unknown) => value is T,
+    allowRequest: boolean
+  ): Promise<T> {
+    return this.requestFromFrame(
+      () => getOrCreateFrame('teams', 'teams.html', true),
+      attribute,
+      typeTester,
+      allowRequest
+    );
+  }
+
   /**
    * Extract data from the page in the given frame.
    * @param frameSupplier A function to retrieve the frame
@@ -827,7 +840,15 @@ export class GameAPIImpl implements GameAPI {
   }
 
   async getTeams(): Promise<Team[]> {
-    return []; // TODO
+    const teams = await this.requestFromTeams('teams', Team.isArray, true);
+    while (teams.length < 16) {
+      teams.push({
+        teamId: '',
+        girlIds: [],
+        active: false
+      });
+    }
+    return teams;
   }
 
   async setTeam(_team: Team): Promise<void> {

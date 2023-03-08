@@ -237,11 +237,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     setShowUpgrade(false);
   }, []);
 
-  const [teams, setTeams] = useState<Team[]>([]);
-  useEffect(() => {
-    gameAPI.getTeams().then(setTeams);
-  }, [gameAPI]);
-
   return (
     <>
       <div className="girlsList">
@@ -283,7 +278,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         <Teams
           allGirls={allGirls}
           selectedGirl={selectedGirl}
-          teams={teams}
           close={() => setHaremMode('standard')}
           show0Pose={show0Pose}
           currentBlessings={currentBlessings}
