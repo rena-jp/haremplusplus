@@ -7,8 +7,8 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useLayoutEffect,
-  useState
+  useState,
+  MutableRefObject
 } from 'react';
 import { TeamStats, useTeamStats } from '../hooks/team-hooks';
 import { BaseGirlTile } from './girl';
@@ -16,20 +16,20 @@ import { GameAPIContext } from '../data/game-api-context';
 
 export interface TeamsProps {
   allGirls: CommonGirlData[];
-  selectedGirl: CommonGirlData | undefined;
   close?: () => void;
   show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
+  girlListener: MutableRefObject<(girl: CommonGirlData) => void>;
 }
 
 export const Teams: React.FC<TeamsProps> = ({
   allGirls,
-  selectedGirl,
   close,
   show0Pose,
   currentBlessings,
-  upcomingBlessings
+  upcomingBlessings,
+  girlListener
 }) => {
   const gameAPI = useContext(GameAPIContext).gameAPI!;
 
@@ -68,11 +68,11 @@ export const Teams: React.FC<TeamsProps> = ({
             {close === undefined ? null : <CloseButton close={close} />}
           </div>
           <div className="teams-list">
-            {teams.map((team) => (
+            {teams.map((team, teamIndex) => (
               <TeamOverview
                 team={team}
                 allGirls={allGirls}
-                key={team.teamId}
+                key={team.teamId ?? teamIndex}
                 edit={() => editTeam(team)}
                 cancel={cancel}
                 show0Pose={show0Pose}
@@ -89,7 +89,7 @@ export const Teams: React.FC<TeamsProps> = ({
           cancel={cancel}
           team={team}
           allGirls={allGirls}
-          selectedGirl={selectedGirl}
+          girlListener={girlListener}
           show0Pose={show0Pose}
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
@@ -262,18 +262,18 @@ export interface TeamEditorProps extends TeamProps {
   edit(): void;
   saveAndClose(team: Team): void;
   cancel(): void;
-  selectedGirl: CommonGirlData | undefined;
+  girlListener: MutableRefObject<(girl: CommonGirlData) => void>;
 }
 
 export const TeamEditor: React.FC<TeamEditorProps> = ({
   team,
-  selectedGirl,
   saveAndClose,
   cancel,
   allGirls,
   show0Pose,
   currentBlessings,
-  upcomingBlessings
+  upcomingBlessings,
+  girlListener
 }) => {
   const [currentTeam, setCurrentTeam] = useState<Team>(() => {
     return { ...team, girlIds: [...team.girlIds] };
@@ -303,24 +303,27 @@ export const TeamEditor: React.FC<TeamEditorProps> = ({
     [selectedTile, setSelectedTile, currentTeam]
   );
 
-  // FIXME Use a proper click listener instead of selection change
-  useLayoutEffect(() => {
-    if (selectedTile !== undefined && selectedGirl !== undefined) {
-      const updatedGirlIds = [...currentTeam.girlIds];
-      const swapGirlIndex = updatedGirlIds.indexOf(selectedGirl.id);
-      if (swapGirlIndex >= 0) {
-        const swapWith = updatedGirlIds[selectedTile];
-        if (swapWith === undefined) {
-          return;
+  const girlEventHandler = useCallback(
+    (girl: CommonGirlData) => {
+      if (selectedTile !== undefined) {
+        const updatedGirlIds = [...currentTeam.girlIds];
+        const swapGirlIndex = updatedGirlIds.indexOf(girl.id);
+        if (swapGirlIndex >= 0) {
+          const swapWith = updatedGirlIds[selectedTile];
+          if (swapWith === undefined) {
+            return;
+          }
+          updatedGirlIds[selectedTile] = girl.id;
+          updatedGirlIds[swapGirlIndex] = swapWith;
+        } else {
+          updatedGirlIds[selectedTile] = girl.id;
         }
-        updatedGirlIds[selectedTile] = selectedGirl.id;
-        updatedGirlIds[swapGirlIndex] = swapWith;
-      } else {
-        updatedGirlIds[selectedTile] = selectedGirl.id;
+        setCurrentTeam({ ...team, girlIds: updatedGirlIds, stats: undefined });
       }
-      setCurrentTeam({ ...team, girlIds: updatedGirlIds, stats: undefined });
-    }
-  }, [selectedGirl]);
+    },
+    [selectedTile, currentTeam, setCurrentTeam]
+  );
+  girlListener.current = girlEventHandler;
 
   const teamStats = useTeamStats(currentTeam, allGirls);
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import ReactDOM from 'react-dom/client';
 import { HaremGirlTile, SimpleGirlTile } from '../components/girl';
 
@@ -171,6 +171,10 @@ export function handleTestTeams() {
 }
 
 const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
+  const girlListener = useRef<(girl: CommonGirlData) => void>(() => {
+    /* No op until set by the teams component */
+  });
+
   return (
     <div style={{ pointerEvents: 'initial' }}>
       <TooltipConfiguration />
@@ -180,7 +184,7 @@ const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
             return allGirls !== undefined ? (
               <Teams
                 allGirls={allGirls}
-                selectedGirl={undefined}
+                girlListener={girlListener}
                 show0Pose={false}
                 currentBlessings={[]}
                 upcomingBlessings={[]}

@@ -178,6 +178,11 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       return groupedGirls.length === 0 ? undefined : groupedGirls[0]; // First visible girl
     }
   );
+
+  const teamsGirlListenerRef = useRef<(girl: CommonGirlData) => void>(() => {
+    /* No-op until defined by the teams editor */
+  });
+
   const selectGirl = useCallback(
     (girl?: CommonGirlData) => {
       setSelectedGirl(girl);
@@ -195,8 +200,13 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       const url = new URL(window.location.toString());
       url.search = params.toString();
       window.history.replaceState('', '', url.toString());
+
+      // Notify the team editor of the selected girl, if it is listening.
+      if (teamsGirlListenerRef.current && girl !== undefined) {
+        teamsGirlListenerRef.current(girl);
+      }
     },
-    [setSelectedGirl]
+    [setSelectedGirl, teamsGirlListenerRef]
   );
 
   useEffect(() => {
@@ -272,11 +282,11 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       {haremMode === 'edit-teams' ? (
         <Teams
           allGirls={allGirls}
-          selectedGirl={selectedGirl}
           close={() => setHaremMode('standard')}
           show0Pose={show0Pose}
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
+          girlListener={teamsGirlListenerRef}
         />
       ) : null}
       <GirlDescription
