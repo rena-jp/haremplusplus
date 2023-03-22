@@ -31,9 +31,32 @@
   height: 35px;
 }
 
-.qh-tooltip {
-  font-size: 2em; /* We have lots of space in Tooltips; use large fonts */
+.react-tooltip.qh-tooltip {
+  font-size: 1.25em; /* We have lots of space in Tooltips; use larger fonts */
   text-align: left;
+  border: 1px solid goldenrod;
+  --rt-opacity: 0.95;
+  z-index: 99999;
+}
+
+.react-tooltip__place-bottom > .qh-tooltip-arrow {
+  border-top: 1px solid goldenrod;
+  border-left: 1px solid goldenrod;
+}
+
+.react-tooltip__place-left > .qh-tooltip-arrow {
+  border-top: 1px solid goldenrod;
+  border-right: 1px solid goldenrod;
+}
+
+.react-tooltip__place-top > .qh-tooltip-arrow {
+  border-right: 1px solid goldenrod;
+  border-bottom: 1px solid goldenrod;
+}
+
+.react-tooltip__place-right > .qh-tooltip-arrow {
+  border-left: 1px solid goldenrod;
+  border-bottom: 1px solid goldenrod;
 }
 
 /** Helper class to fill a tooltip. The element will cover the 

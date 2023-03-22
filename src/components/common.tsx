@@ -1,9 +1,10 @@
 import '../style/common.css';
 import { Elements, Element, Stats, Class, Poses } from '../data/data';
 import { Pose, Zodiac } from '../data/data';
-import ReactDOMServer from 'react-dom/server';
-import ReactTooltip from 'react-tooltip';
-import { ReactElement, ReactNode, useEffect, useMemo } from 'react';
+import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
+import { ReactNode, useMemo, useState } from 'react';
+
+import 'react-tooltip/dist/react-tooltip.css';
 
 export type GemType = Element | 'rainbow';
 
@@ -217,8 +218,8 @@ export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
 
 export interface TooltipProps {
   children: ReactNode;
-  tooltip: ReactElement;
-  place?: string;
+  tooltip: ReactNode;
+  place?: PlacesType;
   cssClasses?: string | string[];
   delay?: number;
 }
@@ -238,26 +239,33 @@ export const Tooltip: React.FC<TooltipProps> = ({
       : [cssClasses];
   classes.push('qh-tooltip-wrapper');
 
-  useEffect(() => {
-    ReactTooltip.rebuild();
-  }, []);
+  const [anchorId] = useState(randomAnchor);
 
   return (
     <>
       <span
         className={classes.join(' ')}
-        data-html={true}
-        data-place={place}
-        data-delay-show={delay}
-        data-tip={ReactDOMServer.renderToString(
-          <div className="qh-tooltip">{tooltip}</div>
-        )}
+        data-tooltip-place={place}
+        data-tooltip-delay-show={delay}
+        data-tooltip-id={anchorId}
       >
         {children}
       </span>
+      <ReactTooltip
+        className="qh-tooltip"
+        classNameArrow="qh-tooltip-arrow"
+        id={anchorId}
+      >
+        {tooltip}
+      </ReactTooltip>
     </>
   );
 };
+
+function randomAnchor(): string {
+  const id = Math.round(Math.random() * 0x10000);
+  return `tt-anchor_${id}`;
+}
 
 interface GemsCountEntryProps {
   element: Element | 'rainbow';
@@ -271,10 +279,6 @@ const GemsCountEntry: React.FC<GemsCountEntryProps> = ({ element, count }) => {
     </span>
   );
 };
-
-export const TooltipConfiguration: React.FC = () => (
-  <ReactTooltip effect="solid" border={true} borderColor="goldenrod" />
-);
 
 export interface StatsDescriptionProps {
   baseStats: Stats;

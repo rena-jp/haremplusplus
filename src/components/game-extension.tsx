@@ -6,7 +6,7 @@ import '../style/game-ext-local.css';
 import { GameAPIImpl } from '../game-extension/GameAPIImpl';
 import { MockGameAPI } from '../mock/MockGameAPI';
 import { GameAPI } from '../api/GameAPI';
-import { CloseButton, TooltipConfiguration } from './common';
+import { CloseButton } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { GameAPIContext } from '../data/game-api-context';
@@ -40,7 +40,6 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
 
   return (
     <div className={`App game-extension ${visible ? '' : 'hidden'}`}>
-      <TooltipConfiguration />
       <GameAPIContext.Provider value={{ gameAPI }}>
         <LoadHaremData gameAPI={gameAPI}>
           {({

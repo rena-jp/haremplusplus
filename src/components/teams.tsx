@@ -383,27 +383,24 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
   const icon = show0Pose ? girl?.icon0 : girl?.icon;
 
   return (
-    <div className={outerClasses.join(' ')}>
+    <Tooltip
+      tooltip={
+        girl === undefined ? null : (
+          <GirlTooltip girl={girl} currentBlessings={currentBlessings} />
+        )
+      }
+      cssClasses={outerClasses.join(' ')}
+      place="bottom"
+    >
       <div
         className={`qh-hexagon-outer${selected ? ' selected' : ''}`}
         onClick={() => select(tileId)}
       >
         <div className={innerClasses.join(' ')}>
-          {girl === undefined ? (
-            <img src={icon} />
-          ) : (
-            <Tooltip
-              place="bottom"
-              tooltip={
-                <GirlTooltip girl={girl} currentBlessings={currentBlessings} />
-              }
-            >
-              <img src={icon} />
-            </Tooltip>
-          )}
+          {girl === undefined ? <img src={icon} /> : <img src={icon} />}
         </div>
       </div>
       {girl ? <ElementIcon element={girl.element} /> : null}
-    </div>
+    </Tooltip>
   );
 };

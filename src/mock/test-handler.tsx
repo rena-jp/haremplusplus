@@ -17,7 +17,6 @@ import { MockGameAPI } from './MockGameAPI';
 import { GameAPI } from '../api/GameAPI';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { Teams } from '../components/teams';
-import { TooltipConfiguration } from '../components/common';
 import { GameAPIContext } from '../data/game-api-context';
 
 const ownedGirl = ownedGirlData as CommonGirlData;
@@ -177,7 +176,6 @@ const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
 
   return (
     <div style={{ pointerEvents: 'initial' }}>
-      <TooltipConfiguration />
       <GameAPIContext.Provider value={{ gameAPI }}>
         <LoadHaremData gameAPI={gameAPI}>
           {({ allGirls }) => {
