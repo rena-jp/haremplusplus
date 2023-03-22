@@ -415,7 +415,8 @@ export class MockGameAPI implements GameAPI {
             {
               girlIds: ['948443498', '886658459', '861690823', '690645314'],
               teamId: '3680617',
-              active: true
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [
@@ -428,77 +429,92 @@ export class MockGameAPI implements GameAPI {
                 '1247315'
               ],
               teamId: '3680618',
-              active: true
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '368',
-              active: true
+              teamId: null,
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '369',
-              active: true
+              teamId: null,
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '370',
-              active: true
+              teamId: null,
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '371',
-              active: true
+              teamId: null,
+              active: true,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '372',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '373',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '374',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '375',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '376',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '377',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '378',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '379',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '380',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             },
             {
               girlIds: [],
-              teamId: '381',
-              active: false
+              teamId: null,
+              active: false,
+              stats: undefined
             }
           ];
           resolve(this.teams);

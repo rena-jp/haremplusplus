@@ -1,4 +1,4 @@
-import { Element, QuestData, Team } from './data';
+import { Element, QuestData } from './data';
 
 export interface GameBlessingData {
   active: GameBlessing[];
@@ -355,8 +355,57 @@ declare global {
     setQuestData?(questData: GameQuestStep): void;
     questData?: GameQuestStep;
     loadingAnimation: { isLoading: boolean };
-    teams?: Team[];
+    teams_data?: TeamsData;
   }
+}
+
+export interface TeamsData {
+  [key: NumberString]: TeamDataEntry; // Index starts at "1" up to "16"
+}
+
+export namespace TeamsData {
+  export function isTeamsData(value: unknown): value is TeamsData {
+    if (isUnknownObject(value)) {
+      for (const key in value) {
+        const entry = value[key];
+        if (!TeamsData.is(entry)) {
+          return false;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  export function is(object: unknown): object is TeamDataEntry {
+    if (isUnknownObject(object)) {
+      return (
+        (isUnknownObject(object.caracs) &&
+          Array.isArray(object.girls_ids) &&
+          typeof object.total_power === 'number' &&
+          object.id_team === null) ||
+        (Number(object.id_team) > 0 && typeof object.locked === 'boolean')
+      );
+    }
+    return false;
+  }
+}
+
+export interface TeamDataEntry {
+  caracs: TeamCaracsEntry; // TODO
+  girls_ids: string[];
+  id_team: NumberString | null;
+  total_power: number;
+  locked: boolean;
+  // Other unused attributes...
+  girls: unknown[];
+}
+
+export interface TeamCaracsEntry {
+  chance: number;
+  damage: number;
+  defense: number;
+  ego: number;
 }
 
 export interface GemsData {
@@ -459,6 +508,33 @@ export namespace ChangePoseResult {
         typeof object.ico === 'string' &&
         typeof object.ava === 'string'
       );
+    }
+    return false;
+  }
+}
+
+export interface TeamCaracsResult {
+  success: boolean;
+  total_power: number;
+  caracs: {
+    ego: number;
+    damage: number;
+    defense: number;
+    chance: number;
+  };
+}
+
+export namespace TeamCaracsResult {
+  export function is(value: unknown): value is TeamCaracsResult {
+    if (isUnknownObject(value)) {
+      if (
+        value.success === true &&
+        typeof value.total_power === 'number' &&
+        isUnknownObject(value.caracs)
+      ) {
+        // TODO also check for caracs
+        return true;
+      }
     }
     return false;
   }

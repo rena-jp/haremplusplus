@@ -1,12 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
-import {
-  BlessingDefinition,
-  CommonGirlData,
-  Element,
-  Team
-} from '../data/data';
+import { BlessingDefinition, CommonGirlData, Element } from '../data/data';
 import { GirlDescription } from './description';
 import { GirlTile } from './girl';
 import { Teams } from './teams';

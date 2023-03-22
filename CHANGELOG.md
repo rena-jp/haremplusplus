@@ -1,6 +1,6 @@
 ## 0.11.5 (NEXT)
 
-- ...
+- Add a team editor to the harem page
 
 ## 0.11.4 - 2023-03-02
 

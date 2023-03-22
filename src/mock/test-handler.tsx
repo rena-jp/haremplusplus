@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { HaremGirlTile, SimpleGirlTile } from '../components/girl';
 
@@ -9,7 +9,7 @@ import ownedMythicData from './girlsData/ownedMythic.json';
 import upgradeReadyData from './girlsData/upgradeReady.json';
 import loadingImgData from './girlsData/loadingImg.json';
 import invalidImgData from './girlsData/invalidImg.json';
-import { CommonGirlData, Team } from '../data/data';
+import { CommonGirlData } from '../data/data';
 
 import './style/mockStyle.css';
 import { GirlTooltip } from '../components/girl-tooltip';

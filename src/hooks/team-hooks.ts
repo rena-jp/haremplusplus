@@ -17,28 +17,42 @@ export function useTeamStats(
 
   const [stats, setStats] = useState<TeamStats>(() => {
     return {
-      attack: 0,
-      defense: 0,
-      ego: 0,
-      harmony: 0,
-      totalPower: 0,
+      attack: team.stats?.damage ?? 0,
+      defense: team.stats?.defense ?? 0,
+      ego: team.stats?.ego ?? 0,
+      harmony: team.stats?.chance ?? 0,
+      totalPower: team.stats?.totalPower ?? 0,
       elements: getTeamElements(girls),
       girls
     };
   });
 
   useEffect(() => {
-    gameAPI.getTeamStats(team).then((teamStats) => {
-      setStats({
-        attack: teamStats.damage,
-        ego: teamStats.ego,
-        defense: teamStats.defense,
-        harmony: teamStats.chance,
-        totalPower: teamStats.totalPower,
-        elements: getTeamElements(girls),
-        girls
-      });
+    // Immediately update the team composition and elements
+    // when girls change, then asynchronously refresh the stats
+    setStats({
+      ...stats,
+      girls,
+      elements: getTeamElements(girls)
     });
+    if (
+      team.stats === undefined &&
+      team.girlIds.some((girl) => girl !== undefined) &&
+      team.teamId !== ''
+    ) {
+      gameAPI.getTeamStats(team).then((teamStats) => {
+        team.stats = teamStats;
+        setStats({
+          attack: teamStats.damage,
+          ego: teamStats.ego,
+          defense: teamStats.defense,
+          harmony: teamStats.chance,
+          totalPower: teamStats.totalPower,
+          elements: getTeamElements(girls),
+          girls
+        });
+      });
+    }
   }, [team, girls]);
 
   return stats;

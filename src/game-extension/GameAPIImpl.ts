@@ -21,6 +21,9 @@ import {
   isUnknownObject,
   MaxOutResult,
   RequestResult,
+  TeamCaracsResult,
+  TeamDataEntry,
+  TeamsData,
   toQuestData,
   UpgradeResult,
   XPResult
@@ -357,7 +360,19 @@ export class GameAPIImpl implements GameAPI {
     let result = '';
     let separator = '';
     for (const key of Object.keys(params)) {
-      result += `${separator}${key}=${params[key]}`;
+      const value = params[key];
+      if (value === undefined) {
+        continue;
+      }
+
+      if (Array.isArray(value)) {
+        for (const entry of value) {
+          result += `${separator}${key}=${entry}`;
+          separator = '&';
+        }
+      } else {
+        result += `${separator}${key}=${value}`;
+      }
       separator = '&';
     }
     return result;
@@ -839,24 +854,76 @@ export class GameAPIImpl implements GameAPI {
     this.requestListeners.delete(listener);
   }
 
+  private teams: Team[] | undefined;
+
   async getTeams(): Promise<Team[]> {
-    const teams = await this.requestFromTeams('teams', Team.isArray, true);
-    while (teams.length < 16) {
-      teams.push({
-        teamId: '',
-        girlIds: [],
-        active: false
-      });
+    if (this.teams === undefined) {
+      const teamsData = await this.requestFromTeams(
+        'teams_data',
+        TeamsData.isTeamsData,
+        true
+      );
+      this.teams = [];
+
+      for (const team of getTeams(teamsData)) {
+        this.teams.push(team);
+      }
     }
-    return teams;
+
+    return this.teams;
   }
 
-  async setTeam(_team: Team): Promise<void> {
-    // TODO
+  async setTeam(team: Team): Promise<void> {
+    if (team.teamId === '') {
+      throw Error('Invalid team: missing team id');
+    }
+    if (!team.active) {
+      throw Error('Invalid team: team is inactive');
+    }
+    if (team.girlIds.filter((girl) => girl !== undefined).length < 3) {
+      throw Error('Invalid team: teams must contain at least 3 girls');
+    }
+    const params = {
+      class: 'Hero',
+      action: 'edit_team',
+      'girls[]': team.girlIds,
+      id_team: team.teamId ?? undefined
+    };
+    const result = await this.postRequest(params);
+    if (!isUnknownObject(result) || result.success !== true) {
+      console.warn('Failed to update the team: ', team);
+    }
+    if (team.teamId !== null && this.teams !== undefined) {
+      const teamIndex = this.teams?.findIndex((t) => t.teamId === team.teamId);
+      if (teamIndex > -1) {
+        // Update the local team data
+        this.teams[teamIndex] = team;
+      } else {
+        // Reset the teams and force refreshing the data
+        this.teams = undefined;
+      }
+    } else {
+      // Reset the teams and force refreshing the data
+      this.teams = undefined;
+    }
   }
 
-  async getTeamStats(_team: Team): Promise<TeamStats> {
-    // TODO
+  async getTeamStats(team: Team): Promise<TeamStats> {
+    const params = {
+      action: 'team_calculate_caracs',
+      'girls[]': team.girlIds
+    };
+    const result = await this.postRequest(params);
+    if (TeamCaracsResult.is(result) && result.success) {
+      return {
+        damage: result.caracs.damage,
+        defense: result.caracs.defense,
+        ego: result.caracs.ego,
+        chance: result.caracs.chance,
+        totalPower: result.total_power
+      };
+    }
+    console.warn('Invalid stats received: ', result);
     return {
       damage: 0,
       defense: 0,
@@ -923,7 +990,7 @@ export class GameAPIImpl implements GameAPI {
 
 interface HHAction {
   action: string;
-  [key: string]: string | number | boolean;
+  [key: string]: string | number | boolean | string[] | undefined;
 }
 
 // Last time the frame was requested.
@@ -1089,5 +1156,23 @@ function toMaxOutItems(result: MaxOutResult): MaxOutItems {
   return {
     excess,
     selection
+  };
+}
+
+export function getTeams(teamData: TeamsData): Team[] {
+  const result: Team[] = [];
+  for (const teamIndex in teamData) {
+    const teamEntry = teamData[teamIndex];
+    result.push(getTeam(teamEntry));
+  }
+  return result;
+}
+
+export function getTeam(teamEntry: TeamDataEntry): Team {
+  return {
+    active: !teamEntry.locked,
+    girlIds: teamEntry.girls_ids,
+    teamId: teamEntry.id_team === null ? null : String(teamEntry.id_team),
+    stats: { ...teamEntry.caracs, totalPower: teamEntry.total_power }
   };
 }

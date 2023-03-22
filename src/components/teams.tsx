@@ -47,8 +47,11 @@ export const Teams: React.FC<TeamsProps> = ({
   );
 
   const saveAndClose = useCallback(
-    (team: Team) => {
-      gameAPI.setTeam(team).then(() => setTeam(undefined));
+    async (team: Team) => {
+      await gameAPI.setTeam(team);
+      const updatedTeams = await gameAPI.getTeams();
+      setTeams(updatedTeams);
+      setTeam(undefined);
     },
     [setTeam, gameAPI]
   );
@@ -300,18 +303,22 @@ export const TeamEditor: React.FC<TeamEditorProps> = ({
     [selectedTile, setSelectedTile, currentTeam]
   );
 
+  // FIXME Use a proper click listener instead of selection change
   useLayoutEffect(() => {
     if (selectedTile !== undefined && selectedGirl !== undefined) {
       const updatedGirlIds = [...currentTeam.girlIds];
       const swapGirlIndex = updatedGirlIds.indexOf(selectedGirl.id);
       if (swapGirlIndex >= 0) {
         const swapWith = updatedGirlIds[selectedTile];
+        if (swapWith === undefined) {
+          return;
+        }
         updatedGirlIds[selectedTile] = selectedGirl.id;
         updatedGirlIds[swapGirlIndex] = swapWith;
       } else {
         updatedGirlIds[selectedTile] = selectedGirl.id;
       }
-      setCurrentTeam({ ...team, girlIds: updatedGirlIds });
+      setCurrentTeam({ ...team, girlIds: updatedGirlIds, stats: undefined });
     }
   }, [selectedGirl]);
 

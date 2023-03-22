@@ -1,3 +1,4 @@
+import { TeamStats } from '../api/GameAPI';
 import { firstToUpper } from '../components/common';
 import { roundValue } from './common';
 import { isUnknownObject } from './game-data';
@@ -751,9 +752,10 @@ export interface QuestData {
 }
 
 export interface Team {
-  teamId: string;
+  teamId: string | null;
   girlIds: string[];
   active: boolean;
+  stats: TeamStats | undefined;
 }
 
 export namespace Team {
