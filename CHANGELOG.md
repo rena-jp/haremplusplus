@@ -1,3 +1,7 @@
+## 0.12.1 - 2023-03-23
+
+- Update the link to the harem in the Hamburger menu
+
 ## 0.12.0 - 2023-03-23
 
 - Update events and unknown poses
