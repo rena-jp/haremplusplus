@@ -2,11 +2,10 @@ import {
   BlessingDefinition,
   CommonGirlData,
   getBlessedStats,
-  getBlessingMultiplier,
   Rarities,
   Rarity
 } from '../data/data';
-import { Grade, ElementIcon, StatsList, PoseIcon } from './common';
+import { Grade, ElementIcon, StatsList, PoseIcon, format } from './common';
 import '../style/girl-tooltip.css';
 import '../style/girls.css';
 
@@ -27,6 +26,21 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
     classes.push(...classNames);
   }
 
+  let totalPower: number;
+  let blessed = false;
+  if (girl.stats) {
+    const blessedStats = getBlessedStats(
+      girl,
+      girl.stats,
+      currentBlessing ?? []
+    );
+    totalPower =
+      blessedStats.charm + blessedStats.hardcore + blessedStats.knowhow;
+    blessed = blessedStats.charm > girl.stats.charm;
+  } else {
+    totalPower = 0;
+  }
+
   return (
     <div className={classes.join(' ')}>
       <h2 className="qh-girl-name">{girl.name}</h2>
@@ -40,7 +54,10 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
         <ElementIcon element={girl.element} />
         <PoseIcon pose={girl.pose} />
       </div>
-      <StatsDescription girl={girl} currentBlessings={currentBlessing} />
+      <div className={`stats-section ${blessed ? ' blessed' : ''}`}>
+        Total Power: {format(totalPower)}
+        <StatsDescription girl={girl} currentBlessings={currentBlessing} />
+      </div>
     </div>
   );
 };
@@ -63,13 +80,17 @@ const StatsDescription: React.FC<GirlTooltipProps> = ({
     return null;
   }
   const blessedStats = getBlessedStats(girl, girl.stats, currentBlessing ?? []);
-  const multiplier = getBlessingMultiplier(girl, currentBlessing ?? []);
+  const potentialLevelMultiplier = 1 / (girl.level ?? 1);
+  const potentialGradeMultiplier =
+    (1 + 0.3 * girl.maxStars) / (1 + 0.3 * girl.stars);
+  const potentialMultiplier =
+    potentialLevelMultiplier * potentialGradeMultiplier;
 
   return (
     <StatsList
       stats={blessedStats}
-      blessed={multiplier > 1.001}
-      potentialMultiplier={multiplier}
+      blessed={blessedStats.charm > girl.stats.charm}
+      potentialMultiplier={potentialMultiplier}
     />
   );
 };

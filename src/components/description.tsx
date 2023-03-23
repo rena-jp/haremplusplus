@@ -196,7 +196,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
     <div className="details-section stats">
       <p>Full Name: {girl.fullName}</p>
       {girl.stats || girl.pose !== Pose.unknown ? (
-        <p className="pose-and-stats">
+        <div className="pose-and-stats">
           <PoseIcon pose={girl.pose} />
           {girl.stats ? (
             <StatsDetails
@@ -206,7 +206,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
               upcomingBlessing={upcomingBlessing}
             />
           ) : null}
-        </p>
+        </div>
       ) : null}
       {girl.recruited ? (
         <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>

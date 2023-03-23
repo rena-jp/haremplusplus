@@ -34,8 +34,13 @@ export const Teams: React.FC<TeamsProps> = ({
   const gameAPI = useContext(GameAPIContext).gameAPI!;
 
   const [teams, setTeams] = useState<Team[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
-    gameAPI.getTeams().then(setTeams);
+    setLoading(true);
+    gameAPI
+      .getTeams()
+      .then(setTeams)
+      .then(() => setLoading(false));
   }, [gameAPI]);
 
   const [team, setTeam] = useState<Team | undefined>();
@@ -62,26 +67,30 @@ export const Teams: React.FC<TeamsProps> = ({
   return (
     <div className="teams-section">
       {team === undefined ? (
-        <>
-          <div className="team-header">
-            <span>Select a team to view or edit</span>
-            {close === undefined ? null : <CloseButton close={close} />}
-          </div>
-          <div className="teams-list">
-            {teams.map((team, teamIndex) => (
-              <TeamOverview
-                team={team}
-                allGirls={allGirls}
-                key={team.teamId ?? teamIndex}
-                edit={() => editTeam(team)}
-                cancel={cancel}
-                show0Pose={show0Pose}
-                currentBlessings={currentBlessings}
-                upcomingBlessings={upcomingBlessings}
-              />
-            ))}
-          </div>
-        </>
+        loading ? (
+          <div>Loading teams...</div>
+        ) : (
+          <>
+            <div className="team-header">
+              <span>Select a team to view or edit</span>
+              {close === undefined ? null : <CloseButton close={close} />}
+            </div>
+            <div className="teams-list">
+              {teams.map((team, teamIndex) => (
+                <TeamOverview
+                  team={team}
+                  allGirls={allGirls}
+                  key={team.teamId ?? teamIndex}
+                  edit={() => editTeam(team)}
+                  cancel={cancel}
+                  show0Pose={show0Pose}
+                  currentBlessings={currentBlessings}
+                  upcomingBlessings={upcomingBlessings}
+                />
+              ))}
+            </div>
+          </>
+        )
       ) : (
         <TeamEditor
           edit={() => editTeam(team)}
