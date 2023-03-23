@@ -16,6 +16,7 @@ This project provides a userscript (To be used with Tampermonkey, or similar bro
 - Sort: Sort by Grade, level, blessings, ...
 - Summary: View the repartition of girls in your harem, by stat, rarity, element, ...
 - Upgrades: Use Books & Gifts, Awaken and Upgrade directly from the harem
+- Teams: Edit your teams directly from the Harem page, using advanced filters and sort
 
 ## Known issues
 
