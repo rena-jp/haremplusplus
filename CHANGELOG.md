@@ -1,7 +1,7 @@
-## 0.11.5 (NEXT)
+## 0.12.0 - 2023-03-23
 
-- Add sort by power options (Base, current, upcoming)
 - Update events and unknown poses
+- Add sort by power options (Base, current, upcoming)
 - Update to React-Tooltip 5.x to fix some tooltip issues
 - Add a team editor to the harem page
 

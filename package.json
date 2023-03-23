@@ -1,6 +1,6 @@
 {
   "name": "harem-plus-plus",
-  "version": "0.11.5",
+  "version": "0.12.0",
   "private": true,
   "dependencies": {
     "deep-equal": "^2.0.5",
