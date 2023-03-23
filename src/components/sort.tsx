@@ -2,14 +2,17 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { BlessingDefinition } from '../data/data';
 import {
   BasePotentialSorter,
+  BasePowerSorter,
   ConfiguredSort,
   CurrentPotentialSorter,
+  CurrentPowerSorter,
   GradeSorter,
   LevelSorter,
   RaritySorter,
   RecruitedSorter,
   SalarySorter,
-  UpcomingPotentialSorter
+  UpcomingPotentialSorter,
+  UpcomingPowerSorter
 } from '../data/sort';
 import { Tooltip } from './common';
 import { PanelProps } from './panels';
@@ -45,7 +48,10 @@ export const SortPanel: React.FC<SortProps> = ({
       RaritySorter,
       BasePotentialSorter,
       CurrentPotentialSorter(currentBlessings),
-      UpcomingPotentialSorter(upcomingBlessings)
+      UpcomingPotentialSorter(upcomingBlessings),
+      BasePowerSorter,
+      CurrentPowerSorter(currentBlessings),
+      UpcomingPowerSorter(upcomingBlessings)
     ];
   }, [currentBlessings, upcomingBlessings]);
 

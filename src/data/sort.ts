@@ -1,4 +1,9 @@
-import { BlessingDefinition, CommonGirlData, getNormalizedPower } from './data';
+import {
+  BlessingDefinition,
+  CommonGirlData,
+  getNormalizedPower,
+  getPower
+} from './data';
 
 export type SortDirection = 'asc' | 'desc';
 
@@ -127,6 +132,10 @@ export function potential(blessings: BlessingDefinition[]): Comparator {
     getNormalizedPower(g1, blessings) - getNormalizedPower(g2, blessings);
 }
 
+export function power(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) => getPower(g1, blessings) - getPower(g2, blessings);
+}
+
 export const LevelSorter: ConfiguredSort = {
   id: 'level',
   direction: 'desc',
@@ -226,6 +235,27 @@ export function PotentialSorter(
   };
 }
 
+export function PowerSorter(
+  sortId: string,
+  label: string,
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: sortId,
+    direction: 'desc',
+    sorter: sorter(
+      label,
+      power(blessings),
+      rarity(),
+      maxGrade(),
+      grade(),
+      level(),
+      shards(),
+      id()
+    )
+  };
+}
+
 export const CurrentPotentialID = 'current-potential';
 export function CurrentPotentialSorter(
   blessings: BlessingDefinition[]
@@ -245,6 +275,22 @@ export const BasePotentialSorter = PotentialSorter(
   'Base Potential',
   []
 );
+
+export const CurrentPowerID = 'current-power';
+export function CurrentPowerSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return PowerSorter(CurrentPowerID, 'Current Power', blessings);
+}
+
+export const UpcomingPowerID = 'upcoming-power';
+export function UpcomingPowerSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return PowerSorter(UpcomingPowerID, 'Upcoming Power', blessings);
+}
+
+export const BasePowerSorter = PowerSorter('base-power', 'Base Power', []);
 
 export function sortGirls(girls: CommonGirlData[]): void {
   girls.sort((girl1, girl2) => {

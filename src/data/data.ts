@@ -589,6 +589,21 @@ export function getNormalizedPower(
   return roundedTotal;
 }
 
+export function getPower(
+  girl: CommonGirlData,
+  blessings: BlessingDefinition[]
+): number {
+  const stats = girl.stats;
+  if (stats === undefined) {
+    return 0;
+  }
+  const basePower = getTotalPower(stats);
+  const multiplier = getBlessingMultiplier(girl, blessings);
+  const total = basePower * multiplier;
+  const roundedTotal = roundValue(total);
+  return roundedTotal;
+}
+
 export function equalBlessing(
   blessing1: BlessingType,
   blessing2: BlessingType
