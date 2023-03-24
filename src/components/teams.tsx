@@ -387,6 +387,8 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
   if (girl !== undefined) {
     innerClasses.push('rarity-bg');
     innerClasses.push(Rarity[girl?.rarity]);
+  } else {
+    innerClasses.push('empty-slot');
   }
 
   const icon = show0Pose ? girl?.icon0 : girl?.icon;

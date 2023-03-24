@@ -81,6 +81,9 @@
 
 .qh-hexagon {
   clip-path: var(--hex-clip-path);
+}
+
+.qh-hexagon.empty-slot {
   background: transparent linear-gradient(180deg, #370012 0, #652438 100%) 0 0
     no-repeat padding-box;
 }

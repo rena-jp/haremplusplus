@@ -32,8 +32,9 @@ else if (window.location.pathname.startsWith('/quest/')) {
 else if (window.location.pathname.startsWith('/teams.html')) {
   handleTeams();
 }
+
 // For localhost testing, host will be localhost:3000
-else if (window.location.host === 'localhost:3000') {
+if (window.location.host === 'localhost:3000') {
   if (window.location.search.includes('testTiles')) {
     handleTestTiles();
   } else if (window.location.search.includes('girlTooltip')) {
@@ -43,6 +44,6 @@ else if (window.location.host === 'localhost:3000') {
   } else {
     handleLocal();
   }
+} else {
+  handleHamburgerMenu();
 }
-
-handleHamburgerMenu();
