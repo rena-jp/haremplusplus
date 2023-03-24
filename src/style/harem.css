@@ -160,6 +160,18 @@
 }
 
 .harem-toolbar > .filter-sort-icon.closed {
+  /**
+  Flip the image vertically when the sort panel is closed,
+  so the arrow points to the right direction
+  */
+  transform: scaleX(-1);
+}
+
+.harem-toolbar > .filter-sort-icon.closed > .react-tooltip {
+  /** 
+  Un-apply the mirror transformation on the tooltip itself; 
+  it should only affect the button icon (otherwise we get mirrored text)
+  */
   transform: scaleX(-1);
 }
 

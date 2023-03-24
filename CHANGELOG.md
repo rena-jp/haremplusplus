@@ -1,5 +1,6 @@
 ## 0.12.2 (NEXT)
 
+- Fix mirrored text in Sort icon tooltip
 - Fix missing background color for C/R/E girls in Teams Editor
 
 ## 0.12.1 - 2023-03-23
