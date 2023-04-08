@@ -1,5 +1,6 @@
-## 0.12.2 (NEXT)
+## 0.12.2 - 2023-04-08
 
+- Update events and unknown poses
 - Fix mirrored text in Sort icon tooltip
 - Fix missing background color for C/R/E girls in Teams Editor
 
