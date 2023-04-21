@@ -157,7 +157,7 @@
   width: 100%;
 }
 
-.gems-summary {
+.resources-summary > .gems-summary {
   width: 100%;
   display: inline-grid;
   justify-items: left;
@@ -170,12 +170,12 @@
  * For larger screens, limit to 4 columns
  */
 @media screen and (min-width: 900px) {
-  .gems-summary {
+  .resources-summary > .gems-summary {
     grid-template-columns: repeat(4, 15ch);
   }
 }
 
-.gems-summary > * {
+.resources-summary > .gems-summary > * {
   display: flex;
   flex-direction: row;
   column-gap: 0.8em;
