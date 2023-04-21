@@ -1,4 +1,4 @@
-## 0.12.3 (NEXT)
+## 0.12.3 - 2023-04-21
 
 - Update events and unknown poses
 - Fix a style conflict between HH++ and Harem++, causing display issues in the HH++ Gems summary
