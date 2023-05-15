@@ -1,0 +1,133 @@
+.qh-girls-equipment {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.8rem;
+}
+
+img.girls-equipment-icon {
+  border: 2px solid white;
+  border-radius: 10px;
+
+  height: calc(var(--image-size) / 2);
+  width: calc(var(--image-size) / 2);
+}
+
+.rarity-bg.none {
+  background-color: #662034;
+}
+
+.equipment-decorators {
+  display: flex;
+  flex-direction: row;
+  column-gap: 3px;
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.equipment-decorator {
+  --item-rarity-color: white;
+  width: 5px;
+  height: 0.5em;
+  border: 1px solid black;
+  position: relative;
+  background-color: rgba(50, 50, 50, 0.8);
+}
+
+.equipment-decorator.level0 {
+  border: 1px solid black;
+}
+
+.equipment-decorator.level10 {
+  border: 1px solid var(--item-rarity-color);
+}
+
+.equipment-decorator.mythic {
+  --item-rarity-color: var(--var-color-mythic);
+}
+.equipment-decorator.legendary {
+  --item-rarity-color: var(--var-color-legendary);
+}
+.equipment-decorator.epic {
+  --item-rarity-color: var(--var-color-epic);
+}
+.equipment-decorator.rare {
+  --item-rarity-color: var(--var-color-rare);
+}
+.equipment-decorator.common {
+  --item-rarity-color: var(--var-color-common);
+}
+
+.equipment-decorator > .track {
+  position: absolute;
+  bottom: 0;
+  background-color: var(--item-rarity-color);
+  width: 100%;
+  /** Height defined in react based on level */
+}
+
+.qh-equipment-tooltip {
+  --rarity-background: transparent;
+  /* border: 1px solid var(--rarity-background); */
+  /* border-radius: 8px; */
+  /* background-color: rgba(20, 20, 20, 0.8); */
+  /* display: inline-block; */
+  padding-bottom: 1rem;
+}
+
+.qh-equipment-tooltip.mythic {
+  --rarity-background: var(--var-color-mythic);
+}
+
+.qh-equipment-tooltip.legendary {
+  --rarity-background: var(--var-color-legendary);
+}
+
+.qh-equipment-tooltip.epic {
+  --rarity-background: var(--var-color-epic);
+}
+
+.qh-equipment-tooltip.rare {
+  --rarity-background: var(--var-color-rare);
+}
+
+.qh-equipment-tooltip.common {
+  --rarity-background: var(--var-color-common);
+}
+
+.qh-equipment-tooltip > h2 {
+  /* background-color: var(--rarity-background); */
+  margin-bottom: 1rem;
+  padding: 0.25em;
+  font-size: 1.25em;
+}
+
+.qh-equipment-stats,
+.qh-equipment-resonance {
+  display: flex;
+  flex-direction: column;
+  row-gap: 0.25em;
+}
+
+.qh-equipment-stats > span,
+.qh-equipment-resonance > span {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1em;
+  align-items: center;
+  justify-content: center;
+}
+
+.qh-equipment-stats > span > .stat-icon,
+.qh-equipment-stats > span > .attack-icon,
+.qh-equipment-stats > span > .defense-icon,
+.qh-equipment-stats > span > .ego-icon,
+.qh-equipment-resonance > span > .stat-icon,
+.qh-equipment-resonance > span > .attack-icon,
+.qh-equipment-resonance > span > .defense-icon,
+.qh-equipment-resonance > span > .ego-icon,
+.qh-equipment-resonance > span > .pose-icon {
+  height: 2.5rem;
+  width: 2.5rem;
+}

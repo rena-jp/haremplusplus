@@ -17,18 +17,27 @@ import {
   getPoseN,
   HaremData,
   Class,
-  Quest
+  Quest,
+  EquipmentData,
+  Equipment,
+  EquipmentStats,
+  EMPTY_STATS,
+  EquipmentResonance
 } from '../data';
 import {
+  ArmorData,
   CaracsEntry,
   GameBlessingData,
   GameQuests,
   GirlsDataEntry,
   GirlsDataList,
-  NumberString
+  NumberString,
+  ResonanceBonuses
 } from '../game-data';
 import girlsPoses from './poses.json';
 import eventTypes from './events.json';
+import { ArmorCaracs } from '../game-data';
+import { getTotalEquipmentStats } from '../girls-equipment';
 
 export interface DataFormat {
   blessings: GameBlessingData;
@@ -67,6 +76,10 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
   Object.keys(girlsDataList).forEach((key) => {
     const girlData = girlsDataList[key];
     const rarity = getRarity(girlData.rarity);
+    const equipmentData =
+      girlData.own && girlData.armor !== undefined
+        ? importEquipment(girlData.armor)
+        : undefined;
     const baseCommonGirl: BaseGirlData = {
       id: String(girlData.id_girl),
       name: girlData.name,
@@ -117,12 +130,18 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
         : girlData.ref.hobbies.food,
       fetish: Array.isArray(girlData.ref.hobbies)
         ? ''
-        : girlData.ref.hobbies.fetish
+        : girlData.ref.hobbies.fetish,
+      equipment: equipmentData
     };
 
     const commonGirl: CommonGirlData = {
       ...baseCommonGirl,
-      stats: getStats(baseCommonGirl, girlData.caracs, currentBlessings)
+      stats: getStats(
+        baseCommonGirl,
+        girlData.caracs,
+        currentBlessings,
+        equipmentData
+      )
     };
 
     allGirls.push(commonGirl);
@@ -132,6 +151,59 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
     allGirls: allGirls,
     activeBlessing: currentBlessings,
     nextBlessing: upcomingBlessings
+  };
+}
+
+function importEquipment(armorData: ArmorData[]): EquipmentData {
+  const items: Equipment[] = [];
+
+  for (const armor of armorData) {
+    const slot = armor.slot_index;
+    const equipment: Equipment = {
+      icon: armor.skin.ico,
+      name: armor.skin.name,
+      level: Number(armor.level),
+      rarity: getRarity(armor.rarity),
+      slot: slot,
+      stats: importEquipmentStats(armor.caracs),
+      resonance: importEquipmentResonance(armor.resonance_bonuses),
+      uid: Number(armor.id_girl_armor_equipped) // TODO: Is this unique?
+    };
+
+    items.push(equipment);
+  }
+
+  return {
+    items
+  };
+}
+
+function importEquipmentStats(stats: ArmorCaracs): EquipmentStats {
+  return {
+    hardcore: Number(stats.carac1),
+    charm: Number(stats.carac2),
+    knowhow: Number(stats.carac3),
+    attack: Number(stats.damage),
+    defense: Number(stats.defense),
+    ego: Number(stats.ego)
+  };
+}
+
+function importEquipmentResonance(
+  bonuses: ResonanceBonuses
+): EquipmentResonance {
+  return {
+    class: bonuses.class ? getClass(bonuses.class.identifier) : undefined,
+    ego: bonuses.class ? bonuses.class.bonus : 0,
+    element:
+      bonuses.element && typeof bonuses.element.identifier === 'string'
+        ? toElement(bonuses.element.identifier)
+        : undefined,
+    defense: bonuses.element ? bonuses.element.bonus : 0,
+    pose: bonuses.figure
+      ? getPoseFromValue(String(bonuses.figure.identifier))
+      : undefined,
+    attack: bonuses.figure ? bonuses.figure.bonus : 0
   };
 }
 
@@ -287,7 +359,11 @@ function getPose(girlData: GirlsDataEntry): Pose {
       return knownPose;
     }
   }
-  return girlData.figure === undefined ? Pose.unknown : Number(girlData.figure);
+  return getPoseFromValue(girlData.figure);
+}
+
+function getPoseFromValue(value: string | undefined): Pose {
+  return value === undefined ? Pose.unknown : Number(value);
 }
 
 function getMissingAff(girlData: GirlsDataEntry, rarity: Rarity): number {
@@ -427,7 +503,8 @@ function countMissingGems(rarity: Rarity, levelCap: number): number {
 function getStats(
   girl: BaseGirlData,
   caracsData: CaracsEntry | undefined,
-  blessings: BlessingDefinition[]
+  blessings: BlessingDefinition[],
+  equipmentData: EquipmentData | undefined
 ): Stats | undefined {
   if (caracsData) {
     const hcRaw: number = caracsData.carac1;
@@ -435,10 +512,16 @@ function getStats(
     const khRaw: number = caracsData.carac3;
 
     const multiplier = getBlessingMultiplier(girl, blessings);
+
+    const equipmentStats = equipmentData
+      ? getTotalEquipmentStats(equipmentData)
+      : EMPTY_STATS;
     return {
-      charm: Number((chRaw / multiplier).toFixed(2)),
-      knowhow: Number((khRaw / multiplier).toFixed(2)),
-      hardcore: Number((hcRaw / multiplier).toFixed(2))
+      hardcore: Number(
+        (hcRaw / multiplier - equipmentStats.hardcore).toFixed(2)
+      ),
+      charm: Number((chRaw / multiplier - equipmentStats.charm).toFixed(2)),
+      knowhow: Number((khRaw / multiplier - equipmentStats.knowhow).toFixed(2))
     };
   }
   return undefined;

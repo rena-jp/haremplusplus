@@ -19,7 +19,7 @@ import {
 import { getMissingGXP } from '../hooks/girl-xp-hooks';
 import '../style/harem.css';
 import {
-  EgoIcon,
+  EnduranceIcon,
   ElementIcon,
   format,
   GemIcon,
@@ -120,7 +120,7 @@ export const Summary: React.FC<SummaryProps> = ({
           Total girls: {owned}/{total} ({missing}) {pct}% <br />
           Harem level: {format(haremLevel)}{' '}
           <span className="ego-bonus">
-            (+{format(egoBonus)} <EgoIcon />)
+            (+{format(egoBonus)} <EnduranceIcon />)
           </span>
           <br />
           Epic Pachinko: {ownedEP}/{totalEp} ({missingEp}) <br />

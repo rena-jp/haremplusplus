@@ -12,7 +12,16 @@ const DEPRECATED_CACHES = [
   'harem-cache-0.9.7',
   'harem-cache-0.9.7-dev.1'
 ];
-const CACHE = 'harem-cache-0.10.0';
+/**
+ * Data cache can and should be cleared after incompatible changes.
+ * Clearing it shouldn't affect user settings.
+ */
+const DATA_CACHE = 'harem-cache-0.10.0';
+/**
+ * Config cache should be preserved (maybe migrated) as much as possible.
+ * Clearing it will remove all user settings, and should be avoided.
+ */
+const CONFIG_CACHE = 'harem-cache-0.10.0';
 
 async function clearOldCaches(): Promise<void> {
   for (const deprecatedCache of DEPRECATED_CACHES) {
@@ -36,8 +45,8 @@ const GEMS_DATA_REQUEST = '/gemsData.json';
 
 export async function loadGemsData(): Promise<GemsData> {
   try {
-    if (await caches.has(CACHE)) {
-      const cache = await caches.open(CACHE);
+    if (await caches.has(DATA_CACHE)) {
+      const cache = await caches.open(DATA_CACHE);
       const storedGemsData = await cache.match(new Request(GEMS_DATA_REQUEST));
       if (storedGemsData) {
         return await storedGemsData.json();
@@ -51,7 +60,7 @@ export async function loadGemsData(): Promise<GemsData> {
 
 export async function persistGemsData(gemsData: GemsData): Promise<void> {
   try {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(DATA_CACHE);
     await cache.put(
       new Request(GEMS_DATA_REQUEST),
       new Response(JSON.stringify(gemsData), {
@@ -71,8 +80,8 @@ const HAREM_DATA_REQUEST = '/quickHaremData.json';
 
 export async function loadHaremData(): Promise<HaremData> {
   try {
-    if (await caches.has(CACHE)) {
-      const cache = await caches.open(CACHE);
+    if (await caches.has(DATA_CACHE)) {
+      const cache = await caches.open(DATA_CACHE);
       const storedHaremData = await cache.match(
         new Request(HAREM_DATA_REQUEST)
       );
@@ -89,7 +98,7 @@ export async function loadHaremData(): Promise<HaremData> {
 export async function persistHaremData(harem: HaremData): Promise<void> {
   if (harem.allGirls.length > 0) {
     try {
-      const cache = await caches.open(CACHE);
+      const cache = await caches.open(DATA_CACHE);
       await cache.put(
         new Request(HAREM_DATA_REQUEST),
         new Response(JSON.stringify(harem), {
@@ -111,8 +120,8 @@ const BLESSINGS_REQUEST = '/blessings.json';
 
 async function loadBlessingsData(): Promise<GameBlessingData> {
   try {
-    if (await caches.has(CACHE)) {
-      const cache = await caches.open(CACHE);
+    if (await caches.has(DATA_CACHE)) {
+      const cache = await caches.open(DATA_CACHE);
       const storedBlessingsData = await cache.match(
         new Request(BLESSINGS_REQUEST)
       );
@@ -130,7 +139,7 @@ async function persistBlessingsData(
   blessingsData: GameBlessingData
 ): Promise<void> {
   try {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(DATA_CACHE);
     await cache.put(
       new Request(BLESSINGS_REQUEST),
       new Response(JSON.stringify(blessingsData), {
@@ -191,7 +200,7 @@ export async function persistDefaultFilter(
   filter: FilterConfig | undefined
 ): Promise<void> {
   try {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(CONFIG_CACHE);
     if (filter === undefined) {
       await cache.delete(FILTERS_REQUEST);
     } else {
@@ -214,8 +223,8 @@ export async function persistDefaultFilter(
 
 export async function loadDefaultFilter(): Promise<FilterConfig> {
   try {
-    if (await caches.has(CACHE)) {
-      const cache = await caches.open(CACHE);
+    if (await caches.has(CONFIG_CACHE)) {
+      const cache = await caches.open(CONFIG_CACHE);
       const storedFilter = await cache.match(new Request(FILTERS_REQUEST));
       if (storedFilter) {
         const defaultConfig = await storedFilter.json();
@@ -239,7 +248,7 @@ export async function persistDefaultSort(
   sort: SortConfig | undefined
 ): Promise<void> {
   try {
-    const cache = await caches.open(CACHE);
+    const cache = await caches.open(CONFIG_CACHE);
     if (sort === undefined) {
       await cache.delete(SORT_REQUEST);
     } else {
@@ -262,8 +271,8 @@ export async function persistDefaultSort(
 
 export async function loadDefaultSort(): Promise<SortConfig> {
   try {
-    if (await caches.has(CACHE)) {
-      const cache = await caches.open(CACHE);
+    if (await caches.has(CONFIG_CACHE)) {
+      const cache = await caches.open(CONFIG_CACHE);
       const storedSorter = await cache.match(new Request(SORT_REQUEST));
       if (storedSorter) {
         const defaultConfig = await storedSorter.json();

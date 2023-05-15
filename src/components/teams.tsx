@@ -13,6 +13,7 @@ import {
 import { TeamStats, useTeamStats } from '../hooks/team-hooks';
 import { BaseGirlTile } from './girl';
 import { GameAPIContext } from '../data/game-api-context';
+import { EquipmentDecorators } from './girls-equipment';
 
 export interface TeamsProps {
   allGirls: CommonGirlData[];
@@ -408,6 +409,10 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
         onClick={() => select(tileId)}
       >
         <div className={innerClasses.join(' ')}>
+          {girl?.equipment === undefined ||
+          girl.equipment.items.length === 0 ? null : (
+            <EquipmentDecorators equipment={girl.equipment} />
+          )}
           {girl === undefined ? <img src={icon} /> : <img src={icon} />}
         </div>
       </div>

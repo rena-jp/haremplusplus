@@ -483,11 +483,35 @@ export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
 };
 
-export const EgoIcon = () => {
+export const EnduranceIcon = () => {
   return (
     <img
       src="https://hh2.hh-content.com/pictures/misc/items_icons/4.png"
-      className="ego-icon"
+      className="endurance-icon"
+    />
+  );
+};
+
+export const EgoIcon = () => {
+  return (
+    <img src="https://hh2.hh-content.com/caracs/ego.png" className="ego-icon" />
+  );
+};
+
+export const AttackIcon = () => {
+  return (
+    <img
+      src="https://hh2.hh-content.com/caracs/damage.png"
+      className="attack-icon"
+    />
+  );
+};
+
+export const DefenseIcon = () => {
+  return (
+    <img
+      src="https://hh2.hh-content.com/caracs/deff_undefined.png"
+      className="defense-icon"
     />
   );
 };

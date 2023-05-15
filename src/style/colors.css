@@ -1,3 +1,10 @@
+:root {
+  --var-color-common: #8d8e9f;
+  --var-color-rare: #23b56b;
+  --var-color-epic: #ffb244;
+  --var-color-legendary: #8e36a9;
+  --var-color-mythic: #ec0039;
+}
 .color > span {
   font-weight: bold;
   --var-color: white;
@@ -67,17 +74,17 @@
   --var-color: #fff;
 }
 .color > .rarity.common {
-  --var-color: #8d8e9f;
+  --var-color: var(--var-color-common);
 }
 .color > .rarity.rare {
-  --var-color: #23b56b;
+  --var-color: var(--var-color-rare);
 }
 .color > .rarity.epic {
-  --var-color: #ffb244;
+  --var-color: var(--var-color-epic);
 }
 .color > .rarity.legendary {
-  --var-color: #8e36a9;
+  --var-color: var(--var-color-legendary);
 }
 .color > .rarity.mythic {
-  --var-color: #ec0039;
+  --var-color: var(--var-color-mythic);
 }

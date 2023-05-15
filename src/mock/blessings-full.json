@@ -1,30 +1,30 @@
 {
   "active": [
     {
-      "title": "Semaine du Vert",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Vert</span> obtiennent <span class=\"blessing-bonus\">+ 35%</span> de bonus sur tous les attributs.",
-      "start_ts": 1668427200,
-      "end_ts": 1669031999
+      "title": "Week of the Submissive",
+      "description": "All girls with <span class=\"blessing-condition\">Element Submissive</span> gain <span class=\"blessing-bonus\">+ 40%</span> bonus on all attributes.",
+      "start_ts": 1684170955,
+      "end_ts": 1694170933
     },
     {
-      "title": "Semaine du 69",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Position préférée 69</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
-      "start_ts": 1668427200,
-      "end_ts": 1669031999
+      "title": "Week of the Nose Dive",
+      "description": "All girls with <span class=\"blessing-condition\">Favorite position Nose Dive</span> gain <span class=\"blessing-bonus\">+ 35%</span> bonus on all attributes.",
+      "start_ts": 1684170955,
+      "end_ts": 1694170933
     }
   ],
   "upcoming": [
     {
-      "title": "Semaine du Rose",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Couleur de cheveux Rose</span> obtiennent <span class=\"blessing-bonus\">+ 25%</span> de bonus sur tous les attributs.",
-      "start_ts": 1669032000,
-      "end_ts": 1669636799
+      "title": "Week of the Aquarius",
+      "description": "All girls with <span class=\"blessing-condition\">Zodiac sign Aquarius</span> gain <span class=\"blessing-bonus\">+ 30%</span> bonus on all attributes.",
+      "start_ts": 1694170933,
+      "end_ts": 1704170933
     },
     {
-      "title": "Semaine du Commune",
-      "description": "Toutes les filles avec <span class=\"blessing-condition\">Rareté Commune</span> obtiennent <span class=\"blessing-bonus\">+ 40%</span> de bonus sur tous les attributs.",
-      "start_ts": 1669032000,
-      "end_ts": 1669636799
+      "title": "Week of the Rare",
+      "description": "All girls with <span class=\"blessing-condition\">Rarity Rare</span> gain <span class=\"blessing-bonus\">+ 25%</span> bonus on all attributes.",
+      "start_ts": 1694170933,
+      "end_ts": 1704170933
     }
   ],
   "success": true

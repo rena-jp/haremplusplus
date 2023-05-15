@@ -114,7 +114,43 @@ export interface BaseGirlData {
   birthday: string;
   hobby: string;
   fetish: string;
+
+  equipment?: EquipmentData; // WIP Experiment
 }
+
+export interface EquipmentData {
+  items: Equipment[];
+}
+
+export interface Equipment {
+  level: number;
+  stats: EquipmentStats;
+  resonance: EquipmentResonance;
+  slot: EquipmentSlot;
+  name: string;
+  icon: string;
+  rarity: Rarity;
+  uid: number;
+}
+
+export interface EquipmentStats extends Stats {
+  ego: number;
+  defense: number;
+  attack: number;
+}
+
+export interface EquipmentResonance {
+  class: Class | undefined;
+  ego: number;
+  element: Element | undefined;
+  defense: number;
+  pose: Pose | undefined;
+  attack: number;
+}
+
+export type EquipmentSlot = number;
+
+export type EmptyGear = Record<string, never>;
 
 /**
  * "Quests" are upgrade scenes
@@ -793,3 +829,5 @@ export namespace Team {
 
 export const SPECIAL_MYTHIC_BOOK_ID = 631;
 export const SPECIAL_MYTHIC_GIFT_ID = 627;
+
+export const EMPTY_STATS = { hardcore: 0, charm: 0, knowhow: 0 };

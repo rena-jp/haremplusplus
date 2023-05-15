@@ -169,6 +169,9 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   pay_time: number;
   salary_per_hour: number;
   Xp: XpEntry;
+
+  // Girls equipment
+  armor?: ArmorData[];
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;
@@ -263,6 +266,65 @@ export interface GirlsSalaryEntry {
    * Pay in N seconds
    */
   pay_in: number;
+}
+
+export interface ArmorData {
+  id_girl_armor_equipped: NumberString;
+  id_member: NumberString;
+  id_girl_item_armor: NumberString;
+  level: NumberString;
+  class: NumberString;
+  class_resonance: ClassResonance;
+  element: string; // Element enum, e.g. "", "light", "psychic", ...
+  element_resonance: ElementResonance;
+  figure: string;
+  figure_resonance: FigureResonance;
+  id_girl: string;
+  caracs: ArmorCaracs;
+  slot_index: number;
+  skin: ArmorSkin;
+  armor: ArmorTypeCaracs;
+  rarity: GameRarity;
+  type: 'girl_armor';
+  resonance_bonuses: ResonanceBonuses;
+}
+
+export type ClassResonance = 'ego' | ''; // No more RNG here; ego or nothing
+export type ElementResonance = 'defense' | ''; // No more RNG here; defense or nothing
+export type FigureResonance = 'damage' | ''; // No more RNG here; defense or nothing
+
+export interface ArmorCaracs {
+  carac1: number;
+  carac2: number;
+  carac3: number;
+  damage: number;
+  defense: number;
+  ego: number;
+}
+
+export interface ArmorTypeCaracs extends ArmorCaracs {
+  rarity: string;
+  id_girl_item_armor: NumberString;
+}
+
+export interface ResonanceBonuses {
+  class?: ResonanceBonus;
+  element?: ResonanceBonus;
+  figure?: ResonanceBonus;
+}
+
+export interface ResonanceBonus {
+  identifier: NumberString;
+  resonance: 'ego' | 'defense' | 'damage';
+  bonus: number;
+}
+
+export interface ArmorSkin {
+  subtype: NumberString;
+  wearer: 'girl';
+  weight: NumberString; // WTF?!
+  name: string;
+  ico: string;
 }
 
 /**

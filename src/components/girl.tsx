@@ -10,6 +10,7 @@ import { CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
 import { ElementIcon, Grade, SalaryIcon, UpgradeIcon } from './common';
+import { EquipmentDecorators } from './girls-equipment';
 
 export interface GirlTileProps {
   girl: CommonGirlData;
@@ -269,6 +270,9 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       classNames={classNames}
       avatarOverlay={
         <>
+          {girl.equipment && girl.equipment?.items.length > 0 ? (
+            <EquipmentDecorators equipment={girl.equipment} />
+          ) : null}
           <SalaryIcon />
           {girl.own || girl.shards === 0 ? null : (
             <span className="qh_shards">{girl.shards}/100</span>

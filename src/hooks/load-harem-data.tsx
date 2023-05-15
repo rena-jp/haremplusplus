@@ -18,6 +18,8 @@ import {
   BlessingDefinition,
   CommonGirlData,
   Element,
+  Equipment,
+  EquipmentData,
   HaremData,
   replace,
   Stats
@@ -320,7 +322,8 @@ function quickEqualGirls(
     girl1.birthday === girl2.birthday && // Language test. Birthday is more likely to be translated in all languages.
     girl1.variations?.length === girl2.variations?.length &&
     girl1.pose === girl2.pose && // Maybe the pose was unknown, and now it's not
-    equalStats(girl1.stats, girl2.stats) // Workaround for stats refresh issue; also accounts for stats that may be adjusted after BC
+    equalStats(girl1.stats, girl2.stats) && // Workaround for stats refresh issue; also accounts for stats that may be adjusted after BC
+    equalEquipment(girl1.equipment, girl2.equipment) // Maybe equipment has changed
   );
 }
 
@@ -329,5 +332,36 @@ function equalStats(stats1?: Stats, stats2?: Stats): boolean {
     stats1?.charm === stats2?.charm &&
     stats1?.hardcore === stats2?.hardcore &&
     stats1?.knowhow === stats2?.knowhow
+  );
+}
+
+function equalEquipment(
+  equip1: EquipmentData | undefined,
+  equip2: EquipmentData | undefined
+): boolean {
+  if (equip1 === equip2) {
+    return true;
+  }
+  if (equip1 === undefined || equip2 === undefined) {
+    return false;
+  }
+  if (equip1.items.length !== equip2.items.length) {
+    return false;
+  }
+  for (let i = 0; i < equip1.items.length; i++) {
+    const item1 = equip1.items[i];
+    const item2 = equip2.items[i];
+    if (!equalItem(item1, item2)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function equalItem(item1: Equipment, item2: Equipment): boolean {
+  return (
+    item1.rarity === item2.rarity &&
+    item1.level === item2.level &&
+    item1.uid === item2.uid
   );
 }
