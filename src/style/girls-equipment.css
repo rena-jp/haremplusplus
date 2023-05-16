@@ -132,3 +132,11 @@ img.girls-equipment-icon {
   height: 2.5rem;
   width: 2.5rem;
 }
+
+.active-resonance {
+  color: green;
+}
+
+.inactive-resonance {
+  color: lightgrey;
+}

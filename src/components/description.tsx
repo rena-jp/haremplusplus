@@ -213,7 +213,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       {girl.equipment !== undefined ? (
         <>
           <p>Equipment:</p>
-          <EquipmentList equipment={girl.equipment} girlId={girl.id} />
+          <EquipmentList equipment={girl.equipment} girl={girl} />
         </>
       ) : null}
       {girl.recruited ? (

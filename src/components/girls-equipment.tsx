@@ -1,4 +1,10 @@
-import { Class, Equipment, EquipmentData, Rarity } from '../data/data';
+import {
+  Class,
+  CommonGirlData,
+  Equipment,
+  EquipmentData,
+  Rarity
+} from '../data/data';
 import { slotsArray } from '../data/girls-equipment';
 import '../style/girls-equipment.css';
 import { Tooltip } from './common';
@@ -13,12 +19,12 @@ import { StatIcon, getDomain } from './common';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
-  girlId: string;
+  girl: CommonGirlData;
 }
 
 export const EquipmentList: React.FC<EquipmentListProps> = ({
   equipment,
-  girlId
+  girl
 }) => {
   const slots = slotsArray(equipment.items);
   return (
@@ -28,7 +34,7 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
           <EquipmentTile
             equipment={item}
             key={index}
-            girlId={girlId}
+            girl={girl}
             slotId={index + 1 /* Slots are indexed 1 to 6 */}
           />
         ))}
@@ -40,17 +46,17 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
 
 interface EquipmentTileProps {
   equipment: Equipment | undefined;
-  girlId: string;
+  girl: CommonGirlData;
   slotId: number;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
   equipment,
-  girlId,
+  girl,
   slotId
 }) => {
   const domain = getDomain();
-  const link = `${domain}/girl/${girlId}?resource=equipment&equipment-slot=${slotId}`;
+  const link = `${domain}/girl/${girl.id}?resource=equipment&equipment-slot=${slotId}`;
   const img = equipment?.icon;
 
   const tileClassNames = ['item-tile'];
@@ -69,7 +75,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
         ) : (
           <Tooltip
             place="bottom"
-            tooltip={<EquipmentTooltip equipment={equipment} />}
+            tooltip={<EquipmentTooltip equipment={equipment} girl={girl} />}
           >
             {icon}
           </Tooltip>
@@ -121,12 +127,28 @@ export const EquipmentDecorator: React.FC<EquipmentDecoratorProps> = ({
 
 export interface EquipmentTooltipProps {
   equipment: Equipment;
+  girl?: CommonGirlData;
 }
 
 export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
-  equipment
+  equipment,
+  girl
 }) => {
   const tooltipClasses = ['qh-equipment-tooltip', Rarity[equipment.rarity]];
+
+  const matchesClassResonance =
+    girl &&
+    equipment.resonance.class !== undefined &&
+    equipment.resonance.class === girl.class;
+  const matchesElementResonance =
+    girl &&
+    equipment.resonance.element !== undefined &&
+    equipment.resonance.element === girl.element;
+  const matchesPoseResonance =
+    girl &&
+    equipment.resonance.pose !== undefined &&
+    equipment.resonance.pose === girl.pose;
+
   return (
     <div className={tooltipClasses.join(' ')}>
       <h2>
@@ -158,19 +180,43 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
         <div className="qh-equipment-resonance">
           <h3>Resonance Bonus</h3>
           {equipment.resonance.class !== undefined ? (
-            <span>
+            <span
+              className={
+                girl
+                  ? matchesClassResonance
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : ''
+              }
+            >
               <StatIcon statClass={equipment.resonance.class} />: <EgoIcon /> +
               {equipment.resonance.ego}%
             </span>
           ) : null}
           {equipment.resonance.element !== undefined ? (
-            <span>
+            <span
+              className={
+                girl
+                  ? matchesElementResonance
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : ''
+              }
+            >
               <ElementIcon element={equipment.resonance.element} />:{' '}
               <DefenseIcon /> +{equipment.resonance.defense}%
             </span>
           ) : null}
           {equipment.resonance.pose !== undefined ? (
-            <span>
+            <span
+              className={
+                girl
+                  ? matchesPoseResonance
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : ''
+              }
+            >
               <PoseIcon pose={equipment.resonance.pose} />: <AttackIcon /> +
               {equipment.resonance.attack}%
             </span>
