@@ -24,7 +24,10 @@ import {
   Zodiacs
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
-import { getMissingAffection } from '../hooks/girl-aff-hooks';
+import {
+  getMissingAffection,
+  useAffectionStats
+} from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, useGemsStats } from '../hooks/girl-gems-hooks';
 import { getMissingGXPToCap, useXpStats } from '../hooks/girl-xp-hooks';
 import { RarityColorText } from './colors';
@@ -37,6 +40,7 @@ import {
   getDomain,
   GiftIcon,
   PoseIcon,
+  ProgressBar,
   SalaryIcon,
   StatsDescriptionTooltip,
   Tooltip
@@ -240,16 +244,11 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           ))
           .reduce((a, b) => [a, ' & ', b])}
       </p>
-      <MissingAffEntry girl={girl} />
-      <MissingGXPEntry girl={girl} />
+
       <MissingGemsEntry girl={girl} />
       {girl.own ? (
         <>
-          {/* 
-                  https://www.hentaiheroes.com/girl/${girl.id}?resource=experience 
-                  https://www.hentaiheroes.com/shop.html?type=potion&girl=${girl.id}
-                */}
-          <p>
+          <div className="upgrade-link">
             <a
               href={`${domain}/girl/${girl.id}?resource=experience`}
               rel="noreferrer"
@@ -259,14 +258,11 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 openUpgrade('books');
               }}
             >
-              Give books <BookIcon />
+              <MissingGXPEntry girl={girl} />
+              <BookIcon />
             </a>
-          </p>
-          {/* 
-                  https://www.hentaiheroes.com/girl/${girl.id}?resource=affection
-                  https://www.hentaiheroes.com/shop.html?type=gift&girl=${girl.id}
-                */}
-          <p>
+          </div>
+          <div className="upgrade-link">
             <a
               href={`${domain}/girl/${girl.id}?resource=affection`}
               rel="noreferrer"
@@ -276,9 +272,10 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
                 openUpgrade('gifts');
               }}
             >
-              Give gifts <GiftIcon />
+              <MissingAffEntry girl={girl} />
+              <GiftIcon />
             </a>
-          </p>
+          </div>
         </>
       ) : null}
       <p>
@@ -296,32 +293,57 @@ interface GirlStatsEntry {
 }
 
 const MissingAffEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
+  const affStats = useAffectionStats(girl, undefined);
+
+  const progressBar = (
+    <ProgressBar
+      curr={affStats.currentAff}
+      min={0}
+      max={affStats.affToMax}
+      extra={affStats.affGain}
+      label={
+        girl.stars === girl.maxStars
+          ? 'Max.'
+          : affStats.currentAff === affStats.affToMax
+          ? 'Ready'
+          : format(affStats.affToMax - affStats.currentAff) + ' Aff'
+      }
+    />
+  );
+
   return girl.missingAff > 0 ? (
-    <p>
+    <div>
       <Tooltip tooltip={<MissingAffDetails girl={girl} />}>
-        Missing Affection: {format(girl.missingAff)}{' '}
+        {progressBar}
       </Tooltip>
-      {/* <img
-            src="https://hh2.hh-content.com/pictures/items/K1.png"
-            style={{ height: '4ex' }}
-          /> */}
-    </p>
-  ) : null;
+    </div>
+  ) : (
+    <div>{progressBar}</div>
+  );
 };
 
 const MissingGXPEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
   const xpStats = useXpStats(girl, undefined);
+
+  const progressBar = (
+    <ProgressBar
+      curr={xpStats.currentXp}
+      min={0}
+      max={xpStats.currentXp + xpStats.xpToMax}
+      extra={xpStats.xpGain}
+      label={xpStats.xpToMax === 0 ? 'Max.' : format(xpStats.xpToMax) + ' XP'}
+    />
+  );
+
   return xpStats.xpToMax > 0 ? (
-    <p>
+    <div>
       <Tooltip tooltip={<MissingGXPDetails girl={girl} />}>
-        Missing XP: {format(xpStats.xpToMax)}{' '}
+        {progressBar}
       </Tooltip>
-      {/* <img
-              src="https://hh2.hh-content.com/pictures/items/XP1.png"
-              style={{ height: '4ex' }}
-            /> */}
-    </p>
-  ) : null;
+    </div>
+  ) : (
+    <div>{progressBar}</div>
+  );
 };
 
 const MissingGemsEntry: React.FC<GirlStatsEntry> = ({ girl }) => {

@@ -112,12 +112,33 @@ body.qh-local {
 }
 
 .details-content > p,
-.details-content > .details-section > p {
+.details-content > .details-section > p,
+.details-content > .details-section > div {
   text-align: left;
+  margin-block: 0.8em;
+}
+
+.icon-link > img {
+  background-image: linear-gradient(to top, #008ed5 0, #05719c 100%);
+  border-radius: 100%;
+  background-origin: content-box, border-box;
+  border: none;
+  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  padding: 2px;
+}
+
+.icon-link:active > img {
+  box-shadow: none;
 }
 
 .details-content > p > .grade {
   justify-content: left;
+}
+
+.upgrade-link {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1em;
 }
 
 .section-switch {

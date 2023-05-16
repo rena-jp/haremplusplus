@@ -1,5 +1,6 @@
 ## 0.13.1 (NEXT)
 
+- Make the XP/Affection sections more compact
 - Replace links to the original harem with links to the harem script
 
 ## 0.13.0 - 2023-05-16
