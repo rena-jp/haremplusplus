@@ -1,3 +1,7 @@
+## 0.13.0 (NEXT)
+
+- Add support for girls equipment
+
 ## 0.12.3 - 2023-04-21
 
 - Update events and unknown poses
