@@ -57,7 +57,7 @@ export type EventSource =
   | 'DP' // Done
   | 'unknown';
 
-export function isEventSource(value: string): value is EventSource {
+export function isEventSource(_value: string): _value is EventSource {
   return true; // Optimism lvl >9000
 }
 

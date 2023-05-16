@@ -53,33 +53,6 @@ export interface FiltersManager {
   persistDefaultFilter(filter: Filter): Promise<void>;
 }
 
-// NEW API WIP
-
-/**
- * The Filters Manager is used to instantiate runtime Filter instances
- * from configurable/serializable FilterConfig.
- */
-// export interface FiltersManager {
-//   createFilter(config: FilterConfig): Filter | undefined;
-//   /**
-//    * Restore the default filter state.
-//    */
-//   restoreDefaultFilter(): void;
-//   /**
-//    * Save the current filter as the new default.
-//    */
-//   persistDefaultFilter(): Promise<void>;
-//   /**
-//    * @Deprecated This should be handled by the manager directly
-//    */
-//   loadDefaultConfig(): Promise<FilterConfig>;
-//   /**
-//    * Add a new filter listener, and returns a callback
-//    * to dispose the listener.
-//    */
-//   onFilterChange(listener: (filter: Filter) => void): () => void;
-// }
-
 export namespace Filters {
   export function equals(filter1: Filter, filter2: Filter): boolean {
     return deepEqual(filter1.getConfig(), filter2.getConfig());

@@ -2,6 +2,7 @@ import { useCallback, useContext, useMemo, useState } from 'react';
 import { BlessingDefinition, EventSource } from '../data/data';
 import { Filter } from '../data/filters/filter-api';
 import {
+  ClassMultiFilter,
   GradeLimitReachedFilter,
   GradeRangeFilter,
   LevelLimitReachedFilter,
@@ -138,6 +139,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <UpgradeReadyForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <ClassForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -612,6 +618,62 @@ const UpgradeReadyForm: React.FC<FormProps> = ({
       removeFilter={removeFilter}
       multipleChoices={false}
       filterId={UpgradeReadyFilter.ID}
+    />
+  );
+};
+
+const ClassForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      {
+        label: 'Hardcore',
+        description: 'Filters Hardcore girls'
+      },
+      {
+        label: 'Charm',
+        description: 'Filters Charm girls'
+      },
+      {
+        label: 'Knowhow',
+        description: 'Filters Knowhow girls'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    if (values.every((v) => !v)) {
+      return undefined;
+    }
+    return new ClassMultiFilter(values[0], values[1], values[2]);
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    const values = options.map((_opt) => false);
+    if (filter instanceof ClassMultiFilter) {
+      values[0] = filter.hardcore;
+      values[1] = filter.charm;
+      values[2] = filter.knowhow;
+    }
+    return values;
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Class"
+      description="Filter girls by class"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={true}
+      filterId={ClassMultiFilter.ID}
     />
   );
 };

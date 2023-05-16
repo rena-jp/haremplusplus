@@ -1,6 +1,7 @@
 import { roundValue } from '../common';
 import {
   BlessingDefinition,
+  Class,
   CommonGirlData,
   EventSource,
   getBasePower,
@@ -319,6 +320,37 @@ export class SourceFilter extends AbstractFilter {
       const source = stringParam(config, 'source');
       if (source && isEventSource(source)) {
         return new SourceFilter(source);
+      }
+      return undefined;
+    }
+  };
+}
+
+export class ClassFilter extends AbstractFilter {
+  static ID = 'class-filter';
+  id = ClassFilter.ID;
+
+  constructor(private classs: Class) {
+    super();
+    this.label = `Class ${Class[classs]}`;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    return girl.class === this.classs;
+  }
+
+  getParams() {
+    return {
+      class: this.classs
+    };
+  }
+
+  static FACTORY: FilterFactory<ClassFilter> = {
+    type: ClassFilter.ID,
+    create: (config) => {
+      const classs = numberParam(config, 'class');
+      if (classs) {
+        return new ClassFilter(classs);
       }
       return undefined;
     }
@@ -729,6 +761,62 @@ export class RarityMultiFilter extends AbstractFilter {
           legendary,
           mythic
         );
+      }
+      return undefined;
+    }
+  };
+}
+
+export class ClassMultiFilter extends AbstractFilter {
+  static ID = 'class';
+  id = ClassMultiFilter.ID;
+  private filters: Filter[] = [];
+  private orFilter: SimpleFilter | undefined;
+
+  constructor(
+    public hardcore: boolean,
+    public charm: boolean,
+    public knowhow: boolean
+  ) {
+    super();
+    if (hardcore) {
+      this.filters.push(new ClassFilter(Class.Hardcore));
+    }
+    if (charm) {
+      this.filters.push(new ClassFilter(Class.Charm));
+    }
+    if (knowhow) {
+      this.filters.push(new ClassFilter(Class.Knowhow));
+    }
+    this.orFilter =
+      this.filters.length === 0 ? undefined : or('', ...this.filters);
+    this.label = this.orFilter === undefined ? '' : this.orFilter.label;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    return this.orFilter === undefined ? false : this.orFilter.includes(girl);
+  }
+
+  getParams() {
+    return {
+      hardcore: this.hardcore,
+      charm: this.charm,
+      knowhow: this.knowhow
+    };
+  }
+
+  static FACTORY: FilterFactory<ClassMultiFilter> = {
+    type: ClassMultiFilter.ID,
+    create: (config) => {
+      const hardcore = booleanParam(config, 'hardcore');
+      const charm = booleanParam(config, 'charm');
+      const knowhow = booleanParam(config, 'knowhow');
+      if (
+        hardcore !== undefined &&
+        charm !== undefined &&
+        knowhow !== undefined
+      ) {
+        return new ClassMultiFilter(hardcore, charm, knowhow);
       }
       return undefined;
     }

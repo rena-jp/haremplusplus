@@ -17,7 +17,8 @@ import {
   RootFilter,
   ShardsMultiFilter,
   SourceMultiFilter,
-  UpgradeReadyFilter
+  UpgradeReadyFilter,
+  ClassMultiFilter
 } from './filter-runtime';
 import { BlessingDefinition } from '../data';
 import { optionsManager } from '../options';
@@ -41,6 +42,7 @@ export class FiltersManagerImpl implements FiltersManager {
     this.register(MinimumPotentialFilter.FACTORY);
 
     this.register(RarityMultiFilter.FACTORY);
+    this.register(ClassMultiFilter.FACTORY);
 
     this.register(ShardsMultiFilter.FACTORY);
     this.register(SourceMultiFilter.FACTORY);
