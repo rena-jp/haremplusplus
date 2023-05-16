@@ -287,6 +287,8 @@ export interface StatsDescriptionProps {
   potentialMultiplier: number;
   blessed: boolean;
   statIcon?: Class;
+  currentBlessingMultiplier: number;
+  upcomingBlessingMultiplier: number;
 }
 
 export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
@@ -295,7 +297,9 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
   upcomingStats,
   potentialMultiplier,
   blessed,
-  statIcon
+  statIcon,
+  currentBlessingMultiplier,
+  upcomingBlessingMultiplier
 }) => {
   // https://hh2.hh-content.com/pictures/misc/items_icons/3.png
   return (
@@ -309,6 +313,8 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
             currentStats={currentStats}
             upcomingStats={upcomingStats}
             potentialMultiplier={potentialMultiplier}
+            currentBlessingMultiplier={currentBlessingMultiplier}
+            upcomingBlessingMultiplier={upcomingBlessingMultiplier}
           />
         }
       >
@@ -322,7 +328,9 @@ export const StatsDescription: React.FC<StatsDescriptionProps> = ({
   baseStats,
   currentStats,
   upcomingStats,
-  potentialMultiplier
+  potentialMultiplier,
+  currentBlessingMultiplier,
+  upcomingBlessingMultiplier
 }) => {
   return (
     <div className="detailed-stats">
@@ -339,7 +347,10 @@ export const StatsDescription: React.FC<StatsDescriptionProps> = ({
           currentStats.charm > baseStats.charm ? ' blessed' : ''
         }`}
       >
-        Current{' '}
+        Current
+        {currentBlessingMultiplier > 1
+          ? ` +${((currentBlessingMultiplier - 1) * 100).toFixed(2)}%`
+          : null}
         <StatsList
           stats={currentStats}
           potentialMultiplier={potentialMultiplier}
@@ -351,7 +362,10 @@ export const StatsDescription: React.FC<StatsDescriptionProps> = ({
           upcomingStats.charm > baseStats.charm ? ' blessed' : ''
         }`}
       >
-        Upcoming{' '}
+        Upcoming
+        {upcomingBlessingMultiplier > 1
+          ? ` +${((upcomingBlessingMultiplier - 1) * 100).toFixed(2)}%`
+          : null}
         <StatsList
           stats={upcomingStats}
           potentialMultiplier={potentialMultiplier}

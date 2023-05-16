@@ -1,5 +1,6 @@
 ## 0.13.0 (NEXT)
 
+- Display blessing multipliers on girl stats tooltip (Current/Upcoming)
 - Add support for girls equipment
 
 ## 0.12.3 - 2023-04-21

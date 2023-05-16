@@ -13,6 +13,7 @@ import {
   EyeColor,
   EyeColors,
   getBlessedStats,
+  getBlessingMultiplier,
   getSourceLabel,
   HairColor,
   HairColors,
@@ -486,6 +487,14 @@ export const StatsDetails: React.FC<StatsProps> = ({
     (1 + 0.3 * girl.maxStars) / (1 + 0.3 * girl.stars);
   const potentialMultiplier =
     potentialLevelMultiplier * potentialGradeMultiplier;
+  const currentBlessingMultiplier = getBlessingMultiplier(
+    girl,
+    currentBlessing
+  );
+  const upcomingBlessingMultiplier = getBlessingMultiplier(
+    girl,
+    upcomingBlessing
+  );
 
   return (
     <>
@@ -496,6 +505,8 @@ export const StatsDetails: React.FC<StatsProps> = ({
         upcomingStats={upcomingStats}
         potentialMultiplier={potentialMultiplier}
         statIcon={girl.class}
+        currentBlessingMultiplier={currentBlessingMultiplier}
+        upcomingBlessingMultiplier={upcomingBlessingMultiplier}
       />
     </>
   );
