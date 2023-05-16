@@ -9,7 +9,7 @@
 .panel.summary {
   display: flex;
   align-items: center;
-  min-width: 80vw;
+  min-width: 55vw;
   flex-direction: column;
 }
 

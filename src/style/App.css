@@ -84,6 +84,11 @@ body.qh-local {
   padding: 1rem;
 }
 
+.blessings-summary > div > h2 {
+  font-size: 1.2em;
+  color: lightgrey;
+}
+
 .missing-girls-blessing > span > .owned {
   color: #c93e3e;
   font-weight: bold;

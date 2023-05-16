@@ -213,6 +213,7 @@ export const BlessingSummaries: React.FC<BlessingSummariesProps> = ({
     <div className="blessings-summary">
       {[...blessings.entries()].map(([type, list]) => (
         <div key={`cat_${Blessing[type]}`} className={`cat_${Blessing[type]}`}>
+          <h2>{Blessings.toDisplayType(type)}</h2>
           {list.map((blessing) => (
             <BlessingSummary
               key={getBlessingKey(blessing)}
@@ -394,7 +395,6 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
       </span>
     ) : (
       <span className="color">
-        {Blessings.toString(blessing.blessing)}{' '}
         <span className={colorName}>
           {Blessings.toDisplayString(blessing.blessing, blessing.blessingValue)}
         </span>

@@ -333,6 +333,17 @@ export namespace Blessings {
     return Blessing[blessing];
   }
 
+  export function toDisplayType(blessing: Blessing): string {
+    switch (blessing) {
+      case Blessing.HairColor:
+        return 'Hair Color';
+      case Blessing.EyeColor:
+        return 'Eye Color';
+      default:
+        return toString(blessing);
+    }
+  }
+
   export function fromString(blessing: keyof typeof Blessing): Blessing {
     return Blessing[blessing];
   }

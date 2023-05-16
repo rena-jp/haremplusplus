@@ -1,5 +1,6 @@
 ## 0.13.0 (NEXT)
 
+- Make the Summary panel more compact
 - Display blessing multipliers on girl stats tooltip (Current/Upcoming)
 - Add support for girls equipment
 
