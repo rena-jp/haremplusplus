@@ -13,7 +13,8 @@ import {
   RarityMultiFilter,
   ShardsMultiFilter,
   SourceMultiFilter,
-  UpgradeReadyFilter
+  UpgradeReadyFilter,
+  EquippedFilter
 } from '../data/filters/filter-runtime';
 import {
   LabeledToggle,
@@ -144,6 +145,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <ClassForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <EquippedForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -618,6 +624,45 @@ const UpgradeReadyForm: React.FC<FormProps> = ({
       removeFilter={removeFilter}
       multipleChoices={false}
       filterId={UpgradeReadyFilter.ID}
+    />
+  );
+};
+
+const EquippedForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      {
+        label: 'Equipped',
+        description: 'Filter girls that have at least one item equipped'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    return values[0] ? new EquippedFilter() : undefined;
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    return filter instanceof EquippedFilter ? [true] : [false];
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Equipped Girls"
+      description="Filter girls that have at least one item equipped"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={false}
+      filterId={EquippedFilter.ID}
     />
   );
 };

@@ -1,5 +1,6 @@
 ## 0.13.1 (NEXT)
 
+- Add filters by Class, by equipment
 - Make the XP/Affection sections more compact
 - Replace links to the original harem with links to the harem script
 

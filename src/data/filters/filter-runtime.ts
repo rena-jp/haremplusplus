@@ -295,6 +295,31 @@ export class UpgradeReadyFilter extends AbstractFilter {
   };
 }
 
+export class EquippedFilter extends AbstractFilter {
+  static ID = 'equipped';
+  id = EquippedFilter.ID;
+
+  constructor() {
+    super();
+    this.label = 'Equipped';
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    return girl.equipment !== undefined && girl.equipment.items.length > 0;
+  }
+
+  getParams() {
+    return undefined;
+  }
+
+  static FACTORY: FilterFactory<EquippedFilter> = {
+    type: EquippedFilter.ID,
+    create: (_config) => {
+      return new EquippedFilter();
+    }
+  };
+}
+
 export class SourceFilter extends AbstractFilter {
   static ID = 'source-event';
   id = SourceFilter.ID;
