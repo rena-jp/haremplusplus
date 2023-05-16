@@ -126,6 +126,7 @@ img.girls-equipment-icon {
 .qh-equipment-resonance > span > .stat-icon,
 .qh-equipment-resonance > span > .attack-icon,
 .qh-equipment-resonance > span > .defense-icon,
+.qh-equipment-resonance > span > .element,
 .qh-equipment-resonance > span > .ego-icon,
 .qh-equipment-resonance > span > .pose-icon {
   height: 2.5rem;

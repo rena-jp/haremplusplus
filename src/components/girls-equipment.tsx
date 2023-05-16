@@ -89,8 +89,8 @@ export const EquipmentDecorators: React.FC<EquipmentDecoratorsProps> = ({
   const slots = slotsArray(equipment.items);
   return (
     <div className="equipment-decorators">
-      {slots.map((item) => (
-        <EquipmentDecorator equipment={item} />
+      {slots.map((item, index) => (
+        <EquipmentDecorator equipment={item} key={index} />
       ))}
     </div>
   );

@@ -210,9 +210,11 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           ) : null}
         </div>
       ) : null}
-      <p>Equipment:</p>
       {girl.equipment !== undefined ? (
-        <EquipmentList equipment={girl.equipment} girlId={girl.id} />
+        <>
+          <p>Equipment:</p>
+          <EquipmentList equipment={girl.equipment} girlId={girl.id} />
+        </>
       ) : null}
       {girl.recruited ? (
         <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>
