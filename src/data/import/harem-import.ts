@@ -241,6 +241,7 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
   const sources: Set<EventSource> = new Set();
   if (girlData.rarity === 'mythic') {
     sources.add('MD');
+    return [...sources.values()];
   }
   if (girlData.source_selectors.pachinko) {
     if (Number(girlData.nb_grades) === 1) {
