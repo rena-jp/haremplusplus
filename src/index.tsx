@@ -10,7 +10,22 @@ import {
 import { handleMarket } from './game-extension/market-handler';
 import { handleQuest } from './game-extension/quest-handler';
 import { handleTeams } from './game-extension/teams-handler';
-import { handleHamburgerMenu } from './game-extension/hamburger-handler';
+import { handleHaremLinks } from './game-extension/harem-links-handler';
+
+// For localhost testing, host will be localhost:3000
+if (window.location.host === 'localhost:3000') {
+  if (window.location.search.includes('testTiles')) {
+    handleTestTiles();
+  } else if (window.location.search.includes('girlTooltip')) {
+    handleTestGirlTooltip();
+  } else if (window.location.search.includes('teams')) {
+    handleTestTeams();
+  } else {
+    handleLocal();
+  }
+} else {
+  handleHaremLinks();
+}
 
 // For Home, add a "Show Harem" button, to show the harem in a Dialog.
 if (window.location.pathname.startsWith('/home.html')) {
@@ -31,19 +46,4 @@ else if (window.location.pathname.startsWith('/quest/')) {
 // Teams data
 else if (window.location.pathname.startsWith('/teams.html')) {
   handleTeams();
-}
-
-// For localhost testing, host will be localhost:3000
-if (window.location.host === 'localhost:3000') {
-  if (window.location.search.includes('testTiles')) {
-    handleTestTiles();
-  } else if (window.location.search.includes('girlTooltip')) {
-    handleTestGirlTooltip();
-  } else if (window.location.search.includes('teams')) {
-    handleTestTeams();
-  } else {
-    handleLocal();
-  }
-} else {
-  handleHamburgerMenu();
 }

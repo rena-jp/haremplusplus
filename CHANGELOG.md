@@ -1,3 +1,7 @@
+## 0.13.1 (NEXT)
+
+- Replace links to the original harem with links to the harem script
+
 ## 0.13.0 - 2023-05-16
 
 - Update events and unknown poses
