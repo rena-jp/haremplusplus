@@ -1,4 +1,4 @@
-## 0.13.0 (NEXT)
+## 0.13.0 - 2023-05-16
 
 - Update events and unknown poses
 - Make the Summary panel more compact
