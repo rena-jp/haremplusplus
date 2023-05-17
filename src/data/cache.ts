@@ -1,7 +1,7 @@
 import { GameAPI } from '../api/GameAPI';
 import { HaremData } from './data';
 import { FilterConfig } from './filters/filter-api';
-import { GameBlessingData, GemsData } from './game-data';
+import { GameBlessingData, GemsData, toAbsoluteTime } from './game-data';
 import { SortConfig } from './sort';
 
 const DEPRECATED_CACHES = [
@@ -174,7 +174,8 @@ export async function loadBlessings(
         // Blessings only change once a week; so if we have a version in
         // cache that hasn't expired, there's no need to refresh.
         blessingsData.active.every(
-          (blessing) => (blessing.end_ts ?? 0) * 1000 > Date.now()
+          (blessing) =>
+            (toAbsoluteTime(blessing).end_ts ?? 0) * 1000 > Date.now()
         )
       ) {
         return blessingsData;

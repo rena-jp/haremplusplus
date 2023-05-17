@@ -7,6 +7,7 @@ import {
   Team
 } from '../data/data';
 import {
+  fixBlessing,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -74,7 +75,8 @@ export class MockGameAPI implements GameAPI {
       this.fireRequestEvent('started');
       setTimeout(() => {
         this.fireRequestEvent('completed');
-        resolve({ ...blessings });
+
+        resolve(fixBlessing({ ...blessings }));
       }, MOCK_DELAY + 200);
     });
   }

@@ -8,6 +8,7 @@ import {
 } from '../data/data';
 import {
   ChangePoseResult,
+  fixBlessing,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -218,7 +219,7 @@ export class GameAPIImpl implements GameAPI {
       };
       const blessings = await this.postRequest(action);
       if (GameBlessingData.is(blessings)) {
-        return blessings;
+        return fixBlessing(blessings);
       }
     } catch (fetchError) {
       console.error('Failed to fetch blessings_data. Error: ', fetchError);

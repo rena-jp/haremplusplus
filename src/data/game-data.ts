@@ -12,6 +12,7 @@ export namespace GameBlessingData {
       if (valueKeys.length === 0) {
         return false;
       }
+      // FIXME: Improve type checking here; format has changed several times...
       if (valueKeys.includes('active') && valueKeys.includes('upcoming')) {
         return true;
       }
@@ -20,13 +21,23 @@ export namespace GameBlessingData {
   }
 }
 
-export interface GameBlessing {
+export type GameBlessing = RelativeGameBlessing | AbsoluteGameBlessing;
+
+export type RelativeGameBlessing = {
+  title: string;
+  description: string;
+  icon_url?: string; // Removed?
+  remaining_time: number;
+  starts_in: number;
+};
+
+export type AbsoluteGameBlessing = {
   title: string;
   description: string;
   icon_url?: string; // Removed?
   start_ts: number;
   end_ts: number;
-}
+};
 
 export interface GirlsDataList {
   [key: string]: GirlsDataEntry;
@@ -868,4 +879,25 @@ export namespace MaxOutResult {
       MaxOutResult.is(object)
     );
   }
+}
+
+export function fixBlessing(blessing: GameBlessingData): GameBlessingData {
+  const active = blessing.active.map(toAbsoluteTime);
+  const upcoming = blessing.upcoming.map(toAbsoluteTime);
+
+  return { active, upcoming };
+}
+
+export function toAbsoluteTime(blessing: GameBlessing): AbsoluteGameBlessing {
+  if ('start_ts' in blessing) {
+    return blessing;
+  }
+  const now = Date.now();
+  return {
+    description: blessing.description,
+    title: blessing.title,
+    icon_url: blessing.icon_url,
+    start_ts: now + blessing.starts_in,
+    end_ts: now + blessing.remaining_time
+  };
 }
