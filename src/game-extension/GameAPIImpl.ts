@@ -534,9 +534,26 @@ export class GameAPIImpl implements GameAPI {
     }
   }
 
-  async unequipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
-    // TODO
-    return;
+  async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
+    const action = {
+      action: 'girl_equipment_unequip',
+      id_girl_armor_equipped: item.uid,
+      rarity_sort: 'desc'
+    };
+    const result = await this.postRequest(action);
+    if (RequestResult.is(result) && result.success) {
+      if (girl.equipment && girl.equipment.items.length > 0) {
+        const itemToRemove = girl.equipment.items.findIndex(
+          (equippedItem) => equippedItem.slot === item.slot
+        );
+        if (itemToRemove > -1) {
+          girl.equipment.items.splice(itemToRemove, 1);
+          if (this.updateGirl) {
+            this.updateGirl(girl);
+          }
+        }
+      }
+    }
   }
 
   async equipAll(girl: CommonGirlData): Promise<void> {

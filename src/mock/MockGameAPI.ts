@@ -420,17 +420,23 @@ export class MockGameAPI implements GameAPI {
   }
 
   async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
-    if (girl.equipment && girl.equipment.items) {
-      const itemToRemove = girl.equipment.items.findIndex(
-        (equippedItem) => equippedItem.slot === item.slot
-      );
-      if (itemToRemove > -1) {
-        girl.equipment.items.splice(itemToRemove, 1);
-        if (this.updateGirl) {
-          this.updateGirl(girl);
+    const result = new Promise<void>((resolve, _reject) => {
+      setTimeout(() => {
+        if (girl.equipment && girl.equipment.items) {
+          const itemToRemove = girl.equipment.items.findIndex(
+            (equippedItem) => equippedItem.slot === item.slot
+          );
+          if (itemToRemove > -1) {
+            girl.equipment.items.splice(itemToRemove, 1);
+            if (this.updateGirl) {
+              this.updateGirl(girl);
+            }
+          }
         }
-      }
-    }
+        resolve();
+      }, 150);
+    });
+    return result;
   }
 
   getCurrency(): number {

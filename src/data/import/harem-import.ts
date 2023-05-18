@@ -167,7 +167,9 @@ export function importEquipment(armorData: ArmorData[]): EquipmentData {
       slot: slot,
       stats: importEquipmentStats(armor.caracs),
       resonance: importEquipmentResonance(armor.resonance_bonuses),
-      uid: Number(armor.id_girl_armor_equipped) // TODO: Is this unique?
+      // TODO: Is this unique? It seems that id_girl_armor_equipped is the correct ID
+      // for equipped items, but doesn't match the unequipped item id
+      uid: Number(armor.id_girl_armor_equipped)
     };
 
     items.push(equipment);

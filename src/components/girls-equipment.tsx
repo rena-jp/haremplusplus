@@ -58,11 +58,12 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   girl,
   slotId
 }) => {
+  const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
   const link = `${domain}/girl/${girl.id}?resource=equipment&equipment-slot=${slotId}`;
   const img = equipment?.icon;
 
-  const tileClassNames = ['item-tile'];
+  const tileClassNames = ['item-tile', 'girl-item-tile'];
   const imgClassNames = ['girls-equipment-icon', 'rarity-bg'];
   if (equipment !== undefined) {
     imgClassNames.push(Rarity[equipment.rarity]);
@@ -70,20 +71,38 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
     imgClassNames.push('none');
   }
   const icon = <img src={img} className={imgClassNames.join(' ')} />;
+
+  const unequip = useCallback(() => {
+    if (equipment !== undefined && gameAPI !== undefined) {
+      gameAPI.unequipOne(girl, equipment);
+    }
+  }, [girl, equipment, gameAPI]);
   return (
     <div className={tileClassNames.join(' ')}>
-      <a href={link} rel="noreferrer">
-        {equipment === undefined ? (
-          icon
-        ) : (
+      {equipment === undefined ? (
+        <a href={link} rel="noreferrer">
+          {icon}
+        </a>
+      ) : (
+        <>
           <Tooltip
-            place="bottom"
+            place="left"
             tooltip={<EquipmentTooltip equipment={equipment} girl={girl} />}
           >
-            {icon}
+            <div className="girl-item-icon-wrapper">
+              <a href={link} rel="noreferrer">
+                {icon}
+              </a>
+              <Tooltip tooltip="Unequip" cssClasses="unequip-one-decorator">
+                <button
+                  className="item-action unequip-one"
+                  onClick={unequip}
+                ></button>
+              </Tooltip>
+            </div>
           </Tooltip>
-        )}
-      </a>
+        </>
+      )}
     </div>
   );
 };

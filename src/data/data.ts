@@ -130,6 +130,9 @@ export interface Equipment {
   name: string;
   icon: string;
   rarity: Rarity;
+  /**
+   * Note: uid changes for items that are equipped vs unequipped.
+   */
   uid: number;
 }
 

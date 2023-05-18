@@ -1,6 +1,8 @@
 .qh-girls-equipment {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  row-gap: 0.4rem;
   column-gap: 0.8rem;
 }
 
@@ -24,6 +26,25 @@ button.item-action {
   background-repeat: no-repeat;
 
   border-color: lightgrey;
+}
+
+.girl-item-icon-wrapper {
+  position: relative;
+}
+
+button.item-action.unequip-one {
+  height: calc(var(--image-size) / 5);
+  width: calc(var(--image-size) / 5);
+  border-radius: 0px;
+  border: none;
+  position: absolute;
+  right: max(5px, calc(var(--image-size) / 20));
+  top: max(5px, calc(var(--image-size) / 20));
+  background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-color: transparent;
 }
 
 button.equip-all {

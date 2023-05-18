@@ -1,5 +1,6 @@
 ## 0.13.1 (NEXT)
 
+- Add unequip single item action
 - Add equip/unequip all actions
 - Fix a bug with blessings cache, causing blessings data to be refreshed too often
 - Add filters by Class, by equipment
