@@ -4,12 +4,38 @@
   column-gap: 0.8rem;
 }
 
-img.girls-equipment-icon {
+img.girls-equipment-icon,
+button.item-action {
   border: 2px solid white;
   border-radius: 10px;
 
   height: calc(var(--image-size) / 2);
   width: calc(var(--image-size) / 2);
+}
+
+.App button.item-action {
+  padding: 0px;
+  cursor: pointer;
+}
+
+button.item-action {
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  border-color: lightgrey;
+}
+
+button.equip-all {
+  background-image: url(https://hh.hh-content.com/pictures/design/equip_all_icon.png);
+}
+
+button.unequip-all {
+  background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
+}
+
+button.item-action {
+  background-color: #662034;
 }
 
 .rarity-bg.none {

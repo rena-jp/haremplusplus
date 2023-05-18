@@ -1,6 +1,7 @@
 import {
   Book,
   CommonGirlData,
+  Equipment,
   getPoseN,
   Gift,
   QuestData,
@@ -391,6 +392,45 @@ export class MockGameAPI implements GameAPI {
     }
     this.fireRequestEvent('completed');
     return;
+  }
+
+  async equipAll(_girl: CommonGirlData): Promise<void> {
+    // TODO mock
+    console.log('Mock Equip All (Not supported yet)');
+  }
+
+  async unequipAll(girl: CommonGirlData): Promise<void> {
+    const result = new Promise<void>((resolve, _reject) => {
+      setTimeout(() => {
+        if (girl.equipment && girl.equipment.items.length > 0) {
+          girl.equipment.items = [];
+          if (this.updateGirl) {
+            this.updateGirl(girl);
+            resolve();
+          }
+        }
+      }, 150);
+    });
+    return result;
+  }
+
+  async equipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
+    // TODO mock
+    console.log('Mock Equip One (Not supported yet)');
+  }
+
+  async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
+    if (girl.equipment && girl.equipment.items) {
+      const itemToRemove = girl.equipment.items.findIndex(
+        (equippedItem) => equippedItem.slot === item.slot
+      );
+      if (itemToRemove > -1) {
+        girl.equipment.items.splice(itemToRemove, 1);
+        if (this.updateGirl) {
+          this.updateGirl(girl);
+        }
+      }
+    }
   }
 
   getCurrency(): number {

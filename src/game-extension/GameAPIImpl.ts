@@ -1,6 +1,7 @@
 import {
   Book,
   CommonGirlData,
+  Equipment,
   getPoseN,
   Gift,
   QuestData,
@@ -8,6 +9,7 @@ import {
 } from '../data/data';
 import {
   ChangePoseResult,
+  EquipActionResult,
   fixBlessing,
   GameBlessingData,
   GameInventory,
@@ -26,6 +28,7 @@ import {
   TeamDataEntry,
   TeamsData,
   toQuestData,
+  UnequipActionResult,
   UpgradeResult,
   XPResult
 } from '../data/game-data';
@@ -48,6 +51,7 @@ import {
 } from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
 import { roundValue } from '../data/common';
+import { importEquipment } from '../data/import/harem-import';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -512,6 +516,46 @@ export class GameAPIImpl implements GameAPI {
 
   getCurrency(): number {
     return this.getHero().currencies.soft_currency;
+  }
+
+  async unequipAll(girl: CommonGirlData): Promise<void> {
+    const action = {
+      action: 'girl_equipment_unequip_all',
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(action);
+    if (UnequipActionResult.is(result) && result.success) {
+      if (girl.equipment && girl.equipment.items.length > 0) {
+        girl.equipment.items = [];
+        if (this.updateGirl) {
+          this.updateGirl(girl);
+        }
+      }
+    }
+  }
+
+  async unequipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
+    // TODO
+    return;
+  }
+
+  async equipAll(girl: CommonGirlData): Promise<void> {
+    const action = {
+      action: 'girl_equipment_equip_all',
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(action);
+    if (EquipActionResult.is(result) && result.success) {
+      girl.equipment = importEquipment(result.equipped_armor);
+      if (this.updateGirl) {
+        this.updateGirl(girl);
+      }
+    }
+  }
+
+  async equipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
+    // TODO
+    return;
   }
 
   private updateGirlWithBook(girl: CommonGirlData, book: Book) {

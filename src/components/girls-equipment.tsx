@@ -1,3 +1,4 @@
+import { useCallback, useContext } from 'react';
 import {
   Class,
   CommonGirlData,
@@ -5,6 +6,7 @@ import {
   EquipmentData,
   Rarity
 } from '../data/data';
+import { GameAPIContext } from '../data/game-api-context';
 import { slotsArray } from '../data/girls-equipment';
 import '../style/girls-equipment.css';
 import { Tooltip } from './common';
@@ -38,7 +40,8 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
             slotId={index + 1 /* Slots are indexed 1 to 6 */}
           />
         ))}
-        {/* TODO Add actions equip all / unequip all */}
+        <EquipAllAction girl={girl} />
+        <UnequipAllAction girl={girl} />
       </div>
     </>
   );
@@ -223,6 +226,40 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
           ) : null}
         </div>
       ) : null}
+    </div>
+  );
+};
+
+interface EquipAllActionProps {
+  girl: CommonGirlData;
+}
+
+const EquipAllAction: React.FC<EquipAllActionProps> = ({ girl }) => {
+  const { gameAPI } = useContext(GameAPIContext);
+  const onClick = useCallback(() => {
+    gameAPI?.equipAll(girl);
+  }, [gameAPI, girl]);
+
+  return (
+    <div className="item-tile">
+      <Tooltip tooltip="Equip All">
+        <button className="item-action equip-all" onClick={onClick}></button>
+      </Tooltip>
+    </div>
+  );
+};
+
+const UnequipAllAction: React.FC<EquipAllActionProps> = ({ girl }) => {
+  const { gameAPI } = useContext(GameAPIContext);
+  const onClick = useCallback(() => {
+    gameAPI?.unequipAll(girl);
+  }, [gameAPI, girl]);
+
+  return (
+    <div className="item-tile">
+      <Tooltip tooltip="Unequip All">
+        <button className="item-action unequip-all" onClick={onClick}></button>
+      </Tooltip>
     </div>
   );
 };

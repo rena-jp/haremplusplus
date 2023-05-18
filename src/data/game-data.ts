@@ -901,3 +901,42 @@ export function toAbsoluteTime(blessing: GameBlessing): AbsoluteGameBlessing {
     end_ts: now + blessing.remaining_time
   };
 }
+
+export interface UnequipActionResult extends RequestResult {
+  unequipped_armor: unknown[];
+  caracs: {
+    carac1: number;
+    carac2: number;
+    carac3: number;
+  };
+}
+
+export interface EquipActionResult extends UnequipActionResult {
+  equipped_armor: ArmorData[];
+}
+
+export namespace UnequipActionResult {
+  export function is(value: unknown): value is UnequipActionResult {
+    if (RequestResult.is(value) && value.success) {
+      if (
+        Array.isArray(value.unequipped_armor) &&
+        isUnknownObject(value.caracs)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
+export namespace EquipActionResult {
+  export function is(value: unknown): value is EquipActionResult {
+    if (UnequipActionResult.is(value)) {
+      const action = value as UnknownObject;
+      if (Array.isArray(action.equipped_armor)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}

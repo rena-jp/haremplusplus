@@ -1,4 +1,11 @@
-import { Book, CommonGirlData, Gift, QuestData, Team } from '../data/data';
+import {
+  Book,
+  CommonGirlData,
+  Equipment,
+  Gift,
+  QuestData,
+  Team
+} from '../data/data';
 import {
   GameBlessingData,
   GameInventory,
@@ -176,6 +183,33 @@ export interface GameAPI {
    * @param team the team
    */
   getTeamStats(team: Team): Promise<TeamStats>;
+
+  /**
+   * Automatically equip the girl with the best available
+   * items.
+   * @param girl the girl to equip
+   */
+  equipAll(girl: CommonGirlData): Promise<void>;
+
+  /**
+   * Unequip all items from this girl.
+   * @param girl the girl to unequip
+   */
+  unequipAll(girl: CommonGirlData): Promise<void>;
+
+  /**
+   * Equip a single item for this girl.
+   * @param girl the girl to equip
+   * @param item the item to equip
+   */
+  equipOne(girl: CommonGirlData, item: Equipment): Promise<void>;
+
+  /**
+   * Unequip a single item from this girl.
+   * @param girl the girl to unequip
+   * @param item the item to unequip
+   */
+  unequipOne(girl: CommonGirlData, item: Equipment): Promise<void>;
 }
 
 export type TeamStats = {

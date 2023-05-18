@@ -1,0 +1,118 @@
+{
+  "unequipped_armor": [
+    {
+      "id_girl_armor": "13425",
+      "id_member": 124147,
+      "id_girl_item_armor": "5",
+      "id_item_skin": "607",
+      "level": "2",
+      "class": "2",
+      "class_resonance": "ego",
+      "element": "light",
+      "element_resonance": "defense",
+      "figure": "6",
+      "figure_resonance": "damage",
+      "caracs": {
+        "carac1": 60,
+        "carac2": 60,
+        "carac3": 60,
+        "damage": 15,
+        "defense": 24,
+        "ego": 90
+      },
+      "slot_index": 1,
+      "skin": {
+        "release_date": "2023-05-11",
+        "id_item_skin": "607",
+        "id_skin_set": "117",
+        "identifier": "ET117",
+        "subtype": "1",
+        "wearer": "girl",
+        "weight": "1",
+        "name": "Luxury neckless",
+        "ico": "https://hh.hh-content.com/pictures/gallery/18/200x/889de5765a889a850ebe7e38b1cb1566.webp"
+      },
+      "armor": {
+        "id_girl_item_armor": "5",
+        "rarity": "mythic",
+        "carac1": "30",
+        "carac2": "30",
+        "carac3": "30",
+        "damage": "7.5",
+        "defense": "12",
+        "ego": "45"
+      },
+      "rarity": "mythic",
+      "type": "girl_armor",
+      "resonance_bonuses": {
+        "class": { "identifier": "2", "resonance": "ego", "bonus": "0.10" },
+        "element": {
+          "identifier": "light",
+          "resonance": "defense",
+          "bonus": "0.10"
+        },
+        "figure": { "identifier": "6", "resonance": "damage", "bonus": "0.10" }
+      }
+    }
+  ],
+
+  "equipped_armor": [
+    {
+      "id_girl_armor_equipped": "6797",
+      "id_member": "124147",
+      "id_girl_item_armor": "5",
+      "id_item_skin": "607",
+      "level": "2",
+      "class": "2",
+      "class_resonance": "ego",
+      "element": "light",
+      "element_resonance": "defense",
+      "figure": "6",
+      "figure_resonance": "damage",
+      "id_girl": 178022829,
+      "caracs": {
+        "carac1": 60,
+        "carac2": 60,
+        "carac3": 60,
+        "damage": 15,
+        "defense": 24,
+        "ego": 90
+      },
+      "slot_index": 1,
+      "skin": {
+        "release_date": "2023-05-11",
+        "id_item_skin": "607",
+        "id_skin_set": "117",
+        "identifier": "ET117",
+        "subtype": "1",
+        "wearer": "girl",
+        "weight": "1",
+        "name": "Luxury neckless",
+        "ico": "https://hh.hh-content.com/pictures/gallery/18/200x/889de5765a889a850ebe7e38b1cb1566.webp"
+      },
+      "armor": {
+        "id_girl_item_armor": "5",
+        "rarity": "mythic",
+        "carac1": "30",
+        "carac2": "30",
+        "carac3": "30",
+        "damage": "7.5",
+        "defense": "12",
+        "ego": "45"
+      },
+      "rarity": "mythic",
+      "type": "girl_armor",
+      "resonance_bonuses": {
+        "class": { "identifier": "2", "resonance": "ego", "bonus": "0.10" },
+        "element": {
+          "identifier": "light",
+          "resonance": "defense",
+          "bonus": "0.10"
+        },
+        "figure": { "identifier": "6", "resonance": "damage", "bonus": "0.10" }
+      }
+    }
+  ],
+  "caracs": { "carac1": 3035, "carac2": 9685, "carac3": 4960 },
+  "success": true
+}

@@ -154,7 +154,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
   };
 }
 
-function importEquipment(armorData: ArmorData[]): EquipmentData {
+export function importEquipment(armorData: ArmorData[]): EquipmentData {
   const items: Equipment[] = [];
 
   for (const armor of armorData) {
