@@ -1,4 +1,4 @@
-## 0.13.1 (NEXT)
+## 0.13.1 - 2023-05-18
 
 - Add unequip single item action
 - Add equip/unequip all actions
