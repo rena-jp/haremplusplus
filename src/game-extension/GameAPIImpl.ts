@@ -538,7 +538,8 @@ export class GameAPIImpl implements GameAPI {
     const action = {
       action: 'girl_equipment_unequip',
       id_girl_armor_equipped: item.uid,
-      rarity_sort: 'desc'
+      sort_by: 'rarity',
+      sorting_order: 'desc'
     };
     const result = await this.postRequest(action);
     if (RequestResult.is(result) && result.success) {

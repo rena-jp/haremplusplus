@@ -40,7 +40,7 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
       if (loading) {
         const timeout = setTimeout(() => {
           setLoading(true);
-        }, 100);
+        }, 200);
         loadingTimeout.current = timeout;
       } else {
         setLoading(false);
