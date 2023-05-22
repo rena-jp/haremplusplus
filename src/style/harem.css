@@ -294,7 +294,8 @@
   align-items: center;
 }
 
-.icon-link > img {
+.icon-link > img,
+.icon-link > .qh-tooltip-wrapper > img {
   height: 1.5em;
 }
 

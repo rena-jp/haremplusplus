@@ -259,7 +259,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
               }}
             >
               <MissingGXPEntry girl={girl} />
-              <BookIcon />
+              <Tooltip tooltip="Give Books">
+                <BookIcon />
+              </Tooltip>
             </a>
           </div>
           <div className="upgrade-link">
@@ -273,7 +275,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
               }}
             >
               <MissingAffEntry girl={girl} />
-              <GiftIcon />
+              <Tooltip tooltip="Give Gifts">
+                <GiftIcon />
+              </Tooltip>
             </a>
           </div>
         </>

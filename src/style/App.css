@@ -118,7 +118,7 @@ body.qh-local {
   margin-block: 0.8em;
 }
 
-.icon-link > img {
+.icon-link > .qh-tooltip-wrapper > img {
   background-image: linear-gradient(to top, #008ed5 0, #05719c 100%);
   border-radius: 100%;
   background-origin: content-box, border-box;
@@ -127,7 +127,7 @@ body.qh-local {
   padding: 2px;
 }
 
-.icon-link:active > img {
+.icon-link:active > .qh-tooltip-wrapper > img {
   box-shadow: none;
 }
 
