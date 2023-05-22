@@ -1,4 +1,4 @@
-# 0.13.2 (NEXT)
+# 0.13.2 - 2023-05-22
 
 - Fix a bug in blessings data cache, preventing the harem from displaying up-to-date blessings/stats
 - Add loading indicator on long-running equipment actions
