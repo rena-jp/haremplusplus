@@ -1,4 +1,4 @@
-# 0.13.3 (NEXT)
+# 0.13.3 - 2023-05-22
 
 - Update recruits equipment requests to match the latest game update
 - Fix: setting "Sort by ... Power" as the default Sort now works properly
