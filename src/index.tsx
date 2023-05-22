@@ -7,7 +7,6 @@ import {
   handleTestTeams,
   handleTestTiles
 } from './mock/test-handler';
-import { handleMarket } from './game-extension/market-handler';
 import { handleQuest } from './game-extension/quest-handler';
 import { handleTeams } from './game-extension/teams-handler';
 import { handleHaremLinks } from './game-extension/harem-links-handler';
@@ -34,10 +33,6 @@ if (window.location.pathname.startsWith('/home.html')) {
 // For Harem, location may be '/harem.html' or '/harem/1'
 else if (window.location.pathname.startsWith('/harem')) {
   handleHarem();
-}
-// For Market, support loading data in the background
-else if (window.location.pathname.startsWith('/shop.html')) {
-  handleMarket();
 }
 // Quests data
 else if (window.location.pathname.startsWith('/quest/')) {

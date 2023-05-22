@@ -393,12 +393,40 @@ export class GameAPIImpl implements GameAPI {
     );
   }
 
-  async getMarketInventory(allowRequest: boolean): Promise<GameInventory> {
-    return this.requestFromMarket(
-      'player_inventory',
-      GameInventory.is,
-      allowRequest
-    );
+  // TODO Separate book inventory / gift inventory,
+  // as they now require separate requests.
+  async getMarketInventory(_allowRequest: boolean): Promise<GameInventory> {
+    //requestFromMarket
+    const booksAction = {
+      action: 'girl_items_inventory',
+      type: 'potion'
+    };
+    const giftsAction = {
+      action: 'girl_items_inventory',
+      type: 'gift'
+    };
+
+    const books = await this.postRequest(booksAction);
+    const gifts = await this.postRequest(giftsAction);
+
+    // TODO Add proper type testers
+    const booksInventory =
+      isUnknownObject(books) &&
+      books.success === true &&
+      Array.isArray(books.inventory)
+        ? books.inventory
+        : [];
+    const giftsInventory =
+      isUnknownObject(gifts) &&
+      gifts.success === true &&
+      Array.isArray(gifts.inventory)
+        ? gifts.inventory
+        : [];
+
+    return {
+      potion: booksInventory,
+      gift: giftsInventory
+    };
   }
 
   async useBook(girl: CommonGirlData, book: Book): Promise<void> {
