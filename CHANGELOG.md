@@ -1,5 +1,6 @@
 # 0.13.2 (NEXT)
 
+- Fix a bug in blessings data cache, preventing the harem from displaying up-to-date blessings/stats
 - Add loading indicator on long-running equipment actions
 - Add tooltips for Give books/Give gifts actions
 

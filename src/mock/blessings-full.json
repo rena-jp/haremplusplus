@@ -1,30 +1,30 @@
 {
   "active": [
     {
-      "title": "Week of the Submissive",
-      "description": "All girls with \u003Cspan class=\u0022blessing-condition\u0022\u003EElement Submissive\u003C/span\u003E gain \u003Cspan class=\u0022blessing-bonus\u0022\u003E+ 40%\u003C/span\u003E bonus on all attributes.",
-      "remaining_time": 436691,
-      "starts_in": -168108
+      "title": "Week of the Aquarius",
+      "description": "All girls with <span class=\"blessing-condition\">Zodiac sign Aquarius</span> gain <span class=\"blessing-bonus\">+ 30%</span> bonus on all attributes.",
+      "remaining_time": 603994,
+      "starts_in": -805
     },
     {
-      "title": "Week of the Nose Dive",
-      "description": "All girls with \u003Cspan class=\u0022blessing-condition\u0022\u003EFavorite position Nose Dive\u003C/span\u003E gain \u003Cspan class=\u0022blessing-bonus\u0022\u003E+ 35%\u003C/span\u003E bonus on all attributes.",
-      "remaining_time": 436691,
-      "starts_in": -168108
+      "title": "Week of the Rare",
+      "description": "All girls with <span class=\"blessing-condition\">Rarity Rare</span> gain <span class=\"blessing-bonus\">+ 25%</span> bonus on all attributes.",
+      "remaining_time": 603994,
+      "starts_in": -805
     }
   ],
   "upcoming": [
     {
-      "title": "Week of the Aquarius",
-      "description": "All girls with \u003Cspan class=\u0022blessing-condition\u0022\u003EZodiac sign Aquarius\u003C/span\u003E gain \u003Cspan class=\u0022blessing-bonus\u0022\u003E+ 30%\u003C/span\u003E bonus on all attributes.",
-      "remaining_time": 1041491,
-      "starts_in": 436692
+      "title": "Week of the Legendary",
+      "description": "All girls with <span class=\"blessing-condition\">Rarity Legendary</span> gain <span class=\"blessing-bonus\">+ 25%</span> bonus on all attributes.",
+      "remaining_time": 1208794,
+      "starts_in": 603995
     },
     {
-      "title": "Week of the Rare",
-      "description": "All girls with \u003Cspan class=\u0022blessing-condition\u0022\u003ERarity Rare\u003C/span\u003E gain \u003Cspan class=\u0022blessing-bonus\u0022\u003E+ 25%\u003C/span\u003E bonus on all attributes.",
-      "remaining_time": 1041491,
-      "starts_in": 436692
+      "title": "Week of the Eccentric",
+      "description": "All girls with <span class=\"blessing-condition\">Element Eccentric</span> gain <span class=\"blessing-bonus\">+ 25%</span> bonus on all attributes.",
+      "remaining_time": 1208794,
+      "starts_in": 603995
     }
   ],
   "success": true

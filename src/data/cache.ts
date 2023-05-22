@@ -1,7 +1,7 @@
 import { GameAPI } from '../api/GameAPI';
 import { HaremData } from './data';
 import { FilterConfig } from './filters/filter-api';
-import { GameBlessingData, GemsData, toAbsoluteTime } from './game-data';
+import { GameBlessing, GameBlessingData, GemsData } from './game-data';
 import { SortConfig } from './sort';
 
 const DEPRECATED_CACHES = [
@@ -173,10 +173,7 @@ export async function loadBlessings(
       if (
         // Blessings only change once a week; so if we have a version in
         // cache that hasn't expired, there's no need to refresh.
-        blessingsData.active.every(
-          (blessing) =>
-            (toAbsoluteTime(blessing).end_ts ?? 0) * 1000 > Date.now()
-        )
+        blessingsData.active.every((blessing) => isActive(blessing))
       ) {
         return blessingsData;
       }
@@ -196,6 +193,15 @@ export async function loadBlessings(
 }
 
 const FILTERS_REQUEST = '/qh-default-filter';
+
+function isActive(blessing: GameBlessing): boolean {
+  if ('end_ts' in blessing) {
+    return blessing.end_ts > Date.now();
+  }
+  // If blessing is stored with relative time, discard it and
+  // always fetch fresh data.
+  return false;
+}
 
 export async function persistDefaultFilter(
   filter: FilterConfig | undefined
