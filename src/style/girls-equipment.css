@@ -13,11 +13,18 @@ button.item-action {
 
   height: calc(var(--image-size) / 2);
   width: calc(var(--image-size) / 2);
+
+  cursor: pointer;
+}
+
+button.unequip-one-decorator:disabled,
+button.item-action:disabled {
+  cursor: default;
+  filter: grayscale(1);
 }
 
 .App button.item-action {
   padding: 0px;
-  cursor: pointer;
 }
 
 button.item-action {

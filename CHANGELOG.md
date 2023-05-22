@@ -1,5 +1,6 @@
 # 0.13.2 (NEXT)
 
+- Add loading indicator on long-running equipment actions
 - Add tooltips for Give books/Give gifts actions
 
 ## 0.13.1 - 2023-05-18

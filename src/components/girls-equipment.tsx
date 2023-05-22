@@ -1,4 +1,4 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useContext, useRef, useState } from 'react';
 import {
   Class,
   CommonGirlData,
@@ -18,6 +18,7 @@ import {
   PoseIcon
 } from './common';
 import { StatIcon, getDomain } from './common';
+import { PulseLoader } from 'react-spinners';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
@@ -28,6 +29,26 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
   equipment,
   girl
 }) => {
+  const [loading, setLoading] = useState(false);
+  const loadingTimeout = useRef<string | number | NodeJS.Timeout | undefined>();
+
+  const delayedSetLoading = useCallback(
+    (loading: boolean) => {
+      if (loadingTimeout.current !== undefined) {
+        clearTimeout(loadingTimeout.current);
+      }
+      if (loading) {
+        const timeout = setTimeout(() => {
+          setLoading(true);
+        }, 100);
+        loadingTimeout.current = timeout;
+      } else {
+        setLoading(false);
+      }
+    },
+    [loadingTimeout, setLoading]
+  );
+
   const slots = slotsArray(equipment.items);
   return (
     <>
@@ -38,10 +59,20 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
             key={index}
             girl={girl}
             slotId={index + 1 /* Slots are indexed 1 to 6 */}
+            loading={loading}
+            setLoading={delayedSetLoading}
           />
         ))}
-        <EquipAllAction girl={girl} />
-        <UnequipAllAction girl={girl} />
+        <EquipAllAction
+          girl={girl}
+          loading={loading}
+          setLoading={delayedSetLoading}
+        />
+        <UnequipAllAction
+          girl={girl}
+          loading={loading}
+          setLoading={delayedSetLoading}
+        />
       </div>
     </>
   );
@@ -51,12 +82,16 @@ interface EquipmentTileProps {
   equipment: Equipment | undefined;
   girl: CommonGirlData;
   slotId: number;
+  loading: boolean;
+  setLoading(loading: boolean): void;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
   equipment,
   girl,
-  slotId
+  slotId,
+  loading,
+  setLoading
 }) => {
   const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
@@ -73,10 +108,11 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   const icon = <img src={img} className={imgClassNames.join(' ')} />;
 
   const unequip = useCallback(() => {
-    if (equipment !== undefined && gameAPI !== undefined) {
-      gameAPI.unequipOne(girl, equipment);
+    if (equipment !== undefined && gameAPI !== undefined && !loading) {
+      setLoading(true);
+      gameAPI.unequipOne(girl, equipment).finally(() => setLoading(false));
     }
-  }, [girl, equipment, gameAPI]);
+  }, [girl, equipment, gameAPI, loading, setLoading]);
   return (
     <div className={tileClassNames.join(' ')}>
       {equipment === undefined ? (
@@ -97,6 +133,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
                 <button
                   className="item-action unequip-one"
                   onClick={unequip}
+                  disabled={loading}
                 ></button>
               </Tooltip>
             </div>
@@ -251,33 +288,61 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
 
 interface EquipAllActionProps {
   girl: CommonGirlData;
+  loading: boolean;
+  setLoading(loading: boolean): void;
 }
 
-const EquipAllAction: React.FC<EquipAllActionProps> = ({ girl }) => {
+const EquipAllAction: React.FC<EquipAllActionProps> = ({
+  girl,
+  loading,
+  setLoading
+}) => {
   const { gameAPI } = useContext(GameAPIContext);
   const onClick = useCallback(() => {
-    gameAPI?.equipAll(girl);
-  }, [gameAPI, girl]);
+    if (!loading) {
+      setLoading(true);
+      gameAPI?.equipAll(girl).finally(() => setLoading(false));
+    }
+  }, [gameAPI, girl, loading, setLoading]);
 
   return (
     <div className="item-tile">
       <Tooltip tooltip="Equip All">
-        <button className="item-action equip-all" onClick={onClick}></button>
+        <button
+          className="item-action equip-all"
+          onClick={onClick}
+          disabled={loading}
+        >
+          {loading ? <PulseLoader color="#b77905" /> : null}
+        </button>
       </Tooltip>
     </div>
   );
 };
 
-const UnequipAllAction: React.FC<EquipAllActionProps> = ({ girl }) => {
+const UnequipAllAction: React.FC<EquipAllActionProps> = ({
+  girl,
+  loading,
+  setLoading
+}) => {
   const { gameAPI } = useContext(GameAPIContext);
   const onClick = useCallback(() => {
-    gameAPI?.unequipAll(girl);
-  }, [gameAPI, girl]);
+    if (!loading) {
+      setLoading(true);
+      gameAPI?.unequipAll(girl).finally(() => setLoading(false));
+    }
+  }, [gameAPI, girl, loading, setLoading]);
 
   return (
     <div className="item-tile">
       <Tooltip tooltip="Unequip All">
-        <button className="item-action unequip-all" onClick={onClick}></button>
+        <button
+          className="item-action unequip-all"
+          onClick={onClick}
+          disabled={loading}
+        >
+          {loading ? <PulseLoader color="#b77905" /> : null}
+        </button>
       </Tooltip>
     </div>
   );
