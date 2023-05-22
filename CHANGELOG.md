@@ -1,3 +1,7 @@
+# 0.13.3 (NEXT)
+
+- Fix: setting "Sort by ... Power" as the default Sort now works properly
+
 # 0.13.2 - 2023-05-22
 
 - Fix a bug in blessings data cache, preventing the harem from displaying up-to-date blessings/stats

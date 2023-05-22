@@ -374,6 +374,12 @@ export function getConfiguredSorter(
       return UpcomingPotentialSorter(upcomingBlessings);
     case PvPValueSorter.id:
       return PvPValueSorter;
+    case BasePowerSorter.id:
+      return BasePowerSorter;
+    case CurrentPowerID:
+      return CurrentPowerSorter(currentBlessings);
+    case UpcomingPowerID:
+      return UpcomingPowerSorter(upcomingBlessings);
   }
   console.warn('Unknown sort ID: ', sortConfig.sort);
   return undefined;
