@@ -123,7 +123,9 @@ const Loading: React.FC<{ loading: boolean; close(): void }> = ({
           <CloseButton close={close} />
           <p>Loading is complete, but no girls were found :(</p>
           <p>
-            <a href="harem.html">Open original Harem</a>
+            <a href="harem.html" rel="noreferrer">
+              Open original Harem
+            </a>
           </p>
         </div>
       )}

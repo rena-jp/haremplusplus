@@ -42,10 +42,18 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
         <button>a2</button>
         <button>a3</button>
         <button>a4</button> */}
+        <a
+          href={`/girl/${girl.id}?resource=equipment&equipment-slot=${slot}`}
+          rel="noreferrer"
+        >
+          Go to equipment page
+        </a>
       </div>
       <div className="qh-quick-inventory">
         {loading
           ? 'Loading inventory...'
+          : equipment.length === 0
+          ? 'No equipment found for the selected slot.'
           : equipment.map((item) => (
               <EquipmentTile
                 girl={girl}

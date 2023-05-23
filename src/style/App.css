@@ -242,3 +242,7 @@ li.nok {
 .action {
   cursor: pointer;
 }
+
+#popup-root a {
+  color: white;
+}
