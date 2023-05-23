@@ -26,6 +26,7 @@ import { StatIcon, getDomain } from './common';
 import { PulseLoader } from 'react-spinners';
 import { QuickEquipment } from './quick-girl-equipment';
 import Popup from 'reactjs-popup';
+import { roundValue } from '../data/common';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
@@ -312,7 +313,9 @@ const StatsDiff: React.FC<StatsDiffProps> = ({ diff }) => {
   const className = diff > 0 ? 'positive' : 'negative';
   const sign = diff > 0 ? '+' : '';
   return (
-    <span className={`stats-diff ${className}`}>({`${sign}${diff}`})</span>
+    <span className={`stats-diff ${className}`}>
+      ({`${sign}${roundValue(diff)}`})
+    </span>
   );
 };
 

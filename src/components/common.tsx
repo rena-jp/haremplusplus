@@ -5,6 +5,7 @@ import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
 import { ReactNode, useMemo, useState } from 'react';
 
 import 'react-tooltip/dist/react-tooltip.css';
+import { roundValue } from '../data/common';
 
 export type GemType = Element | 'rainbow';
 
@@ -349,7 +350,7 @@ export const StatsDescription: React.FC<StatsDescriptionProps> = ({
       >
         Current
         {currentBlessingMultiplier > 1
-          ? ` +${((currentBlessingMultiplier - 1) * 100).toFixed(2)}%`
+          ? ` +${roundValue((currentBlessingMultiplier - 1) * 100)}%`
           : null}
         <StatsList
           stats={currentStats}
@@ -364,7 +365,7 @@ export const StatsDescription: React.FC<StatsDescriptionProps> = ({
       >
         Upcoming
         {upcomingBlessingMultiplier > 1
-          ? ` +${((upcomingBlessingMultiplier - 1) * 100).toFixed(2)}%`
+          ? ` +${roundValue((upcomingBlessingMultiplier - 1) * 100)}%`
           : null}
         <StatsList
           stats={upcomingStats}
