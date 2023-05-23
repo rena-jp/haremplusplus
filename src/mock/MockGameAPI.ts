@@ -14,6 +14,7 @@ import {
   GameQuests,
   GemsData,
   GemsEntry,
+  GirlEquipment,
   GirlsDataList,
   GirlsSalaryList
 } from '../data/game-data';
@@ -36,6 +37,8 @@ import { roundValue } from '../data/common';
 // import blessings from './blessings-full.json';
 // import quests from './quests-full.json';
 // import inventory from './inventory.json';
+// import girlsInventory from './girls-inventory.json';
+const girlsInventory = { '1': { items: [] } };
 const girls = {};
 const blessings = { active: [], upcoming: [] };
 const quests = {};
@@ -417,6 +420,12 @@ export class MockGameAPI implements GameAPI {
   async equipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
     // TODO mock
     console.log('Mock Equip One (Not supported yet)');
+
+    return new Promise((resolve, _reject) => {
+      setTimeout(() => {
+        resolve();
+      }, 150);
+    });
   }
 
   async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
@@ -434,6 +443,58 @@ export class MockGameAPI implements GameAPI {
           }
         }
         resolve();
+      }, 150);
+    });
+    return result;
+  }
+
+  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<void> {
+    const modifiedGirls: CommonGirlData[] = [];
+    for (const girl of allGirls) {
+      if (girl.equipment !== undefined && girl.equipment.items.length > 0) {
+        girl.equipment.items = [];
+        modifiedGirls.push(girl);
+      }
+    }
+    if (this.updateGirl) {
+      for (const girl of modifiedGirls) {
+        this.updateGirl(girl);
+      }
+    }
+  }
+
+  async getGirlsInventory(
+    girl: CommonGirlData,
+    slot?: number | undefined
+  ): Promise<GirlEquipment[]> {
+    console.log('Try get inventory for slot: ', slot);
+    const result = new Promise<GirlEquipment[]>((resolve, reject) => {
+      console.log('Start timer...');
+      setTimeout(async () => {
+        console.log('Start execution...');
+        if (slot !== undefined) {
+          const slotKey = String(slot);
+          const inventoryInSlot = { ...girlsInventory }[slotKey];
+          if (
+            inventoryInSlot &&
+            'items' in inventoryInSlot &&
+            Array.isArray(inventoryInSlot.items)
+          ) {
+            console.log('Valid; resolve');
+            resolve(inventoryInSlot.items as unknown[] as GirlEquipment[]);
+          } else {
+            console.log('Invalid; reject');
+            reject('Missing inventory or invalid slot?');
+          }
+        } else {
+          // Return all
+          console.log('Return for all slots');
+          const result: GirlEquipment[] = [];
+          for (let slot = 1; slot <= 6; slot++) {
+            result.push(...(await this.getGirlsInventory(girl, slot)));
+          }
+          resolve(result);
+        }
       }, 150);
     });
     return result;

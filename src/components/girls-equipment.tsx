@@ -19,6 +19,8 @@ import {
 } from './common';
 import { StatIcon, getDomain } from './common';
 import { PulseLoader } from 'react-spinners';
+import { QuickEquipment } from './quick-girl-equipment';
+import Popup from 'reactjs-popup';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
@@ -105,7 +107,22 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   } else {
     imgClassNames.push('none');
   }
-  const icon = <img src={img} className={imgClassNames.join(' ')} />;
+
+  const [showQEPopup, setShowQEPopup] = useState(false);
+  const openQuickEquipmentPopup = useCallback(() => {
+    setShowQEPopup(true);
+  }, [gameAPI, girl, slotId]);
+
+  const icon = (
+    <img
+      src={img}
+      className={imgClassNames.join(' ')}
+      onClick={(ev) => {
+        ev.preventDefault();
+        openQuickEquipmentPopup();
+      }}
+    />
+  );
 
   const unequip = useCallback(() => {
     if (equipment !== undefined && gameAPI !== undefined && !loading) {
@@ -140,6 +157,16 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
           </Tooltip>
         </>
       )}
+      {showQEPopup ? (
+        <Popup modal open={showQEPopup} onClose={() => setShowQEPopup(false)}>
+          {
+            ((close: () => void) => (
+              <QuickEquipment girl={girl} slot={slotId} close={close} />
+              // eslint-disable-next-line
+            )) as any
+          }
+        </Popup>
+      ) : null}
     </div>
   );
 };

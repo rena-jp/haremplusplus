@@ -300,6 +300,27 @@ export interface ArmorData {
   resonance_bonuses: ResonanceBonuses;
 }
 
+export interface GirlEquipment {
+  id_girl_armor: NumberString;
+  id_member: NumberString;
+  id_girl_item_armor: NumberString;
+  id_item_skin: NumberString;
+  id_variation: NumberString;
+  level: NumberString;
+  caracs: ArmorCaracs;
+  slot_index: number;
+  armor: ArmorTypeCaracs;
+  skin: ArmorSkin;
+  variation: unknown; // null?
+  rarity: GameRarity;
+  type: 'girl_armor';
+  resonance_bonuses: ResonanceBonuses;
+}
+
+export interface GirlEquipmentResult extends RequestResult {
+  items: GirlEquipment[];
+}
+
 export type ClassResonance = 'ego' | ''; // No more RNG here; ego or nothing
 export type ElementResonance = 'defense' | ''; // No more RNG here; defense or nothing
 export type FigureResonance = 'damage' | ''; // No more RNG here; defense or nothing
@@ -318,7 +339,11 @@ export interface ArmorTypeCaracs extends ArmorCaracs {
   id_girl_item_armor: NumberString;
 }
 
-export interface ResonanceBonuses {
+export type ResonanceBonuses = EmptyResonance | ResonanceBonusesValue;
+
+export type EmptyResonance = [];
+
+export interface ResonanceBonusesValue {
   class?: ResonanceBonus;
   element?: ResonanceBonus;
   figure?: ResonanceBonus;

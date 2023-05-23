@@ -435,9 +435,6 @@ export const XPStatus: React.FC<XpStatusProps> = ({
 
   return (
     <div className="xp-status">
-      <Popup>
-        <div>Test popup content</div>
-      </Popup>
       {girl.level! < 750 ? (
         <span>
           Lv. {girl.level} to Lv. {displayTargetLevel}:

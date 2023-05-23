@@ -29,6 +29,7 @@ import {
   CaracsEntry,
   GameBlessingData,
   GameQuests,
+  GirlEquipment,
   GirlsDataEntry,
   GirlsDataList,
   NumberString,
@@ -154,11 +155,20 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
   };
 }
 
-export function importEquipment(armorData: ArmorData[]): EquipmentData {
+export function importEquipment(
+  armorData: ArmorData[] | GirlEquipment[]
+): EquipmentData {
   const items: Equipment[] = [];
 
   for (const armor of armorData) {
     const slot = armor.slot_index;
+    // TODO: Is this unique? It seems that id_girl_armor_equipped is the correct ID
+    // for equipped items, but doesn't match the unequipped item id
+    const uid = Number(
+      'id_girl_armor_equipped' in armor
+        ? armor.id_girl_armor_equipped
+        : armor.id_girl_armor
+    );
     const equipment: Equipment = {
       icon: armor.skin.ico,
       name: armor.skin.name,
@@ -167,9 +177,8 @@ export function importEquipment(armorData: ArmorData[]): EquipmentData {
       slot: slot,
       stats: importEquipmentStats(armor.caracs),
       resonance: importEquipmentResonance(armor.resonance_bonuses),
-      // TODO: Is this unique? It seems that id_girl_armor_equipped is the correct ID
-      // for equipped items, but doesn't match the unequipped item id
-      uid: Number(armor.id_girl_armor_equipped)
+
+      uid
     };
 
     items.push(equipment);
@@ -194,19 +203,28 @@ function importEquipmentStats(stats: ArmorCaracs): EquipmentStats {
 function importEquipmentResonance(
   bonuses: ResonanceBonuses
 ): EquipmentResonance {
-  return {
-    class: bonuses.class ? getClass(bonuses.class.identifier) : undefined,
-    ego: bonuses.class ? bonuses.class.bonus : 0,
-    element:
-      bonuses.element && typeof bonuses.element.identifier === 'string'
-        ? toElement(bonuses.element.identifier)
-        : undefined,
-    defense: bonuses.element ? bonuses.element.bonus : 0,
-    pose: bonuses.figure
-      ? getPoseFromValue(String(bonuses.figure.identifier))
-      : undefined,
-    attack: bonuses.figure ? bonuses.figure.bonus : 0
-  };
+  return Array.isArray(bonuses)
+    ? {
+        class: undefined,
+        ego: 0,
+        element: undefined,
+        defense: 0,
+        pose: undefined,
+        attack: 0
+      }
+    : {
+        class: bonuses.class ? getClass(bonuses.class.identifier) : undefined,
+        ego: bonuses.class ? bonuses.class.bonus : 0,
+        element:
+          bonuses.element && typeof bonuses.element.identifier === 'string'
+            ? toElement(bonuses.element.identifier)
+            : undefined,
+        defense: bonuses.element ? bonuses.element.bonus : 0,
+        pose: bonuses.figure
+          ? getPoseFromValue(String(bonuses.figure.identifier))
+          : undefined,
+        attack: bonuses.figure ? bonuses.figure.bonus : 0
+      };
 }
 
 function getClass(gameClass: NumberString): Class {

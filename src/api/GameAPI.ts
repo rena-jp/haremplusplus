@@ -11,6 +11,7 @@ import {
   GameInventory,
   GameQuests,
   GemsData,
+  GirlEquipment,
   GirlsDataList,
   GirlsSalaryList
 } from '../data/game-data';
@@ -210,6 +211,24 @@ export interface GameAPI {
    * @param item the item to unequip
    */
   unequipOne(girl: CommonGirlData, item: Equipment): Promise<void>;
+
+  /**
+   * Unequip all items from all girls.
+   *
+   * @param allGirls all girls data
+   */
+  unequipAllGirls(allGirls: CommonGirlData[]): Promise<void>;
+
+  /**
+   * Return the inventory for girls equipment.
+   * @param girl the selected girl. May be used to sort inventory by matching resonance.
+   * @param slot if specified, only items for this slot will be returned.
+   * Otherwise, all items will be returned.
+   */
+  getGirlsInventory(
+    girl: CommonGirlData,
+    slot?: number
+  ): Promise<GirlEquipment[]>;
 }
 
 export type TeamStats = {

@@ -8,6 +8,7 @@ import {
   Team
 } from '../data/data';
 import {
+  ArmorData,
   ChangePoseResult,
   EquipActionResult,
   fixBlessing,
@@ -17,6 +18,8 @@ import {
   GameQuestStep,
   GemsData,
   GiftResult,
+  GirlEquipment,
+  GirlEquipmentResult,
   GirlsDataList,
   GirlsSalaryEntry,
   GirlsSalaryList,
@@ -538,7 +541,7 @@ export class GameAPIImpl implements GameAPI {
     const action = {
       action: 'girl_equipment_unequip',
       id_girl_armor_equipped: item.uid,
-      sort_by: 'rarity',
+      sort_by: 'resonance',
       sorting_order: 'desc'
     };
     const result = await this.postRequest(action);
@@ -571,9 +574,92 @@ export class GameAPIImpl implements GameAPI {
     }
   }
 
-  async equipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
-    // TODO
-    return;
+  async equipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
+    const params = {
+      action: 'girl_equipment_equip',
+      id_girl: girl.id,
+      id_girl_armor: item.uid,
+      sort_by: 'resonance',
+      sorting_order: 'desc'
+    };
+    const result = await this.postRequest(params);
+    if (
+      isUnknownObject(result) &&
+      result.success === true &&
+      'equipped_armor' in result
+    ) {
+      // TODO Improve request type checking
+
+      const equipped = importEquipment([result.equipped_armor as ArmorData]);
+      if (equipped.items[0]) {
+        const equippedItem = equipped.items[0];
+        const slot = equippedItem.slot;
+        if (girl.equipment && girl.equipment.items.length > 0) {
+          const existing = girl.equipment?.items?.findIndex(
+            (item) => item.slot === slot
+          );
+          if (existing > -1) {
+            girl.equipment.items[existing] = equippedItem;
+          } else {
+            girl.equipment.items.push(equippedItem);
+          }
+        } else {
+          girl.equipment = { items: [equippedItem] };
+        }
+      }
+
+      if (this.updateGirl) {
+        this.updateGirl(girl);
+      }
+    }
+    console.log('Equipment result: ', result);
+  }
+
+  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<void> {
+    const params = {
+      action: 'girl_equipment_unequip_all_girls'
+    };
+    const result = await this.postRequest(params);
+    if (RequestResult.is(result) && result.success) {
+      const modifiedGirls: CommonGirlData[] = [];
+      for (const girl of allGirls) {
+        if (girl.equipment !== undefined && girl.equipment.items.length > 0) {
+          girl.equipment.items = [];
+          modifiedGirls.push(girl);
+        }
+      }
+      if (this.updateGirl) {
+        for (const girl of modifiedGirls) {
+          this.updateGirl(girl);
+        }
+      }
+    }
+  }
+
+  async getGirlsInventory(
+    girl: CommonGirlData,
+    slot?: number | undefined
+  ): Promise<GirlEquipment[]> {
+    if (slot !== undefined) {
+      const params = {
+        action: 'girl_equipment_list',
+        slot_index: slot,
+        sort_by: 'resonance',
+        sorting_order: 'desc',
+        page: 1,
+        id_girl: girl.id
+      };
+      const result = await this.postRequest(params);
+      if (
+        isUnknownObject(result) &&
+        result.success === true &&
+        Array.isArray(result.items)
+      ) {
+        // TODO Improve type testing
+        return (result as unknown as GirlEquipmentResult).items;
+      }
+    }
+    return [];
   }
 
   private updateGirlWithBook(girl: CommonGirlData, book: Book) {

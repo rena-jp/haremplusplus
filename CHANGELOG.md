@@ -1,3 +1,7 @@
+# 0.13.4 (NEXT)
+
+- Add a quick-equip popup for girls equipment
+
 # 0.13.3 - 2023-05-22
 
 - Update recruits equipment requests to match the latest game update
