@@ -162,6 +162,7 @@ button.item-action {
   display: flex;
   flex-direction: column;
   row-gap: 0.25em;
+  padding-left: 2rem;
 }
 
 .qh-equipment-stats > span,
@@ -170,7 +171,7 @@ button.item-action {
   flex-direction: row;
   column-gap: 1em;
   align-items: center;
-  justify-content: center;
+  justify-content: left;
 }
 
 .qh-equipment-stats > span > .stat-icon,
@@ -191,6 +192,21 @@ button.item-action {
   color: green;
 }
 
-.inactive-resonance {
+.inactive-resonance,
+.disabled-resonance {
   color: lightgrey;
+}
+
+.disabled-resonance > .stat-icon,
+.disabled-resonance > .element,
+.disabled-resonance > .pose-icon {
+  filter: grayscale(1);
+}
+
+.stats-diff.positive {
+  color: green;
+}
+
+.stats-diff.negative {
+  color: red;
 }

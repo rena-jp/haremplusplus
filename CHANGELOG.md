@@ -1,5 +1,6 @@
 # 0.13.4 (NEXT)
 
+- Add stats comparison in equipment tooltip, when equipping a new item
 - Add a quick-equip popup for girls equipment
 
 # 0.13.3 - 2023-05-22

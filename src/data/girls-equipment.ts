@@ -1,4 +1,10 @@
-import { EMPTY_STATS, Equipment, EquipmentData, Stats } from './data';
+import {
+  CommonGirlData,
+  EMPTY_STATS,
+  Equipment,
+  EquipmentData,
+  Stats
+} from './data';
 
 export const SLOTS_COUNT = 6;
 
@@ -35,4 +41,40 @@ export function slotsArray(items: Equipment[]): (Equipment | undefined)[] {
     result[i] = item;
   }
   return result;
+}
+
+export function matchesClassResonance(
+  equipment?: Equipment,
+  girl?: CommonGirlData
+): boolean {
+  return (
+    girl !== undefined &&
+    equipment !== undefined &&
+    equipment.resonance.class !== undefined &&
+    equipment.resonance.class === girl.class
+  );
+}
+
+export function matchesElementResonance(
+  equipment?: Equipment,
+  girl?: CommonGirlData
+): boolean {
+  return (
+    girl !== undefined &&
+    equipment !== undefined &&
+    equipment.resonance.element !== undefined &&
+    equipment.resonance.element === girl.element
+  );
+}
+
+export function matchesPoseResonance(
+  equipment?: Equipment,
+  girl?: CommonGirlData
+): boolean {
+  return (
+    girl !== undefined &&
+    equipment !== undefined &&
+    equipment.resonance.pose !== undefined &&
+    equipment.resonance.pose === girl.pose
+  );
 }

@@ -7,7 +7,12 @@ import {
   Rarity
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
-import { slotsArray } from '../data/girls-equipment';
+import {
+  matchesClassResonance,
+  matchesElementResonance,
+  matchesPoseResonance,
+  slotsArray
+} from '../data/girls-equipment';
 import '../style/girls-equipment.css';
 import { Tooltip } from './common';
 import {
@@ -140,7 +145,13 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
         <>
           <Tooltip
             place="left"
-            tooltip={<EquipmentTooltip equipment={equipment} girl={girl} />}
+            tooltip={
+              <EquipmentTooltip
+                equipment={equipment}
+                currentEquipment={equipment}
+                girl={girl}
+              />
+            }
           >
             <div className="girl-item-icon-wrapper">
               <a href={link} rel="noreferrer">
@@ -213,27 +224,41 @@ export const EquipmentDecorator: React.FC<EquipmentDecoratorProps> = ({
 
 export interface EquipmentTooltipProps {
   equipment: Equipment;
-  girl?: CommonGirlData;
+  currentEquipment: Equipment | undefined;
+  girl: CommonGirlData | undefined;
 }
 
 export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
   equipment,
+  currentEquipment,
   girl
 }) => {
   const tooltipClasses = ['qh-equipment-tooltip', Rarity[equipment.rarity]];
 
-  const matchesClassResonance =
-    girl &&
-    equipment.resonance.class !== undefined &&
-    equipment.resonance.class === girl.class;
-  const matchesElementResonance =
-    girl &&
-    equipment.resonance.element !== undefined &&
-    equipment.resonance.element === girl.element;
-  const matchesPoseResonance =
-    girl &&
-    equipment.resonance.pose !== undefined &&
-    equipment.resonance.pose === girl.pose;
+  const hcDiff = getStatsDiff(
+    equipment.stats.hardcore,
+    currentEquipment?.stats?.hardcore
+  );
+  const chDiff = getStatsDiff(
+    equipment.stats.charm,
+    currentEquipment?.stats?.charm
+  );
+  const khDiff = getStatsDiff(
+    equipment.stats.knowhow,
+    currentEquipment?.stats?.knowhow
+  );
+  const egoDiff = getStatsDiff(
+    equipment.stats.ego,
+    currentEquipment?.stats?.ego
+  );
+  const attackDiff = getStatsDiff(
+    equipment.stats.attack,
+    currentEquipment?.stats?.attack
+  );
+  const defDiff = getStatsDiff(
+    equipment.stats.defense,
+    currentEquipment?.stats?.defense
+  );
 
   return (
     <div className={tooltipClasses.join(' ')}>
@@ -243,74 +268,164 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
       <div className="qh-equipment-stats">
         <span>
           <StatIcon statClass={Class.Hardcore} /> {equipment.stats.hardcore}
+          <StatsDiff diff={hcDiff} />
         </span>
         <span>
           <StatIcon statClass={Class.Charm} /> {equipment.stats.charm}
+          <StatsDiff diff={chDiff} />
         </span>
         <span>
           <StatIcon statClass={Class.Knowhow} /> {equipment.stats.knowhow}
+          <StatsDiff diff={khDiff} />
         </span>
         <span>
           <EgoIcon /> {equipment.stats.ego}
+          <StatsDiff diff={egoDiff} />
         </span>
         <span>
           <AttackIcon /> {equipment.stats.attack}
+          <StatsDiff diff={attackDiff} />
         </span>
         <span>
           <DefenseIcon /> {equipment.stats.defense}
+          <StatsDiff diff={defDiff} />
         </span>
       </div>
-      {equipment.resonance.class !== undefined ||
-      equipment.resonance.element !== undefined ||
-      equipment.resonance.pose !== undefined ? (
-        <div className="qh-equipment-resonance">
-          <h3>Resonance Bonus</h3>
-          {equipment.resonance.class !== undefined ? (
-            <span
-              className={
-                girl
-                  ? matchesClassResonance
-                    ? 'active-resonance'
-                    : 'inactive-resonance'
-                  : ''
-              }
-            >
-              <StatIcon statClass={equipment.resonance.class} />: <EgoIcon /> +
-              {equipment.resonance.ego}%
-            </span>
-          ) : null}
-          {equipment.resonance.element !== undefined ? (
-            <span
-              className={
-                girl
-                  ? matchesElementResonance
-                    ? 'active-resonance'
-                    : 'inactive-resonance'
-                  : ''
-              }
-            >
-              <ElementIcon element={equipment.resonance.element} />:{' '}
-              <DefenseIcon /> +{equipment.resonance.defense}%
-            </span>
-          ) : null}
-          {equipment.resonance.pose !== undefined ? (
-            <span
-              className={
-                girl
-                  ? matchesPoseResonance
-                    ? 'active-resonance'
-                    : 'inactive-resonance'
-                  : ''
-              }
-            >
-              <PoseIcon pose={equipment.resonance.pose} />: <AttackIcon /> +
-              {equipment.resonance.attack}%
-            </span>
-          ) : null}
-        </div>
-      ) : null}
+      <ResonanceSection
+        equipment={equipment}
+        currentEquipment={currentEquipment}
+        girl={girl}
+      />
     </div>
   );
+};
+
+interface StatsDiffProps {
+  diff: number | undefined;
+}
+
+const StatsDiff: React.FC<StatsDiffProps> = ({ diff }) => {
+  if (diff === undefined || diff === 0) {
+    return null;
+  }
+
+  const className = diff > 0 ? 'positive' : 'negative';
+  const sign = diff > 0 ? '+' : '';
+  return (
+    <span className={`stats-diff ${className}`}>({`${sign}${diff}`})</span>
+  );
+};
+
+interface ResonanceSectionProps {
+  equipment: Equipment;
+  currentEquipment?: Equipment;
+  girl?: CommonGirlData;
+}
+
+const ResonanceSection: React.FC<ResonanceSectionProps> = ({
+  equipment,
+  currentEquipment,
+  girl
+}) => {
+  const matchesClass = matchesClassResonance(equipment, girl);
+  const matchesElement = matchesElementResonance(equipment, girl);
+  const matchesPose = matchesPoseResonance(equipment, girl);
+
+  const egoValue = equipment.resonance.ego;
+  const activeEgoValue = matchesClass ? egoValue : 0;
+  const refEgo = matchesClassResonance(currentEquipment, girl)
+    ? currentEquipment!.resonance.ego
+    : 0;
+  const currentClass = matchesClassResonance(currentEquipment, girl)
+    ? currentEquipment?.resonance.class
+    : undefined;
+
+  const defValue = equipment.resonance.defense;
+  const activeDefValue = matchesElement ? defValue : 0;
+  const refDef = matchesElementResonance(currentEquipment, girl)
+    ? currentEquipment!.resonance.defense
+    : 0;
+  const currentElement = matchesElementResonance(currentEquipment, girl)
+    ? currentEquipment?.resonance.element
+    : undefined;
+
+  const attValue = equipment.resonance.attack;
+  const activeAttValue = matchesPose ? attValue : 0;
+  const refAtt = matchesPoseResonance(currentEquipment, girl)
+    ? currentEquipment!.resonance.attack
+    : 0;
+  const currentPose = matchesPoseResonance(currentEquipment, girl)
+    ? currentEquipment?.resonance.pose
+    : undefined;
+
+  const displayClass = equipment.resonance.class ?? currentClass;
+  const displayElement = equipment.resonance.element ?? currentElement;
+  const displayPose = equipment.resonance.pose ?? currentPose;
+
+  const activeClass = displayClass === equipment.resonance.class;
+  const activeElement = displayElement === equipment.resonance.element;
+  const activePose = displayPose === equipment.resonance.pose;
+
+  return displayClass !== undefined ||
+    displayElement !== undefined ||
+    displayPose !== undefined ? (
+    <>
+      <h3>Resonance Bonus</h3>
+      <div className="qh-equipment-resonance">
+        {displayClass !== undefined ? (
+          <span
+            className={
+              girl
+                ? activeClass
+                  ? matchesClass
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : 'disabled-resonance'
+                : ''
+            }
+          >
+            <StatIcon statClass={displayClass} />: <EgoIcon /> +
+            {equipment.resonance.ego}%
+            <StatsDiff diff={activeEgoValue - refEgo} />
+          </span>
+        ) : null}
+        {displayElement !== undefined ? (
+          <span
+            className={
+              girl
+                ? activeElement
+                  ? matchesElement
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : 'disabled-resonance'
+                : ''
+            }
+          >
+            <ElementIcon element={displayElement} />: <DefenseIcon />+
+            {equipment.resonance.defense}%
+            <StatsDiff diff={activeDefValue - refDef} />
+          </span>
+        ) : null}
+        {displayPose !== undefined ? (
+          <span
+            className={
+              girl
+                ? activePose
+                  ? matchesPose
+                    ? 'active-resonance'
+                    : 'inactive-resonance'
+                  : 'disabled-resonance'
+                : ''
+            }
+          >
+            <PoseIcon pose={displayPose} />: <AttackIcon /> +
+            {equipment.resonance.attack}%
+            <StatsDiff diff={activeAttValue - refAtt} />
+          </span>
+        ) : null}
+      </div>
+    </>
+  ) : null;
 };
 
 interface EquipAllActionProps {
@@ -374,3 +489,13 @@ const UnequipAllAction: React.FC<EquipAllActionProps> = ({
     </div>
   );
 };
+
+function getStatsDiff(
+  newValue: number,
+  refValue: number | undefined
+): number | undefined {
+  if (refValue === undefined) {
+    return newValue;
+  }
+  return newValue - refValue;
+}

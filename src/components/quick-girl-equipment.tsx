@@ -22,6 +22,9 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
   if (!gameAPI) {
     return null;
   }
+  const currentEquipment = girl.equipment
+    ? girl.equipment.items.find((item) => item.slot === slot)
+    : undefined;
   const [loading, setLoading] = useState(true);
   const [equipment, setEquipment] = useState<Equipment[]>([]);
   useEffect(() => {
@@ -31,8 +34,6 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
       .then((inventory) => setEquipment(inventory.items))
       .then(() => setLoading(false));
   }, [gameAPI, girl, slot]);
-
-  console.log('Render QE with items: ', equipment.length);
 
   return (
     <div className="qh-quick-equipment">
@@ -49,6 +50,7 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
               <EquipmentTile
                 girl={girl}
                 equipment={item}
+                currentEquipment={currentEquipment}
                 gameAPI={gameAPI}
                 key={item.uid}
                 close={close}
@@ -63,12 +65,14 @@ interface EquipmentTileProps {
   girl: CommonGirlData;
   equipment: Equipment;
   gameAPI: GameAPI;
+  currentEquipment: Equipment | undefined;
   close?: () => void;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
   girl,
   equipment,
+  currentEquipment,
   gameAPI,
   close
 }) => {
@@ -95,7 +99,13 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
       <>
         <Tooltip
           place="left"
-          tooltip={<EquipmentTooltip equipment={equipment} girl={girl} />}
+          tooltip={
+            <EquipmentTooltip
+              equipment={equipment}
+              currentEquipment={currentEquipment}
+              girl={girl}
+            />
+          }
         >
           <div className="girl-item-icon-wrapper">{icon}</div>
         </Tooltip>
