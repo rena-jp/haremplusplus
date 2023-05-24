@@ -136,12 +136,17 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
       gameAPI.unequipOne(girl, equipment).finally(() => setLoading(false));
     }
   }, [girl, equipment, gameAPI, loading, setLoading]);
+
+  const slotLabel = getSlotLabel(slotId);
+
   return (
     <div className={tileClassNames.join(' ')}>
       {equipment === undefined ? (
-        <a href={link} rel="noreferrer">
-          {icon}
-        </a>
+        <Tooltip tooltip={slotLabel}>
+          <a href={link} rel="noreferrer">
+            {icon}
+          </a>
+        </Tooltip>
       ) : (
         <>
           <Tooltip
@@ -501,4 +506,24 @@ function getStatsDiff(
     return newValue;
   }
   return newValue - refValue;
+}
+
+function getSlotLabel(slotId: number): string {
+  switch (slotId) {
+    case 1:
+      return 'Head';
+    case 2:
+      return 'Body';
+    case 3:
+      return 'Pants';
+    case 4:
+      return 'Boots';
+    case 5:
+      return 'Accessory';
+    case 6:
+      return 'Item';
+
+    default:
+      return 'Slot';
+  }
 }
