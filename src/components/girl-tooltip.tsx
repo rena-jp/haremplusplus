@@ -73,8 +73,12 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
       </div>
       <div className={`stats-section ${blessed ? ' blessed' : ''}`}>
         Total Power: {format(totalPower)}
-        <br />
-        Equipped Power: {format(equippedPower)}
+        {equippedPower > totalPower ? (
+          <>
+            <br />
+            Equipped Power: {format(equippedPower)}
+          </>
+        ) : null}
         <StatsDescription girl={girl} currentBlessings={currentBlessings} />
       </div>
     </div>

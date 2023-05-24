@@ -1,16 +1,16 @@
-# 0.13.4 (NEXT)
+## 0.13.4 (NEXT)
 
 - Add a description tooltip on empty equipment slots
 - Add stats tooltips on girls in harem, when editing teams
 - Add stats comparison in equipment tooltip, when equipping a new item
 - Add a quick-equip popup for girls equipment
 
-# 0.13.3 - 2023-05-22
+## 0.13.3 - 2023-05-22
 
 - Update recruits equipment requests to match the latest game update
 - Fix: setting "Sort by ... Power" as the default Sort now works properly
 
-# 0.13.2 - 2023-05-22
+## 0.13.2 - 2023-05-22
 
 - Fix a bug in blessings data cache, preventing the harem from displaying up-to-date blessings/stats
 - Add loading indicator on long-running equipment actions
