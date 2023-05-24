@@ -1,4 +1,4 @@
-## 0.13.4 (NEXT)
+## 0.13.4 - 2023-05-24
 
 - Update unknown poses
 - Add a description tooltip on empty equipment slots
