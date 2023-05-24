@@ -6,11 +6,12 @@ import React, {
   useState
 } from 'react';
 import LazyLoad from 'react-lazyload';
-import { CommonGirlData, Rarity } from '../data/data';
+import { BlessingDefinition, CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
-import { ElementIcon, Grade, SalaryIcon, UpgradeIcon } from './common';
+import { ElementIcon, Grade, SalaryIcon, Tooltip, UpgradeIcon } from './common';
 import { EquipmentDecorators } from './girls-equipment';
+import { GirlTooltip } from './girl-tooltip';
 
 export interface GirlTileProps {
   girl: CommonGirlData;
@@ -204,6 +205,8 @@ export interface HaremGirlTileProps extends GirlTileProps {
    */
   payAt: number | undefined;
   selectGirl(girl: CommonGirlData): void;
+  showTooltip?: boolean;
+  currentBlessings?: BlessingDefinition[];
 }
 
 /**
@@ -216,7 +219,9 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   show0Pose,
   collectSalary,
   payAt,
-  lazy
+  lazy,
+  showTooltip,
+  currentBlessings
 }) => {
   const selectOnClick = useCallback(() => selectGirl(girl), [selectGirl, girl]);
 
@@ -261,7 +266,7 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
     }
   }, [collectSalary, selectOnClick, girl, salaryReady]);
 
-  return (
+  const tile = (
     <SimpleGirlTile
       girl={girl}
       onClick={onClick}
@@ -284,6 +289,16 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       {girl.own ? <span className="girl-header">{displayedLevel}</span> : null}
       {girl.upgradeReady ? <UpgradeIcon /> : null}
     </SimpleGirlTile>
+  );
+
+  return showTooltip === true ? (
+    <Tooltip
+      tooltip={<GirlTooltip girl={girl} currentBlessings={currentBlessings} />}
+    >
+      {tile}
+    </Tooltip>
+  ) : (
+    tile
   );
 };
 

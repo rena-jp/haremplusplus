@@ -259,6 +259,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
                 show0Pose={show0Pose}
                 collectSalary={collectSalary}
                 payAt={payAt}
+                showTooltip={haremMode === 'edit-teams'}
+                currentBlessings={currentBlessings}
               />
             );
           })}
@@ -275,6 +277,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
               show0Pose={show0Pose}
               collectSalary={collectSalary}
               payAt={undefined}
+              showTooltip={haremMode === 'edit-teams'}
+              currentBlessings={currentBlessings}
             />
           ))}
         </div>

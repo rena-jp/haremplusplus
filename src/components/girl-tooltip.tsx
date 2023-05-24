@@ -2,12 +2,14 @@ import {
   BlessingDefinition,
   CommonGirlData,
   getBlessedStats,
+  getBlessingMultiplier,
   Rarities,
   Rarity
 } from '../data/data';
 import { Grade, ElementIcon, StatsList, PoseIcon, format } from './common';
 import '../style/girl-tooltip.css';
 import '../style/girls.css';
+import { getTotalEquipmentStats } from '../data/girls-equipment';
 
 export interface GirlTooltipProps {
   girl: CommonGirlData;
@@ -17,7 +19,7 @@ export interface GirlTooltipProps {
 
 export const GirlTooltip: React.FC<GirlTooltipProps> = ({
   girl,
-  currentBlessings: currentBlessing,
+  currentBlessings,
   classNames
 }) => {
   const classes = ['girl-tooltip'];
@@ -27,18 +29,33 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
   }
 
   let totalPower: number;
+  let equippedPower: number;
   let blessed = false;
   if (girl.stats) {
     const blessedStats = getBlessedStats(
       girl,
       girl.stats,
-      currentBlessing ?? []
+      currentBlessings ?? []
     );
     totalPower =
       blessedStats.charm + blessedStats.hardcore + blessedStats.knowhow;
     blessed = blessedStats.charm > girl.stats.charm;
+    if (girl.equipment) {
+      const equipmentStats = getTotalEquipmentStats(girl.equipment);
+      const blessingMultiplier =
+        currentBlessings === undefined
+          ? 1
+          : getBlessingMultiplier(girl, currentBlessings);
+      const rawEquipPower =
+        equipmentStats.hardcore + equipmentStats.charm + equipmentStats.knowhow;
+      const blessedEquipPower = blessingMultiplier * rawEquipPower;
+      equippedPower = totalPower + blessedEquipPower;
+    } else {
+      equippedPower = totalPower;
+    }
   } else {
     totalPower = 0;
+    equippedPower = 0;
   }
 
   return (
@@ -56,7 +73,9 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
       </div>
       <div className={`stats-section ${blessed ? ' blessed' : ''}`}>
         Total Power: {format(totalPower)}
-        <StatsDescription girl={girl} currentBlessings={currentBlessing} />
+        <br />
+        Equipped Power: {format(equippedPower)}
+        <StatsDescription girl={girl} currentBlessings={currentBlessings} />
       </div>
     </div>
   );
