@@ -210,3 +210,19 @@ button.item-action {
 .stats-diff.negative {
   color: red;
 }
+
+.item-level-decorator {
+  position: absolute;
+  bottom: 3px;
+  left: 3px;
+  background-color: #b14;
+  border: min(2px, var(--border-width)) solid #f70;
+  border-radius: 100%;
+  width: 20%;
+  height: 20%;
+  font-size: 0.7em;
+  text-align: center;
+  line-height: 100%;
+  padding: min(3px, calc(2 * var(--border-width)));
+  pointer-events: none;
+}

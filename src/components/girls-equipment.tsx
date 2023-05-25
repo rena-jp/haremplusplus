@@ -170,6 +170,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
                   disabled={loading}
                 ></button>
               </Tooltip>
+              <div className="item-level-decorator">{equipment.level}</div>
             </div>
           </Tooltip>
         </>
