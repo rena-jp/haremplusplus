@@ -321,6 +321,17 @@ export interface GirlEquipmentResult extends RequestResult {
   items: GirlEquipment[];
 }
 
+export namespace GirlEquipmentResult {
+  export function is(value: unknown): value is GirlEquipmentResult {
+    if (isUnknownObject(value)) {
+      if (value.success === true && Array.isArray(value.items)) {
+        return true;
+      }
+    }
+    return false;
+  }
+}
+
 export type ClassResonance = 'ego' | ''; // No more RNG here; ego or nothing
 export type ElementResonance = 'defense' | ''; // No more RNG here; defense or nothing
 export type FigureResonance = 'damage' | ''; // No more RNG here; defense or nothing
@@ -490,7 +501,7 @@ export namespace TeamsData {
 }
 
 export interface TeamDataEntry {
-  caracs: TeamCaracsEntry; // TODO
+  caracs: TeamCaracsEntry;
   girls_ids: string[];
   id_team: NumberString | null;
   total_power: number;
@@ -928,8 +939,10 @@ export function toAbsoluteTime(blessing: GameBlessing): AbsoluteGameBlessing {
 }
 
 export interface UnequipActionResult extends RequestResult {
-  unequipped_armor: unknown[];
-  caracs: {
+  unequipped_armor: ArmorData[] | ArmorData | null;
+
+  /** Present for equip-all / unequip-all */
+  caracs?: {
     carac1: number;
     carac2: number;
     carac3: number;
@@ -937,15 +950,15 @@ export interface UnequipActionResult extends RequestResult {
 }
 
 export interface EquipActionResult extends UnequipActionResult {
-  equipped_armor: ArmorData[];
+  equipped_armor: ArmorData[] | ArmorData;
 }
 
 export namespace UnequipActionResult {
   export function is(value: unknown): value is UnequipActionResult {
     if (RequestResult.is(value) && value.success) {
       if (
-        Array.isArray(value.unequipped_armor) &&
-        isUnknownObject(value.caracs)
+        value.unequipped_armor !== undefined &&
+        (value.caracs === undefined || isUnknownObject(value.caracs))
       ) {
         return true;
       }
@@ -958,7 +971,10 @@ export namespace EquipActionResult {
   export function is(value: unknown): value is EquipActionResult {
     if (UnequipActionResult.is(value)) {
       const action = value as UnknownObject;
-      if (Array.isArray(action.equipped_armor)) {
+      if (
+        Array.isArray(action.equipped_armor) ||
+        isUnknownObject(action.equipped_armor)
+      ) {
         return true;
       }
     }

@@ -8,7 +8,6 @@ import {
   Team
 } from '../data/data';
 import {
-  ArmorData,
   ChangePoseResult,
   EquipActionResult,
   fixBlessing,
@@ -534,6 +533,11 @@ export class GameAPIImpl implements GameAPI {
           this.updateGirl(girl);
         }
       }
+    } else {
+      console.error(
+        'UnequipAll: Failed to unequip the girl: invalid request result',
+        result
+      );
     }
   }
 
@@ -545,7 +549,7 @@ export class GameAPIImpl implements GameAPI {
       sorting_order: 'desc'
     };
     const result = await this.postRequest(action);
-    if (RequestResult.is(result) && result.success) {
+    if (UnequipActionResult.is(result) && result.success) {
       if (girl.equipment && girl.equipment.items.length > 0) {
         const itemToRemove = girl.equipment.items.findIndex(
           (equippedItem) => equippedItem.slot === item.slot
@@ -557,6 +561,11 @@ export class GameAPIImpl implements GameAPI {
           }
         }
       }
+    } else {
+      console.error(
+        'UnequipOne: Failed to unequip the girl: invalid request result',
+        result
+      );
     }
   }
 
@@ -567,10 +576,18 @@ export class GameAPIImpl implements GameAPI {
     };
     const result = await this.postRequest(action);
     if (EquipActionResult.is(result) && result.success) {
-      girl.equipment = importEquipment(result.equipped_armor);
+      const equipped = Array.isArray(result.equipped_armor)
+        ? result.equipped_armor
+        : [result.equipped_armor];
+      girl.equipment = importEquipment(equipped);
       if (this.updateGirl) {
         this.updateGirl(girl);
       }
+    } else {
+      console.error(
+        'EquipAll: Failed to equip the girl: invalid request result',
+        result
+      );
     }
   }
 
@@ -583,14 +600,11 @@ export class GameAPIImpl implements GameAPI {
       sorting_order: 'desc'
     };
     const result = await this.postRequest(params);
-    if (
-      isUnknownObject(result) &&
-      result.success === true &&
-      'equipped_armor' in result
-    ) {
-      // TODO Improve request type checking
-
-      const equipped = importEquipment([result.equipped_armor as ArmorData]);
+    if (EquipActionResult.is(result) && result.success) {
+      const armor = Array.isArray(result.equipped_armor)
+        ? result.equipped_armor
+        : [result.equipped_armor];
+      const equipped = importEquipment(armor);
       if (equipped.items[0]) {
         const equippedItem = equipped.items[0];
         const slot = equippedItem.slot;
@@ -611,6 +625,11 @@ export class GameAPIImpl implements GameAPI {
       if (this.updateGirl) {
         this.updateGirl(girl);
       }
+    } else {
+      console.error(
+        'EquipOne: Failed to equip the girl: invalid request result',
+        result
+      );
     }
   }
 
@@ -619,7 +638,7 @@ export class GameAPIImpl implements GameAPI {
       action: 'girl_equipment_unequip_all_girls'
     };
     const result = await this.postRequest(params);
-    if (RequestResult.is(result) && result.success) {
+    if (UnequipActionResult.is(result) && result.success) {
       const modifiedGirls: CommonGirlData[] = [];
       for (const girl of allGirls) {
         if (girl.equipment !== undefined && girl.equipment.items.length > 0) {
@@ -632,6 +651,11 @@ export class GameAPIImpl implements GameAPI {
           this.updateGirl(girl);
         }
       }
+    } else {
+      console.error(
+        'UnequipAllGirls: Failed to unequip all girls: invalid request result',
+        result
+      );
     }
   }
 
@@ -649,13 +673,8 @@ export class GameAPIImpl implements GameAPI {
         id_girl: girl.id
       };
       const result = await this.postRequest(params);
-      if (
-        isUnknownObject(result) &&
-        result.success === true &&
-        Array.isArray(result.items)
-      ) {
-        // TODO Improve type testing
-        return (result as unknown as GirlEquipmentResult).items;
+      if (GirlEquipmentResult.is(result) && result.success) {
+        return result.items;
       }
     }
     return [];

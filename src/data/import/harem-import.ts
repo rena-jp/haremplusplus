@@ -354,7 +354,6 @@ function getEventTypes(events: number[]): EventSource[] {
 }
 
 function getEventType(eventId: number): EventSource {
-  // TODO... Detect LD/CE/OD Events....
   // Careful: SE and Classic/OD/LD use the same selector (event: [1] may correspond to SE_1 or Classic_1)
   // For owned girls, it's not possible to distinguish SE vs Classic
   const eventType = eventTypes[String(eventId) as keyof typeof eventTypes];
