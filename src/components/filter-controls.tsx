@@ -128,7 +128,6 @@ export const ToggleList: React.FC<ToggleListProps> = ({
         const toggleStateClass = values[index] ? 'pressed' : 'notpressed';
         const classNames = ['toggle', 'hh-action-button', toggleStateClass];
         if (option.styleClasses) {
-          console.log('Add toggle style classes: ', option.styleClasses);
           classNames.push(...option.styleClasses);
         }
         return (

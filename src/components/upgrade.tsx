@@ -756,7 +756,7 @@ const MaxItems: React.FC<MaxItemsProps> = ({
         setUsedItems(newUsedItems);
         setExcess(usedItems.excess);
       } catch (error) {
-        console.log('Error: ', error);
+        console.error('Error: ', error);
       }
 
       setReady(true);

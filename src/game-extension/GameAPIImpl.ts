@@ -612,7 +612,6 @@ export class GameAPIImpl implements GameAPI {
         this.updateGirl(girl);
       }
     }
-    console.log('Equipment result: ', result);
   }
 
   async unequipAllGirls(allGirls: CommonGirlData[]): Promise<void> {
