@@ -400,3 +400,7 @@
     grid-column: 2 / 4;
   }
 }
+
+.hide-tooltips .react-tooltip {
+  display: none;
+}

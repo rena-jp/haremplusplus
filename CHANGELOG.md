@@ -1,5 +1,6 @@
 ## 0.13.5 (NEXT)
 
+- Fix a performance issue when editing teams in the harem
 - Make the quick equipment screen larger on small devices
 - Add level decorator on girls equipment
 - Add class icon on class filter buttons

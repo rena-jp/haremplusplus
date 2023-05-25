@@ -245,9 +245,14 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     setShowUpgrade(false);
   }, []);
 
+  // Use a CSS class to disable all tooltips, instead
+  // of a react prop. This is necessary to avoid re-rendering
+  // hundreds/thousands of girl tiles whenever the mode changes.
+  const hideTooltips = haremMode !== 'edit-teams';
+
   return (
     <>
-      <div className="girlsList">
+      <div className={`girlsList${hideTooltips ? ' hide-tooltips' : ''}`}>
         <div className="owned">
           {ownedGirls.map((girl) => {
             const payAt = girlsSalaries.get(girl.id);
@@ -262,7 +267,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
                 show0Pose={show0Pose}
                 collectSalary={collectSalary}
                 payAt={payAt}
-                showTooltip={haremMode === 'edit-teams'}
                 currentBlessings={currentBlessings}
               />
             );
@@ -280,7 +284,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
               show0Pose={show0Pose}
               collectSalary={collectSalary}
               payAt={undefined}
-              showTooltip={haremMode === 'edit-teams'}
               currentBlessings={currentBlessings}
             />
           ))}
