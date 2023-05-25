@@ -1,5 +1,6 @@
 ## 0.13.5 (NEXT)
 
+- Improve sort by power/potential: group equivalent girls by element
 - Fix a performance issue when editing teams in the harem
 - Make the quick equipment screen larger on small devices
 - Add level decorator on girls equipment

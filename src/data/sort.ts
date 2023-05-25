@@ -1,6 +1,7 @@
 import {
   BlessingDefinition,
   CommonGirlData,
+  Element,
   getNormalizedPower,
   getPower
 } from './data';
@@ -136,6 +137,34 @@ export function power(blessings: BlessingDefinition[]): Comparator {
   return (g1, g2) => getPower(g1, blessings) - getPower(g2, blessings);
 }
 
+export function element(): Comparator {
+  return (g1, g2) =>
+    getElementWeight(g1.element) - getElementWeight(g2.element);
+}
+
+function getElementWeight(element: Element): number {
+  switch (element) {
+    case Element.blue:
+      return 8;
+    case Element.dark:
+      return 7;
+    case Element.orange:
+      return 6;
+    case Element.red:
+      return 5;
+    case Element.green:
+      return 4;
+    case Element.yellow:
+      return 3;
+    case Element.white:
+      return 2;
+    case Element.purple:
+      return 1;
+    default:
+      return 0;
+  }
+}
+
 export const LevelSorter: ConfiguredSort = {
   id: 'level',
   direction: 'desc',
@@ -225,6 +254,7 @@ export function PotentialSorter(
     sorter: sorter(
       label,
       potential(blessings),
+      element(),
       rarity(),
       maxGrade(),
       grade(),
@@ -246,6 +276,7 @@ export function PowerSorter(
     sorter: sorter(
       label,
       power(blessings),
+      element(),
       rarity(),
       maxGrade(),
       grade(),
