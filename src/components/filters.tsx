@@ -1,5 +1,5 @@
 import { useCallback, useContext, useMemo, useState } from 'react';
-import { BlessingDefinition, EventSource } from '../data/data';
+import { BlessingDefinition, EventSource, Team } from '../data/data';
 import { Filter } from '../data/filters/filter-api';
 import {
   ClassMultiFilter,
@@ -30,6 +30,7 @@ import { FiltersContext } from '../hooks/filter-hooks';
 export interface FiltersProps extends PanelProps {
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
+  teams: Team[];
 }
 
 export const FiltersPanel: React.FC<FiltersProps> = ({

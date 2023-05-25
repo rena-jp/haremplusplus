@@ -3,17 +3,12 @@ import '../style/teams.css';
 import '../style/common.css';
 import { CloseButton, ElementIcon, format, getDomain, Tooltip } from './common';
 import { GirlTooltip } from './girl-tooltip';
-import {
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  MutableRefObject
-} from 'react';
+import { useCallback, useContext, useState, MutableRefObject } from 'react';
 import { TeamStats, useTeamStats } from '../hooks/team-hooks';
 import { BaseGirlTile } from './girl';
 import { GameAPIContext } from '../data/game-api-context';
 import { EquipmentDecorators } from './girls-equipment';
+import { TeamsData } from '../hooks/teams-hooks';
 
 export interface TeamsProps {
   allGirls: CommonGirlData[];
@@ -22,6 +17,7 @@ export interface TeamsProps {
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
   girlListener: MutableRefObject<(girl: CommonGirlData) => void>;
+  teamsData: TeamsData;
 }
 
 export const Teams: React.FC<TeamsProps> = ({
@@ -30,19 +26,10 @@ export const Teams: React.FC<TeamsProps> = ({
   show0Pose,
   currentBlessings,
   upcomingBlessings,
-  girlListener
+  girlListener,
+  teamsData
 }) => {
   const gameAPI = useContext(GameAPIContext).gameAPI!;
-
-  const [teams, setTeams] = useState<Team[]>([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    setLoading(true);
-    gameAPI
-      .getTeams()
-      .then(setTeams)
-      .then(() => setLoading(false));
-  }, [gameAPI]);
 
   const [team, setTeam] = useState<Team | undefined>();
   const editTeam = useCallback(
@@ -54,16 +41,17 @@ export const Teams: React.FC<TeamsProps> = ({
 
   const saveAndClose = useCallback(
     async (team: Team) => {
-      await gameAPI.setTeam(team);
-      const updatedTeams = await gameAPI.getTeams();
-      setTeams(updatedTeams);
+      teamsData.updateTeam(team);
       setTeam(undefined);
     },
-    [setTeam, gameAPI]
+    [setTeam, gameAPI, teamsData, teamsData.updateTeam]
   );
+
   const cancel = useCallback(() => {
     setTeam(undefined);
   }, [setTeam]);
+
+  const { teams, loading } = teamsData;
 
   return (
     <div className="teams-section">

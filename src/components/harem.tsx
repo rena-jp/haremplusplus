@@ -20,6 +20,7 @@ import { useSorter } from '../hooks/sort-hooks';
 import { FiltersContext, useFilters } from '../hooks/filter-hooks';
 import { useApplyFilters } from '../hooks/girls-data-hooks';
 import { OptionsContext } from '../data/options-context';
+import { useTeams } from '../hooks/teams-hooks';
 
 export interface HaremProps {
   allGirls: CommonGirlData[];
@@ -129,6 +130,8 @@ export const Harem: React.FC<HaremProps> = ({
 
   const classNames = ['qh-harem', haremMode];
 
+  const teamsData = useTeams(gameAPI);
+
   return (
     <>
       <FiltersContext.Provider value={filtersState}>
@@ -150,6 +153,7 @@ export const Harem: React.FC<HaremProps> = ({
               close={closePanel}
               currentBlessings={currentBlessings}
               upcomingBlessings={upcomingBlessings}
+              teams={teamsData.teams}
             />
             <SortPanel
               visible={displayedTab?.id === 'sort'}
@@ -192,6 +196,7 @@ export const Harem: React.FC<HaremProps> = ({
               consumeGems={consumeGems}
               haremMode={haremMode}
               setHaremMode={setHaremMode}
+              teamsData={teamsData}
             />
           </div>
         </OptionsContext.Provider>

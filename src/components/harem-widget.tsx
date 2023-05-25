@@ -6,6 +6,7 @@ import { GirlDescription } from './description';
 import { GirlTile } from './girl';
 import { Teams } from './teams';
 import { UpgradePage } from './upgrade';
+import { TeamsData } from '../hooks/teams-hooks';
 
 /**
  * Number of girls to be rendered immediately. Should be small (< 100 items)
@@ -41,6 +42,7 @@ export interface HaremWidgetProps {
   consumeGems(element: Element, gems: number): void;
   haremMode: HaremMode;
   setHaremMode: (mode: HaremMode) => void;
+  teamsData: TeamsData;
 }
 
 export const HaremWidget: React.FC<HaremWidgetProps> = ({
@@ -53,7 +55,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   gemsCount,
   consumeGems,
   haremMode,
-  setHaremMode
+  setHaremMode,
+  teamsData
 }) => {
   // Sort girls by owned/not owned, to ensure we render owned girls first (avoid weird
   // initial display on small harems with few owned girls).
@@ -291,6 +294,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
           girlListener={teamsGirlListenerRef}
+          teamsData={teamsData}
         />
       ) : null}
       <GirlDescription

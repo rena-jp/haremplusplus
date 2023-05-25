@@ -18,6 +18,7 @@ import { GameAPI } from '../api/GameAPI';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { Teams } from '../components/teams';
 import { GameAPIContext } from '../data/game-api-context';
+import { useTeams } from '../hooks/teams-hooks';
 
 const ownedGirl = ownedGirlData as CommonGirlData;
 const missingGirl = missingGirlData as CommonGirlData;
@@ -174,6 +175,8 @@ const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
     /* No op until set by the teams component */
   });
 
+  const teamsData = useTeams(gameAPI);
+
   return (
     <div style={{ pointerEvents: 'initial' }}>
       <GameAPIContext.Provider value={{ gameAPI }}>
@@ -186,6 +189,7 @@ const TeamsTest: React.FC<{ gameAPI: GameAPI }> = ({ gameAPI }) => {
                 show0Pose={false}
                 currentBlessings={[]}
                 upcomingBlessings={[]}
+                teamsData={teamsData}
               />
             ) : null;
           }}
