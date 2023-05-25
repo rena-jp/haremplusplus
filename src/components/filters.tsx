@@ -676,15 +676,18 @@ const ClassForm: React.FC<FormProps> = ({
     () => [
       {
         label: 'Hardcore',
-        description: 'Filters Hardcore girls'
+        description: 'Filters Hardcore girls',
+        styleClasses: ['qh-class', 'hardcore']
       },
       {
         label: 'Charm',
-        description: 'Filters Charm girls'
+        description: 'Filters Charm girls',
+        styleClasses: ['qh-class', 'charm']
       },
       {
         label: 'Knowhow',
-        description: 'Filters Knowhow girls'
+        description: 'Filters Knowhow girls',
+        styleClasses: ['qh-class', 'knowhow']
       }
     ],
     []

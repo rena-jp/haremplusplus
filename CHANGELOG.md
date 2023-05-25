@@ -1,3 +1,7 @@
+## 0.13.5 (NEXT)
+
+- Add class icon on class filter buttons
+
 ## 0.13.4 - 2023-05-24
 
 - Update unknown poses

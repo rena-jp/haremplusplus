@@ -57,14 +57,14 @@ input.hh-text-input.number {
 }
 
 button.toggle.pressed {
-  background: linear-gradient(to bottom, #ffa23e 0, #c41b53 100%);
+  background-image: linear-gradient(to bottom, #ffa23e 0, #c41b53 100%);
 }
 
 /**
 * For filters: the button is checked, but the filter is inactive
 */
 .inactive > button.toggle.pressed {
-  background: linear-gradient(
+  background-image: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.3) 0,
     rgba(88, 88, 88, 0.3) 100%

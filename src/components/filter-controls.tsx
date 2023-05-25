@@ -99,6 +99,7 @@ export interface ToggleListProps {
 export interface ToggleOption {
   label: string;
   description: string;
+  styleClasses?: string[];
 }
 
 export const ToggleList: React.FC<ToggleListProps> = ({
@@ -125,9 +126,14 @@ export const ToggleList: React.FC<ToggleListProps> = ({
     <>
       {options.map((option, index) => {
         const toggleStateClass = values[index] ? 'pressed' : 'notpressed';
+        const classNames = ['toggle', 'hh-action-button', toggleStateClass];
+        if (option.styleClasses) {
+          console.log('Add toggle style classes: ', option.styleClasses);
+          classNames.push(...option.styleClasses);
+        }
         return (
           <button
-            className={`toggle hh-action-button ${toggleStateClass}`}
+            className={classNames.join(' ')}
             onClick={() => toggleState(index)}
             title={option.description}
             key={index}
