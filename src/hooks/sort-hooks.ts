@@ -17,11 +17,11 @@ export interface SorterState {
   isDefaultSort: boolean;
 }
 
-export const useSorter: (
+export function useSorter(
   options: HaremOptions,
   currentBlessings: BlessingDefinition[],
   upcomingBlessings: BlessingDefinition[]
-) => SorterState = (options, currentBlessings, upcomingBlessings) => {
+): SorterState {
   const [defaultSortConfig, setDefaultSortConfig] = useState(
     options.defaultSort
   );
@@ -64,4 +64,4 @@ export const useSorter: (
     persistDefaultSort,
     isDefaultSort
   };
-};
+}

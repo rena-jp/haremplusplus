@@ -19,9 +19,10 @@ import {
   SourceMultiFilter,
   UpgradeReadyFilter,
   ClassMultiFilter,
-  EquippedFilter
+  EquippedFilter,
+  TeamsFilter
 } from './filter-runtime';
-import { BlessingDefinition } from '../data';
+import { BlessingDefinition, Team } from '../data';
 import { optionsManager } from '../options';
 
 export class FiltersManagerImpl implements FiltersManager {
@@ -29,7 +30,8 @@ export class FiltersManagerImpl implements FiltersManager {
 
   constructor(
     private currentBlessing: BlessingDefinition[],
-    private upcomingBlessing: BlessingDefinition[]
+    private upcomingBlessing: BlessingDefinition[],
+    private teams: Team[]
   ) {
     this.register(GradeRangeFilter.FACTORY);
     this.register(MaxGradeRangeFilter.FACTORY);
@@ -42,6 +44,7 @@ export class FiltersManagerImpl implements FiltersManager {
     this.register(UpgradeReadyFilter.FACTORY);
     this.register(EquippedFilter.FACTORY);
     this.register(MinimumPotentialFilter.FACTORY);
+    this.register(TeamsFilter.FACTORY);
 
     this.register(RarityMultiFilter.FACTORY);
     this.register(ClassMultiFilter.FACTORY);
@@ -63,7 +66,8 @@ export class FiltersManagerImpl implements FiltersManager {
         config,
         this,
         this.currentBlessing,
-        this.upcomingBlessing
+        this.upcomingBlessing,
+        this.teams
       );
     }
     console.error(

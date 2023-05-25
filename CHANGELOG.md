@@ -1,5 +1,6 @@
 ## 0.13.5 (NEXT)
 
+- Add filter by team, with an optional range parameter (e.g. 1;3-5 for teams 1, 3, 4 and 5)
 - Improve sort by power/potential: group equivalent girls by element
 - Fix a performance issue when editing teams in the harem
 - Make the quick equipment screen larger on small devices

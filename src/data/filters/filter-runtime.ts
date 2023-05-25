@@ -7,7 +7,8 @@ import {
   getBasePower,
   getBlessedStats,
   isEventSource,
-  Rarity
+  Rarity,
+  Team
 } from '../data';
 import { UnknownObject } from '../game-data';
 import { Filter, FilterConfig, FilterFactory } from './filter-api';
@@ -656,7 +657,7 @@ export class ShardsMultiFilter extends AbstractFilter {
 
 export class RarityFilter extends AbstractFilter {
   static ID = 'rarity-filter';
-  id = ShardsFilter.ID;
+  id = RarityFilter.ID;
 
   constructor(private rarity: Rarity) {
     super();
@@ -704,6 +705,86 @@ export class RarityFilter extends AbstractFilter {
         return new RarityFilter(rarity);
       }
       return undefined;
+    }
+  };
+}
+
+export class TeamsFilter extends AbstractFilter {
+  static ID = 'teams-filter';
+  id = TeamsFilter.ID;
+
+  constructor(private include: string, private teams: Team[]) {
+    super();
+    const filteredTeams = this.getFilteredTeams();
+    this.label =
+      teams.length === 0
+        ? 'Loading teams...'
+        : filteredTeams.length === this.teams.length
+        ? 'All teams'
+        : `Teams ${include}`;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    if (this.teams.length === 0) {
+      // Teams are not loaded yet; just display everything
+      return true;
+    }
+    const teams = this.getFilteredTeams();
+    return teams.some((team) => team.girlIds.some((id) => id === girl.id));
+  }
+
+  private getFilteredTeams(): Team[] {
+    const groups = this.include.split(';');
+    const teams: Set<number> = new Set();
+    for (const group of groups) {
+      if (group.includes('-')) {
+        const range = group.split('-');
+        const min = Number(range[0]);
+        const max = Number(range[1]);
+        if (!isNaN(min) && !isNaN(max) && min > 0) {
+          for (let i = min; i <= max; i++) {
+            teams.add(i);
+            if (i >= 16) {
+              break;
+            }
+          }
+        }
+      } else {
+        const value = Number(group);
+        if (!isNaN(value) && value > 0 && value <= 16) {
+          teams.add(value);
+        }
+      }
+    }
+    if (teams.size === 0) {
+      return this.teams;
+    }
+    const result: Team[] = [];
+    for (const teamNumber of teams) {
+      if (teamNumber < this.teams.length) {
+        result.push(this.teams[teamNumber - 1]);
+      }
+    }
+    return result;
+  }
+
+  getParams() {
+    return {
+      include: this.include
+    };
+  }
+
+  static FACTORY: FilterFactory<TeamsFilter> = {
+    type: TeamsFilter.ID,
+    create: (
+      config,
+      _filtersManager,
+      _currentBlessings,
+      _upcomingBlessings,
+      teams: Team[]
+    ) => {
+      const include = stringParam(config, 'include');
+      return new TeamsFilter(include ?? '', teams);
     }
   };
 }

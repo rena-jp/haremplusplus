@@ -88,6 +88,53 @@ export const NumberRangeControl: React.FC<NumberRangeControlProps> = ({
   );
 };
 
+export interface InputControlProps extends FilterControlProps {
+  input: string;
+  setInput(input: string): void;
+}
+
+export const InputControl: React.FC<InputControlProps> = ({
+  label,
+  description,
+  input,
+  setInput,
+  clear,
+  reapply,
+  isActive,
+  cssClasses
+}) => {
+  // Update range when input changes
+  const updateInput = useCallback(
+    (newInput: string) => {
+      setInput(newInput);
+    },
+    [setInput, input]
+  );
+
+  return (
+    <div
+      className={`filter-entry${isActive ? '' : ' inactive'}${
+        cssClasses === undefined || cssClasses.length === 0
+          ? ''
+          : ' ' + cssClasses.join(' ')
+      }`}
+    >
+      <FilterHeader
+        label={label}
+        description={description}
+        isActive={isActive}
+        clear={clear}
+        reapply={reapply}
+      />
+      <input
+        className="hh-text-input"
+        value={input}
+        onChange={(ev) => updateInput(ev.target.value)}
+      />
+    </div>
+  );
+};
+
 export interface ToggleListProps {
   options: ToggleOption[];
   values: boolean[];

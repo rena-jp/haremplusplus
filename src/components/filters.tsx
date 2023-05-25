@@ -14,9 +14,11 @@ import {
   ShardsMultiFilter,
   SourceMultiFilter,
   UpgradeReadyFilter,
-  EquippedFilter
+  EquippedFilter,
+  TeamsFilter
 } from '../data/filters/filter-runtime';
 import {
+  InputControl,
   LabeledToggle,
   NumberInputWithOptions,
   NumberRangeControl,
@@ -36,7 +38,8 @@ export interface FiltersProps extends PanelProps {
 export const FiltersPanel: React.FC<FiltersProps> = ({
   visible,
   currentBlessings,
-  upcomingBlessings
+  upcomingBlessings,
+  teams
 }) => {
   const className = `panel filters ${visible ? 'visible' : 'hidden'}`;
 
@@ -111,6 +114,12 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
+        />
+        <TeamsForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+          teams={teams}
         />
         <PotentialForm
           getActiveFilter={getActiveFilter}
@@ -918,8 +927,49 @@ const PotentialForm: React.FC<PotentialFormProps> = ({
   );
 };
 
+interface TeamsFormProps extends FormProps {
+  teams: Team[];
+}
+
+const TeamsForm: React.FC<TeamsFormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter,
+  teams
+}) => {
+  const createFilter = useCallback(
+    (input: string) => {
+      return new TeamsFilter(input, teams);
+    },
+    [teams]
+  );
+
+  const getInput = useCallback((filter: Filter) => {
+    const params = filter.getConfig()?.params;
+    const input = getStringParam(params?.include);
+    return input ?? '';
+  }, []);
+
+  return (
+    <InputForm
+      label="Teams"
+      description="Filter girls that belong to a Team. Use optional range for specific teams, e.g. 1; 3-5"
+      createFilter={createFilter}
+      getInput={getInput}
+      removeFilter={removeFilter}
+      updateFilter={updateFilter}
+      getActiveFilter={getActiveFilter}
+      filterId={TeamsFilter.ID}
+    />
+  );
+};
+
 function getNumberParam(value: unknown): number | undefined {
   return typeof value === 'number' ? value : undefined;
+}
+
+function getStringParam(value: unknown): string {
+  return typeof value === 'string' ? value : '';
 }
 
 interface FormProps {
@@ -933,6 +983,105 @@ interface LabeledProps {
   label: string;
   description: string;
 }
+
+interface InputFormProps extends FormProps, LabeledProps {
+  createFilter(input: string): Filter | undefined;
+  getInput(filter: Filter): string;
+  filterId: string;
+}
+
+const InputForm: React.FC<InputFormProps> = ({
+  label,
+  description,
+  updateFilter,
+  removeFilter,
+  getActiveFilter,
+  createFilter,
+  filterId,
+  getInput
+}) => {
+  const activeFilter = getActiveFilter(filterId);
+  const active = activeFilter !== undefined;
+
+  const [localFilter, setLocalFilter] = useState<Filter | undefined>(
+    activeFilter
+  );
+
+  // If the filter is active: display input from props (currently applied filter).
+  // Otherwise: display input from saved (disabled) filter. This allows saving
+  // the input values while the filter is disabled, to easily restore it later on.
+  const filterToDisplay = useMemo(
+    () => (active ? activeFilter : localFilter),
+    [activeFilter, localFilter]
+  );
+
+  if (activeFilter !== undefined && localFilter !== activeFilter) {
+    // The filter was updated externally (e.g. via restore defaults).
+    // In this case, update our local values.
+    setLocalFilter(activeFilter);
+  }
+
+  const input = useMemo<string>(
+    () => (filterToDisplay === undefined ? '' : getInput(filterToDisplay)),
+    [filterToDisplay]
+  );
+
+  const setInput = useCallback(
+    (input: string) => {
+      const newFilter = createFilter(input);
+      if (newFilter) {
+        // Valid; Enable or Update
+        updateFilter(newFilter);
+        setLocalFilter(newFilter);
+      } else {
+        // Invalid; Disable
+        if (localFilter !== undefined) {
+          removeFilter(localFilter);
+        }
+        setLocalFilter(undefined);
+      }
+    },
+    [localFilter, createFilter]
+  );
+
+  const clear = useCallback(() => {
+    if (localFilter !== undefined) {
+      removeFilter(localFilter);
+    }
+  }, [localFilter]);
+
+  const reapply = useMemo(() => {
+    if (localFilter !== undefined) {
+      return () => {
+        const newLocalFilter = createFilter(getInput(localFilter));
+        if (newLocalFilter !== undefined) {
+          setLocalFilter(newLocalFilter);
+          updateFilter(newLocalFilter);
+        }
+      };
+    } else {
+      return () => {
+        const newLocalFilter = createFilter('');
+        if (newLocalFilter !== undefined) {
+          setLocalFilter(newLocalFilter);
+          updateFilter(newLocalFilter);
+        }
+      };
+    }
+  }, [localFilter, createFilter, setLocalFilter, updateFilter]);
+
+  return (
+    <InputControl
+      label={label}
+      description={description}
+      input={input}
+      isActive={active}
+      setInput={setInput}
+      clear={clear}
+      reapply={reapply}
+    />
+  );
+};
 
 interface RangeFormProps extends FormProps, LabeledProps {
   createFilter(range: Range): Filter | undefined;

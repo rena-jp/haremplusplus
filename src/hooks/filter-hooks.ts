@@ -1,5 +1,11 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { BlessingDefinition } from '../data/data';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
+import { BlessingDefinition, Team } from '../data/data';
 import {
   Filter,
   FilterConfig,
@@ -72,19 +78,20 @@ export interface HaremStateResult {
   setShow0Pose(show: boolean): void;
 }
 
-export const useFilters: (
+export function useFilters(
   options: HaremOptions,
   currentBlessings: BlessingDefinition[],
-  upcomingBlessings: BlessingDefinition[]
-) => FilterState = (options, currentBlessings, upcomingBlessings) => {
+  upcomingBlessings: BlessingDefinition[],
+  teams: Team[]
+) {
   const [searchText, setSearchValue] = useState('');
   const setSearchText = useCallback((search: string) => {
     setSearchValue(search);
   }, []);
 
   const filtersManager = useMemo(
-    () => new FiltersManagerImpl(currentBlessings, upcomingBlessings),
-    [currentBlessings, upcomingBlessings]
+    () => new FiltersManagerImpl(currentBlessings, upcomingBlessings, teams),
+    [currentBlessings, upcomingBlessings, teams]
   );
 
   const [defaultFilterConfig, setDefaultFilterConfig] = useState(() => {
@@ -137,6 +144,14 @@ export const useFilters: (
     return new RootFilter(filters);
   }, [filters]);
 
+  // Update the active filter(s) when blessings or teams change
+  useEffect(() => {
+    const currentFilters = filtersRef.current;
+    const config = new RootFilter(currentFilters).getConfig();
+    const updatedFilter = getFilters(config, filtersManager);
+    setFilters(updatedFilter);
+  }, [currentBlessings, upcomingBlessings, teams, filtersManager]);
+
   const isDefaultFilter = useMemo(() => {
     const result =
       defaultFilterConfig !== undefined &&
@@ -177,7 +192,7 @@ export const useFilters: (
     removeFilter,
     setSearchText
   };
-};
+}
 
 function getFilters(
   filterConfig: FilterConfig | undefined,

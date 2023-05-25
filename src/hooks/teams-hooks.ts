@@ -19,7 +19,7 @@ export function useTeams(gameAPI: GameAPI): TeamsData {
     async (team: Team) => {
       await gameAPI.setTeam(team);
       const updatedTeams = await gameAPI.getTeams();
-      setTeams(updatedTeams);
+      setTeams([...updatedTeams]);
     },
     [gameAPI, setTeams]
   );

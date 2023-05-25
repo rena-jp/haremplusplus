@@ -82,7 +82,14 @@ export const Harem: React.FC<HaremProps> = ({
     setActiveTab(undefined);
   }, [setActiveTab]);
 
-  const filtersState = useFilters(options, currentBlessings, upcomingBlessings);
+  const teamsData = useTeams(gameAPI);
+
+  const filtersState = useFilters(
+    options,
+    currentBlessings,
+    upcomingBlessings,
+    teamsData.teams
+  );
   const sorterState = useSorter(options, currentBlessings, upcomingBlessings);
   const quickFiltersState = useQuickFilters(
     options,
@@ -129,8 +136,6 @@ export const Harem: React.FC<HaremProps> = ({
   }, [tabs, toggleTab, activeTab]);
 
   const classNames = ['qh-harem', haremMode];
-
-  const teamsData = useTeams(gameAPI);
 
   return (
     <>

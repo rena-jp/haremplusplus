@@ -1,4 +1,4 @@
-import { BlessingDefinition, CommonGirlData } from '../data';
+import { BlessingDefinition, CommonGirlData, Team } from '../data';
 import { UnknownObject } from '../game-data';
 import deepEqual from 'deep-equal';
 
@@ -40,7 +40,8 @@ export interface FilterFactory<T extends Filter> {
     filterConfig: FilterConfig,
     filterManager: FiltersManager,
     currentBlessing: BlessingDefinition[],
-    upcomingBlessing: BlessingDefinition[]
+    upcomingBlessing: BlessingDefinition[],
+    teams: Team[]
   ): T | undefined;
 }
 
