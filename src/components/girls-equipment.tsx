@@ -1,4 +1,12 @@
-import { useCallback, useContext, useRef, useState } from 'react';
+import {
+  EventHandler,
+  MouseEvent,
+  ReactNode,
+  useCallback,
+  useContext,
+  useRef,
+  useState
+} from 'react';
 import {
   Class,
   CommonGirlData,
@@ -8,6 +16,7 @@ import {
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
 import {
+  getSlotLabel,
   matchesClassResonance,
   matchesElementResonance,
   matchesPoseResonance,
@@ -27,15 +36,20 @@ import { PulseLoader } from 'react-spinners';
 import { QuickEquipment } from './quick-girl-equipment';
 import Popup from 'reactjs-popup';
 import { roundValue } from '../data/common';
+import { GirlsInventory } from './girls-inventory';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
   girl: CommonGirlData;
+  listGirls: CommonGirlData[];
+  showActions?: boolean;
 }
 
 export const EquipmentList: React.FC<EquipmentListProps> = ({
   equipment,
-  girl
+  girl,
+  listGirls,
+  showActions
 }) => {
   const [loading, setLoading] = useState(false);
   const loadingTimeout = useRef<string | number | NodeJS.Timeout | undefined>();
@@ -71,16 +85,26 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
             setLoading={delayedSetLoading}
           />
         ))}
-        <EquipAllAction
-          girl={girl}
-          loading={loading}
-          setLoading={delayedSetLoading}
-        />
-        <UnequipAllAction
-          girl={girl}
-          loading={loading}
-          setLoading={delayedSetLoading}
-        />
+        {showActions === undefined || showActions ? (
+          <>
+            <EquipAllAction
+              girl={girl}
+              loading={loading}
+              setLoading={delayedSetLoading}
+            />
+            <UnequipAllAction
+              girl={girl}
+              loading={loading}
+              setLoading={delayedSetLoading}
+            />
+            <OpenInventoryAction
+              girl={girl}
+              listGirls={listGirls}
+              loading={loading}
+              setLoading={delayedSetLoading}
+            />
+          </>
+        ) : null}
       </div>
     </>
   );
@@ -92,6 +116,8 @@ interface EquipmentTileProps {
   slotId: number;
   loading: boolean;
   setLoading(loading: boolean): void;
+  classNames?: string[];
+  onClick?: EventHandler<MouseEvent<unknown>>;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
@@ -99,7 +125,9 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   girl,
   slotId,
   loading,
-  setLoading
+  classNames,
+  setLoading,
+  onClick
 }) => {
   const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
@@ -107,6 +135,9 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   const img = equipment?.icon;
 
   const tileClassNames = ['item-tile', 'girl-item-tile'];
+  if (classNames) {
+    tileClassNames.push(...classNames);
+  }
   const imgClassNames = ['girls-equipment-icon', 'rarity-bg'];
   if (equipment !== undefined) {
     imgClassNames.push(Rarity[equipment.rarity]);
@@ -123,10 +154,14 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
     <img
       src={img}
       className={imgClassNames.join(' ')}
-      onClick={(ev) => {
-        ev.preventDefault();
-        openQuickEquipmentPopup();
-      }}
+      onClick={
+        onClick === undefined
+          ? (ev) => {
+              ev.preventDefault();
+              openQuickEquipmentPopup();
+            }
+          : onClick
+      }
     />
   );
 
@@ -140,7 +175,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   const slotLabel = getSlotLabel(slotId);
 
   return (
-    <div className={tileClassNames.join(' ')}>
+    <div className={tileClassNames.join(' ')} onClick={onClick}>
       {equipment === undefined ? (
         <Tooltip tooltip={slotLabel}>
           <a href={link} rel="noreferrer">
@@ -499,6 +534,47 @@ const UnequipAllAction: React.FC<EquipAllActionProps> = ({
   );
 };
 
+interface OpenInventoryActionProps extends EquipAllActionProps {
+  listGirls: CommonGirlData[];
+}
+
+const OpenInventoryAction: React.FC<OpenInventoryActionProps> = ({
+  girl,
+  listGirls,
+  loading
+}) => {
+  const [showInventoryPopup, setShowInventoryPopup] = useState(false);
+
+  return (
+    <div className="item-tile">
+      <Tooltip tooltip="Open Inventory">
+        <button
+          className="item-action open-inventory"
+          onClick={() => setShowInventoryPopup(true)}
+          disabled={loading}
+        >
+          {loading ? <PulseLoader color="#b77905" /> : null}
+        </button>
+      </Tooltip>
+      {showInventoryPopup ? (
+        <Popup
+          modal
+          open={showInventoryPopup}
+          onClose={() => setShowInventoryPopup(false)}
+        >
+          {
+            <GirlsInventory
+              girl={girl}
+              girls={listGirls}
+              close={() => setShowInventoryPopup(false)}
+            />
+          }
+        </Popup>
+      ) : null}
+    </div>
+  );
+};
+
 function getStatsDiff(
   newValue: number,
   refValue: number | undefined
@@ -509,22 +585,64 @@ function getStatsDiff(
   return newValue - refValue;
 }
 
-function getSlotLabel(slotId: number): string {
-  switch (slotId) {
-    case 1:
-      return 'Head';
-    case 2:
-      return 'Body';
-    case 3:
-      return 'Pants';
-    case 4:
-      return 'Boots';
-    case 5:
-      return 'Accessory';
-    case 6:
-      return 'Item';
-
-    default:
-      return 'Slot';
-  }
+export interface SimpleEquipmentTileProps {
+  equipment: Equipment | undefined;
+  slotId: number;
+  classNames?: string[];
+  children?: ReactNode;
+  girl?: CommonGirlData;
+  onClick?: EventHandler<MouseEvent<unknown>>;
 }
+
+export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
+  equipment,
+  classNames,
+  slotId,
+  children,
+  girl,
+  onClick
+}) => {
+  const img = equipment?.icon;
+
+  const tileClassNames = ['item-tile', 'girl-item-tile'];
+  if (classNames) {
+    tileClassNames.push(...classNames);
+  }
+  const imgClassNames = ['girls-equipment-icon', 'rarity-bg'];
+  if (equipment !== undefined) {
+    imgClassNames.push(Rarity[equipment.rarity]);
+  } else {
+    imgClassNames.push('none');
+  }
+
+  const icon = <img src={img} className={imgClassNames.join(' ')} />;
+
+  const slotLabel = getSlotLabel(slotId);
+
+  return (
+    <div className={tileClassNames.join(' ')} onClick={onClick}>
+      {equipment === undefined ? (
+        <Tooltip tooltip={slotLabel}>{icon}</Tooltip>
+      ) : (
+        <>
+          <Tooltip
+            place="right"
+            tooltip={
+              <EquipmentTooltip
+                equipment={equipment}
+                currentEquipment={equipment}
+                girl={girl}
+              />
+            }
+          >
+            <div className="girl-item-icon-wrapper">
+              {icon}
+              <div className="item-level-decorator">{equipment.level}</div>
+              {children}
+            </div>
+          </Tooltip>
+        </>
+      )}
+    </div>
+  );
+};

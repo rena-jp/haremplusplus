@@ -398,19 +398,20 @@ export class MockGameAPI implements GameAPI {
     return;
   }
 
-  async equipAll(_girl: CommonGirlData): Promise<void> {
+  async equipAll(_girl: CommonGirlData): Promise<GirlEquipment[]> {
     // TODO mock
     console.log('Mock Equip All (Not supported yet)');
+    return [];
   }
 
-  async unequipAll(girl: CommonGirlData): Promise<void> {
-    const result = new Promise<void>((resolve, _reject) => {
+  async unequipAll(girl: CommonGirlData): Promise<GirlEquipment[]> {
+    const result = new Promise<GirlEquipment[]>((resolve, _reject) => {
       setTimeout(() => {
         if (girl.equipment && girl.equipment.items.length > 0) {
           girl.equipment.items = [];
           if (this.updateGirl) {
             this.updateGirl(girl);
-            resolve();
+            resolve([]);
           }
         }
       }, 150);
@@ -418,19 +419,25 @@ export class MockGameAPI implements GameAPI {
     return result;
   }
 
-  async equipOne(_girl: CommonGirlData, _item: Equipment): Promise<void> {
+  async equipOne(
+    _girl: CommonGirlData,
+    _item: Equipment
+  ): Promise<GirlEquipment[]> {
     // TODO mock
     console.log('Mock Equip One (Not supported yet)');
 
     return new Promise((resolve, _reject) => {
       setTimeout(() => {
-        resolve();
+        resolve([]);
       }, 150);
     });
   }
 
-  async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
-    const result = new Promise<void>((resolve, _reject) => {
+  async unequipOne(
+    girl: CommonGirlData,
+    item: Equipment
+  ): Promise<GirlEquipment[]> {
+    const result = new Promise<GirlEquipment[]>((resolve, _reject) => {
       setTimeout(() => {
         if (girl.equipment && girl.equipment.items) {
           const itemToRemove = girl.equipment.items.findIndex(
@@ -443,13 +450,13 @@ export class MockGameAPI implements GameAPI {
             }
           }
         }
-        resolve();
+        resolve([]);
       }, 150);
     });
     return result;
   }
 
-  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<void> {
+  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<GirlEquipment[]> {
     const modifiedGirls: CommonGirlData[] = [];
     for (const girl of allGirls) {
       if (girl.equipment !== undefined && girl.equipment.items.length > 0) {
@@ -462,6 +469,7 @@ export class MockGameAPI implements GameAPI {
         this.updateGirl(girl);
       }
     }
+    return [];
   }
 
   async getGirlsInventory(

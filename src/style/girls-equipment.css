@@ -8,8 +8,8 @@
 
 img.girls-equipment-icon,
 button.item-action {
-  border: 2px solid white;
-  border-radius: 10px;
+  border: var(--border-width) solid white;
+  border-radius: 8px;
 
   height: calc(var(--image-size) / 2);
   width: calc(var(--image-size) / 2);
@@ -60,6 +60,12 @@ button.equip-all {
 
 button.unequip-all {
   background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
+}
+
+button.open-inventory {
+  background-image: url(https://hh2.hh-content.com//design/resource_backpack.png);
+  background-size: 75% 75%;
+  background-origin: content-box;
 }
 
 button.item-action {
@@ -213,16 +219,18 @@ button.item-action {
 
 .item-level-decorator {
   position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   bottom: 3px;
   left: 3px;
   background-color: #b14;
   border: min(2px, var(--border-width)) solid #f70;
   border-radius: 100%;
-  width: 20%;
-  height: 20%;
+  width: 30%;
+  height: 30%;
   font-size: 0.7em;
   text-align: center;
   line-height: 100%;
-  padding: min(3px, calc(2 * var(--border-width)));
   pointer-events: none;
 }

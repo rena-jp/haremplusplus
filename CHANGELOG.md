@@ -1,5 +1,6 @@
 ## 0.13.5 (NEXT)
 
+- Add a new screen to manage girls equipment/inventory
 - Use the new Ajax requests to load the Market inventory (Books/Gifts)
 - Add filter by team, with an optional range parameter (e.g. 1;3-5 for teams 1, 3, 4 and 5)
 - Improve sort by power/potential: group equivalent girls by element

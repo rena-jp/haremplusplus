@@ -1,0 +1,205 @@
+.girls-inventory {
+  background-color: rgba(30, 30, 30, 0.9);
+  border: 1px solid goldenrod;
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+
+  width: 80vw;
+  height: 60vh;
+}
+
+.girls-inventory-content {
+  display: flex;
+  flex-direction: row;
+  column-gap: 1rem;
+
+  min-height: 0;
+
+  font-size: 1.25em;
+}
+
+.girls-inventory-content > .girls-list > div.inv-placeholder {
+  display: none;
+}
+
+.item-slot.selected img.girls-equipment-icon {
+  border-color: dodgerblue;
+}
+
+.girls-inventory-content > * {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.girls-inventory-content > .girls-list {
+  display: grid;
+  grid-template-columns: repeat(14, auto);
+  grid-template-rows: auto calc(var(--image-size) / 2);
+  flex-direction: column;
+  min-width: fit-content;
+
+  padding: 1rem;
+
+  align-content: start;
+  align-items: stretch;
+
+  padding-right: 30px;
+
+  --icon-height: 30px;
+}
+
+.girls-inventory-content > .girls-list > .item-slot,
+.girls-inventory-content > .girls-list > .inv-placeholder {
+  padding-right: 4px;
+  box-sizing: border-box;
+}
+
+.girls-inventory-content > .girls-list > .stat-res,
+.girls-inventory-content > .girls-list > .stat {
+  display: flex;
+  flex-direction: row;
+  column-gap: 0.25em;
+  row-gap: 0.25em;
+}
+
+.girls-inventory-content > .girls-list > .stat-res.header {
+  flex-direction: row;
+}
+.girls-inventory-content > .girls-list > div.stat,
+.girls-inventory-content > .girls-list > div.stat-res {
+  width: 4ch;
+  padding: 0px;
+}
+
+.girls-inventory-content > .girls-list > div.stat-res {
+  width: 5.5ch;
+}
+
+.girls-inventory-content > .girls-list > .stat > .stat-bonus.pos:before,
+.girls-inventory-content > .girls-list > .stat-res > .stat-bonus.pos:before {
+  content: '+';
+}
+
+.stat-bonus.pos {
+  color: green;
+}
+
+.stat-bonus.neg {
+  color: red;
+}
+
+@media screen and (max-width: 1800px) {
+  /**
+  * Hide item cells on smaller screens. Show a single placeholder
+  * instead.
+  */
+  .girls-inventory-content > .girls-list {
+    grid-template-columns: repeat(9, auto);
+  }
+  .girls-inventory-content > .girls-list > .item-slot {
+    display: none;
+  }
+
+  .girls-inventory-content > .girls-list > .item-slot.selected {
+    display: flex;
+  }
+
+  .girls-inventory-content > .girls-list > div.inv-placeholder {
+    display: flex;
+  }
+
+  .item-slot.selected img.girls-equipment-icon {
+    border-color: white; /* No need for selection color when we show a single cell anyway */
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .girls-inventory {
+    width: 85vw;
+    height: 90vh;
+  }
+
+  /**
+  * Also hide stat cells on very small screens (Only keep
+  * total stats)
+  */
+  .girls-inventory-content > .girls-list {
+    grid-template-columns: repeat(6, auto);
+  }
+
+  .girls-inventory-content > .girls-list > .stat {
+    display: none;
+  }
+
+  .girls-inventory-content > .girls-list > .total-stats {
+    display: flex;
+  }
+}
+
+.girls-inventory-content > .girls-list > * > .stat-value {
+  display: none;
+}
+
+.girls-inventory-content > .girls-list > .equipment > .stat-value {
+  display: initial;
+}
+
+.girls-inventory-content > .girls-list > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding-inline: 0.25em; */
+}
+
+.girls-inventory-content > .girls-list > div.stat,
+.girls-inventory-content > .girls-list > div.stat-res {
+  border: 1px dashed grey;
+  border-radius: 0px;
+}
+
+.girls-inventory-content > .girls-list > div.header {
+  height: var(--icon-height);
+}
+
+.girls-inventory-content > .girls-list > div.header,
+.girls-inventory-content > .girls-list > div.equipment {
+  border: none;
+  position: sticky;
+  top: 0px;
+  background-color: rgba(30, 30, 30, 0.9);
+  z-index: 50;
+}
+
+.girls-inventory-content > .girls-list > div.equipment {
+  top: var(--icon-height);
+}
+
+.girls-inventory-content > .girls-list > div > .stat-icon,
+.girls-inventory-content > .girls-list > div > .ego-icon,
+.girls-inventory-content > .girls-list > div > .attack-icon,
+.girls-inventory-content > .girls-list > div > .defense-icon {
+  width: var(--icon-height);
+  height: var(--icon-height);
+}
+
+.girls-inventory-content > .girls-list .qh-girls-equipment {
+  flex-wrap: nowrap;
+}
+
+.girls-inventory-content > .girls-list .tile-avatar {
+  height: calc(var(--image-size) * 0.5);
+  width: calc(var(--image-size) * 0.5);
+}
+
+.girls-inventory-content > .qh-inventory {
+  display: flex;
+  flex-direction: row;
+  padding: 0.5rem;
+  flex-wrap: wrap;
+  column-gap: 1em;
+  row-gap: 0.5em;
+
+  align-content: flex-start;
+}

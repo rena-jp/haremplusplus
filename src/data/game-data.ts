@@ -279,6 +279,9 @@ export interface GirlsSalaryEntry {
   pay_in: number;
 }
 
+/**
+ * Represents an item currently equipped by a girl.
+ */
 export interface ArmorData {
   id_girl_armor_equipped: NumberString;
   id_member: NumberString;
@@ -300,6 +303,9 @@ export interface ArmorData {
   resonance_bonuses: ResonanceBonuses;
 }
 
+/**
+ * Represents an item currently in the inventory.
+ */
 export interface GirlEquipment {
   id_girl_armor: NumberString;
   id_member: NumberString;
@@ -947,6 +953,8 @@ export interface UnequipActionResult extends RequestResult {
     carac2: number;
     carac3: number;
   };
+
+  inventory_armor: GirlEquipment[] | GirlEquipment | null | undefined;
 }
 
 export interface EquipActionResult extends UnequipActionResult {

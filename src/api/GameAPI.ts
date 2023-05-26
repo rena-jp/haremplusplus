@@ -189,35 +189,40 @@ export interface GameAPI {
    * Automatically equip the girl with the best available
    * items.
    * @param girl the girl to equip
+   * @return the updated inventory
    */
-  equipAll(girl: CommonGirlData): Promise<void>;
+  equipAll(girl: CommonGirlData): Promise<GirlEquipment[]>;
 
   /**
    * Unequip all items from this girl.
    * @param girl the girl to unequip
+   * @return the updated inventory
    */
-  unequipAll(girl: CommonGirlData): Promise<void>;
+  unequipAll(girl: CommonGirlData): Promise<GirlEquipment[]>;
 
   /**
    * Equip a single item for this girl.
    * @param girl the girl to equip
    * @param item the item to equip
+   * @return the updated inventory
    */
-  equipOne(girl: CommonGirlData, item: Equipment): Promise<void>;
+  equipOne(girl: CommonGirlData, item: Equipment): Promise<GirlEquipment[]>;
 
   /**
    * Unequip a single item from this girl.
    * @param girl the girl to unequip
    * @param item the item to unequip
+   * @return the updated inventory
    */
-  unequipOne(girl: CommonGirlData, item: Equipment): Promise<void>;
+  unequipOne(girl: CommonGirlData, item: Equipment): Promise<GirlEquipment[]>;
 
   /**
    * Unequip all items from all girls.
    *
    * @param allGirls all girls data
+   * @return the updated inventory
    */
-  unequipAllGirls(allGirls: CommonGirlData[]): Promise<void>;
+  unequipAllGirls(allGirls: CommonGirlData[]): Promise<GirlEquipment[]>;
 
   /**
    * Return the inventory for girls equipment.

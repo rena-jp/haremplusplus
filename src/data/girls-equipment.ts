@@ -5,6 +5,8 @@ import {
   EquipmentData,
   Stats
 } from './data';
+import { GirlEquipment } from './game-data';
+import { importEquipment } from './import/harem-import';
 
 export const SLOTS_COUNT = 6;
 
@@ -77,4 +79,61 @@ export function matchesPoseResonance(
     equipment.resonance.pose !== undefined &&
     equipment.resonance.pose === girl.pose
   );
+}
+
+export function getSlotLabel(slotId: number): string {
+  switch (slotId) {
+    case 1:
+      return 'Head';
+    case 2:
+      return 'Body';
+    case 3:
+      return 'Pants';
+    case 4:
+      return 'Boots';
+    case 5:
+      return 'Accessory';
+    case 6:
+      return 'Item';
+
+    default:
+      return 'Slot';
+  }
+}
+
+export function updateInventory(
+  inventory: EquipmentData,
+  update: GirlEquipment[],
+  slotToUpdate: number
+): EquipmentData {
+  // Keep the inventory as-is for unchanged slots. Remove all items
+  // for the changed slot.
+  const newInventory = [...inventory.items].filter(
+    (item) => item.slot !== slotToUpdate
+  );
+  const qhInventory = importEquipment(update);
+  // Add all items of the changed slot based on the inventory update
+  newInventory.push(
+    ...qhInventory.items.filter((item) => item.slot === slotToUpdate)
+  );
+
+  // Sort inventory again
+  sortInventory(newInventory);
+
+  return { items: newInventory };
+}
+
+export function sortInventory(inventory: Equipment[]): void {
+  inventory.sort((e1, e2) => {
+    if (e1.rarity !== e2.rarity) {
+      return e2.rarity - e1.rarity;
+    }
+    if (e1.level !== e2.level) {
+      return e2.level - e1.level;
+    }
+    if (e1.slot !== e2.slot) {
+      return e1.slot - e2.slot;
+    }
+    return e1.uid - e2.uid;
+  });
 }

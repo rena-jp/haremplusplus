@@ -308,6 +308,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       ) : null}
       <GirlDescription
         allGirls={allGirls}
+        listGirls={ownedGirls}
         girl={selectedGirl}
         activeBlessing={currentBlessings}
         nextBlessing={upcomingBlessings}

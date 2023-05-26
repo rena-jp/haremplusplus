@@ -138,8 +138,8 @@ export interface Equipment {
 
 export interface EquipmentStats extends Stats {
   ego: number;
-  defense: number;
   attack: number;
+  defense: number;
 }
 
 export interface EquipmentResonance {

@@ -51,7 +51,18 @@ import { UpgradePage } from './upgrade';
 import { EquipmentList } from './girls-equipment';
 
 export interface GirlDescriptionProps {
+  /**
+   * All girls.
+   */
   allGirls: CommonGirlData[];
+  /**
+   * All girls visible with the current filter. Used
+   * to populate the Equipment Inventory.
+   */
+  listGirls: CommonGirlData[];
+  /**
+   * The currently selected girl (optional)
+   */
   girl?: CommonGirlData;
   activeBlessing: BlessingDefinition[];
   nextBlessing: BlessingDefinition[];
@@ -66,6 +77,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   nextBlessing,
   show0Pose,
   allGirls,
+  listGirls,
   selectGirl,
   openUpgrade
 }) => {
@@ -164,6 +176,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               ) : (
                 <BlessingSection
                   girl={girl}
+                  listGirls={listGirls}
                   currentBlessing={activeBlessing}
                   upcomingBlessing={nextBlessing}
                   domain={domain}
@@ -186,6 +199,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
 export interface BlessingSectionProps {
   domain: string;
   girl: CommonGirlData;
+  listGirls: CommonGirlData[];
   currentBlessing: BlessingDefinition[];
   upcomingBlessing: BlessingDefinition[];
   openUpgrade(page: UpgradePage): void;
@@ -194,6 +208,7 @@ export interface BlessingSectionProps {
 export const BlessingSection: React.FC<BlessingSectionProps> = ({
   domain,
   girl,
+  listGirls,
   currentBlessing,
   upcomingBlessing,
   openUpgrade
@@ -217,7 +232,11 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
       {girl.equipment !== undefined ? (
         <>
           <p>Equipment:</p>
-          <EquipmentList equipment={girl.equipment} girl={girl} />
+          <EquipmentList
+            equipment={girl.equipment}
+            girl={girl}
+            listGirls={listGirls}
+          />
         </>
       ) : null}
       {girl.recruited ? (

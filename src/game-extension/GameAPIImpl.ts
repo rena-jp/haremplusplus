@@ -3,7 +3,6 @@ import {
   CommonGirlData,
   Equipment,
   getPoseN,
-  getRarity,
   Gift,
   QuestData,
   Team
@@ -549,7 +548,7 @@ export class GameAPIImpl implements GameAPI {
     return this.getHero().currencies.soft_currency;
   }
 
-  async unequipAll(girl: CommonGirlData): Promise<void> {
+  async unequipAll(girl: CommonGirlData): Promise<GirlEquipment[]> {
     const action = {
       action: 'girl_equipment_unequip_all',
       id_girl: girl.id
@@ -568,9 +567,14 @@ export class GameAPIImpl implements GameAPI {
         result
       );
     }
+    // TODO Return the updated inventory. Unused for now.
+    return [];
   }
 
-  async unequipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
+  async unequipOne(
+    girl: CommonGirlData,
+    item: Equipment
+  ): Promise<GirlEquipment[]> {
     const action = {
       action: 'girl_equipment_unequip',
       id_girl_armor_equipped: item.uid,
@@ -589,6 +593,12 @@ export class GameAPIImpl implements GameAPI {
             this.updateGirl(girl);
           }
         }
+
+        const inventory = result.inventory_armor;
+        if (inventory !== undefined && inventory !== null) {
+          const items = Array.isArray(inventory) ? inventory : [inventory];
+          return items;
+        }
       }
     } else {
       console.error(
@@ -596,9 +606,11 @@ export class GameAPIImpl implements GameAPI {
         result
       );
     }
+    // TODO Throw?
+    return [];
   }
 
-  async equipAll(girl: CommonGirlData): Promise<void> {
+  async equipAll(girl: CommonGirlData): Promise<GirlEquipment[]> {
     const action = {
       action: 'girl_equipment_equip_all',
       id_girl: girl.id
@@ -618,9 +630,14 @@ export class GameAPIImpl implements GameAPI {
         result
       );
     }
+    // TODO Return the updated inventory. Unused for now.
+    return [];
   }
 
-  async equipOne(girl: CommonGirlData, item: Equipment): Promise<void> {
+  async equipOne(
+    girl: CommonGirlData,
+    item: Equipment
+  ): Promise<GirlEquipment[]> {
     const params = {
       action: 'girl_equipment_equip',
       id_girl: girl.id,
@@ -654,15 +671,24 @@ export class GameAPIImpl implements GameAPI {
       if (this.updateGirl) {
         this.updateGirl(girl);
       }
+
+      const inventory = result.inventory_armor;
+      if (inventory !== undefined && inventory !== null) {
+        const items = Array.isArray(inventory) ? inventory : [inventory];
+        return items;
+      }
     } else {
       console.error(
         'EquipOne: Failed to equip the girl: invalid request result',
         result
       );
     }
+
+    // TODO Throw?
+    return [];
   }
 
-  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<void> {
+  async unequipAllGirls(allGirls: CommonGirlData[]): Promise<GirlEquipment[]> {
     const params = {
       action: 'girl_equipment_unequip_all_girls'
     };
@@ -686,17 +712,20 @@ export class GameAPIImpl implements GameAPI {
         result
       );
     }
+    // TODO Return the updated inventory. Unused for now.
+    return [];
   }
 
   async getGirlsInventory(
     girl: CommonGirlData,
-    slot?: number | undefined
+    slot?: number | undefined,
+    sortByRarity = false
   ): Promise<GirlEquipment[]> {
     if (slot !== undefined) {
       const params = {
         action: 'girl_equipment_list',
         slot_index: slot,
-        sort_by: 'resonance',
+        sort_by: sortByRarity ? 'rarity' : 'resonance',
         sorting_order: 'desc',
         page: 1,
         id_girl: girl.id
@@ -709,9 +738,8 @@ export class GameAPIImpl implements GameAPI {
       // Return all
       const result: GirlEquipment[] = [];
       for (let slot = 1; slot <= 6; slot++) {
-        result.push(...(await this.getGirlsInventory(girl, slot)));
+        result.push(...(await this.getGirlsInventory(girl, slot, true)));
       }
-      result.sort((e1, e2) => getRarity(e2.rarity) - getRarity(e1.rarity));
       return result;
     }
     return [];

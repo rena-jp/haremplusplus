@@ -94,6 +94,9 @@ requiring actual content. */
 .stat-icon.class_2 {
   background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/3.png);
 }
+.stat-icon.class_rainbow {
+  background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/16.svg);
+}
 
 .pose-icon {
   display: inline-block;

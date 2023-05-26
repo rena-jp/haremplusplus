@@ -403,7 +403,7 @@ export const StatsList: React.FC<StatsProps> = ({
 };
 
 export interface StatIconProps {
-  statClass: Class;
+  statClass: Class | 'rainbow';
   blessed?: boolean;
 }
 
