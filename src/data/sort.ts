@@ -176,6 +176,7 @@ export const LevelSorter: ConfiguredSort = {
     maxGrade(),
     grade(),
     shards(),
+    element(),
     id()
   )
 };
@@ -191,6 +192,7 @@ export const GradeSorter: ConfiguredSort = {
     maxLevel(),
     level(),
     shards(),
+    element(),
     id()
   )
 };
@@ -226,6 +228,7 @@ export const RaritySorter: ConfiguredSort = {
     grade(),
     level(),
     shards(),
+    element(),
     id()
   )
 };
@@ -239,6 +242,7 @@ export const RecruitedSorter: ConfiguredSort = {
     rarity(),
     maxGrade(),
     shards(),
+    element(),
     id()
   )
 };
