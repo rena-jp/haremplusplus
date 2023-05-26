@@ -401,6 +401,6 @@
   }
 }
 
-.hide-tooltips .react-tooltip {
+.hide-tooltips > #harem-tooltip {
   display: none;
 }

@@ -3,10 +3,11 @@ import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
 import { BlessingDefinition, CommonGirlData, Element } from '../data/data';
 import { GirlDescription } from './description';
-import { GirlTile } from './girl';
+import { GIRL_TOOLTIP_ID, GirlTile } from './girl';
 import { Teams } from './teams';
 import { UpgradePage } from './upgrade';
 import { TeamsData } from '../hooks/teams-hooks';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 /**
  * Number of girls to be rendered immediately. Should be small (< 100 items)
@@ -288,6 +289,11 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
             />
           ))}
         </div>
+        <ReactTooltip
+          id={GIRL_TOOLTIP_ID}
+          className="qh-tooltip"
+          classNameArrow="qh-tooltip-arrow"
+        />
       </div>
       {haremMode === 'edit-teams' ? (
         <Teams

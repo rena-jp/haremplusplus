@@ -2,6 +2,7 @@ import React, {
   ReactNode,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState
 } from 'react';
@@ -9,15 +10,19 @@ import LazyLoad from 'react-lazyload';
 import { BlessingDefinition, CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
-import { ElementIcon, Grade, SalaryIcon, Tooltip, UpgradeIcon } from './common';
+import { ElementIcon, Grade, SalaryIcon, UpgradeIcon } from './common';
 import { EquipmentDecorators } from './girls-equipment';
 import { GirlTooltip } from './girl-tooltip';
+import ReactDOMServer from 'react-dom/server';
+
+export const GIRL_TOOLTIP_ID = 'harem-tooltip';
 
 export interface GirlTileProps {
   girl: CommonGirlData;
   selected: boolean;
   show0Pose: boolean;
   lazy?: boolean;
+  tooltipContent?: string;
 }
 
 export interface SimpleGirlTileProps extends GirlTileProps {
@@ -38,7 +43,8 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   children,
   avatarOverlay,
   classNames,
-  lazy
+  lazy,
+  tooltipContent
 }) => {
   const avatarOverlayWithElement = (
     <>
@@ -66,6 +72,7 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
       classNames={classNames}
       lazy={lazy}
       show0Pose={show0Pose}
+      tooltipContent={tooltipContent}
     />
   );
 };
@@ -80,6 +87,7 @@ export interface BaseGirlTileProps {
   selected?: boolean;
   show0Pose?: boolean;
   lazy?: boolean;
+  tooltipContent?: string;
 }
 
 /**
@@ -98,7 +106,8 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
   classNames,
   selected,
   show0Pose,
-  lazy
+  lazy,
+  tooltipContent
 }) => {
   const allClassNames = ['girlTile'];
   if (girl !== undefined) {
@@ -148,6 +157,8 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
       onClick={onClick}
       title={girl?.name}
       ref={tileRef}
+      data-tooltip-id={GIRL_TOOLTIP_ID}
+      data-tooltip-html={tooltipContent}
     >
       {children}
       <div className="avatar-area">
@@ -205,7 +216,6 @@ export interface HaremGirlTileProps extends GirlTileProps {
    */
   payAt: number | undefined;
   selectGirl(girl: CommonGirlData): void;
-  showTooltip?: boolean;
   currentBlessings?: BlessingDefinition[];
 }
 
@@ -220,7 +230,6 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   collectSalary,
   payAt,
   lazy,
-  showTooltip,
   currentBlessings
 }) => {
   const selectOnClick = useCallback(() => selectGirl(girl), [selectGirl, girl]);
@@ -266,7 +275,13 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
     }
   }, [collectSalary, selectOnClick, girl, salaryReady]);
 
-  const tile = (
+  const tooltipContent = useMemo(() => {
+    return ReactDOMServer.renderToStaticMarkup(
+      <GirlTooltip girl={girl} currentBlessings={currentBlessings} />
+    );
+  }, [girl, currentBlessings]);
+
+  return (
     <SimpleGirlTile
       girl={girl}
       onClick={onClick}
@@ -285,20 +300,11 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
         </>
       }
       lazy={lazy}
+      tooltipContent={tooltipContent}
     >
       {girl.own ? <span className="girl-header">{displayedLevel}</span> : null}
       {girl.upgradeReady ? <UpgradeIcon /> : null}
     </SimpleGirlTile>
-  );
-
-  return showTooltip === true ? (
-    <Tooltip
-      tooltip={<GirlTooltip girl={girl} currentBlessings={currentBlessings} />}
-    >
-      {tile}
-    </Tooltip>
-  ) : (
-    tile
   );
 };
 
