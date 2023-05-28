@@ -1,4 +1,4 @@
-## 0.13.5 (NEXT)
+## 0.13.5 - 2023-05-28
 
 - Add a new screen to manage girls equipment/inventory
 - Use the new Ajax requests to load the Market inventory (Books/Gifts)
