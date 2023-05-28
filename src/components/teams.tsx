@@ -3,7 +3,13 @@ import '../style/teams.css';
 import '../style/common.css';
 import { CloseButton, ElementIcon, format, getDomain, Tooltip } from './common';
 import { GirlTooltip } from './girl-tooltip';
-import { useCallback, useContext, useState, MutableRefObject } from 'react';
+import {
+  useCallback,
+  useContext,
+  useState,
+  MutableRefObject,
+  useEffect
+} from 'react';
 import { TeamStats, useTeamStats } from '../hooks/team-hooks';
 import { BaseGirlTile } from './girl';
 import { GameAPIContext } from '../data/game-api-context';
@@ -51,7 +57,20 @@ export const Teams: React.FC<TeamsProps> = ({
     setTeam(undefined);
   }, [setTeam]);
 
-  const { teams, loading } = teamsData;
+  const { teams, loading: teamsLoading, refresh } = teamsData;
+
+  // Always refresh teams when opening the teams screen; we want to make sure
+  // they are up-to-date before editing them.
+  const [firstLoad, setFirstLoad] = useState(true);
+
+  useEffect(() => {
+    if (!teamsLoading) {
+      refresh();
+    }
+    setFirstLoad(false);
+  }, []);
+
+  const loading = teamsLoading || firstLoad;
 
   return (
     <div className="teams-section">

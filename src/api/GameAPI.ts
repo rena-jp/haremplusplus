@@ -171,7 +171,7 @@ export interface GameAPI {
   /**
    * Get the list of teams.
    */
-  getTeams(): Promise<Team[]>;
+  getTeams(refresh: boolean): Promise<Team[]>;
 
   /**
    * Update the specified team.

@@ -3,6 +3,7 @@ import {
   CommonGirlData,
   Equipment,
   getPoseN,
+  getRarity,
   Gift,
   QuestData,
   Team
@@ -704,6 +705,14 @@ export class GameAPIImpl implements GameAPI {
       if (GirlEquipmentResult.is(result) && result.success) {
         return result.items;
       }
+    } else {
+      // Return all
+      const result: GirlEquipment[] = [];
+      for (let slot = 1; slot <= 6; slot++) {
+        result.push(...(await this.getGirlsInventory(girl, slot)));
+      }
+      result.sort((e1, e2) => getRarity(e2.rarity) - getRarity(e1.rarity));
+      return result;
     }
     return [];
   }
@@ -1051,8 +1060,8 @@ export class GameAPIImpl implements GameAPI {
 
   private teams: Team[] | undefined;
 
-  async getTeams(): Promise<Team[]> {
-    if (this.teams === undefined) {
+  async getTeams(refresh: boolean): Promise<Team[]> {
+    if (this.teams === undefined || refresh) {
       const teamsData = await this.requestFromTeams(
         'teams_data',
         TeamsData.isTeamsData,

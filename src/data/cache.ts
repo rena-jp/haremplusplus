@@ -1,5 +1,5 @@
 import { GameAPI } from '../api/GameAPI';
-import { HaremData } from './data';
+import { HaremData, Team } from './data';
 import { FilterConfig } from './filters/filter-api';
 import { GameBlessing, GameBlessingData, GemsData } from './game-data';
 import { SortConfig } from './sort';
@@ -295,4 +295,40 @@ export async function loadDefaultSort(): Promise<SortConfig> {
     );
   }
   return Promise.reject('Failed to load sorter from cache');
+}
+
+const TEAMS_REQUEST = 'teams.json';
+
+export async function persistTeams(teams: Team[]): Promise<void> {
+  try {
+    const cache = await caches.open(DATA_CACHE);
+    await cache.put(
+      new Request(TEAMS_REQUEST),
+      new Response(JSON.stringify(teams), {
+        headers: { 'Content-Type': 'application/json' }
+      })
+    );
+  } catch (error) {
+    console.error('[Teams] Failed to persist teams. Reason: ', error);
+    return Promise.reject(['[Teams] Failed to persist teams. Reason: ', error]);
+  }
+}
+
+export async function loadTeams(): Promise<Team[] | undefined> {
+  try {
+    if (await caches.has(DATA_CACHE)) {
+      const cache = await caches.open(DATA_CACHE);
+      const storedTeams = await cache.match(new Request(TEAMS_REQUEST));
+      if (storedTeams) {
+        const teams = await storedTeams.json();
+        return Array.isArray(teams) ? teams : undefined;
+      }
+    }
+  } catch (error) {
+    console.warn(
+      'An error occurred while trying to load teams from cache:',
+      error
+    );
+  }
+  return Promise.reject('Failed to load teams from cache');
 }

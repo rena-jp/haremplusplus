@@ -3,6 +3,7 @@ import {
   CommonGirlData,
   Equipment,
   getPoseN,
+  getRarity,
   Gift,
   QuestData,
   Team
@@ -467,11 +468,8 @@ export class MockGameAPI implements GameAPI {
     girl: CommonGirlData,
     slot?: number | undefined
   ): Promise<GirlEquipment[]> {
-    console.log('Try get inventory for slot: ', slot);
     const result = new Promise<GirlEquipment[]>((resolve, reject) => {
-      console.log('Start timer...');
       setTimeout(async () => {
-        console.log('Start execution...');
         if (slot !== undefined) {
           const slotKey = String(slot);
           const inventoryInSlot = { ...girlsInventory }[slotKey];
@@ -480,19 +478,17 @@ export class MockGameAPI implements GameAPI {
             'items' in inventoryInSlot &&
             Array.isArray(inventoryInSlot.items)
           ) {
-            console.log('Valid; resolve');
             resolve(inventoryInSlot.items as unknown[] as GirlEquipment[]);
           } else {
-            console.log('Invalid; reject');
             reject('Missing inventory or invalid slot?');
           }
         } else {
           // Return all
-          console.log('Return for all slots');
           const result: GirlEquipment[] = [];
           for (let slot = 1; slot <= 6; slot++) {
             result.push(...(await this.getGirlsInventory(girl, slot)));
           }
+          result.sort((e1, e2) => getRarity(e2.rarity) - getRarity(e1.rarity));
           resolve(result);
         }
       }, 150);
@@ -514,9 +510,9 @@ export class MockGameAPI implements GameAPI {
 
   private teams: Team[] | undefined;
 
-  async getTeams(): Promise<Team[]> {
+  async getTeams(refresh: boolean): Promise<Team[]> {
     return new Promise((resolve) => {
-      if (this.teams !== undefined) {
+      if (this.teams !== undefined && !refresh) {
         resolve(this.teams);
       } else {
         setTimeout(() => {
@@ -634,7 +630,7 @@ export class MockGameAPI implements GameAPI {
 
   async setTeam(team: Team): Promise<void> {
     if (this.teams === undefined) {
-      this.teams = await this.getTeams();
+      this.teams = await this.getTeams(false);
     }
     const currentTeam = this.teams.findIndex((t) => t.teamId === team.teamId);
     if (currentTeam >= 0) {
