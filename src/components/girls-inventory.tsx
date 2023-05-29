@@ -28,6 +28,7 @@ import {
 } from '../data/girls-equipment';
 import { AttackIcon, DefenseIcon, EgoIcon, StatIcon, Tooltip } from './common';
 import { roundValue } from '../data/common';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 export interface GirlsInventoryProps {
   /**
@@ -157,6 +158,11 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
           })}
         </div>
       </div>
+      <ReactTooltip
+        id="equipment-tooltip"
+        className="qh-tooltip"
+        classNameArrow="qh-tooltip-arrow"
+      />
     </div>
   );
 };

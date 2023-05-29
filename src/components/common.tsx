@@ -2,10 +2,11 @@ import '../style/common.css';
 import { Elements, Element, Stats, Class, Poses } from '../data/data';
 import { Pose, Zodiac } from '../data/data';
 import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactElement, ReactNode, useMemo, useState } from 'react';
 
 import 'react-tooltip/dist/react-tooltip.css';
 import { roundValue } from '../data/common';
+import ReactDOMServer from 'react-dom/server';
 
 export type GemType = Element | 'rainbow';
 
@@ -224,6 +225,44 @@ export interface TooltipProps {
   cssClasses?: string | string[];
   delay?: number;
 }
+
+export interface SharedTooltipProps extends TooltipProps {
+  tooltipId: string;
+  tooltip: ReactElement;
+}
+
+export const SharedTooltip: React.FC<SharedTooltipProps> = ({
+  tooltip,
+  children,
+  place,
+  cssClasses,
+  delay,
+  tooltipId
+}) => {
+  const classes =
+    cssClasses === undefined
+      ? []
+      : Array.isArray(cssClasses)
+      ? cssClasses
+      : [cssClasses];
+  classes.push('qh-tooltip-wrapper');
+
+  const tooltipContent = ReactDOMServer.renderToStaticMarkup(tooltip);
+
+  return (
+    <>
+      <span
+        className={classes.join(' ')}
+        data-tooltip-place={place}
+        data-tooltip-delay-show={delay}
+        data-tooltip-id={tooltipId}
+        data-tooltip-html={tooltipContent}
+      >
+        {children}
+      </span>
+    </>
+  );
+};
 
 export const Tooltip: React.FC<TooltipProps> = ({
   tooltip,

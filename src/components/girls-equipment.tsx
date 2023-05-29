@@ -23,7 +23,7 @@ import {
   slotsArray
 } from '../data/girls-equipment';
 import '../style/girls-equipment.css';
-import { Tooltip } from './common';
+import { SharedTooltip, Tooltip } from './common';
 import {
   AttackIcon,
   DefenseIcon,
@@ -625,7 +625,7 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
         <Tooltip tooltip={slotLabel}>{icon}</Tooltip>
       ) : (
         <>
-          <Tooltip
+          <SharedTooltip
             place="right"
             tooltip={
               <EquipmentTooltip
@@ -634,13 +634,14 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
                 girl={girl}
               />
             }
+            tooltipId="equipment-tooltip"
           >
             <div className="girl-item-icon-wrapper">
               {icon}
               <div className="item-level-decorator">{equipment.level}</div>
               {children}
             </div>
-          </Tooltip>
+          </SharedTooltip>
         </>
       )}
     </div>

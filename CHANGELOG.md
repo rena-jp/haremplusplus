@@ -1,3 +1,7 @@
+## 0.13.6 (NEXT)
+
+- Fix equipment tooltips: avoid stuck tooltips in the inventory
+
 ## 0.13.5 - 2023-05-28
 
 - Add a new screen to manage girls equipment/inventory
