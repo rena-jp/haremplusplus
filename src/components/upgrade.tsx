@@ -421,7 +421,7 @@ export const XPStatus: React.FC<XpStatusProps> = ({
         girl={girl}
         allGirls={allGirls}
         trigger={
-          <button className="awaken overlay">
+          <button className="awaken overlay icon-action">
             <Tooltip tooltip={<span>Awaken</span>}>
               <div className="filler"></div>
             </Tooltip>

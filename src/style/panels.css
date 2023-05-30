@@ -35,7 +35,6 @@
 .qh-panel {
   display: flex;
   flex-direction: column;
-  row-gap: 1em;
 }
 
 .qh-panel > .panel > .close-popup {
@@ -64,6 +63,7 @@
 .filter-entry {
   display: flex;
   flex-direction: row;
+  align-items: center;
   gap: 5px;
 }
 
@@ -86,8 +86,8 @@
 }
 
 .qh-filter-status {
-  width: 30px;
-  height: 30px;
+  width: 1.5em;
+  height: 1.5em;
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
@@ -122,7 +122,7 @@
 .sort-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.4em;
   align-items: flex-start;
   overflow: auto;
 }

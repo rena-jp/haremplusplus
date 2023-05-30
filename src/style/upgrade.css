@@ -194,7 +194,6 @@
 
 button.awaken {
   background-image: url('https://hh2.hh-content.com/design/ic_gem.svg');
-  padding: 0.2em;
   background-size: contain;
   background-position: center;
   background-origin: content-box;
@@ -212,8 +211,8 @@ button.awaken.overlay {
   right: 0;
   top: 50%;
   transform: translateX(30%) translateY(-50%);
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.5em;
+  height: 1.5em;
   box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
 }
 

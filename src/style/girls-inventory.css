@@ -40,14 +40,14 @@
   flex-direction: column;
   min-width: fit-content;
 
-  padding: 1rem;
+  padding-inline: 1rem;
 
   align-content: start;
   align-items: stretch;
 
   padding-right: 30px;
 
-  --icon-height: 30px;
+  --icon-height: 1.5em;
 }
 
 .girls-inventory-content > .girls-list > .item-slot,
@@ -108,10 +108,6 @@
 
   .girls-inventory-content > .girls-list > div.inv-placeholder {
     display: flex;
-  }
-
-  .item-slot.selected img.girls-equipment-icon {
-    border-color: white; /* No need for selection color when we show a single cell anyway */
   }
 }
 

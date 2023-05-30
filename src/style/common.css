@@ -282,7 +282,7 @@ requiring actual content. */
   border: 1px solid white;
   position: relative;
   min-height: 1.2em;
-  width: 14rem;
+  width: 12em;
   display: flex;
   flex-direction: row;
   align-items: stretch;

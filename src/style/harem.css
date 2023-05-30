@@ -16,7 +16,7 @@
  */
 @media only screen and (max-width: 1000px) {
   .qh-harem {
-    grid-template-columns: 1.2fr 0.6fr 1.4fr;
+    grid-template-columns: 1.6fr 0.6fr 1.4fr;
   }
 }
 
@@ -25,8 +25,8 @@
   min-width: 0;
 
   /** Global left, right and bottom margins */
-  margin-bottom: 15px;
-  padding: 0px 15px 0px 15px;
+  margin-bottom: 1em;
+  padding: 0px 1em 0px 1em;
 }
 
 .qh-harem > .harem-toolbar {
@@ -38,7 +38,7 @@
 }
 
 .qh-harem > .girlsList {
-  grid-column: 1;
+  grid-column: 1 /2;
   grid-row: 2;
 }
 
@@ -76,23 +76,26 @@
   background-image: url(https://hh2.hh-content.com/pictures/design/form/search_field_L.png);
   background-position: 100% 50%;
   background-repeat: no-repeat;
-  background-size: 40px;
+  background-size: 2.5em;
 
   width: 18em;
 
   font-size: 0.8em;
 }
 
-.harem-toolbar > .quick-filters {
-  margin-left: 60px;
+.toolbar-content > .hh-action-button,
+.harem-toolbar > .hh-action-button {
+  height: 1.5em;
+  min-width: 1.5em;
 }
 
-.harem-toolbar > .quick-filters > p {
-  padding: 0px;
-  margin: 0px;
+.harem-toolbar > .icon-action {
+  padding: 0.3em;
 }
 
-.harem-toolbar > .quick-filters > .toggle0pose {
+.toggle0pose {
+  margin-left: 4em;
+
   display: flex;
   flex-direction: row;
   gap: 0.5ch;
@@ -100,7 +103,11 @@
   font-size: 0.8em;
 }
 
-.harem-toolbar > .clear-filters > .hh-action-button {
+.qh-menu-toggle {
+  margin-right: 2em;
+}
+
+.toolbar-content > .hh-action-button.clear-filters {
   width: 10em;
   padding: 5px;
 }
@@ -146,17 +153,8 @@
     );
 }
 
-.harem-toolbar > .hh-action-button {
-  height: 1.5em;
-  width: 1.5em;
-}
-
 .harem-toolbar > .spacer {
   margin-left: auto; /* Push to the end of the toolbar */
-}
-
-.harem-toolbar > .filter-sort-icon {
-  padding: 0.3rem;
 }
 
 .harem-toolbar > .filter-sort-icon.closed {
@@ -214,6 +212,12 @@
   column-gap: 5px;
   row-gap: 5px;
   flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 860px) {
+  .girlsList > div {
+    column-gap: 0px;
+  }
 }
 
 .pose {

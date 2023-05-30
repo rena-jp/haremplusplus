@@ -34,16 +34,16 @@ import { getAffectionStats, isUpgradeReady } from '../hooks/girl-aff-hooks';
 import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
 import { roundValue } from '../data/common';
 // import girls from './girlsDataList-test.json';
-// import girls from './girlsdatalist-full.json';
-// import blessings from './blessings-full.json';
-// import quests from './quests-full.json';
-// import inventory from './inventory.json';
-// import girlsInventory from './girls-inventory.json';
-const girlsInventory = { '1': { items: [] } };
-const girls = {};
-const blessings = { active: [], upcoming: [] };
-const quests = {};
-const inventory = { gift: [], potion: [] };
+import girls from './girlsdatalist-full.json';
+import blessings from './blessings-full.json';
+import quests from './quests-full.json';
+import inventory from './inventory.json';
+import girlsInventory from './girls-inventory.json';
+// const girlsInventory = { '1': { items: [] } };
+// const girls = {};
+// const blessings = { active: [], upcoming: [] };
+// const quests = {};
+// const inventory = { gift: [], potion: [] };
 
 const MOCK_DELAY = 500;
 

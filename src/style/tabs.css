@@ -62,6 +62,12 @@
   z-index: 2;
 }
 
+@media screen and (max-height: 500px) {
+  .qh-panel {
+    height: 95%;
+  }
+}
+
 .App.game-extension > .qh-panel {
   box-sizing: border-box;
 }

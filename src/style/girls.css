@@ -196,3 +196,26 @@
 .girlTile.selected {
   background-color: #61dafb;
 }
+
+@media screen and (max-width: 1199px) {
+  .girlTile > .avatar-area {
+    padding: 0.3em 0.5em 0px 0.5em;
+  }
+}
+
+@media screen and (max-width: 960px) {
+  .girlTile > .girl-header {
+    position: absolute;
+    top: calc(var(--border-width) + 4px);
+    left: 50%;
+    z-index: 1;
+    transform: translateX(-50%);
+    text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+      1px -1px 0 #000;
+    font-size: 0.8em;
+  }
+
+  .girlTile > .avatar-area > .equipment-decorators {
+    top: 18px;
+  }
+}

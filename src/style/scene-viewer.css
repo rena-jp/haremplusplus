@@ -10,6 +10,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
+  font-size: 0.8em;
 }
 
 .qh-scene-viewer > h2 {
@@ -19,8 +20,8 @@
 
 .qh-scene-viewer > .close-popup {
   position: absolute;
-  top: 2rem;
-  right: 2.5rem;
+  top: 2em;
+  right: 2.5em;
 }
 
 .qh-scene-content {

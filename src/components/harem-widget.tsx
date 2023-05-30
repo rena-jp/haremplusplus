@@ -8,6 +8,7 @@ import { Teams } from './teams';
 import { UpgradePage } from './upgrade';
 import { TeamsData } from '../hooks/teams-hooks';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { PoPTeams } from './pop-teams';
 
 /**
  * Number of girls to be rendered immediately. Should be small (< 100 items)
@@ -333,7 +334,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
           />
         </div>
       )}
-      {/* <PoPTeams girls={allGirls} activeBlessing={currentBlessings} /> */}
+      <PoPTeams girls={allGirls} activeBlessing={currentBlessings} />
     </>
   );
 };
