@@ -693,7 +693,7 @@ export class GameAPIImpl implements GameAPI {
       action: 'girl_equipment_unequip_all_girls'
     };
     const result = await this.postRequest(params);
-    if (UnequipActionResult.is(result) && result.success) {
+    if (RequestResult.is(result) && result.success) {
       const modifiedGirls: CommonGirlData[] = [];
       for (const girl of allGirls) {
         if (girl.equipment !== undefined && girl.equipment.items.length > 0) {
@@ -713,6 +713,8 @@ export class GameAPIImpl implements GameAPI {
       );
     }
     // TODO Return the updated inventory. Unused for now.
+    // The game doesn't return incremental updates for this action, so
+    // it's probably easier to reload the inventory afterwards.
     return [];
   }
 

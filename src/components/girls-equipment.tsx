@@ -42,6 +42,7 @@ export interface EquipmentListProps {
   equipment: EquipmentData;
   girl: CommonGirlData;
   listGirls: CommonGirlData[];
+  allGirls: CommonGirlData[];
   showActions?: boolean;
 }
 
@@ -49,6 +50,7 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
   equipment,
   girl,
   listGirls,
+  allGirls,
   showActions
 }) => {
   const [loading, setLoading] = useState(false);
@@ -100,6 +102,7 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
             <OpenInventoryAction
               girl={girl}
               listGirls={listGirls}
+              allGirls={allGirls}
               loading={loading}
               setLoading={delayedSetLoading}
             />
@@ -536,11 +539,13 @@ const UnequipAllAction: React.FC<EquipAllActionProps> = ({
 
 interface OpenInventoryActionProps extends EquipAllActionProps {
   listGirls: CommonGirlData[];
+  allGirls: CommonGirlData[];
 }
 
 const OpenInventoryAction: React.FC<OpenInventoryActionProps> = ({
   girl,
   listGirls,
+  allGirls,
   loading
 }) => {
   const [showInventoryPopup, setShowInventoryPopup] = useState(false);
@@ -559,6 +564,7 @@ const OpenInventoryAction: React.FC<OpenInventoryActionProps> = ({
       {showInventoryPopup ? (
         <Popup
           modal
+          nested
           open={showInventoryPopup}
           onClose={() => setShowInventoryPopup(false)}
         >
@@ -566,6 +572,7 @@ const OpenInventoryAction: React.FC<OpenInventoryActionProps> = ({
             <GirlsInventory
               girl={girl}
               girls={listGirls}
+              allGirls={allGirls}
               close={() => setShowInventoryPopup(false)}
             />
           }

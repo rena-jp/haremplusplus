@@ -9,6 +9,7 @@ import {
 } from 'react';
 import {
   CommonGirlData,
+  EMPTY_INVENTORY_STATS,
   Equipment,
   EquipmentData,
   InventoryStats
@@ -24,11 +25,13 @@ import {
   getTotalInventoryStats,
   slotsArray,
   sortInventory,
+  sumInventoryStats,
   updateInventory
 } from '../data/girls-equipment';
 import { AttackIcon, DefenseIcon, EgoIcon, StatIcon, Tooltip } from './common';
 import { roundValue } from '../data/common';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import Popup from 'reactjs-popup';
 
 export interface GirlsInventoryProps {
   /**
@@ -40,13 +43,18 @@ export interface GirlsInventoryProps {
    * The list of girls to show in the equipment screen.
    */
   girls: CommonGirlData[];
+  /**
+   * The complete list of all girls.
+   */
+  allGirls: CommonGirlData[];
 
   close?: () => void;
 }
 
 export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
   girl,
-  girls
+  girls,
+  allGirls
 }) => {
   const displayGirls = useMemo(() => girls.slice(0, 20), [girls]);
 
@@ -54,8 +62,13 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
 
   const [inventory, setInventory] = useState<EquipmentData>({ items: [] });
   const [loading, setLoading] = useState(true);
+
+  const [selectedItem, setSelectedItem] = useState<Equipment | undefined>(
+    undefined
+  );
+
   useEffect(() => {
-    if (displayGirls.length > 0 && gameAPI !== undefined) {
+    if (girls.length > 0 && gameAPI !== undefined) {
       setLoading(true);
       gameAPI
         .getGirlsInventory(girl)
@@ -68,10 +81,6 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
         .then(() => setLoading(false));
     }
   }, [gameAPI]);
-
-  const [selectedItem, setSelectedItem] = useState<Equipment | undefined>(
-    undefined
-  );
 
   const equipSelected = useCallback(
     async (girl: CommonGirlData) => {
@@ -110,6 +119,18 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
     [gameAPI, inventory, setInventory]
   );
 
+  const unequipAll = useCallback(async () => {
+    if (gameAPI !== undefined) {
+      setInventory({ items: [] });
+      setLoading(true);
+      await gameAPI.unequipAllGirls(allGirls);
+      const inventoryContent = await gameAPI.getGirlsInventory(girl);
+      const newInventory = importEquipment(inventoryContent);
+      setInventory(newInventory);
+      setLoading(false);
+    }
+  }, [gameAPI, inventory, setInventory, girl, allGirls, setLoading]);
+
   const showFilterLengthWarning = girls.length > displayGirls.length;
 
   return (
@@ -134,29 +155,15 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
               unequipOne={unequipOne}
             />
           ))}
+          <InventoryTotalStatsEntry girls={girls} />
         </div>
-        <div className="qh-inventory">
-          {loading ? <span>Loading inventory...</span> : null}
-          {loading === false && inventory.items.length === 0 ? (
-            <span>Inventory is empty.</span>
-          ) : null}
-          {inventory.items.map((item) => {
-            const classNames =
-              item === selectedItem ? ['item-slot', 'selected'] : ['item-slot'];
-            return (
-              <SimpleEquipmentTile
-                equipment={item}
-                classNames={classNames}
-                slotId={item.slot}
-                key={item.uid}
-                onClick={(ev) => {
-                  ev.preventDefault();
-                  setSelectedItem(item === selectedItem ? undefined : item);
-                }}
-              />
-            );
-          })}
-        </div>
+        <InventoryItems
+          loading={loading}
+          inventory={inventory}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+          unequipAll={unequipAll}
+        />
       </div>
       <ReactTooltip
         id="equipment-tooltip"
@@ -271,13 +278,19 @@ const EquipmentStatsTotal: React.FC<EquipmentStatsTotalProps> = ({ girl }) => {
         <span className="stat-value">{stats.defense}</span>
       </div>
       <div className="stat-res">
-        <span className="stat-value">{stats.rEgo}%</span>
+        <span className="stat-value">
+          {stats.rEgo > 0 ? stats.rEgo + '%' : ''}
+        </span>
       </div>
       <div className="stat-res">
-        <span className="stat-value">{stats.rDef}%</span>
+        <span className="stat-value">
+          {stats.rDef > 0 ? stats.rDef + '%' : ''}
+        </span>
       </div>
       <div className="stat-res">
-        <span className="stat-value"> {stats.rAtk}%</span>
+        <span className="stat-value">
+          {stats.rAtk > 0 ? stats.rAtk + '%' : ''}
+        </span>
       </div>
     </>
   );
@@ -424,6 +437,53 @@ const EquipmentStatsEntry: React.FC<EquipmentStatsEntryProps> = ({
   );
 };
 
+interface InventoryTotalStatsEntryProps {
+  girls: CommonGirlData[];
+}
+
+const InventoryTotalStatsEntry: React.FC<InventoryTotalStatsEntryProps> = ({
+  girls
+}) => {
+  let allTotalStats = EMPTY_INVENTORY_STATS;
+  for (const girl of girls) {
+    const girlStats = getTotalInventoryStats(girl, girl.equipment?.items ?? []);
+    allTotalStats = sumInventoryStats(allTotalStats, girlStats);
+  }
+  return (
+    <>
+      <div className="inventory-footer total">Total:</div>
+
+      <div className="stat total-stats">
+        <span className="stat-value">{allTotalStats.totalStats}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{allTotalStats.ego}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{allTotalStats.attack}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{allTotalStats.defense}</span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value">
+          {allTotalStats.rEgo > 0 ? `${allTotalStats.rEgo}%` : ''}
+        </span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value">
+          {allTotalStats.rDef > 0 ? `${allTotalStats.rDef}%` : ''}
+        </span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value">
+          {allTotalStats.rAtk > 0 ? `${allTotalStats.rAtk}%` : ''}
+        </span>
+      </div>
+    </>
+  );
+};
+
 function getStatsDiff(
   girl: CommonGirlData,
   equipment: Equipment | undefined,
@@ -503,6 +563,86 @@ const InventoryPlaceholder: React.FC<InventoryPlaceholderProps> = ({
       {showAsItem !== false ? (
         <SimpleEquipmentTile slotId={0} equipment={undefined} />
       ) : null}
+    </div>
+  );
+};
+
+interface InventoryItemsProps {
+  inventory: EquipmentData;
+  loading: boolean;
+  selectedItem: Equipment | undefined;
+  setSelectedItem(item: Equipment | undefined): void;
+  unequipAll(): void;
+}
+
+const InventoryItems: React.FC<InventoryItemsProps> = ({
+  inventory,
+  loading,
+  selectedItem,
+  setSelectedItem,
+  unequipAll
+}) => {
+  return (
+    <div className="qh-inventory">
+      <div className="qh-inventory-items">
+        {loading ? <span>Loading inventory...</span> : null}
+        {loading === false && inventory.items.length === 0 ? (
+          <span>Inventory is empty.</span>
+        ) : null}
+        {inventory.items.slice(0, 50).map((item) => {
+          const classNames =
+            item === selectedItem ? ['item-slot', 'selected'] : ['item-slot'];
+          return (
+            <SimpleEquipmentTile
+              equipment={item}
+              classNames={classNames}
+              slotId={item.slot}
+              key={item.uid}
+              onClick={(ev) => {
+                ev.preventDefault();
+                setSelectedItem(item === selectedItem ? undefined : item);
+              }}
+            />
+          );
+        })}
+      </div>
+      <div className="qh-inventory-actions">
+        <Popup
+          modal
+          nested
+          trigger={
+            <button className="hh-action-button">Unequip All girls</button>
+          }
+        >
+          {
+            ((close: () => void) => (
+              <div className="unequip-all-confirm-popup">
+                <h2>Unequip All Girls</h2>
+                <p>
+                  This action unequips all items from all owned girls (including
+                  the ones not currently displayed in the Inventory) . Do you
+                  want to continue?
+                </p>
+                <div className="qh-actions">
+                  <button
+                    className="hh-action-button hh-game-action"
+                    onClick={() => {
+                      unequipAll();
+                      close();
+                    }}
+                  >
+                    Unequip All Girls
+                  </button>
+                  <button className="hh-action-button" onClick={close}>
+                    Cancel
+                  </button>
+                </div>
+              </div>
+              // eslint-disable-next-line
+            )) as any
+          }
+        </Popup>
+      </div>
     </div>
   );
 };

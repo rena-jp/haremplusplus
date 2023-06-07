@@ -177,6 +177,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                 <BlessingSection
                   girl={girl}
                   listGirls={listGirls}
+                  allGirls={allGirls}
                   currentBlessing={activeBlessing}
                   upcomingBlessing={nextBlessing}
                   domain={domain}
@@ -200,6 +201,7 @@ export interface BlessingSectionProps {
   domain: string;
   girl: CommonGirlData;
   listGirls: CommonGirlData[];
+  allGirls: CommonGirlData[];
   currentBlessing: BlessingDefinition[];
   upcomingBlessing: BlessingDefinition[];
   openUpgrade(page: UpgradePage): void;
@@ -209,6 +211,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   domain,
   girl,
   listGirls,
+  allGirls,
   currentBlessing,
   upcomingBlessing,
   openUpgrade
@@ -236,6 +239,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             equipment={girl.equipment}
             girl={girl}
             listGirls={listGirls}
+            allGirls={allGirls}
           />
         </>
       ) : null}

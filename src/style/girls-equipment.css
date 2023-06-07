@@ -23,7 +23,8 @@ button.item-action:disabled {
   filter: grayscale(1);
 }
 
-.App button.item-action {
+.App button.item-action,
+#popup-root button.item-action {
   padding: 0px;
 }
 

@@ -243,7 +243,9 @@ li.nok {
 }
 
 .App input,
-.App button {
+.App button,
+#popup-root input,
+#popup-root button {
   padding-inline: 0.5em;
   padding-block: 0.25em;
 }
