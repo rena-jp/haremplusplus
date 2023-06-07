@@ -11,7 +11,7 @@ import {
   CommonGirlData,
   Equipment,
   EquipmentData,
-  EquipmentStats
+  InventoryStats
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
 import { BaseGirlTile } from './girl';
@@ -19,9 +19,9 @@ import { SimpleEquipmentTile } from './girls-equipment';
 import { importEquipment } from '../data/import/harem-import';
 import '../style/girls-inventory.css';
 import {
-  matchesClassResonance,
-  matchesElementResonance,
-  matchesPoseResonance,
+  diffInventoryStats,
+  getEquipmentStats,
+  getTotalInventoryStats,
   slotsArray,
   sortInventory,
   updateInventory
@@ -239,36 +239,85 @@ const EquipmentStatsDetails: React.FC<EquipmentStatsDetailsProps> = ({
   equipment,
   refEquipment
 }) => {
+  return equipment === undefined ? (
+    <EquipmentStatsTotal girl={girl} />
+  ) : (
+    <EquipmentStatsDiff
+      girl={girl}
+      equipment={equipment}
+      refEquipment={refEquipment}
+    />
+  );
+};
+
+interface EquipmentStatsTotalProps {
+  girl: CommonGirlData;
+}
+
+const EquipmentStatsTotal: React.FC<EquipmentStatsTotalProps> = ({ girl }) => {
+  const stats = getTotalInventoryStats(girl, girl.equipment?.items ?? []);
+  return (
+    <>
+      <div className="stat total-stats">
+        <span className="stat-value">{stats.totalStats}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{stats.ego}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{stats.attack}</span>
+      </div>
+      <div className="stat">
+        <span className="stat-value">{stats.defense}</span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value">{stats.rEgo}%</span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value">{stats.rDef}%</span>
+      </div>
+      <div className="stat-res">
+        <span className="stat-value"> {stats.rAtk}%</span>
+      </div>
+    </>
+  );
+};
+
+const EquipmentStatsDiff: React.FC<EquipmentStatsDetailsProps> = ({
+  girl,
+  equipment,
+  refEquipment
+}) => {
   const stats = getEquipmentStats(girl, equipment);
   const statsDiff = getStatsDiff(girl, equipment, refEquipment);
 
   return (
     <>
-      <div className="stat total-stats">
+      <div className="stat total-stats stat-diff">
         <span className="stat-value">{stats.totalStats}</span>
         <StatDiff value={statsDiff.totalStats} force={true} />
       </div>
-      <div className="stat">
+      <div className="stat stat-diff">
         <span className="stat-value">{stats.ego}</span>
         <StatDiff value={statsDiff.ego} force={equipment !== undefined} />
       </div>
-      <div className="stat">
+      <div className="stat stat-diff">
         <span className="stat-value">{stats.attack}</span>
         <StatDiff value={statsDiff.attack} force={equipment !== undefined} />
       </div>
-      <div className="stat">
+      <div className="stat stat-diff">
         <span className="stat-value">{stats.defense}</span>
         <StatDiff value={statsDiff.defense} force={equipment !== undefined} />
       </div>
-      <div className="stat-res">
+      <div className="stat-res stat-diff">
         <span className="stat-value">{stats.rEgo}%</span>
         <StatDiff value={statsDiff.rEgo} />
       </div>
-      <div className="stat-res">
+      <div className="stat-res stat-diff">
         <span className="stat-value">{stats.rDef}%</span>
         <StatDiff value={statsDiff.rDef} />
       </div>
-      <div className="stat-res">
+      <div className="stat-res stat-diff">
         <span className="stat-value"> {stats.rAtk}%</span>
         <StatDiff value={statsDiff.rAtk} />
       </div>
@@ -382,68 +431,9 @@ function getStatsDiff(
 ): InventoryStats {
   const equipStats = getEquipmentStats(girl, equipment);
   const refEquipStats = getEquipmentStats(girl, refEquipment);
-  return {
-    hardcore: equipStats.hardcore - refEquipStats.hardcore,
-    charm: equipStats.charm - refEquipStats.charm,
-    knowhow: equipStats.knowhow - refEquipStats.knowhow,
-    ego: equipStats.ego - refEquipStats.ego,
-    defense: equipStats.defense - refEquipStats.defense,
-    attack: equipStats.attack - refEquipStats.attack,
-    rEgo: equipStats.rEgo - refEquipStats.rEgo,
-    rDef: equipStats.rDef - refEquipStats.rDef,
-    rAtk: equipStats.rAtk - refEquipStats.rAtk,
-    totalStats: equipStats.totalStats - refEquipStats.totalStats
-  };
+  return diffInventoryStats(equipStats, refEquipStats);
 }
 
-function getEquipmentStats(
-  girl: CommonGirlData | undefined,
-  equipment: Equipment | undefined
-): InventoryStats {
-  if (equipment === undefined) {
-    return {
-      attack: 0,
-      charm: 0,
-      defense: 0,
-      ego: 0,
-      hardcore: 0,
-      knowhow: 0,
-      rAtk: 0,
-      rDef: 0,
-      rEgo: 0,
-      totalStats: 0
-    };
-  }
-
-  const matchesAtk =
-    girl === undefined ? true : matchesPoseResonance(equipment, girl);
-  const matchesDef =
-    girl === undefined ? true : matchesElementResonance(equipment, girl);
-  const matchesEgo =
-    girl === undefined ? true : matchesClassResonance(equipment, girl);
-
-  return {
-    hardcore: equipment.stats.hardcore,
-    charm: equipment.stats.charm,
-    knowhow: equipment.stats.knowhow,
-    ego: equipment.stats.ego,
-    attack: equipment.stats.attack,
-    defense: equipment.stats.defense,
-    rEgo: matchesEgo ? equipment.resonance.ego : 0,
-    rDef: matchesDef ? equipment.resonance.defense : 0,
-    rAtk: matchesAtk ? equipment.resonance.attack : 0,
-    totalStats:
-      equipment.stats.hardcore + equipment.stats.charm + equipment.stats.knowhow
-  };
-}
-
-interface InventoryStats extends EquipmentStats {
-  rEgo: number;
-  rDef: number;
-  rAtk: number;
-
-  totalStats: number;
-}
 interface StatDiffProps {
   value: number;
   /**

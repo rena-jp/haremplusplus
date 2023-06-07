@@ -1,8 +1,11 @@
+import { roundValue } from './common';
 import {
   CommonGirlData,
+  EMPTY_INVENTORY_STATS,
   EMPTY_STATS,
   Equipment,
   EquipmentData,
+  InventoryStats,
   Stats
 } from './data';
 import { GirlEquipment } from './game-data';
@@ -136,4 +139,82 @@ export function sortInventory(inventory: Equipment[]): void {
     }
     return e1.uid - e2.uid;
   });
+}
+
+export function getEquipmentStats(
+  girl: CommonGirlData | undefined,
+  equipment: Equipment | undefined
+): InventoryStats {
+  if (equipment === undefined) {
+    return EMPTY_INVENTORY_STATS;
+  }
+
+  const matchesAtk =
+    girl === undefined ? true : matchesPoseResonance(equipment, girl);
+  const matchesDef =
+    girl === undefined ? true : matchesElementResonance(equipment, girl);
+  const matchesEgo =
+    girl === undefined ? true : matchesClassResonance(equipment, girl);
+
+  return {
+    hardcore: equipment.stats.hardcore,
+    charm: equipment.stats.charm,
+    knowhow: equipment.stats.knowhow,
+    ego: equipment.stats.ego,
+    attack: equipment.stats.attack,
+    defense: equipment.stats.defense,
+    rEgo: matchesEgo ? equipment.resonance.ego : 0,
+    rDef: matchesDef ? equipment.resonance.defense : 0,
+    rAtk: matchesAtk ? equipment.resonance.attack : 0,
+    totalStats:
+      equipment.stats.hardcore + equipment.stats.charm + equipment.stats.knowhow
+  };
+}
+
+export function getTotalInventoryStats(
+  girl: CommonGirlData,
+  items: Equipment[]
+): InventoryStats {
+  let totalStats = EMPTY_INVENTORY_STATS;
+  for (const item of items) {
+    const stats = getEquipmentStats(girl, item);
+    totalStats = sumInventoryStats(totalStats, stats);
+  }
+  return totalStats;
+}
+
+export function sumInventoryStats(
+  stats1: InventoryStats,
+  stats2: InventoryStats
+): InventoryStats {
+  return {
+    attack: roundValue(stats1.attack + stats2.attack),
+    defense: roundValue(stats1.defense + stats2.defense),
+    ego: roundValue(stats1.ego + stats2.ego),
+    hardcore: roundValue(stats1.hardcore + stats2.hardcore),
+    charm: roundValue(stats1.charm + stats2.charm),
+    knowhow: roundValue(stats1.knowhow + stats2.knowhow),
+    totalStats: roundValue(stats1.totalStats + stats2.totalStats),
+    rAtk: roundValue(stats1.rAtk + stats2.rAtk),
+    rDef: roundValue(stats1.rDef + stats2.rDef),
+    rEgo: roundValue(stats1.rEgo + stats2.rEgo)
+  };
+}
+
+export function diffInventoryStats(
+  stats1: InventoryStats,
+  stats2: InventoryStats
+): InventoryStats {
+  return {
+    attack: roundValue(stats1.attack - stats2.attack),
+    defense: roundValue(stats1.defense - stats2.defense),
+    ego: roundValue(stats1.ego - stats2.ego),
+    hardcore: roundValue(stats1.hardcore - stats2.hardcore),
+    charm: roundValue(stats1.charm - stats2.charm),
+    knowhow: roundValue(stats1.knowhow - stats2.knowhow),
+    totalStats: roundValue(stats1.totalStats - stats2.totalStats),
+    rAtk: roundValue(stats1.rAtk - stats2.rAtk),
+    rDef: roundValue(stats1.rDef - stats2.rDef),
+    rEgo: roundValue(stats1.rEgo - stats2.rEgo)
+  };
 }

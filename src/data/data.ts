@@ -142,6 +142,31 @@ export interface EquipmentStats extends Stats {
   defense: number;
 }
 
+export interface InventoryStats extends EquipmentStats {
+  rEgo: number;
+  rDef: number;
+  rAtk: number;
+
+  totalStats: number;
+}
+
+export const EMPTY_EQUIPMENT_STATS: EquipmentStats = {
+  hardcore: 0,
+  charm: 0,
+  knowhow: 0,
+  ego: 0,
+  attack: 0,
+  defense: 0
+};
+
+export const EMPTY_INVENTORY_STATS: InventoryStats = {
+  ...EMPTY_EQUIPMENT_STATS,
+  rEgo: 0,
+  rDef: 0,
+  rAtk: 0,
+  totalStats: 0
+};
+
 export interface EquipmentResonance {
   class: Class | undefined;
   ego: number;

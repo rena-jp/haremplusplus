@@ -134,12 +134,11 @@
   }
 }
 
-.girls-inventory-content > .girls-list > * > .stat-value {
+.girls-inventory-content > .girls-list > .stat-diff > .stat-value {
+  /** When comparing equipment, only show the diff in the table.
+  The value is already displayed in the header and doesn't need to be repeated
+  in each cell */
   display: none;
-}
-
-.girls-inventory-content > .girls-list > .equipment > .stat-value {
-  display: initial;
 }
 
 .girls-inventory-content > .girls-list > div {
