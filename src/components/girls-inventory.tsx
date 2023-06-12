@@ -155,7 +155,7 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
               unequipOne={unequipOne}
             />
           ))}
-          <InventoryTotalStatsEntry girls={girls} />
+          <InventoryTotalStatsEntry girls={displayGirls} />
         </div>
         <InventoryItems
           loading={loading}
