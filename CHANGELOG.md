@@ -1,5 +1,8 @@
 ## 0.13.6 (NEXT)
 
+- Add "Unequip all girls" action to the inventory
+- Inventory: add "total stats" entry to the equipment table
+- Improve layout for smaller screens (mobile devices)
 - Fix equipment tooltips: avoid stuck tooltips in the inventory
 
 ## 0.13.5 - 2023-05-28
