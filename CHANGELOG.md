@@ -1,5 +1,6 @@
 ## 0.13.6 (NEXT)
 
+- Update unknown poses and events
 - Add "Unequip all girls" action to the inventory
 - Inventory: add "total stats" entry to the equipment table
 - Improve layout for smaller screens (mobile devices)
