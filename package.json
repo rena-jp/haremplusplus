@@ -1,6 +1,6 @@
 {
   "name": "harem-plus-plus",
-  "version": "0.13.6",
+  "version": "0.13.7",
   "private": true,
   "dependencies": {
     "caniuse-lite": "^1.0.30001487",

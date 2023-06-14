@@ -376,37 +376,39 @@ function sortByClass(
 }
 
 function getTargetValue(level: number) {
+  // FIXME: Values have changed. Need to check actual values again
+  const multiplier = 7 / 6;
   switch (level) {
     case 1:
       return 0;
     case 2:
-      return 3375;
+      return Math.ceil(3375 * multiplier);
     case 3:
-      return 4557;
+      return Math.ceil(4557 * multiplier);
     case 4:
-      return 6151;
+      return Math.ceil(6151 * multiplier);
     case 5:
-      return 8304;
+      return Math.ceil(8304 * multiplier);
     case 6:
-      return 11210;
+      return Math.ceil(11210 * multiplier);
     case 7:
-      return 15134;
+      return Math.ceil(15134 * multiplier);
     case 8:
-      return 20431;
+      return Math.ceil(20431 * multiplier);
     case 9:
-      return 27582;
+      return Math.ceil(27582 * multiplier);
     case 10:
-      return 37234;
+      return Math.ceil(37234 * multiplier);
     case 11:
-      return 50267;
+      return Math.ceil(50267 * multiplier);
     case 12:
-      return 67860;
+      return Math.ceil(67860 * multiplier);
     case 13:
-      return 91611;
+      return Math.ceil(91611 * multiplier);
     case 14:
-      return 123674;
+      return Math.ceil(123674 * multiplier);
     case 15:
     default:
-      return 166961;
+      return Math.ceil(166961 * multiplier);
   }
 }
