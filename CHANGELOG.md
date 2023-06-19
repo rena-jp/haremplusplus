@@ -1,4 +1,4 @@
-## 0.13.7 (NEXT)
+## 0.13.7 - 2023-06-19
 
 - Fix a bug where the inventory would only display 50 items instead of (up to) 600
 
