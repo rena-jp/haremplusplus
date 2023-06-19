@@ -589,7 +589,7 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
         {loading === false && inventory.items.length === 0 ? (
           <span>Inventory is empty.</span>
         ) : null}
-        {inventory.items.slice(0, 50).map((item) => {
+        {inventory.items.map((item) => {
           const classNames =
             item === selectedItem ? ['item-slot', 'selected'] : ['item-slot'];
           return (
