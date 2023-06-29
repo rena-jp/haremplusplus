@@ -1,3 +1,7 @@
+# WARNING
+
+Since end of June, 2023, Development of the Harem++ script is discontinued, as I stopped playing the game. The script remains available, but might stop working properly in the future.
+
 # Harem++
 
 ## Userscript
