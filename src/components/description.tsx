@@ -670,6 +670,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
         ? `quest/${quest.idQuest}`
         : `girl/${girl.id}?resource=affection`;
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [openUpgradePopup, setOpenUpgradePopup] = useState(false);
 
     return (

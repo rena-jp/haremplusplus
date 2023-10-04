@@ -33,7 +33,10 @@ export class GradeRangeFilter extends AbstractFilter {
   static ID = 'grade-range';
   id = GradeRangeFilter.ID;
 
-  constructor(public minStars: number, public maxStars?: number) {
+  constructor(
+    public minStars: number,
+    public maxStars?: number
+  ) {
     super();
     this.label =
       maxStars === undefined
@@ -74,7 +77,10 @@ export class MaxGradeRangeFilter extends AbstractFilter {
   static ID = 'max-grade-range';
   id = MaxGradeRangeFilter.ID;
 
-  constructor(public minStars: number, public maxStars?: number) {
+  constructor(
+    public minStars: number,
+    public maxStars?: number
+  ) {
     super();
     this.label =
       maxStars === undefined
@@ -115,7 +121,10 @@ export class LevelRangeFilter extends AbstractFilter {
   static ID = 'level-range';
   id = LevelRangeFilter.ID;
 
-  constructor(public minLevel: number, public maxLevel?: number) {
+  constructor(
+    public minLevel: number,
+    public maxLevel?: number
+  ) {
     super();
     this.label =
       maxLevel === undefined
@@ -157,7 +166,10 @@ export class MaxLevelRangeFilter extends AbstractFilter {
   static ID = 'max-level-range';
   id = MaxLevelRangeFilter.ID;
 
-  constructor(public minLevel: number, public maxLevel?: number) {
+  constructor(
+    public minLevel: number,
+    public maxLevel?: number
+  ) {
     super();
     this.label =
       maxLevel === undefined
@@ -713,7 +725,10 @@ export class TeamsFilter extends AbstractFilter {
   static ID = 'teams-filter';
   id = TeamsFilter.ID;
 
-  constructor(private include: string, private teams: Team[]) {
+  constructor(
+    private include: string,
+    private teams: Team[]
+  ) {
     super();
     const filteredTeams = this.getFilteredTeams();
     this.label =

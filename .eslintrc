@@ -1,11 +1,10 @@
 {
   "root": true,
-  "parser": "@typescript-eslint/parser",
-  "plugins": ["@typescript-eslint", "prettier"],
+  "plugins": ["prettier"],
   "extends": [
     "eslint:recommended",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:@typescript-eslint/recommended",
+    "react-app", // including @typescript-eslint
+    "react-app/jest",
     "prettier"
   ],
   "rules": {

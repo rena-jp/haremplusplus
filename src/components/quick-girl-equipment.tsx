@@ -25,8 +25,11 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
   const currentEquipment = girl.equipment
     ? girl.equipment.items.find((item) => item.slot === slot)
     : undefined;
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [loading, setLoading] = useState(true);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [equipment, setEquipment] = useState<Equipment[]>([]);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
     gameAPI
       .getGirlsInventory(girl, slot)
