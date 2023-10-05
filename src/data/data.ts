@@ -254,7 +254,8 @@ export enum HairColor {
   darkPink,
   black,
   grey,
-  golden
+  golden,
+  bronze
 }
 export enum EyeColor {
   pink,
@@ -269,7 +270,8 @@ export enum EyeColor {
   silver,
   black,
   unknown,
-  purple
+  purple,
+  dark
 }
 export enum Zodiac {
   aries,

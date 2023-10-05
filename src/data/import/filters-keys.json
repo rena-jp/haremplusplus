@@ -110,7 +110,9 @@
     "sun_flavor_element": "Joueuse",
     "Joueuse": "sun_flavor_element",
     "water_flavor_element": "Sensuelle",
-    "Sensuelle": "water_flavor_element"
+    "Sensuelle": "water_flavor_element",
+    "D83": "Bronze",
+    "Bronze": "D83"
   },
   "en": {
     "69": "69",
@@ -223,7 +225,9 @@
     "sun_flavor_element": "Playful",
     "Playful": "sun_flavor_element",
     "water_flavor_element": "Sensual",
-    "Sensual": "water_flavor_element"
+    "Sensual": "water_flavor_element",
+    "D83": "Bronze",
+    "Bronze": "D83"
   },
   "de": {
     "69": "69",
@@ -336,7 +340,9 @@
     "sun_flavor_element": "Verspielt",
     "Verspielt": "sun_flavor_element",
     "water_flavor_element": "Sinnlich",
-    "Sinnlich": "water_flavor_element"
+    "Sinnlich": "water_flavor_element",
+    "D83": "Bronzo",
+    "Bronzo": "D83"
   },
   "it": {
     "69": "69",
@@ -449,7 +455,9 @@
     "sun_flavor_element": "Giocosa",
     "Giocosa": "sun_flavor_element",
     "water_flavor_element": "Sensuale",
-    "Sensuale": "water_flavor_element"
+    "Sensuale": "water_flavor_element",
+    "D83": "Bronze",
+    "Bronze": "D83"
   },
   "es": {
     "69": "69",
@@ -561,7 +569,9 @@
     "sun_flavor_element": "Juguetona",
     "Juguetona": "sun_flavor_element",
     "water_flavor_element": "Sensual",
-    "Sensual": "water_flavor_element"
+    "Sensual": "water_flavor_element",
+    "D83": "Bronze",
+    "Bronze": "D83"
   },
   "jp": {
     "69": "69位",
@@ -673,7 +683,9 @@
     "sun_flavor_element": "Playful",
     "Playful": "sun_flavor_element",
     "water_flavor_element": "Sensual",
-    "Sensual": "water_flavor_element"
+    "Sensual": "water_flavor_element",
+    "D83": "ブロンズ",
+    "ブロンズ": "D83"
   },
   "ru": {
     "69": "69",
@@ -786,6 +798,8 @@
     "sun_flavor_element": "Playful",
     "Playful": "sun_flavor_element",
     "water_flavor_element": "Sensual",
-    "Sensual": "water_flavor_element"
+    "Sensual": "water_flavor_element",
+    "D83": "Бронзовый",
+    "Бронзовый": "D83"
   }
 }

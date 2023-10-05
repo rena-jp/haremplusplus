@@ -38,6 +38,8 @@ export function toHairColor(hairColor: string): HairColor {
       return HairColor.strawberryBlond;
     case 'XXX':
       return HairColor.unknown;
+    case 'D83':
+      return HairColor.bronze;
     default:
       return HairColor.unknown;
   }
@@ -71,6 +73,8 @@ export function toEyeColor(eyeColor: string): EyeColor {
       return EyeColor.grey;
     case 'XXX':
       return EyeColor.unknown;
+    case '321':
+      return EyeColor.dark;
     default:
       return EyeColor.unknown;
   }
