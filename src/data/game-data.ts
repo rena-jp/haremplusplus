@@ -791,7 +791,7 @@ export namespace GiftResult {
 
 export interface GameQuestStep {
   id: number;
-  currentStepId: number;
+  currentStepNum: number;
   steps: GameQuestStepData[] | string[][];
   tutorialData: unknown;
   status: QuestStatus;
@@ -819,7 +819,7 @@ export namespace GameQuestStep {
     if (isUnknownObject(object)) {
       return (
         typeof object.id === 'number' &&
-        typeof object.currentStepId === 'number' &&
+        typeof object.currentStepNum === 'number' &&
         Array.isArray(object.steps) &&
         object.questType === 'girl_grade'
       );
@@ -864,7 +864,7 @@ export function toQuestData(
       dialogue: data[0],
       scene,
       sceneFull: resizeScene(scene),
-      step: gameQuestStep.currentStepId
+      step: gameQuestStep.currentStepNum
     };
   } else {
     return {
@@ -875,7 +875,7 @@ export function toQuestData(
       portrait: data.portrait,
       scene: data.picture,
       sceneFull: resizeScene(data.picture),
-      step: gameQuestStep.currentStepId
+      step: gameQuestStep.currentStepNum
     };
   }
 }
