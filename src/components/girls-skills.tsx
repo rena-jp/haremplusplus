@@ -45,23 +45,23 @@ export interface SkillWrapperProps {
 
 const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
   const skillTier = girl.skillTiers?.[tier];
-  if (skillTier == undefined) return null;
+  if (skillTier === undefined) return null;
   const { icon, icon_path, skill_points_used } = skillTier;
   const maxPoints = maxPointsPerTierMap[girl.rarity][tier - 1];
   const count = `${skill_points_used}${
     skill_points_used < maxPoints ? `/${maxPoints}` : ''
   }`;
   let tooltip = null;
-  if (tier == 1) {
+  if (tier === 1) {
     if (girl.salary || girl.salaryPerHour) {
       const infos = [];
-      if (girl.salary != undefined) infos.push(`${girl.salary}`);
-      if (girl.salaryPerHour != undefined)
+      if (girl.salary !== undefined) infos.push(`${girl.salary}`);
+      if (girl.salaryPerHour !== undefined)
         infos.push(`(${girl.salaryPerHour}/h)`);
       if (infos.length > 0) tooltip = 'Income: ' + infos.join(' ');
     }
   }
-  if (tier == 3) {
+  if (tier === 3) {
     switch (icon) {
       case 'hair_color': {
         const name = HairColors.toDisplayString(girl.hairColor[0]);
@@ -85,7 +85,7 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
       }
     }
   }
-  if (tier == 5) {
+  if (tier === 5) {
     switch (girl.element) {
       case Element.yellow:
       case Element.dark:
