@@ -111,6 +111,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.own ? girlData.pay_time : undefined,
       salary: girlData.own ? girlData.salary : undefined,
+      salaryPerHour: girlData.own ? girlData.salary_per_hour : undefined,
       missingGems: countMissingGems(
         rarity,
         girlData.own ? girlData.level_cap : 250

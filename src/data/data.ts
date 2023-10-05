@@ -101,6 +101,10 @@ export interface BaseGirlData {
    */
   salary?: number;
   /**
+   * Salary value per hour. Only for owned girls.
+   */
+  salaryPerHour?: number;
+  /**
    * Variations of this character. Ids.
    */
   variations?: string[];

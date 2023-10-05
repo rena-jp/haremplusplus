@@ -1,0 +1,34 @@
+.details-section.stats a.skills-link {
+  display: block;
+  width: fit-content;
+}
+
+.details-section.stats .skills_row {
+  display: flex;
+  gap: 0.5em;
+  text-align: left;
+}
+
+.details-section.stats .skill-wrapper {
+  position: relative;
+  width: 4em;
+  height: 4em;
+  margin-bottom: 1em;
+}
+
+.details-section.stats .skill-preview {
+  width: inherit;
+  height: inherit;
+}
+
+.details-section.stats .skill-wrapper .count {
+  position: absolute;
+  width: 3em;
+  height: 1.5em;
+  left: 0.5em;
+  bottom: -0.75em;
+  text-align: center;
+  border: 1px solid #fff;
+  border-radius: 50%;
+  background-color: #8e0333;
+}

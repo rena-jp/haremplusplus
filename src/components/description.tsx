@@ -49,6 +49,7 @@ import { SimpleGirlTile } from './girl';
 import { SceneViewer } from './scenes';
 import { UpgradePage } from './upgrade';
 import { EquipmentList } from './girls-equipment';
+import { SkillTierList } from './girls-skills';
 
 export interface GirlDescriptionProps {
   /**
@@ -241,6 +242,12 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             listGirls={listGirls}
             allGirls={allGirls}
           />
+        </>
+      ) : null}
+      {girl.skillTiers !== undefined ? (
+        <>
+          <p>Skills:</p>
+          <SkillTierList girl={girl} />
         </>
       ) : null}
       {girl.recruited ? (
