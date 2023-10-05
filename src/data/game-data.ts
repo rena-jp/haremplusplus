@@ -1,4 +1,4 @@
-import { Element, QuestData } from './data';
+import { Element, QuestData, SkillTiers } from './data';
 
 export interface GameBlessingData {
   active: GameBlessing[];
@@ -183,6 +183,7 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
 
   // Girls equipment
   armor?: ArmorData[];
+  skill_tiers_info: SkillTiers;
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;

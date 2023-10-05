@@ -333,6 +333,64 @@ export class EquippedFilter extends AbstractFilter {
   };
 }
 
+export class GirlSkillsFilter extends AbstractFilter {
+  static ID = 'skilled';
+  id = GirlSkillsFilter.ID;
+
+  constructor(
+    public maxedSkills: boolean,
+    public someSkills: boolean,
+    public noSkills: boolean
+  ) {
+    super();
+    this.label = `${maxedSkills ? 'Maxed' : noSkills ? 'No' : 'Some'} skills`;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    if (girl.skillTiers == null) return false;
+    const skillTiers = Object.values(girl.skillTiers);
+    const hasSkills = skillTiers.some((e) => e.skill_points_used > 0);
+    if (this.noSkills) return !hasSkills;
+    const maxPointsPerTierMap = {
+      [Rarity.starting]: [6, 6, 3, 3, 1],
+      [Rarity.common]: [6, 6, 3, 3, 1],
+      [Rarity.rare]: [6, 7, 3, 3, 2],
+      [Rarity.epic]: [6, 8, 4, 4, 3],
+      [Rarity.legendary]: [6, 9, 4, 4, 4],
+      [Rarity.mythic]: [6, 10, 5, 5, 5]
+    };
+    const maxPointsPerTier = maxPointsPerTierMap[girl.rarity];
+    const maxedSkills = skillTiers.every(
+      (e) => e.skill_points_used >= maxPointsPerTier[e.tier - 1]
+    );
+    if (this.maxedSkills) return maxedSkills;
+    if (this.someSkills) return hasSkills && !maxedSkills;
+    return false;
+  }
+
+  getParams() {
+    return {
+      maxedSkills: this.maxedSkills,
+      someSkills: this.someSkills,
+      noSkills: this.noSkills
+    };
+  }
+
+  static FACTORY: FilterFactory<GirlSkillsFilter> = {
+    type: GirlSkillsFilter.ID,
+    create: (config) => {
+      const maxedSkills = booleanParam(config, 'maxedSkills');
+      const someSkills = booleanParam(config, 'someSkills');
+      const noSkills = booleanParam(config, 'noSkills');
+      return new GirlSkillsFilter(
+        maxedSkills === true,
+        someSkills === true,
+        noSkills === true
+      );
+    }
+  };
+}
+
 export class SourceFilter extends AbstractFilter {
   static ID = 'source-event';
   id = SourceFilter.ID;

@@ -20,6 +20,7 @@ import {
   UpgradeReadyFilter,
   ClassMultiFilter,
   EquippedFilter,
+  GirlSkillsFilter,
   TeamsFilter
 } from './filter-runtime';
 import { BlessingDefinition, Team } from '../data';
@@ -43,6 +44,7 @@ export class FiltersManagerImpl implements FiltersManager {
 
     this.register(UpgradeReadyFilter.FACTORY);
     this.register(EquippedFilter.FACTORY);
+    this.register(GirlSkillsFilter.FACTORY);
     this.register(MinimumPotentialFilter.FACTORY);
     this.register(TeamsFilter.FACTORY);
 

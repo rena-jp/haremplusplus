@@ -116,6 +116,18 @@ export interface BaseGirlData {
   fetish: string;
 
   equipment?: EquipmentData; // WIP Experiment
+  skillTiers?: SkillTiers;
+}
+
+export interface SkillTiers {
+  [index: string]: SkillTier;
+}
+
+export interface SkillTier {
+  icon: string;
+  icon_path: string;
+  skill_points_used: number;
+  tier: number;
 }
 
 export interface EquipmentData {

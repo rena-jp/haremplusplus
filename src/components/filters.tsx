@@ -15,6 +15,7 @@ import {
   SourceMultiFilter,
   UpgradeReadyFilter,
   EquippedFilter,
+  GirlSkillsFilter,
   TeamsFilter
 } from '../data/filters/filter-runtime';
 import {
@@ -160,6 +161,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <EquippedForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <GirlSkillsForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -673,6 +679,63 @@ const EquippedForm: React.FC<FormProps> = ({
       removeFilter={removeFilter}
       multipleChoices={false}
       filterId={EquippedFilter.ID}
+    />
+  );
+};
+
+const GirlSkillsForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      {
+        label: 'Maxed skills',
+        description: 'Filter girls that have maxed skills'
+      },
+      {
+        label: 'Some skills',
+        description: 'Filter girls that have at least one skill but not maxed'
+      },
+      {
+        label: 'No skills',
+        description: 'Filter girls that have no skills'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    return values.every((v) => !v)
+      ? undefined
+      : new GirlSkillsFilter(
+          values[0] === true,
+          values[1] === true,
+          values[2] === true
+        );
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    if (filter instanceof GirlSkillsFilter) {
+      return [filter.maxedSkills, filter.someSkills, filter.noSkills];
+    } else {
+      return Array(3).fill(false);
+    }
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Girl skills"
+      description="Filter girl skills"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={false}
+      filterId={GirlSkillsFilter.ID}
     />
   );
 };

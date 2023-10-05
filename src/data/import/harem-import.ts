@@ -81,6 +81,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       girlData.own && girlData.armor !== undefined
         ? importEquipment(girlData.armor)
         : undefined;
+    const skillTiers = girlData.own ? girlData.skill_tiers_info : undefined;
     const baseCommonGirl: BaseGirlData = {
       id: String(girlData.id_girl),
       name: girlData.name,
@@ -132,7 +133,8 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       fetish: Array.isArray(girlData.ref.hobbies)
         ? ''
         : girlData.ref.hobbies.fetish,
-      equipment: equipmentData
+      equipment: equipmentData,
+      skillTiers: skillTiers
     };
 
     const commonGirl: CommonGirlData = {
