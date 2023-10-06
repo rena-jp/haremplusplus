@@ -20,7 +20,9 @@
     "eject": "react-scripts eject",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
-    "update-poses": "node ./scripts/update-poses.js"
+    "update-poses": "node ./scripts/update-poses.js",
+    "release": "node ./scripts/release.js",
+    "build-release": "npm run build && npm run release"
   },
   "browserslist": {
     "production": [
