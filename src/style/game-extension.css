@@ -16,10 +16,10 @@
 }
 
 .App.game-extension {
-  width: 95%;
-  height: calc(100% - 8em);
+  width: calc(100% - 1em);
+  height: calc(100% - 6em);
   /** Leave space on top to view energy and stuff. */
-  margin: 5em auto 3em auto;
+  margin: 5.5em auto 0 auto;
   background-color: rgb(69, 33, 41);
   padding: 0px;
   border-radius: 20px;

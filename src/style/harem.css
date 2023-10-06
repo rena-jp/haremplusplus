@@ -4,7 +4,7 @@
   height: 100%;
   width: 100%;
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr 1fr;
+  grid-template-columns: 1.3fr 0.7fr 1fr;
   column-gap: 5px;
 
   grid-auto-rows: minmax(auto, max-content);
@@ -78,7 +78,7 @@
   background-repeat: no-repeat;
   background-size: 2.5em;
 
-  width: 18em;
+  width: 14em;
 
   font-size: 0.8em;
 }
@@ -94,7 +94,7 @@
 }
 
 .toggle0pose {
-  margin-left: 4em;
+  margin-left: 0em;
 
   display: flex;
   flex-direction: row;
@@ -104,11 +104,10 @@
 }
 
 .qh-menu-toggle {
-  margin-right: 2em;
+  margin-right: 0em;
 }
 
 .toolbar-content > .hh-action-button.clear-filters {
-  width: 10em;
   padding: 5px;
 }
 
@@ -132,11 +131,7 @@
 }
 
 .harem-toolbar > .refresh {
-  margin-right: clamp(
-    1rem,
-    calc(5vw - 3rem),
-    2.5rem
-  ); /* Add a bit of space before the X button */
+  margin-right: 1em;
 }
 
 .harem-toolbar > .refresh[disabled] {
@@ -230,7 +225,8 @@
 
 .pose > img {
   /** Auto size the image in the available space. */
-  flex: 1 1 0;
+  width: 100%;
+  object-fit: contain;
   min-height: 0;
 }
 

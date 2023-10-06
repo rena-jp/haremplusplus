@@ -27,7 +27,7 @@
 }
 
 /* @media screen and (max-width: 4000px) { */
-@media screen and (max-width: 1020px) {
+@media screen and (max-width: 1070px) {
   .harem-toolbar > .toolbar-content {
     display: none;
   }
