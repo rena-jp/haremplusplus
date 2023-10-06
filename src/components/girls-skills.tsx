@@ -54,33 +54,60 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
   let tooltip = null;
   if (tier === 1) {
     if (girl.salary || girl.salaryPerHour) {
-      const infos = [];
-      if (girl.salary !== undefined) infos.push(`${girl.salary}`);
-      if (girl.salaryPerHour !== undefined)
-        infos.push(`(${girl.salaryPerHour}/h)`);
-      if (infos.length > 0) tooltip = 'Income: ' + infos.join(' ');
+      const contents = [];
+      if (girl.salary !== undefined) {
+        contents.push(<br />, `${girl.salary}`);
+      }
+      if (girl.salaryPerHour !== undefined) {
+        contents.push(<br />, `(${girl.salaryPerHour}/h)`);
+      }
+      if (contents.length > 0) tooltip = <span>Income:{contents}</span>;
     }
   }
   if (tier === 3) {
     switch (icon) {
       case 'hair_color': {
         const name = HairColors.toDisplayString(girl.hairColor[0]);
-        tooltip = `Hair Color: ${name}`;
+        tooltip = (
+          <span>
+            Hair Color:
+            <br />
+            {name}
+          </span>
+        );
         break;
       }
       case 'eye_color': {
         const name = EyeColors.toDisplayString(girl.eyeColor[0]);
-        tooltip = `Eye Color: ${name}`;
+        tooltip = (
+          <span>
+            Eye Color:
+            <br />
+            {name}
+          </span>
+        );
         break;
       }
       case 'figure': {
         const name = Poses.toDisplayString(girl.pose);
-        tooltip = `Favorite position: ${name}`;
+        tooltip = (
+          <span>
+            Favorite position
+            <br />
+            {name}
+          </span>
+        );
         break;
       }
       case 'zodiac': {
         const name = Zodiacs.toDisplayString(girl.zodiac);
-        tooltip = `Zodiac sign: ${name}`;
+        tooltip = (
+          <span>
+            Zodiac sign:
+            <br />
+            {name}
+          </span>
+        );
         break;
       }
     }
@@ -89,19 +116,19 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
     switch (girl.element) {
       case Element.yellow:
       case Element.dark:
-        tooltip = 'Stun';
+        tooltip = <span>Stun</span>;
         break;
       case Element.orange:
       case Element.white:
-        tooltip = 'Shield';
+        tooltip = <span>Shield</span>;
         break;
       case Element.green:
       case Element.purple:
-        tooltip = 'Reflect';
+        tooltip = <span>Reflect</span>;
         break;
       case Element.red:
       case Element.blue:
-        tooltip = 'Execute';
+        tooltip = <span>Execute</span>;
         break;
     }
   }

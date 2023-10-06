@@ -15,9 +15,17 @@ export const GirlTraits = React.memo<GirlTraitsProps>(
       const values = Blessings.getBlessingValue(girl, blessing);
       const value = Array.isArray(values) ? values[0] : values;
       const trait: Trait = { traitEnum, traitValue: value };
-      const tooltip = Blessings.toDisplayString(blessing, value);
+
       return (
-        <Tooltip tooltip={<span>{tooltip}</span>}>
+        <Tooltip
+          tooltip={
+            <span>
+              {Blessings.toDisplayType(blessing)}:
+              <br />
+              {Blessings.toDisplayString(blessing, value)}
+            </span>
+          }
+        >
           <span
             onClick={() => {
               setSingleTrait(trait);
