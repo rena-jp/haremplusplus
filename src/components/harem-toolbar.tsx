@@ -49,7 +49,7 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   totalGirlsCount,
   activeQuickFilters,
   clearQuickFilters,
-  traitsFilter: traitsFilter,
+  traitsFilter,
   clearTraitsFilter,
   show0Pose,
   toggle0Pose,
