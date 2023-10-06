@@ -1,3 +1,11 @@
+## 0.14.0 - 2023-10-06
+
+- Add support for girl skills
+- Add support for new colors
+- Update unknown poses
+- Fix an affection scene bug
+- Move quick harem to waifu page
+
 ## 0.13.7 - 2023-06-19
 
 - Fix a bug where the inventory would only display 50 items instead of (up to) 600
