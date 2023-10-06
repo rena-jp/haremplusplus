@@ -484,6 +484,19 @@ export const CloseButton: React.FC<CloseButtonProps> = ({ close, title }) => {
   return <div className="close-popup" onClick={close} title={title}></div>;
 };
 
+export interface ReturnButtonProps {
+  close: () => void;
+  title?: string;
+}
+
+export const ReturnButton: React.FC<ReturnButtonProps> = ({ close, title }) => {
+  return (
+    <div className="return-button" onClick={close} title={title}>
+      <div className="return-button-content"></div>
+    </div>
+  );
+};
+
 export function getDomain(): string {
   const host = window.location.host;
   const domain = host.includes('localhost')

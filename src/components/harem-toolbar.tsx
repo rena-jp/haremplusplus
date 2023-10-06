@@ -2,7 +2,7 @@ import { ReactNode, useContext, useMemo } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import { Element } from '../data/data';
 import { FiltersContext } from '../hooks/filter-hooks';
-import { CloseButton, GemsCount, Tooltip } from './common';
+import { GemsCount, ReturnButton, Tooltip } from './common';
 import { QuickFilter } from './harem';
 import { RequestsMonitor } from './requests-monitor';
 import { PulseLoader } from 'react-spinners';
@@ -206,7 +206,7 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         </Tooltip>
       </button>
       {close === undefined ? null : (
-        <CloseButton title="Close harem" close={close} />
+        <ReturnButton title="Return" close={close} />
       )}
       <div className="break" />
       <FiltersDescription

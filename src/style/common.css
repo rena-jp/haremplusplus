@@ -151,6 +151,23 @@ requiring actual content. */
   height: 2.5em;
 }
 
+.return-button {
+  cursor: pointer;
+  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  background-image: linear-gradient(to top, #008ed5 0, #05719c 100%);
+  border: 1px solid #000;
+  border-radius: 50%;
+}
+
+.return-button-content {
+  background-image: url(https://hh2.hh-content.com/design/ic_arrow-back.svg);
+  width: 2em;
+  height: 2em;
+  background-size: 1.5em;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .element {
   width: 2em;
   height: 2em;

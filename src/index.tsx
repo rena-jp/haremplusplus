@@ -10,6 +10,7 @@ import {
 import { handleQuest } from './game-extension/quest-handler';
 import { handleTeams } from './game-extension/teams-handler';
 import { handleHaremLinks } from './game-extension/harem-links-handler';
+import { handleWaifu } from './game-extension/waifu-handler';
 
 // For localhost testing, host will be localhost:3000
 if (window.location.host === 'localhost:3000') {
@@ -26,7 +27,7 @@ if (window.location.host === 'localhost:3000') {
   handleHaremLinks();
 }
 
-// For Home, add a "Show Harem" button, to show the harem in a Dialog.
+// For Home, add a "Show Harem" button.
 if (window.location.pathname.startsWith('/home.html')) {
   handleHome();
 }
@@ -41,4 +42,8 @@ else if (window.location.pathname.startsWith('/quest/')) {
 // Teams data
 else if (window.location.pathname.startsWith('/teams.html')) {
   handleTeams();
+}
+// For Waifu, to show the harem in a Dialog.
+else if (window.location.pathname.startsWith('/waifu.html')) {
+  handleWaifu();
 }

@@ -3,5 +3,5 @@
  */
 export async function handleHamburgerMenu(): Promise<void> {
   const haremLink = window.$("nav a[href='/harem.html']");
-  haremLink.attr('href', 'home.html?harem');
+  haremLink.attr('href', 'waifu.html?harem');
 }
