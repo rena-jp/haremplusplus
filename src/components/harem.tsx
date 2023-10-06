@@ -8,6 +8,7 @@ import {
 import '../style/harem.css';
 import '../style/controls.css';
 import { Summary } from './summary';
+import { TraitsSummary } from './traits-summary';
 import { GameAPI } from '../api/GameAPI';
 import { Tab, TabFolder } from './tabs';
 import { FiltersPanel } from './filters';
@@ -17,6 +18,7 @@ import { HaremMode, HaremWidget } from './harem-widget';
 import { HaremToolbar } from './harem-toolbar';
 import { useQuickFilters } from '../hooks/quick-filter-hooks';
 import { useSorter } from '../hooks/sort-hooks';
+import { useTraitsFilter } from '../hooks/traits-filter-hooks';
 import { FiltersContext, useFilters } from '../hooks/filter-hooks';
 import { useApplyFilters } from '../hooks/girls-data-hooks';
 import { OptionsContext } from '../data/options-context';
@@ -63,7 +65,8 @@ export const Harem: React.FC<HaremProps> = ({
     const sort: Tab = { id: 'sort', label: 'Sort' };
     const _presets: Tab = { id: 'presets', label: 'Presets' };
     const filters: Tab = { id: 'filters', label: 'Filters' };
-    return [summary, filters, sort];
+    const traits: Tab = { id: 'traits', label: 'Traits' };
+    return [summary, filters, sort, traits];
   }, []);
 
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -96,11 +99,13 @@ export const Harem: React.FC<HaremProps> = ({
     currentBlessings,
     upcomingBlessings
   );
-  const { filteredGirls, matchedGirls } = useApplyFilters(
+  const traitsFilterState = useTraitsFilter();
+  const { filteredGirls, quickFilteredGirls, matchedGirls } = useApplyFilters(
     allGirls,
     sorterState.sorter,
     filtersState.activeFilter,
     quickFiltersState.activeQuickFilters,
+    traitsFilterState.traitsFilter,
     filtersState.searchText
   );
 
@@ -153,6 +158,12 @@ export const Harem: React.FC<HaremProps> = ({
               visible={displayedTab?.id === 'summary'}
               close={closePanel}
             />
+            <TraitsSummary
+              filteredGirls={quickFilteredGirls}
+              traitsFilterState={traitsFilterState}
+              visible={displayedTab?.id === 'traits'}
+              close={closePanel}
+            />
             <FiltersPanel
               visible={displayedTab?.id === 'filters'}
               close={closePanel}
@@ -181,6 +192,8 @@ export const Harem: React.FC<HaremProps> = ({
               visibleGirlsCount={matchedGirls.length}
               activeQuickFilters={quickFiltersState.activeQuickFilters}
               clearQuickFilters={quickFiltersState.clearQuickFilters}
+              traitsFilter={traitsFilterState.traitsFilter}
+              clearTraitsFilter={traitsFilterState.clearTraits}
               show0Pose={is0Pose}
               toggle0Pose={toggle0Pose}
               toggleTab={togglePanel}
@@ -202,6 +215,7 @@ export const Harem: React.FC<HaremProps> = ({
               haremMode={haremMode}
               setHaremMode={setHaremMode}
               teamsData={teamsData}
+              setSingleTrait={traitsFilterState.toggleSingleTrait}
             />
           </div>
         </OptionsContext.Provider>

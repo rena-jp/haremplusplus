@@ -12,6 +12,10 @@ import { HaremMode } from './harem-widget';
 import Popup from 'reactjs-popup';
 
 import '../style/hamburger-menu.css';
+import {
+  TraitsFilter,
+  isTraitsFilterActive
+} from '../hooks/traits-filter-hooks';
 
 export interface HaremToolbarProps {
   gameAPI: GameAPI;
@@ -22,6 +26,9 @@ export interface HaremToolbarProps {
   // Quick filters
   activeQuickFilters: QuickFilter[];
   clearQuickFilters(): void;
+  // Trait filters
+  traitsFilter: TraitsFilter;
+  clearTraitsFilter(): void;
   // Others
   show0Pose: boolean;
   toggle0Pose(): void;
@@ -42,6 +49,8 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   totalGirlsCount,
   activeQuickFilters,
   clearQuickFilters,
+  traitsFilter: traitsFilter,
+  clearTraitsFilter,
   show0Pose,
   toggle0Pose,
   loading,
@@ -76,6 +85,14 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
       </button>
 
       <button
+        className="hh-action-button clear-filters trait"
+        disabled={!isTraitsFilterActive(traitsFilter)}
+        onClick={clearTraitsFilter}
+      >
+        Clear traits filter
+      </button>
+
+      <button
         className="hh-action-button restore-default-filter"
         disabled={isDefaultFilter}
         onClick={restoreDefaultFilter}
@@ -87,6 +104,7 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         disabled={activeQuickFilters.length === 0 && filters.length === 0}
         onClick={() => {
           clearQuickFilters();
+          clearTraitsFilter();
           clearFilters();
         }}
       >

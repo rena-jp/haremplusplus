@@ -21,6 +21,7 @@ import {
   Pose,
   Quest,
   Stats,
+  Trait,
   Zodiacs
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
@@ -50,6 +51,7 @@ import { SceneViewer } from './scenes';
 import { UpgradePage } from './upgrade';
 import { EquipmentList } from './girls-equipment';
 import { SkillTierList } from './girls-skills';
+import { GirlTraits } from './girls-traits';
 
 export interface GirlDescriptionProps {
   /**
@@ -70,6 +72,7 @@ export interface GirlDescriptionProps {
   show0Pose: boolean;
   selectGirl(girl: CommonGirlData): void;
   openUpgrade(page: UpgradePage): void;
+  setSingleTrait(trait: Trait): void;
 }
 
 export const GirlDescription: React.FC<GirlDescriptionProps> = ({
@@ -80,7 +83,8 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   allGirls,
   listGirls,
   selectGirl,
-  openUpgrade
+  openUpgrade,
+  setSingleTrait
 }) => {
   const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
   const gameAPI = useContext(GameAPIContext).gameAPI!;
@@ -183,6 +187,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                   upcomingBlessing={nextBlessing}
                   domain={domain}
                   openUpgrade={openUpgrade}
+                  setSingleTrait={setSingleTrait}
                 />
               )}
               <p>
@@ -206,6 +211,7 @@ export interface BlessingSectionProps {
   currentBlessing: BlessingDefinition[];
   upcomingBlessing: BlessingDefinition[];
   openUpgrade(page: UpgradePage): void;
+  setSingleTrait(trait: Trait): void;
 }
 
 export const BlessingSection: React.FC<BlessingSectionProps> = ({
@@ -215,7 +221,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   allGirls,
   currentBlessing,
   upcomingBlessing,
-  openUpgrade
+  openUpgrade,
+  setSingleTrait
 }) => {
   return (
     <div className="details-section stats">
@@ -250,6 +257,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           <SkillTierList girl={girl} />
         </>
       ) : null}
+      <p>Traits:</p>
+      <GirlTraits girl={girl} setSingleTrait={setSingleTrait} />
       {girl.recruited ? (
         <p>Recruited: {new Date(girl.recruited).toLocaleDateString()}</p>
       ) : null}

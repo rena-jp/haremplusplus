@@ -1,14 +1,21 @@
 import { useMemo } from 'react';
 import { QuickFilter } from '../components/harem';
-import { CommonGirlData, matchesBlessing } from '../data/data';
+import {
+  CommonGirlData,
+  Traits,
+  matchesBlessing,
+  matchesTraits
+} from '../data/data';
 import { Filter } from '../data/filters/filter-api';
 import { Sorter } from '../data/sort';
+import { TraitsFilter } from './traits-filter-hooks';
 
 export const useApplyFilters = (
   allGirls: CommonGirlData[],
   sorter: Sorter | undefined,
   activeFilter: Filter | undefined,
   quickFilters: QuickFilter[],
+  traitsFilter: TraitsFilter,
   searchText: string
 ) => {
   const sortedGirls = useMemo(() => {
@@ -26,13 +33,28 @@ export const useApplyFilters = (
     [filteredGirls, quickFilters]
   );
 
+  const traitFilteredGirls = useMemo(() => {
+    return traitsFilter == null
+      ? quickFilteredGirls
+      : quickFilteredGirls.filter((girl) =>
+          matchesTraits(
+            girl,
+            Traits.values()
+              .map((key) => traitsFilter.traits[key])
+              .filter(<T>(e?: T): e is T => e !== undefined),
+            traitsFilter.skilledOnly
+          )
+        );
+  }, [quickFilteredGirls, traitsFilter]);
+
   const textFilter = useMemo(
-    () => quickFilteredGirls.filter((girl) => matchesSearch(girl, searchText)),
-    [quickFilteredGirls, searchText]
+    () => traitFilteredGirls.filter((girl) => matchesSearch(girl, searchText)),
+    [traitFilteredGirls, searchText]
   );
 
   return {
     filteredGirls,
+    quickFilteredGirls,
     matchedGirls: textFilter
   };
 };

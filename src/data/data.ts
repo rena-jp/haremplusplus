@@ -888,3 +888,155 @@ export const SPECIAL_MYTHIC_BOOK_ID = 631;
 export const SPECIAL_MYTHIC_GIFT_ID = 627;
 
 export const EMPTY_STATS = { hardcore: 0, charm: 0, knowhow: 0 };
+
+export enum TraitEnum {
+  HairColor,
+  EyeColor,
+  Zodiac,
+  Pose
+}
+
+export type HairColorTrait = {
+  traitEnum: TraitEnum.HairColor;
+  traitValue: HairColor;
+};
+
+export type EyeColorTrait = {
+  traitEnum: TraitEnum.EyeColor;
+  traitValue: EyeColor;
+};
+
+export type ZodiacTrait = {
+  traitEnum: TraitEnum.Zodiac;
+  traitValue: Zodiac;
+};
+
+export type PoseTrait = {
+  traitEnum: TraitEnum.Pose;
+  traitValue: Pose;
+};
+
+export type Trait = HairColorTrait | EyeColorTrait | ZodiacTrait | PoseTrait;
+
+export namespace Traits {
+  export function getElements(traitEnum: TraitEnum): Element[] {
+    switch (traitEnum) {
+      case TraitEnum.HairColor:
+        return [Element.green, Element.white];
+      case TraitEnum.EyeColor:
+        return [Element.dark, Element.red];
+      case TraitEnum.Zodiac:
+        return [Element.orange, Element.purple];
+      case TraitEnum.Pose:
+        return [Element.blue, Element.yellow];
+    }
+  }
+
+  export function toBlessing(traitEnum: TraitEnum): Blessing {
+    switch (traitEnum) {
+      case TraitEnum.HairColor:
+        return Blessing.HairColor;
+      case TraitEnum.EyeColor:
+        return Blessing.EyeColor;
+      case TraitEnum.Zodiac:
+        return Blessing.Zodiac;
+      case TraitEnum.Pose:
+        return Blessing.Pose;
+    }
+  }
+
+  export function toBlessingType(trait: Trait): BlessingType {
+    return {
+      blessing: toBlessing(trait.traitEnum),
+      blessingValue: trait.traitValue
+    };
+  }
+
+  export function values(): TraitEnum[] {
+    return Object.values(TraitEnum).filter(
+      (e): e is TraitEnum => typeof e !== 'string'
+    );
+  }
+
+  export function getEnumType(traitEnum: TraitEnum.HairColor): typeof HairColor;
+  export function getEnumType(traitEnum: TraitEnum.EyeColor): typeof EyeColor;
+  export function getEnumType(traitEnum: TraitEnum.Zodiac): typeof Zodiac;
+  export function getEnumType(traitEnum: TraitEnum.Pose): typeof Pose;
+  export function getEnumType(
+    traitEnum: TraitEnum
+  ): typeof HairColor | typeof EyeColor | typeof Zodiac | typeof Pose;
+  export function getEnumType(
+    traitEnum: TraitEnum
+  ): typeof HairColor | typeof EyeColor | typeof Zodiac | typeof Pose {
+    switch (traitEnum) {
+      case TraitEnum.HairColor:
+        return HairColor;
+      case TraitEnum.EyeColor:
+        return EyeColor;
+      case TraitEnum.Zodiac:
+        return Zodiac;
+      case TraitEnum.Pose:
+        return Pose;
+    }
+  }
+}
+
+export function allTraits(): Trait[] {
+  const result: Trait[] = [];
+  for (const traitEnum of Traits.values()) {
+    const values = Traits.getEnumType(traitEnum);
+    for (const value of Object.values(values).filter(
+      (e: any): e is number => typeof e === 'number'
+    )) {
+      result.push({ traitEnum: traitEnum, traitValue: value });
+    }
+  }
+  return result;
+}
+
+export function equalTrait(trait1: Trait, trait2: Trait): boolean {
+  return (
+    trait1.traitEnum === trait2.traitEnum &&
+    trait1.traitValue === trait2.traitValue
+  );
+}
+
+export function matchesTraits(
+  girl: BaseGirlData,
+  traits: Trait[],
+  skilledOnly: boolean
+): boolean {
+  if (traits.length <= 0) return true;
+  const hasEveryTrait = traits.every((trait) =>
+    matchesBlessing(girl, Traits.toBlessingType(trait))
+  );
+  if (!hasEveryTrait) return false;
+  if (skilledOnly) {
+    const hasSkill = traits.some((trait) => matchesTraitSkill(girl, trait));
+    if (!hasSkill) return false;
+  }
+  return true;
+}
+
+function matchesTraitSkill(girl: BaseGirlData, trait: Trait): boolean {
+  if (girl.maxStars < 3) return false; // no tier 3 skill
+
+  const matchesElement = Traits.getElements(trait.traitEnum).includes(
+    girl.element
+  );
+  if (!matchesElement) return false;
+
+  switch (trait.traitEnum) {
+    case TraitEnum.EyeColor:
+      if (girl.eyeColor[0] === trait.traitValue) return true;
+      break;
+    case TraitEnum.HairColor:
+      if (girl.hairColor[0] === trait.traitValue) return true;
+      break;
+    default:
+      if (matchesBlessing(girl, Traits.toBlessingType(trait))) return true;
+      break;
+  }
+
+  return false;
+}

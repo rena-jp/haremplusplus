@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { forceCheck } from 'react-lazyload';
 import { GameAPI, SalaryDataListener } from '../api/GameAPI';
-import { BlessingDefinition, CommonGirlData, Element } from '../data/data';
+import {
+  BlessingDefinition,
+  CommonGirlData,
+  Element,
+  Trait
+} from '../data/data';
 import { GirlDescription } from './description';
 import { GIRL_TOOLTIP_ID, GirlTile } from './girl';
 import { Teams } from './teams';
@@ -44,6 +49,7 @@ export interface HaremWidgetProps {
   haremMode: HaremMode;
   setHaremMode: (mode: HaremMode) => void;
   teamsData: TeamsData;
+  setSingleTrait(trait: Trait): void;
 }
 
 export const HaremWidget: React.FC<HaremWidgetProps> = ({
@@ -57,7 +63,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   consumeGems,
   haremMode,
   setHaremMode,
-  teamsData
+  teamsData,
+  setSingleTrait
 }) => {
   // Sort girls by owned/not owned, to ensure we render owned girls first (avoid weird
   // initial display on small harems with few owned girls).
@@ -315,6 +322,7 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         show0Pose={show0Pose}
         selectGirl={selectGirl}
         openUpgrade={openUpgrade}
+        setSingleTrait={setSingleTrait}
       />
       {selectedGirl && showUpgrade && selectedGirl.own && (
         <div className="harem-upgrade-panel">

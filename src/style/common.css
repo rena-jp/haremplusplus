@@ -390,3 +390,20 @@ requiring actual content. */
 .stats-list > .stat.kh-stat {
   background-image: url(https://hh2.hh-content.com/pictures/misc/items_icons/3.png);
 }
+
+.trait-icon {
+  display: inline-block;
+  background-size: cover;
+  width: 3em;
+  height: 3em;
+  margin-right: 0.5em;
+}
+
+.blessings-summary .trait-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.25em;
+}
+.details .trait-icon {
+  cursor: pointer;
+}

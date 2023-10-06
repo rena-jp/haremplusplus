@@ -1,5 +1,15 @@
 import '../style/common.css';
-import { Elements, Element, Stats, Class, Poses } from '../data/data';
+import {
+  Elements,
+  Element,
+  Stats,
+  Class,
+  Poses,
+  Trait,
+  TraitEnum,
+  HairColor,
+  EyeColor
+} from '../data/data';
 import { Pose, Zodiac } from '../data/data';
 import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
 import { ReactElement, ReactNode, useMemo, useState } from 'react';
@@ -567,5 +577,69 @@ export const DefenseIcon = () => {
       src="https://hh2.hh-content.com/caracs/deff_undefined.png"
       className="defense-icon"
     />
+  );
+};
+
+export interface TraitIconProps {
+  trait: Trait;
+}
+
+export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
+  const hairColorMap = {
+    [HairColor.blue]: '00F',
+    [HairColor.grey]: '888',
+    [HairColor.blond]: 'FF0',
+    [HairColor.white]: 'FFF',
+    [HairColor.pink]: 'F99',
+    [HairColor.silver]: 'CCC',
+    [HairColor.red]: 'F00',
+    [HairColor.darkBlond]: 'B62',
+    [HairColor.dark]: '321',
+    [HairColor.green]: '0F0',
+    [HairColor.purple]: 'F0F',
+    [HairColor.orange]: 'F90',
+    [HairColor.black]: '000',
+    [HairColor.brown]: 'A55',
+    [HairColor.golden]: 'FD0',
+    [HairColor.darkPink]: 'B06',
+    [HairColor.strawberryBlond]: 'EB8',
+    [HairColor.unknown]: 'XXX',
+    [HairColor.bronze]: 'D83'
+  };
+
+  const eyeColorMap = {
+    [EyeColor.blue]: '00F',
+    [EyeColor.golden]: 'FD0',
+    [EyeColor.green]: '0F0',
+    [EyeColor.brown]: 'A55',
+    [EyeColor.pink]: 'F99',
+    [EyeColor.red]: 'F00',
+    [EyeColor.purple]: 'F0F',
+    [EyeColor.orange]: 'F90',
+    [EyeColor.silver]: 'CCC',
+    [EyeColor.darkPink]: 'B06',
+    [EyeColor.black]: '000',
+    [EyeColor.grey]: '888',
+    [EyeColor.unknown]: 'XXX',
+    [EyeColor.dark]: '321'
+  };
+
+  let url = 'https://hh2.hh-content.com/pictures/design/blessings_icons/';
+  switch (trait.traitEnum) {
+    case TraitEnum.HairColor:
+      url += `hair_colors/hair_color_${hairColorMap[trait.traitValue]}.png`;
+      break;
+    case TraitEnum.EyeColor:
+      url += `eye_colors/eye_color_${eyeColorMap[trait.traitValue]}.png`;
+      break;
+    case TraitEnum.Zodiac:
+      url += `zodiac_signs/zodiac_sign_${Zodiac[trait.traitValue]}.png`;
+      break;
+    case TraitEnum.Pose:
+      url += `positions/fav_pose_${trait.traitValue}.png`;
+      break;
+  }
+  return (
+    <span className="trait-icon" style={{ backgroundImage: `url(${url})` }} />
   );
 };
