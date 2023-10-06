@@ -1,7 +1,3 @@
-# WARNING
-
-Since end of June, 2023, Development of the Harem++ script is discontinued, as I stopped playing the game. The script remains available, but might stop working properly in the future.
-
 # Harem++
 
 ## Userscript
@@ -11,7 +7,7 @@ This project provides a userscript (To be used with Tampermonkey, or similar bro
 ## Installation
 
 - Install Tampermonkey or another userscript extension for your web-browser
-- Open https://raw.githubusercontent.com/LiliatHH/haremplusplus/main/release/haremplusplus.user.js and click Install
+- Open https://raw.githubusercontent.com/rena-jp/haremplusplus/main/release/haremplusplus.user.js and click Install
 
 ## Features
 
@@ -33,3 +29,4 @@ This project provides a userscript (To be used with Tampermonkey, or similar bro
 
 - Liliat
 - -MM-
+- rena-jp
