@@ -19,13 +19,16 @@ export const GirlTraits = React.memo<GirlTraitsProps>(
         <span className="trait-group">
           {values.map((value) => {
             const trait: Trait = { traitEnum, traitValue: value };
+            const colorName = Blessings.getEnumType(blessing)[value];
             return (
               <Tooltip
                 tooltip={
-                  <span>
+                  <span className="color">
                     {Blessings.toDisplayType(blessing)}:
                     <br />
-                    {Blessings.toDisplayString(blessing, value)}
+                    <span className={colorName}>
+                      {Blessings.toDisplayString(blessing, value)}
+                    </span>
                   </span>
                 }
               >

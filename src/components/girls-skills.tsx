@@ -6,7 +6,9 @@ import {
   HairColors,
   EyeColors,
   Poses,
-  Zodiacs
+  Zodiacs,
+  EyeColor,
+  HairColor
 } from '../data/data';
 import '../style/girls-skills.css';
 import { Tooltip } from './common';
@@ -67,23 +69,27 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
   if (tier === 3) {
     switch (icon) {
       case 'hair_color': {
-        const name = HairColors.toDisplayString(girl.hairColor[0]);
+        const firstHairColor = girl.hairColor[0];
+        const name = HairColors.toDisplayString(firstHairColor);
+        const colorName = HairColor[firstHairColor];
         tooltip = (
-          <span>
+          <span className="color">
             Hair Color:
             <br />
-            {name}
+            <span className={colorName}>{name}</span>
           </span>
         );
         break;
       }
       case 'eye_color': {
-        const name = EyeColors.toDisplayString(girl.eyeColor[0]);
+        const firstEyeColor = girl.eyeColor[0];
+        const name = EyeColors.toDisplayString(firstEyeColor);
+        const colorName = EyeColor[firstEyeColor];
         tooltip = (
-          <span>
+          <span className="color">
             Eye Color:
             <br />
-            {name}
+            <span className={colorName}>{name}</span>
           </span>
         );
         break;
