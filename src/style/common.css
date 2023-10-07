@@ -411,9 +411,6 @@ requiring actual content. */
 .trait-icon {
   display: inline-block;
   background-size: cover;
-  width: 3em;
-  height: 3em;
-  margin-right: 0.5em;
 }
 
 .blessings-summary .trait-icon {
@@ -421,6 +418,18 @@ requiring actual content. */
   height: 1.5em;
   margin-right: 0.25em;
 }
-.details .trait-icon {
+
+.details .girl-traits .trait-icon {
+  width: 3em;
+  height: 3em;
+  margin-right: 0;
   cursor: pointer;
+}
+
+.details .girl-traits .trait-group {
+  margin-right: 0.5em;
+}
+
+.details .girl-traits .trait-group span {
+  vertical-align: top;
 }
