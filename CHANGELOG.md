@@ -1,3 +1,8 @@
+## 0.14.1 - 2023-10-07
+
+- Change to display the second color as well
+- Improve tooltip color
+
 ## 0.14.0 - 2023-10-06
 
 - Add support for girl skills
