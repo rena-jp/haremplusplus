@@ -22,6 +22,7 @@ import {
   EquipmentData,
   HaremData,
   replace,
+  SkillTiers,
   Stats
 } from '../data/data';
 import {
@@ -323,7 +324,8 @@ function quickEqualGirls(
     girl1.variations?.length === girl2.variations?.length &&
     girl1.pose === girl2.pose && // Maybe the pose was unknown, and now it's not
     equalStats(girl1.stats, girl2.stats) && // Workaround for stats refresh issue; also accounts for stats that may be adjusted after BC
-    equalEquipment(girl1.equipment, girl2.equipment) // Maybe equipment has changed
+    equalEquipment(girl1.equipment, girl2.equipment) && // Maybe equipment has changed
+    equalSkillTiers(girl1.skillTiers, girl2.skillTiers)
   );
 }
 
@@ -364,4 +366,19 @@ function equalItem(item1: Equipment, item2: Equipment): boolean {
     item1.level === item2.level &&
     item1.uid === item2.uid
   );
+}
+
+function equalSkillTiers(
+  skillTiers1?: SkillTiers,
+  skillTiers2?: SkillTiers
+): boolean {
+  if (skillTiers1 === skillTiers2) return true;
+  if (skillTiers1 === undefined || skillTiers2 === undefined) return false;
+  return Array(5)
+    .fill(0)
+    .every(
+      (_, i) =>
+        skillTiers1[i + 1]?.skill_points_used ===
+        skillTiers2[i + 1]?.skill_points_used
+    );
 }
