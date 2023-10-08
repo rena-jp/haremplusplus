@@ -1,3 +1,8 @@
+## 0.14.2 - 2023-10-08
+
+- Fix money collection function to work
+- Fix to check for skill updates
+
 ## 0.14.1 - 2023-10-07
 
 - Change to display the second color as well
