@@ -1360,21 +1360,7 @@ function refreshSalaryManager(
     ownedGirls[girlId] = new window.Girl(salaryData[girlId]);
     ownedGirls[girlId]['gId'] = parseInt(girlId, 10);
   }
-  salaryManager.init(ownedGirls, true);
-
-  // Refresh the collect all button
-  const collectButton = window.$('#collect_all');
-  const salarySum = collectButton.find('.sum');
-  const newAmount = Math.max(
-    0,
-    parseInt(salarySum.attr('amount'), 10) - girlSalaryEntry.salary
-  );
-  salarySum.attr('amount', newAmount);
-  const collectStr = window.GT.design.harem_collect;
-  const amountTxt = window.number_format_lang(newAmount, 0);
-  salarySum.text(collectStr + ' ' + amountTxt);
-
-  window.Collect.changeDisableBtnState(newAmount <= 0);
+  salaryManager.init(ownedGirls, false);
 }
 
 function toMaxOutItems(result: MaxOutResult): MaxOutItems {

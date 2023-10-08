@@ -1,9 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
+import { GirlsDataEntry } from '../data/game-data';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
+
+  const ownedGirls: any = {};
+  const girlsDataList = window.girlsDataList as unknown as GirlsDataEntry[];
+  girlsDataList.forEach((girl) => {
+    const girlId = girl.id_girl;
+    ownedGirls[girlId] = new window.Girl(girl);
+    ownedGirls[girlId]['gId'] = Number(girlId);
+  });
+  window.GirlSalaryManager.init(ownedGirls, false);
 
   const root = createRoot();
   let visible = searchParams.has('harem');
