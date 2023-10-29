@@ -1,3 +1,12 @@
+## 0.15.1 - 2023-10-29
+
+- Fix unknown pose icon error
+- Remove unused css
+
+## 0.15.0 - 2023-10-29
+
+- Add Comix-Harem support (thanks to bohammettuz)
+
 ## 0.14.2 - 2023-10-08
 
 - Fix money collection function to work
