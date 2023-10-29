@@ -219,7 +219,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
         list: gameGirls,
         quests: gameQuests
       };
-      toHaremData(gameData).then(updateResult);
+      toHaremData(gameData, gameAPI.getGameName()).then(updateResult);
     }
   }, [gameGirls, gameBlessings, gameQuests]);
 

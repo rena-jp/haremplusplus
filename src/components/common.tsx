@@ -641,7 +641,9 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     [HairColor.darkPink]: 'B06',
     [HairColor.strawberryBlond]: 'EB8',
     [HairColor.unknown]: 'XXX',
-    [HairColor.bronze]: 'D83'
+    [HairColor.bronze]: 'D83',
+    [HairColor.ashBrown]: '765',
+    [HairColor.bald]: 'YYY'
   };
 
   const eyeColorMap = {
@@ -658,7 +660,8 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     [EyeColor.black]: '000',
     [EyeColor.grey]: '888',
     [EyeColor.unknown]: 'XXX',
-    [EyeColor.dark]: '321'
+    [EyeColor.dark]: '321',
+    [EyeColor.white]: 'FFF'
   };
 
   const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
