@@ -563,8 +563,11 @@ export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   return <img src={`https://${contentHostName2}/pictures/items/${icon}.png`} />;
 };
 
-export const EnduranceIcon = () => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+export interface SimpleIconProps {
+  gameName: GameName;
+}
+
+export const EnduranceIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
@@ -574,8 +577,7 @@ export const EnduranceIcon = () => {
   );
 };
 
-export const EgoIcon = () => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+export const EgoIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
@@ -585,8 +587,7 @@ export const EgoIcon = () => {
   );
 };
 
-export const AttackIcon = () => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+export const AttackIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
@@ -596,8 +597,7 @@ export const AttackIcon = () => {
   );
 };
 
-export const DefenseIcon = () => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+export const DefenseIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img

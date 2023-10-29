@@ -12,6 +12,7 @@ import {
   CommonGirlData,
   EyeColor,
   EyeColors,
+  GameName,
   getBlessedStats,
   getBlessingMultiplier,
   getSourceLabel,
@@ -189,6 +190,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                   domain={domain}
                   openUpgrade={openUpgrade}
                   setSingleTrait={setSingleTrait}
+                  gameName={gameAPI.getGameName()}
                 />
               )}
               <p>
@@ -213,6 +215,7 @@ export interface BlessingSectionProps {
   upcomingBlessing: BlessingDefinition[];
   openUpgrade(page: UpgradePage): void;
   setSingleTrait(trait: Trait): void;
+  gameName: GameName;
 }
 
 export const BlessingSection: React.FC<BlessingSectionProps> = ({
@@ -223,7 +226,8 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   currentBlessing,
   upcomingBlessing,
   openUpgrade,
-  setSingleTrait
+  setSingleTrait,
+  gameName
 }) => {
   return (
     <div className="details-section stats">
@@ -249,6 +253,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             girl={girl}
             listGirls={listGirls}
             allGirls={allGirls}
+            gameName={gameName}
           />
         </>
       ) : null}

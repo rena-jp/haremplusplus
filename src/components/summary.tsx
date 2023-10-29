@@ -10,6 +10,7 @@ import {
   Elements,
   equalBlessing,
   EyeColor,
+  GameName,
   getMatchingGirls,
   HairColor,
   Pose,
@@ -37,6 +38,7 @@ export interface SummaryProps extends PanelProps {
   filters: QuickFilter[];
   currentBlessings: BlessingDefinition[];
   nextBlessings: BlessingDefinition[];
+  gameName: GameName;
 }
 
 export const Summary: React.FC<SummaryProps> = ({
@@ -46,7 +48,8 @@ export const Summary: React.FC<SummaryProps> = ({
   toggleFilter,
   currentBlessings,
   nextBlessings,
-  visible
+  visible,
+  gameName
 }) => {
   const [filteredOnly, setFilteredOnly] = useState(true);
 
@@ -120,7 +123,7 @@ export const Summary: React.FC<SummaryProps> = ({
           Total girls: {owned}/{total} ({missing}) {pct}% <br />
           Harem level: {format(haremLevel)}{' '}
           <span className="ego-bonus">
-            (+{format(egoBonus)} <EnduranceIcon />)
+            (+{format(egoBonus)} <EnduranceIcon gameName={gameName} />)
           </span>
           <br />
           Epic Pachinko: {ownedEP}/{totalEp} ({missingEp}) <br />

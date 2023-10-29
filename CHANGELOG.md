@@ -1,3 +1,7 @@
+## 0.15.2 - 2023-10-30
+
+- Fix broken girl equipment screen
+
 ## 0.15.1 - 2023-10-29
 
 - Fix unknown pose icon error

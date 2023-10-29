@@ -157,6 +157,7 @@ export const Harem: React.FC<HaremProps> = ({
               nextBlessings={upcomingBlessings}
               visible={displayedTab?.id === 'summary'}
               close={closePanel}
+              gameName={gameAPI.getGameName()}
             />
             <TraitsSummary
               filteredGirls={quickFilteredGirls}
