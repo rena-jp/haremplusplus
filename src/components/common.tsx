@@ -4,6 +4,7 @@ import {
   Element,
   Elements,
   EyeColor,
+  GameName,
   HairColor,
   Pose,
   Poses,
@@ -44,7 +45,7 @@ export const GemIcon: React.FC<GemProps> = ({
   );
 };
 
-export function getGemIcon(element: GemType, gameName: string): string {
+export function getGemIcon(element: GemType, gameName: GameName): string {
   const contentHostName2 = contentHost2(gameName);
 
   switch (element) {
@@ -142,31 +143,21 @@ export function formatTime(value: number): string {
   }
 }
 
-export function contentHost(gameName: string): string {
+export function contentHost(gameName: GameName): string {
   switch (gameName) {
-    case 'hh_hentai': {
+    case GameName.HentaiHeroes:
       return 'hh.hh-content.com';
-    }
-    case 'hh_comix': {
+    case GameName.ComixHarem:
       return 'ch.hh-content.com';
-    }
-    default: {
-      return 'hh.hh-content.com';
-    }
   }
 }
 
-export function contentHost2(gameName: string): string {
+export function contentHost2(gameName: GameName): string {
   switch (gameName) {
-    case 'hh_hentai': {
+    case GameName.HentaiHeroes:
       return 'hh2.hh-content.com';
-    }
-    case 'hh_comix': {
+    case GameName.ComixHarem:
       return 'ch.hh-content.com';
-    }
-    default: {
-      return 'hh2.hh-content.com';
-    }
   }
 }
 

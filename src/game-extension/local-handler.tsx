@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
+import { GameName } from '../data/data';
 
 export async function handleLocal(): Promise<void> {
   const showHarem = getOrCreateShowHarem();
@@ -15,7 +16,7 @@ export async function handleLocal(): Promise<void> {
           <GameExtension
             visible={visible}
             setVisible={setVisible}
-            gameName={'hh_hentai'}
+            gameName={GameName.HentaiHeroes}
           />
         </React.StrictMode>
       );
@@ -45,7 +46,6 @@ export async function handleLocal(): Promise<void> {
  */
 function createRoot(): ReactDOM.Root {
   const targetBody = document.getElementById('hh_hentai');
-  // const targetBody = document.getElementById('hh_comix');
   if (targetBody === null) {
     return ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
   }

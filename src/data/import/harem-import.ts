@@ -4,6 +4,7 @@ import {
   BaseGirlData,
   BlessingDefinition,
   EyeColor,
+  GameName,
   getBlessingMultiplier,
   getRarity,
   HairColor,
@@ -35,8 +36,8 @@ import {
   NumberString,
   ResonanceBonuses
 } from '../game-data';
-import girlsPosesHhHentai from './poses_hh_hentai.json';
-import girlsPosesHhComix from './poses_hh_comix.json';
+import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
+import girlsPosesComixHarem from './poses_hh_comix.json';
 import eventTypes from './events.json';
 import { ArmorCaracs } from '../game-data';
 import { getTotalEquipmentStats } from '../girls-equipment';
@@ -68,7 +69,7 @@ export namespace DataFormat {
  */
 export async function toHaremData(
   playerData: DataFormat,
-  gameName: string
+  gameName: GameName
 ): Promise<HaremData> {
   const allGirls: CommonGirlData[] = [];
 
@@ -379,16 +380,17 @@ interface GirlsPose {
   [key: string]: number;
 }
 
-function getPose(girlData: GirlsDataEntry, gameName: string): Pose {
+function getPose(girlData: GirlsDataEntry, gameName: GameName): Pose {
   if (girlData.figure === undefined) {
     const girlId = girlData.id_girl;
     let girlsPoses;
-    if (gameName === 'hh_hentai') {
-      girlsPoses = girlsPosesHhHentai;
-    } else if (gameName === 'hh_comix') {
-      girlsPoses = girlsPosesHhComix;
-    } else {
-      girlsPoses = girlsPosesHhHentai;
+    switch (gameName) {
+      case GameName.HentaiHeroes:
+        girlsPoses = girlsPosesHentaiHeroes;
+        break;
+      case GameName.ComixHarem:
+        girlsPoses = girlsPosesComixHarem;
+        break;
     }
     const knownPose = (girlsPoses as GirlsPose)[girlId];
     if (knownPose) {

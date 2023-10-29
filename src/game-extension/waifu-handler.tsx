@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
+import { GameName } from '../data/data';
 import { GirlsDataEntry } from '../data/game-data';
 
 export async function handleWaifu(): Promise<void> {
@@ -53,9 +54,8 @@ export async function handleWaifu(): Promise<void> {
  * Must be called only once.
  * @returns The root element for the harem
  */
-function createRoot(gameName: string): ReactDOM.Root {
-  // const targetBody = document.getElementById('hh_hentai');
-  const targetBody = document.getElementById(gameName);
+function createRoot(gameName: GameName): ReactDOM.Root {
+  const targetBody = document.getElementById(gameName.valueOf());
   if (targetBody === null) {
     return ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
   }
@@ -67,12 +67,12 @@ function createRoot(gameName: string): ReactDOM.Root {
   return root;
 }
 
-function getGameName(): string {
+function getGameName(): GameName {
   if (document.getElementById('hh_hentai')) {
-    return 'hh_hentai';
+    return GameName.HentaiHeroes;
   }
   if (document.getElementById('hh_comix')) {
-    return 'hh_comix';
+    return GameName.ComixHarem;
   }
-  return 'hh_hentai'; // default
+  return GameName.HentaiHeroes; // default
 }

@@ -1,4 +1,4 @@
-import { HaremData } from '../data/data';
+import {GameName, HaremData} from '../data/data';
 import {
   GameBlessingData,
   GameQuests,
@@ -80,7 +80,7 @@ async function updateQuestsAndDispatch(): Promise<void> {
  */
 async function writeDataToCache(
   girls: GirlsDataList,
-  gameName: string
+  gameName: GameName
 ): Promise<void> {
   let blessings: GameBlessingData = { active: [], upcoming: [] };
   try {

@@ -2,6 +2,7 @@ import {
   Book,
   CommonGirlData,
   Equipment,
+  GameName,
   getPoseN,
   getRarity,
   Gift,
@@ -56,7 +57,7 @@ const MOCK_DELAY = 500;
 export class MockGameAPI implements GameAPI {
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
-  private gameName = 'hh_hentai';
+  private gameName = GameName.HentaiHeroes;
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {}
 
@@ -730,11 +731,11 @@ export class MockGameAPI implements GameAPI {
     // Not supported in mock
   }
 
-  setGameName(gameName: string) {
+  setGameName(gameName: GameName) {
     this.gameName = gameName;
   }
 
-  getGameName(): string {
+  getGameName(): GameName {
     return this.gameName;
   }
 }

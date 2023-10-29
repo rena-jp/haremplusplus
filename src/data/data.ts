@@ -1043,3 +1043,8 @@ function matchesTraitSkill(girl: BaseGirlData, trait: Trait): boolean {
 
   return false;
 }
+
+export enum GameName {
+  HentaiHeroes = 'hh_hentai',
+  ComixHarem = 'hh_comix'
+}

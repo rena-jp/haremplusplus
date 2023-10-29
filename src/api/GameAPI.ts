@@ -2,6 +2,7 @@ import {
   Book,
   CommonGirlData,
   Equipment,
+  GameName,
   Gift,
   QuestData,
   Team
@@ -235,8 +236,8 @@ export interface GameAPI {
     slot?: number
   ): Promise<GirlEquipment[]>;
 
-  setGameName(gameName: string): void;
-  getGameName(): string;
+  setGameName(gameName: GameName): void;
+  getGameName(): GameName;
 }
 
 export type TeamStats = {

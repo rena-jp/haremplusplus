@@ -10,11 +10,12 @@ import { CloseButton } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { GameAPIContext } from '../data/game-api-context';
+import { GameName } from '../data/data';
 
 export interface GameExtensionProps {
   visible: boolean;
   setVisible(visible: boolean): void;
-  gameName: string;
+  gameName: GameName;
 }
 
 export const GameExtension: React.FC<GameExtensionProps> = ({
