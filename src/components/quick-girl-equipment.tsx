@@ -115,6 +115,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
               equipment={equipment}
               currentEquipment={currentEquipment}
               girl={girl}
+              gameName={gameAPI.getGameName()}
             />
           }
         >
