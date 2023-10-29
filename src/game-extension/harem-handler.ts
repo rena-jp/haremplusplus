@@ -1,4 +1,4 @@
-import {GameName, HaremData} from '../data/data';
+import { GameName, HaremData } from '../data/data';
 import {
   GameBlessingData,
   GameQuests,

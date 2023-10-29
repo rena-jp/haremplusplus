@@ -16,7 +16,6 @@ import {
 import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
 import { ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 
-import 'react-tooltip/dist/react-tooltip.css';
 import { roundValue } from '../data/common';
 import ReactDOMServer from 'react-dom/server';
 import { GameAPIContext } from '../data/game-api-context';
@@ -669,6 +668,7 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
       url += `zodiac_signs/zodiac_sign_${Zodiac[trait.traitValue]}.png`;
       break;
     case TraitEnum.Pose:
+      if (trait.traitValue === Pose.unknown) return null;
       url += `positions/fav_pose_${trait.traitValue}.png`;
       break;
   }
