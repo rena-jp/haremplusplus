@@ -75,11 +75,17 @@
   background-size: contain;
   background-repeat: no-repeat;
 }
-.star.empty {
+#hh_hentai .star.empty {
   background-image: url(https://hh.hh-content.com/design_v2/affstar_empty_S.png);
 }
-.star.solid {
+#hh_hentai .star.solid {
   background-image: url(https://hh.hh-content.com/design_v2/affstar_S.png);
+}
+#hh_comix .star.empty {
+  background-image: url(https://ch.hh-content.com/design_v2/affstar_empty_S.png);
+}
+#hh_comix .star.solid {
+  background-image: url(https://ch.hh-content.com/design_v2/affstar_S.png);
 }
 .star.solid.current {
   filter: drop-shadow(0px 0px 3px orange);

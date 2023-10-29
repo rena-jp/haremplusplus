@@ -23,7 +23,7 @@ button.item-action:disabled {
   filter: grayscale(1);
 }
 
-.App button.item-action,
+.QuickHarem button.item-action,
 #popup-root button.item-action {
   padding: 0px;
 }
@@ -48,25 +48,41 @@ button.item-action.unequip-one {
   position: absolute;
   right: max(5px, calc(var(--image-size) / 20));
   top: max(5px, calc(var(--image-size) / 20));
-  background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
   background-color: transparent;
 }
-
-button.equip-all {
-  background-image: url(https://hh.hh-content.com/pictures/design/equip_all_icon.png);
+#hh_hentai button.item-action.unequip-one {
+  background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
+}
+#hh_comix button.item-action.unequip-one {
+  background-image: url(https://ch.hh-content.com/clubs/ic_xCross.png);
 }
 
-button.unequip-all {
+#hh_hentai button.equip-all {
+  background-image: url(https://hh.hh-content.com/pictures/design/equip_all_icon.png);
+}
+#hh_comix button.equip-all {
+  background-image: url(https://ch.hh-content.com/pictures/design/equip_all_icon.png);
+}
+
+#hh_hentai button.unequip-all {
   background-image: url(https://hh.hh-content.com/clubs/ic_xCross.png);
+}
+#hh_comix button.unequip-all {
+  background-image: url(https://ch.hh-content.com/clubs/ic_xCross.png);
 }
 
 button.open-inventory {
-  background-image: url(https://hh2.hh-content.com//design/resource_backpack.png);
   background-size: 75% 75%;
   background-origin: content-box;
+}
+#hh_hentai button.open-inventory {
+  background-image: url(https://hh2.hh-content.com//design/resource_backpack.png);
+}
+#hh_comix button.open-inventory {
+  background-image: url(https://ch.hh-content.com//design/resource_backpack.png);
 }
 
 button.item-action {

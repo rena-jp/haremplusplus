@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
+import { GameName } from '../data/data';
 
 export async function handleLocal(): Promise<void> {
   const showHarem = getOrCreateShowHarem();
@@ -12,7 +13,11 @@ export async function handleLocal(): Promise<void> {
     const updateApp = () => {
       root.render(
         <React.StrictMode>
-          <GameExtension visible={visible} setVisible={setVisible} />
+          <GameExtension
+            visible={visible}
+            setVisible={setVisible}
+            gameName={GameName.HentaiHeroes}
+          />
         </React.StrictMode>
       );
     };

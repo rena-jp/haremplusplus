@@ -1,5 +1,5 @@
 /** Workaround for standalone */
-.App.standalone,
-.App.standalone > div:first-of-type {
+.QuickHarem.standalone,
+.QuickHarem.standalone > div:first-of-type {
   height: 100%;
 }

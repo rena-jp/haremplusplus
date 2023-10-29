@@ -2,6 +2,7 @@ import {
   Book,
   CommonGirlData,
   Equipment,
+  GameName,
   getPoseN,
   Gift,
   QuestData,
@@ -96,6 +97,7 @@ export class GameAPIImpl implements GameAPI {
   private salaryListeners: SalaryDataListener[] = [];
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
+  private gameName = GameName.HentaiHeroes;
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {
     this.installRequestsListener();
@@ -1219,6 +1221,14 @@ export class GameAPIImpl implements GameAPI {
         }
       }
     }
+  }
+
+  setGameName(gameName: GameName): void {
+    this.gameName = gameName;
+  }
+
+  getGameName(): GameName {
+    return this.gameName;
   }
 }
 

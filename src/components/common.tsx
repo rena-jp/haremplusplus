@@ -1,22 +1,24 @@
 import '../style/common.css';
 import {
-  Elements,
-  Element,
-  Stats,
   Class,
+  Element,
+  Elements,
+  EyeColor,
+  GameName,
+  HairColor,
+  Pose,
   Poses,
+  Stats,
   Trait,
   TraitEnum,
-  HairColor,
-  EyeColor
+  Zodiac
 } from '../data/data';
-import { Pose, Zodiac } from '../data/data';
 import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
-import { ReactElement, ReactNode, useMemo, useState } from 'react';
+import { ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 
-import 'react-tooltip/dist/react-tooltip.css';
 import { roundValue } from '../data/common';
 import ReactDOMServer from 'react-dom/server';
+import { GameAPIContext } from '../data/game-api-context';
 
 export type GemType = Element | 'rainbow';
 
@@ -31,7 +33,8 @@ export const GemIcon: React.FC<GemProps> = ({
   className,
   noTitle
 }) => {
-  const icon = getGemIcon(element);
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const icon = getGemIcon(element, gameName);
   const elementName =
     element === 'rainbow' ? 'rainbow' : Elements.toString(element);
   const cssClass = `elementIcon ${className ?? ''}`;
@@ -41,26 +44,28 @@ export const GemIcon: React.FC<GemProps> = ({
   );
 };
 
-export function getGemIcon(element: GemType): string {
+export function getGemIcon(element: GemType, gameName: GameName): string {
+  const contentHostName2 = contentHost2(gameName);
+
   switch (element) {
     case 'rainbow':
-      return 'https://hh2.hh-content.com/pictures/design/gems/all.png';
+      return `https://${contentHostName2}/pictures/design/gems/all.png`;
     case Element.blue:
-      return 'https://hh2.hh-content.com/pictures/design/gems/water.png';
+      return `https://${contentHostName2}/pictures/design/gems/water.png`;
     case Element.red:
-      return 'https://hh2.hh-content.com/pictures/design/gems/fire.png';
+      return `https://${contentHostName2}/pictures/design/gems/fire.png`;
     case Element.dark:
-      return 'https://hh2.hh-content.com/pictures/design/gems/darkness.png';
+      return `https://${contentHostName2}/pictures/design/gems/darkness.png`;
     case Element.green:
-      return 'https://hh2.hh-content.com/pictures/design/gems/nature.png';
+      return `https://${contentHostName2}/pictures/design/gems/nature.png`;
     case Element.orange:
-      return 'https://hh2.hh-content.com/pictures/design/gems/stone.png';
+      return `https://${contentHostName2}/pictures/design/gems/stone.png`;
     case Element.purple:
-      return 'https://hh2.hh-content.com/pictures/design/gems/psychic.png';
+      return `https://${contentHostName2}/pictures/design/gems/psychic.png`;
     case Element.white:
-      return 'https://hh2.hh-content.com/pictures/design/gems/light.png';
+      return `https://${contentHostName2}/pictures/design/gems/light.png`;
     case Element.yellow:
-      return 'https://hh2.hh-content.com/pictures/design/gems/sun.png';
+      return `https://${contentHostName2}/pictures/design/gems/sun.png`;
   }
 }
 
@@ -81,29 +86,6 @@ export const SalaryIcon: React.FC = () => {
 export const UpgradeIcon: React.FC = () => {
   return <div className="upgrade-girl" />;
 };
-
-export function getElementIcon(element: Element | 'rainbow'): string {
-  switch (element) {
-    case 'rainbow':
-      return 'https://hh.hh-content.com/pictures/girls_elements/Multicolored.png';
-    case Element.blue:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Sensual.png';
-    case Element.red:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Eccentric.png';
-    case Element.dark:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Multicolored.png';
-    case Element.green:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Exhibitionist.png';
-    case Element.orange:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Physical.png';
-    case Element.purple:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Voyeurs.png';
-    case Element.white:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Submissive.png';
-    case Element.yellow:
-      return 'https://hh.hh-content.com/pictures/girls_elements/Playful.png';
-  }
-}
 
 export interface ZodiacProps {
   zodiac: Zodiac;
@@ -157,6 +139,24 @@ export function formatTime(value: number): string {
     return `${minutes} minutes`;
   } else {
     return `${seconds} seconds`;
+  }
+}
+
+export function contentHost(gameName: GameName): string {
+  switch (gameName) {
+    case GameName.HentaiHeroes:
+      return 'hh.hh-content.com';
+    case GameName.ComixHarem:
+      return 'ch.hh-content.com';
+  }
+}
+
+export function contentHost2(gameName: GameName): string {
+  switch (gameName) {
+    case GameName.HentaiHeroes:
+      return 'hh2.hh-content.com';
+    case GameName.ComixHarem:
+      return 'ch.hh-content.com';
   }
 }
 
@@ -351,7 +351,6 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
   currentBlessingMultiplier,
   upcomingBlessingMultiplier
 }) => {
-  // https://hh2.hh-content.com/pictures/misc/items_icons/3.png
   return (
     <span className="stats-description">
       <Tooltip
@@ -552,42 +551,57 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
 export const BookIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'XP2' : `XP${item}`;
-  return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+  return <img src={`https://${contentHostName2}/pictures/items/${icon}.png`} />;
 };
 
 export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'K2' : `K${item}`;
-  return <img src={`https://hh2.hh-content.com/pictures/items/${icon}.png`} />;
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+  return <img src={`https://${contentHostName2}/pictures/items/${icon}.png`} />;
 };
 
 export const EnduranceIcon = () => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
   return (
     <img
-      src="https://hh2.hh-content.com/pictures/misc/items_icons/4.png"
+      src={`https://${contentHostName2}/pictures/misc/items_icons/4.png`}
       className="endurance-icon"
     />
   );
 };
 
 export const EgoIcon = () => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
   return (
-    <img src="https://hh2.hh-content.com/caracs/ego.png" className="ego-icon" />
+    <img
+      src={`https://${contentHostName2}/caracs/ego.png`}
+      className="ego-icon"
+    />
   );
 };
 
 export const AttackIcon = () => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
   return (
     <img
-      src="https://hh2.hh-content.com/caracs/damage.png"
+      src={`https://${contentHostName2}/caracs/damage.png`}
       className="attack-icon"
     />
   );
 };
 
 export const DefenseIcon = () => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
   return (
     <img
-      src="https://hh2.hh-content.com/caracs/deff_undefined.png"
+      src={`https://${contentHostName2}/caracs/deff_undefined.png`}
       className="defense-icon"
     />
   );
@@ -617,7 +631,9 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     [HairColor.darkPink]: 'B06',
     [HairColor.strawberryBlond]: 'EB8',
     [HairColor.unknown]: 'XXX',
-    [HairColor.bronze]: 'D83'
+    [HairColor.bronze]: 'D83',
+    [HairColor.ashBrown]: '765',
+    [HairColor.bald]: 'YYY'
   };
 
   const eyeColorMap = {
@@ -634,10 +650,13 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     [EyeColor.black]: '000',
     [EyeColor.grey]: '888',
     [EyeColor.unknown]: 'XXX',
-    [EyeColor.dark]: '321'
+    [EyeColor.dark]: '321',
+    [EyeColor.white]: 'FFF'
   };
 
-  let url = 'https://hh2.hh-content.com/pictures/design/blessings_icons/';
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+  let url = `https://${contentHostName2}/pictures/design/blessings_icons/`;
   switch (trait.traitEnum) {
     case TraitEnum.HairColor:
       url += `hair_colors/hair_color_${hairColorMap[trait.traitValue]}.png`;
@@ -649,6 +668,7 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
       url += `zodiac_signs/zodiac_sign_${Zodiac[trait.traitValue]}.png`;
       break;
     case TraitEnum.Pose:
+      if (trait.traitValue === Pose.unknown) return null;
       url += `positions/fav_pose_${trait.traitValue}.png`;
       break;
   }

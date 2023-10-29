@@ -306,7 +306,6 @@
 .harem-upgrade-panel {
   /** Appearance */
   opacity: 98%;
-  background-color: rgb(69, 33, 41);
   border: 1px solid black;
   border-radius: 15px;
   box-shadow: 0px 0px 7px black;
@@ -330,6 +329,12 @@
   z-index: 2;
 
   /* transition: transform 0.5s ease-in, visibility 0.5s ease-in; */
+}
+#hh_hentai .harem-upgrade-panel {
+  background-color: rgb(69, 33, 41);
+}
+#hh_comix .harem-upgrade-panel {
+  background-color: rgb(15, 30, 60);
 }
 
 /** Anchor the panel to the right on larger devices */

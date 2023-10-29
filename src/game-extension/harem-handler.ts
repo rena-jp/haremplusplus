@@ -1,4 +1,4 @@
-import { HaremData } from '../data/data';
+import { GameName, HaremData } from '../data/data';
 import {
   GameBlessingData,
   GameQuests,
@@ -36,7 +36,7 @@ export async function handleHarem(): Promise<void> {
 async function updateGirlsAndDispatch(): Promise<void> {
   try {
     const girls = await gameAPI.getGirls(false);
-    writeDataToCache(girls);
+    writeDataToCache(girls, gameAPI.getGameName());
     if (window.parent && window.parent !== window) {
       window.parent.postMessage(girls, window.location.origin);
 
@@ -75,9 +75,13 @@ async function updateQuestsAndDispatch(): Promise<void> {
 /**
  * Load the blessings, and convert the data (blessings + girls) to the extension harem format.
  * @param girls The girlsDataList from the game.
+ * @param gameName The game name
  * @returns An empty promise.
  */
-async function writeDataToCache(girls: GirlsDataList): Promise<void> {
+async function writeDataToCache(
+  girls: GirlsDataList,
+  gameName: GameName
+): Promise<void> {
   let blessings: GameBlessingData = { active: [], upcoming: [] };
   try {
     blessings = await loadBlessings(gameAPI);
@@ -94,7 +98,7 @@ async function writeDataToCache(girls: GirlsDataList): Promise<void> {
     const playerData: DataFormat = { list: girls, blessings, quests };
     let haremData: HaremData;
     try {
-      haremData = await toHaremData(playerData);
+      haremData = await toHaremData(playerData, gameName);
     } catch (error) {
       console.error(
         'Error when converting girls data list to harem data. Data format: ',

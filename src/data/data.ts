@@ -255,7 +255,9 @@ export enum HairColor {
   black,
   grey,
   golden,
-  bronze
+  bronze,
+  ashBrown,
+  bald
 }
 export enum EyeColor {
   pink,
@@ -271,7 +273,8 @@ export enum EyeColor {
   black,
   unknown,
   purple,
-  dark
+  dark,
+  white
 }
 export enum Zodiac {
   aries,
@@ -1039,4 +1042,9 @@ function matchesTraitSkill(girl: BaseGirlData, trait: Trait): boolean {
   }
 
   return false;
+}
+
+export enum GameName {
+  HentaiHeroes = 'hh_hentai',
+  ComixHarem = 'hh_comix'
 }

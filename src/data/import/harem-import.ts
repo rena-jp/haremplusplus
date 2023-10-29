@@ -4,6 +4,7 @@ import {
   BaseGirlData,
   BlessingDefinition,
   EyeColor,
+  GameName,
   getBlessingMultiplier,
   getRarity,
   HairColor,
@@ -35,7 +36,8 @@ import {
   NumberString,
   ResonanceBonuses
 } from '../game-data';
-import girlsPoses from './poses.json';
+import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
+import girlsPosesComixHarem from './poses_hh_comix.json';
 import eventTypes from './events.json';
 import { ArmorCaracs } from '../game-data';
 import { getTotalEquipmentStats } from '../girls-equipment';
@@ -62,9 +64,13 @@ export namespace DataFormat {
  * Girls salary are not included.
  *
  * @param playerData The in-game data
+ * @param gameName The game name
  * @returns The HaremData used in this application
  */
-export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
+export async function toHaremData(
+  playerData: DataFormat,
+  gameName: GameName
+): Promise<HaremData> {
   const allGirls: CommonGirlData[] = [];
 
   const girlsDataList = playerData.list;
@@ -99,7 +105,7 @@ export async function toHaremData(playerData: DataFormat): Promise<HaremData> {
       shards: girlData.shards,
       recruited: girlData.own ? parseDate(girlData.date_added) : undefined,
       // Blessings
-      pose: getPose(girlData),
+      pose: getPose(girlData, gameName),
       hairColor: getHairColor(girlData),
       eyeColor: getEyeColor(girlData),
       zodiac: getZodiac(girlData),
@@ -374,9 +380,18 @@ interface GirlsPose {
   [key: string]: number;
 }
 
-function getPose(girlData: GirlsDataEntry): Pose {
+function getPose(girlData: GirlsDataEntry, gameName: GameName): Pose {
   if (girlData.figure === undefined) {
     const girlId = girlData.id_girl;
+    let girlsPoses;
+    switch (gameName) {
+      case GameName.HentaiHeroes:
+        girlsPoses = girlsPosesHentaiHeroes;
+        break;
+      case GameName.ComixHarem:
+        girlsPoses = girlsPosesComixHarem;
+        break;
+    }
     const knownPose = (girlsPoses as GirlsPose)[girlId];
     if (knownPose) {
       return knownPose;

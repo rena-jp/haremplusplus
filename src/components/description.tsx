@@ -44,7 +44,8 @@ import {
   ProgressBar,
   SalaryIcon,
   StatsDescriptionTooltip,
-  Tooltip
+  Tooltip,
+  contentHost2
 } from './common';
 import { SimpleGirlTile } from './girl';
 import { SceneViewer } from './scenes';
@@ -674,12 +675,13 @@ const QuestStep: React.FC<QuestStepProps> = ({
   step,
   gameAPI
 }) => {
+  const contentHostName2 = contentHost2(gameAPI.getGameName());
   if (quest) {
     const imgSrc = quest.ready
-      ? 'https://hh2.hh-content.com/design_v2/affstar_upgrade.png'
+      ? `https://${contentHostName2}/design_v2/affstar_upgrade.png`
       : quest.done
-      ? 'https://hh2.hh-content.com/design_v2/affstar.png'
-      : 'https://hh2.hh-content.com/design_v2/affstar_empty.png';
+      ? `https://${contentHostName2}/design_v2/affstar.png`
+      : `https://${contentHostName2}/design_v2/affstar_empty.png`;
     const img = <img src={imgSrc} />;
     const link =
       quest.done || quest.ready
@@ -727,7 +729,8 @@ const QuestStep: React.FC<QuestStepProps> = ({
       </>
     );
   } else {
-    return <img src="https://hh2.hh-content.com/design_v2/affstar_empty.png" />;
+    const imgSrc = `https://${contentHostName2}/design_v2/affstar_empty.png`;
+    return <img src={imgSrc} />;
   }
 };
 

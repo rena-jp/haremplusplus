@@ -10,15 +10,18 @@ import { CloseButton } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { GameAPIContext } from '../data/game-api-context';
+import { GameName } from '../data/data';
 
 export interface GameExtensionProps {
   visible: boolean;
   setVisible(visible: boolean): void;
+  gameName: GameName;
 }
 
 export const GameExtension: React.FC<GameExtensionProps> = ({
   visible,
-  setVisible
+  setVisible,
+  gameName
 }) => {
   const [options, setOptions] = useState<HaremOptions | undefined>(undefined);
 
@@ -37,9 +40,10 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
         : new GameAPIImpl(),
     []
   );
+  gameAPI.setGameName(gameName);
 
   return (
-    <div className={`App game-extension ${visible ? '' : 'hidden'}`}>
+    <div className={`QuickHarem game-extension ${visible ? '' : 'hidden'}`}>
       <GameAPIContext.Provider value={{ gameAPI }}>
         <LoadHaremData gameAPI={gameAPI}>
           {({

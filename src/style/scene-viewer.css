@@ -1,9 +1,14 @@
 .qh-scene-viewer {
   width: 98vw;
   height: 98vh;
-  background-color: rgb(69, 33, 41);
   border-radius: 15px;
   box-shadow: 0px 0px 7px black;
+}
+#hh_hentai .qh-scene-viewer {
+  background-color: rgb(69, 33, 41);
+}
+#hh_comix .qh-scene-viewer {
+  background-color: rgb(15, 30, 60);
 }
 
 .qh-scene-viewer {
