@@ -96,6 +96,7 @@ export class GameAPIImpl implements GameAPI {
   private salaryListeners: SalaryDataListener[] = [];
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
+  private gameName = 'hh_hentai';
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {
     this.installRequestsListener();
@@ -1219,6 +1220,14 @@ export class GameAPIImpl implements GameAPI {
         }
       }
     }
+  }
+
+  setGameName(gameName: string): void {
+    this.gameName = gameName;
+  }
+
+  getGameName(): string {
+    return this.gameName;
   }
 }
 

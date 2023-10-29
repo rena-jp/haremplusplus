@@ -12,7 +12,11 @@ export async function handleLocal(): Promise<void> {
     const updateApp = () => {
       root.render(
         <React.StrictMode>
-          <GameExtension visible={visible} setVisible={setVisible} />
+          <GameExtension
+            visible={visible}
+            setVisible={setVisible}
+            gameName={'hh_hentai'}
+          />
         </React.StrictMode>
       );
     };
@@ -41,6 +45,7 @@ export async function handleLocal(): Promise<void> {
  */
 function createRoot(): ReactDOM.Root {
   const targetBody = document.getElementById('hh_hentai');
+  // const targetBody = document.getElementById('hh_comix');
   if (targetBody === null) {
     return ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
   }

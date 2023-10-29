@@ -42,7 +42,6 @@
 .qh-panel {
   /** Appearance */
   opacity: 98%;
-  background-color: rgb(69, 33, 41);
   border: 1px solid black;
   border-radius: 15px;
   box-shadow: 0px 0px 7px black;
@@ -61,6 +60,12 @@
   transition: transform 0.5s ease-in, visibility 0.5s ease-in;
   z-index: 2;
 }
+#hh_hentai .qh-panel {
+  background-color: rgb(69, 33, 41);
+}
+#hh_comix .qh-panel {
+  background-color: rgb(15, 30, 60);
+}
 
 @media screen and (max-height: 500px) {
   .qh-panel {
@@ -68,7 +73,7 @@
   }
 }
 
-.App.game-extension > .qh-panel {
+.QuickHarem.game-extension > .qh-panel {
   box-sizing: border-box;
 }
 

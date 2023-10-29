@@ -179,32 +179,60 @@ requiring actual content. */
   background-position: center;
 }
 
-.element.dark {
+#hh_hentai .element.dark {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Dominatrix.png');
 }
-.element.white {
+#hh_hentai .element.white {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Submissive.png');
 }
-.element.purple {
+#hh_hentai .element.purple {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Voyeurs.png');
 }
-.element.red {
+#hh_hentai .element.red {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Eccentric.png');
 }
-.element.blue {
+#hh_hentai .element.blue {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Sensual.png');
 }
-.element.green {
+#hh_hentai .element.green {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Exhibitionist.png');
 }
-.element.orange {
+#hh_hentai .element.orange {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Physical.png');
 }
-.element.yellow {
+#hh_hentai .element.yellow {
   background-image: url('https://hh.hh-content.com/pictures/girls_elements/Playful.png');
 }
-.element.rainbow {
+#hh_hentai .element.rainbow {
   background-image: url('https://hh2.hh-content.com/pictures/girls_elements/Multicolored.png');
+}
+
+#hh_comix .element.dark {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Dominatrix.png');
+}
+#hh_comix .element.white {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Submissive.png');
+}
+#hh_comix .element.purple {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Voyeurs.png');
+}
+#hh_comix .element.red {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Eccentric.png');
+}
+#hh_comix .element.blue {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Sensual.png');
+}
+#hh_comix .element.green {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Exhibitionist.png');
+}
+#hh_comix .element.orange {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Physical.png');
+}
+#hh_comix .element.yellow {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Playful.png');
+}
+#hh_comix .element.rainbow {
+  background-image: url('https://ch.hh-content.com/pictures/girls_elements/Multicolored.png');
 }
 
 .tile img.tileImg {

@@ -14,11 +14,13 @@ import { GameAPIContext } from '../data/game-api-context';
 export interface GameExtensionProps {
   visible: boolean;
   setVisible(visible: boolean): void;
+  gameName: string;
 }
 
 export const GameExtension: React.FC<GameExtensionProps> = ({
   visible,
-  setVisible
+  setVisible,
+  gameName
 }) => {
   const [options, setOptions] = useState<HaremOptions | undefined>(undefined);
 
@@ -37,9 +39,10 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
         : new GameAPIImpl(),
     []
   );
+  gameAPI.setGameName(gameName);
 
   return (
-    <div className={`App game-extension ${visible ? '' : 'hidden'}`}>
+    <div className={`QuickHarem game-extension ${visible ? '' : 'hidden'}`}>
       <GameAPIContext.Provider value={{ gameAPI }}>
         <LoadHaremData gameAPI={gameAPI}>
           {({

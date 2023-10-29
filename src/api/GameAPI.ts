@@ -234,6 +234,9 @@ export interface GameAPI {
     girl: CommonGirlData,
     slot?: number
   ): Promise<GirlEquipment[]>;
+
+  setGameName(gameName: string): void;
+  getGameName(): string;
 }
 
 export type TeamStats = {

@@ -15,12 +15,17 @@ export async function handleWaifu(): Promise<void> {
   });
   window.GirlSalaryManager.init(ownedGirls, false);
 
-  const root = createRoot();
+  const gameName = getGameName();
+  const root = createRoot(gameName);
   let visible = searchParams.has('harem');
   const updateApp = () => {
     root.render(
       <React.StrictMode>
-        <GameExtension visible={visible} setVisible={setVisible} />
+        <GameExtension
+          visible={visible}
+          setVisible={setVisible}
+          gameName={gameName}
+        />
       </React.StrictMode>
     );
   };
@@ -48,8 +53,9 @@ export async function handleWaifu(): Promise<void> {
  * Must be called only once.
  * @returns The root element for the harem
  */
-function createRoot(): ReactDOM.Root {
-  const targetBody = document.getElementById('hh_hentai');
+function createRoot(gameName: string): ReactDOM.Root {
+  // const targetBody = document.getElementById('hh_hentai');
+  const targetBody = document.getElementById(gameName);
   if (targetBody === null) {
     return ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
   }
@@ -59,4 +65,14 @@ function createRoot(): ReactDOM.Root {
   targetBody.appendChild(quickHaremWrapper);
   const root = ReactDOM.createRoot(quickHaremWrapper);
   return root;
+}
+
+function getGameName(): string {
+  if (document.getElementById('hh_hentai')) {
+    return 'hh_hentai';
+  }
+  if (document.getElementById('hh_comix')) {
+    return 'hh_comix';
+  }
+  return 'hh_hentai'; // default
 }

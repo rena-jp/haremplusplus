@@ -11,16 +11,15 @@
   overflow: hidden; /* Hide sliding panels */
 }
 
-#quick-harem-wrapper > .App {
+#quick-harem-wrapper > .QuickHarem {
   pointer-events: initial; /* The parent makes use ignore mouse-events. We need to explicitly handle them here */
 }
 
-.App.game-extension {
+.QuickHarem.game-extension {
   width: calc(100% - 1em);
   height: calc(100% - 6em);
   /** Leave space on top to view energy and stuff. */
   margin: 5.5em auto 0 auto;
-  background-color: rgb(69, 33, 41);
   padding: 0px;
   border-radius: 20px;
   /* overflow: auto; */
@@ -29,16 +28,22 @@
   display: flex;
   flex-direction: column;
 }
+#hh_hentai .QuickHarem.game-extension {
+  background-color: rgb(69, 33, 41);
+}
+#hh_comix .QuickHarem.game-extension {
+  background-color: rgb(15, 30, 60);
+}
 
 /** < 600px height, use all available space */
 @media only screen and (max-height: 600px) {
-  .App.game-extension {
+  .QuickHarem.game-extension {
     height: 95%;
     margin: auto;
   }
 }
 
-.App.game-extension.hidden {
+.QuickHarem.game-extension.hidden {
   visibility: hidden;
 }
 

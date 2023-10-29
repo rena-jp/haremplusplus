@@ -56,6 +56,7 @@ const MOCK_DELAY = 500;
 export class MockGameAPI implements GameAPI {
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
+  private gameName = 'hh_hentai';
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {}
 
@@ -727,6 +728,14 @@ export class MockGameAPI implements GameAPI {
 
   removeSalaryDataListener(_listener: SalaryDataListener): void {
     // Not supported in mock
+  }
+
+  setGameName(gameName: string) {
+    this.gameName = gameName;
+  }
+
+  getGameName(): string {
+    return this.gameName;
   }
 }
 
