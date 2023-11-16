@@ -38,6 +38,7 @@ import {
 } from '../game-data';
 import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
 import girlsPosesComixHarem from './poses_hh_comix.json';
+import girlsPosesPornstarHarem from './poses_hh_pornstar.json';
 import eventTypes from './events.json';
 import { ArmorCaracs } from '../game-data';
 import { getTotalEquipmentStats } from '../girls-equipment';
@@ -390,6 +391,9 @@ function getPose(girlData: GirlsDataEntry, gameName: GameName): Pose {
         break;
       case GameName.ComixHarem:
         girlsPoses = girlsPosesComixHarem;
+        break;
+      case GameName.PornstarHarem:
+        girlsPoses = girlsPosesPornstarHarem;
         break;
     }
     const knownPose = (girlsPoses as GirlsPose)[girlId];
