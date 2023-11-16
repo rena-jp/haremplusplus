@@ -66,6 +66,9 @@
 #hh_comix .qh-panel {
   background-color: rgb(15, 30, 60);
 }
+#hh_star .qh-panel {
+  background-color: rgb(120, 30, 75);
+}
 
 @media screen and (max-height: 500px) {
   .qh-panel {

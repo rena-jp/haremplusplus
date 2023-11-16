@@ -7,6 +7,10 @@ body.qh-local {
 #hh_comix body.qh-local {
   background-color: rgb(15, 30, 60);
 }
+#hh_star body.qh-local {
+  background-color: rgb(132, 36, 87);
+  background-image: linear-gradient(rgb(184, 66, 122), rgb(95, 35, 65));
+}
 
 .QuickHarem {
   text-align: center;
@@ -64,6 +68,9 @@ body.qh-local {
 }
 #hh_comix .app-title {
   background-image: url(https://ch.hh-content.com/pictures/design/symbol_shadow.svg);
+}
+#hh_star .app-title {
+  background-image: url(https://th.hh-content.com/pictures/design/symbol_shadow.svg);
 }
 
 .data-input {

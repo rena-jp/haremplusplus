@@ -336,6 +336,10 @@
 #hh_comix .harem-upgrade-panel {
   background-color: rgb(15, 30, 60);
 }
+#hh_star .harem-upgrade-panel {
+  background-color: rgb(132, 36, 87);
+  background-image: linear-gradient(rgb(97, 27, 48), rgb(235, 92, 189));
+}
 
 /** Anchor the panel to the right on larger devices */
 @media screen and (min-width: 901px) and (min-height: 741px) {
