@@ -8,6 +8,10 @@ updatePoses(
     'https://docs.google.com/spreadsheets/d/1g-5kmvlHhA728yTF7xMdKfWuMe9-SqxW-QDdjc26J6I/export?format=tsv&gid=0',
     './src/data/import/poses_hh_comix.json'
 );
+updatePoses(
+    'https://docs.google.com/spreadsheets/d/1hNIxwCJ6yzENZRGSjg_yTeIW93ObrCSy3u_0RmljgDg/export?format=tsv&gid=0',
+    './src/data/import/poses_hh_pornstar.json'
+);
 
 async function updatePoses(
     spreadsheet,

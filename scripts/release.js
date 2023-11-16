@@ -20,6 +20,8 @@ const output = `// ==UserScript==
 // @match        https://nutaku.haremheroes.com/*
 // @match        https://*.comixharem.com/*
 // @match        https://nutaku.comixharem.com/*
+// @match        https://*.pornstarharem.com/*
+// @match        https://nutaku.pornstarharem.com/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=hentaiheroes.com
 // @updateURL    https://raw.githubusercontent.com/rena-jp/haremplusplus/main/release/haremplusplus.user.js
 // @downloadURL  https://raw.githubusercontent.com/rena-jp/haremplusplus/main/release/haremplusplus.user.js
