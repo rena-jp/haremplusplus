@@ -1,3 +1,7 @@
+## 0.16.1 - 2023-11-16
+
+- Fix PsH poses error
+
 ## 0.16.0 - 2023-11-16
 
 - Add Pornstar Harem support
