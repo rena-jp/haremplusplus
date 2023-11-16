@@ -10,6 +10,9 @@
 #hh_comix .qh-scene-viewer {
   background-color: rgb(15, 30, 60);
 }
+#hh_star .qh-scene-viewer {
+  background-color: rgb(105, 20, 60);
+}
 
 .qh-scene-viewer {
   display: flex;

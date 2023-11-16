@@ -148,6 +148,8 @@ export function contentHost(gameName: GameName): string {
       return 'hh.hh-content.com';
     case GameName.ComixHarem:
       return 'ch.hh-content.com';
+    case GameName.PornstarHarem:
+      return 'th.hh-content.com';
   }
 }
 
@@ -157,6 +159,8 @@ export function contentHost2(gameName: GameName): string {
       return 'hh2.hh-content.com';
     case GameName.ComixHarem:
       return 'ch.hh-content.com';
+    case GameName.PornstarHarem:
+      return 'th.hh-content.com';
   }
 }
 

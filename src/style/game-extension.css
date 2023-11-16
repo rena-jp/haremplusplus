@@ -34,6 +34,10 @@
 #hh_comix .QuickHarem.game-extension {
   background-color: rgb(15, 30, 60);
 }
+#hh_star .QuickHarem.game-extension {
+  background-color: rgb(132, 36, 87);
+  background-image: linear-gradient(rgb(184, 66, 122), rgb(95, 35, 65));
+}
 
 /** < 600px height, use all available space */
 @media only screen and (max-height: 600px) {

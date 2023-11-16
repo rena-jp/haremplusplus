@@ -87,6 +87,12 @@
 #hh_comix .star.solid {
   background-image: url(https://ch.hh-content.com/design_v2/affstar_S.png);
 }
+#hh_star .star.empty {
+  background-image: url(https://th.hh-content.com/design_v2/affstar_empty_S.png);
+}
+#hh_star .star.solid {
+  background-image: url(https://th.hh-content.com/design_v2/affstar_S.png);
+}
 .star.solid.current {
   filter: drop-shadow(0px 0px 3px orange);
 }

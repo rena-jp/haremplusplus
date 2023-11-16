@@ -74,5 +74,8 @@ function getGameName(): GameName {
   if (document.getElementById('hh_comix')) {
     return GameName.ComixHarem;
   }
+  if (document.getElementById('hh_star')) {
+    return GameName.PornstarHarem;
+  }
   return GameName.HentaiHeroes; // default
 }

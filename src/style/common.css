@@ -235,6 +235,34 @@ requiring actual content. */
   background-image: url('https://ch.hh-content.com/pictures/girls_elements/Multicolored.png');
 }
 
+#hh_star .element.dark {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Dominatrix.png');
+}
+#hh_star .element.white {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Submissive.png');
+}
+#hh_star .element.purple {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Voyeurs.png');
+}
+#hh_star .element.red {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Eccentric.png');
+}
+#hh_star .element.blue {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Sensual.png');
+}
+#hh_star .element.green {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Exhibitionist.png');
+}
+#hh_star .element.orange {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Physical.png');
+}
+#hh_star .element.yellow {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Playful.png');
+}
+#hh_star .element.rainbow {
+  background-image: url('https://th.hh-content.com/pictures/girls_elements/Multicolored.png');
+}
+
 .tile img.tileImg {
   background-repeat: no-repeat;
   background-size: cover;
