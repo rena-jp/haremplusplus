@@ -161,6 +161,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
 
   const icon = (
     <img
+      alt=""
       src={img}
       className={imgClassNames.join(' ')}
       onClick={
@@ -636,7 +637,7 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
     imgClassNames.push('none');
   }
 
-  const icon = <img src={img} className={imgClassNames.join(' ')} />;
+  const icon = <img alt="" src={img} className={imgClassNames.join(' ')} />;
 
   const slotLabel = getSlotLabel(slotId);
 

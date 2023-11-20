@@ -102,7 +102,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
 
   const img = equipment?.icon;
   const icon = (
-    <img src={img} className={imgClassNames.join(' ')} onClick={equip} />
+    <img alt="" src={img} className={imgClassNames.join(' ')} onClick={equip} />
   );
 
   return (

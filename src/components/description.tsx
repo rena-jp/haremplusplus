@@ -687,7 +687,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
       : quest.done
       ? `https://${contentHostName2}/design_v2/affstar.png`
       : `https://${contentHostName2}/design_v2/affstar_empty.png`;
-    const img = <img src={imgSrc} />;
+    const img = <img alt="" src={imgSrc} />;
     const link =
       quest.done || quest.ready
         ? `quest/${quest.idQuest}`
@@ -735,7 +735,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
     );
   } else {
     const imgSrc = `https://${contentHostName2}/design_v2/affstar_empty.png`;
-    return <img src={imgSrc} />;
+    return <img alt="" src={imgSrc} />;
   }
 };
 
