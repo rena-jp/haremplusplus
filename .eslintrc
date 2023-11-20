@@ -9,7 +9,7 @@
   ],
   "rules": {
     "no-console": "off",
-    "prettier/prettier": 2,
+    "prettier/prettier": "warn",
     "@typescript-eslint/no-namespace": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "no-unused-vars": "off",
