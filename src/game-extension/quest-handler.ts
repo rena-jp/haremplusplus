@@ -28,7 +28,8 @@ async function handleQuestData(): Promise<void> {
             window.questData = data;
             resolve();
           };
-          eval(updatedContent);
+          // eslint-disable-next-line no-new-func
+          Function(updatedContent)();
         });
       }
     }
