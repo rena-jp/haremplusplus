@@ -1,3 +1,10 @@
+## 0.17.0 - 2023-11-21
+
+- Add resonance filter to equipment inventory
+- Fix tooltip arrow
+- Update pose data
+- Update dependent libraries
+
 ## 0.16.1 - 2023-11-16
 
 - Fix PsH poses error
