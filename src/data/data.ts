@@ -532,6 +532,8 @@ export namespace EyeColors {
 export namespace HairColors {
   export function toDisplayString(hairColor: HairColor): string {
     switch (hairColor) {
+      case HairColor.ashBrown:
+        return 'Ash Brown';
       case HairColor.darkBlond:
         return 'Dark Blond';
       case HairColor.darkPink:
