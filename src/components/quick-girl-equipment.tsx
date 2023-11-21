@@ -56,17 +56,17 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
         {loading
           ? 'Loading inventory...'
           : equipment.length === 0
-          ? 'No equipment found for the selected slot.'
-          : equipment.map((item) => (
-              <EquipmentTile
-                girl={girl}
-                equipment={item}
-                currentEquipment={currentEquipment}
-                gameAPI={gameAPI}
-                key={item.uid}
-                close={close}
-              />
-            ))}
+            ? 'No equipment found for the selected slot.'
+            : equipment.map((item) => (
+                <EquipmentTile
+                  girl={girl}
+                  equipment={item}
+                  currentEquipment={currentEquipment}
+                  gameAPI={gameAPI}
+                  key={item.uid}
+                  close={close}
+                />
+              ))}
       </div>
     </div>
   );

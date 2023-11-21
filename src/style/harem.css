@@ -139,7 +139,8 @@
 }
 
 .hh-action-button.filter-sort-icon {
-  background: center / contain content-box no-repeat
+  background:
+    center / contain content-box no-repeat
       url(https://hh2.hh-content.com/design_v2/search_open.png),
     linear-gradient(
       to bottom,

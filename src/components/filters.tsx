@@ -909,8 +909,8 @@ const PotentialForm: React.FC<PotentialFormProps> = ({
         blessing === 'none'
           ? undefined
           : blessing === 'current'
-          ? currentBlessings
-          : upcomingBlessings;
+            ? currentBlessings
+            : upcomingBlessings;
       return new MinimumPotentialFilter(
         threshold,
         blessing,

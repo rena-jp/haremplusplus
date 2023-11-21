@@ -374,8 +374,8 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
     blessing.blessing === Blessing.HairColor
       ? blessingEnum[blessing.blessingValue]
       : blessing.blessing === Blessing.Rarity
-      ? `rarity ${blessingEnum[blessing.blessingValue]}`
-      : '';
+        ? `rarity ${blessingEnum[blessing.blessingValue]}`
+        : '';
 
   const blessingDescription =
     blessing.blessing === Blessing.Element ? (

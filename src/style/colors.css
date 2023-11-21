@@ -10,8 +10,10 @@
   --var-color: white;
   --var-shadow-color: black;
   color: var(--var-color);
-  text-shadow: 1px 1px 0 var(--var-shadow-color),
-    -1px 1px 0 var(--var-shadow-color), -1px -1px 0 var(--var-shadow-color),
+  text-shadow:
+    1px 1px 0 var(--var-shadow-color),
+    -1px 1px 0 var(--var-shadow-color),
+    -1px -1px 0 var(--var-shadow-color),
     1px -1px 0 var(--var-shadow-color);
 }
 .color > .blue {

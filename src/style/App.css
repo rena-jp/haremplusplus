@@ -132,7 +132,9 @@ body.qh-local {
   border-radius: 100%;
   background-origin: content-box, border-box;
   border: none;
-  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  box-shadow:
+    0 3px 0 rgba(13, 22, 25, 0.35),
+    inset 0 3px 0 #6df0ff;
   padding: 2px;
 }
 
@@ -160,17 +162,26 @@ body.qh-local {
 .section-switch > span {
   cursor: pointer;
   color: #d08467;
-  text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+  text-shadow:
+    1px 1px 0 #000,
+    -1px 1px 0 #000,
+    -1px -1px 0 #000,
     1px -1px 0 #000;
 }
 
 .section-switch > span.active {
   cursor: initial;
   color: #ffb827;
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000,
-    1px 1px 0 #000, -2px -2px 5px rgba(255, 159, 0, 0.4),
-    2px -2px 5px rgba(255, 159, 0, 0.4), -2px 2px 5px rgba(255, 159, 0, 0.4),
-    2px 2px 5px rgba(255, 159, 0, 0.4), 0 0 10px rgba(255, 159, 0, 0.4);
+  text-shadow:
+    -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000,
+    -2px -2px 5px rgba(255, 159, 0, 0.4),
+    2px -2px 5px rgba(255, 159, 0, 0.4),
+    -2px 2px 5px rgba(255, 159, 0, 0.4),
+    2px 2px 5px rgba(255, 159, 0, 0.4),
+    0 0 10px rgba(255, 159, 0, 0.4);
 }
 
 .general-attributes {

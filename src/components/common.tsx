@@ -257,8 +257,8 @@ export const SharedTooltip: React.FC<SharedTooltipProps> = ({
     cssClasses === undefined
       ? []
       : Array.isArray(cssClasses)
-      ? cssClasses
-      : [cssClasses];
+        ? cssClasses
+        : [cssClasses];
   classes.push('qh-tooltip-wrapper');
 
   const tooltipContent = ReactDOMServer.renderToStaticMarkup(tooltip);
@@ -289,8 +289,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
     cssClasses === undefined
       ? []
       : Array.isArray(cssClasses)
-      ? cssClasses
-      : [cssClasses];
+        ? cssClasses
+        : [cssClasses];
   classes.push('qh-tooltip-wrapper');
 
   const [anchorId] = useState(randomAnchor);

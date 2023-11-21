@@ -111,12 +111,12 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
     girl === undefined
       ? 'none'
       : activeTab === 'lore' && girl.own
-      ? 'lore'
-      : activeTab === 'variations' &&
-        girl.variations &&
-        girl.variations.length > 1
-      ? 'variations'
-      : 'stats';
+        ? 'lore'
+        : activeTab === 'variations' &&
+            girl.variations &&
+            girl.variations.length > 1
+          ? 'variations'
+          : 'stats';
 
   return (
     <>
@@ -354,8 +354,8 @@ const MissingAffEntry: React.FC<GirlStatsEntry> = ({ girl }) => {
         girl.stars === girl.maxStars
           ? 'Max.'
           : affStats.currentAff === affStats.affToMax
-          ? 'Ready'
-          : format(affStats.affToMax - affStats.currentAff) + ' Aff'
+            ? 'Ready'
+            : format(affStats.affToMax - affStats.currentAff) + ' Aff'
       }
     />
   );
@@ -685,8 +685,8 @@ const QuestStep: React.FC<QuestStepProps> = ({
     const imgSrc = quest.ready
       ? `https://${contentHostName2}/design_v2/affstar_upgrade.png`
       : quest.done
-      ? `https://${contentHostName2}/design_v2/affstar.png`
-      : `https://${contentHostName2}/design_v2/affstar_empty.png`;
+        ? `https://${contentHostName2}/design_v2/affstar.png`
+        : `https://${contentHostName2}/design_v2/affstar_empty.png`;
     const img = <img alt="" src={imgSrc} />;
     const link =
       quest.done || quest.ready
