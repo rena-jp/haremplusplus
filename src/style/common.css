@@ -39,23 +39,8 @@
   z-index: 99999;
 }
 
-.react-tooltip__place-bottom > .qh-tooltip-arrow {
-  border-top: 1px solid goldenrod;
-  border-left: 1px solid goldenrod;
-}
-
-.react-tooltip__place-left > .qh-tooltip-arrow {
-  border-top: 1px solid goldenrod;
+.qh-tooltip-arrow {
   border-right: 1px solid goldenrod;
-}
-
-.react-tooltip__place-top > .qh-tooltip-arrow {
-  border-right: 1px solid goldenrod;
-  border-bottom: 1px solid goldenrod;
-}
-
-.react-tooltip__place-right > .qh-tooltip-arrow {
-  border-left: 1px solid goldenrod;
   border-bottom: 1px solid goldenrod;
 }
 
@@ -153,7 +138,9 @@ requiring actual content. */
 
 .return-button {
   cursor: pointer;
-  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  box-shadow:
+    0 3px 0 rgba(13, 22, 25, 0.35),
+    inset 0 3px 0 #6df0ff;
   background-image: linear-gradient(to top, #008ed5 0, #05719c 100%);
   border: 1px solid #000;
   border-radius: 50%;
@@ -266,7 +253,8 @@ requiring actual content. */
 .tile img.tileImg {
   background-repeat: no-repeat;
   background-size: cover;
-  box-shadow: 0 0 5px 1px rgba(52, 0, 15, 0.75),
+  box-shadow:
+    0 0 5px 1px rgba(52, 0, 15, 0.75),
     inset 0 0 8px rgba(55, 30, 103, 0.4);
 
   border: var(--border-width) solid white;
