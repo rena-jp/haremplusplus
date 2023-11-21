@@ -29,7 +29,15 @@ import {
   sumInventoryStats,
   updateInventory
 } from '../data/girls-equipment';
-import { AttackIcon, DefenseIcon, EgoIcon, StatIcon, Tooltip } from './common';
+import {
+  AttackIcon,
+  DefenseIcon,
+  EgoIcon,
+  ElementIcon,
+  PoseIcon,
+  StatIcon,
+  Tooltip
+} from './common';
 import { roundValue } from '../data/common';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Popup from 'reactjs-popup';
@@ -243,6 +251,15 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
               )
         }
       />
+      <div className="equipment-resonance">
+        <StatIcon statClass={girl.class} />
+      </div>
+      <div className="equipment-resonance">
+        <ElementIcon element={girl.element} />
+      </div>
+      <div className="equipment-resonance">
+        <PoseIcon pose={girl.pose} />
+      </div>
     </>
   );
 };
@@ -384,6 +401,9 @@ const GirlInventoryHeader: React.FC<{ gameName: GameName }> = ({
       <div className="header stat-res">
         <AttackIcon gameName={gameName} />%
       </div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
     </>
   );
 };
@@ -452,6 +472,9 @@ const EquipmentStatsEntry: React.FC<EquipmentStatsEntryProps> = ({
           {stats.rAtk > 0 ? `${stats.rAtk}%` : ''}
         </span>
       </div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
     </>
   );
 };
