@@ -113,7 +113,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
       <h2>{girl.name}</h2>
       <div className="qh-scene-content">
         <div className="qh-scene-area">
-          <img className="qh-scene" src={checkedImage} />
+          <img alt="" className="qh-scene" src={checkedImage} />
           {showText ? (
             <span className="qh-scene-dialogue overlay">{sceneText}</span>
           ) : null}

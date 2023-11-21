@@ -7,7 +7,9 @@
   );
   /* background-color: rgba(0, 0, 0, 0.3); */
   border-radius: 0.25em;
-  box-shadow: 0 2px 0 #c61f52, 0 0 13px rgba(159, 7, 58, 0.6),
+  box-shadow:
+    0 2px 0 #c61f52,
+    0 0 13px rgba(159, 7, 58, 0.6),
     0 0 13px rgba(159, 7, 58, 0.95);
   color: white;
 
@@ -45,7 +47,9 @@ input.hh-text-input {
   border: 1px solid #ffa23e;
   background-color: rgba(0, 0, 0, 0.3);
   border-radius: 4px;
-  box-shadow: 0 2px 0 #c61f52, 0 0 13px rgba(159, 7, 58, 0.6),
+  box-shadow:
+    0 2px 0 #c61f52,
+    0 0 13px rgba(159, 7, 58, 0.6),
     0 0 13px rgba(159, 7, 58, 0.95);
   color: white;
 
@@ -73,7 +77,9 @@ button.toggle.pressed {
 }
 
 .hh-game-action {
-  box-shadow: 0 3px 0 rgba(23, 33, 7, 0.6), inset 0 3px 0 #95ed3f;
+  box-shadow:
+    0 3px 0 rgba(23, 33, 7, 0.6),
+    inset 0 3px 0 #95ed3f;
   border: 1px solid #000;
   background-image: linear-gradient(to top, #619f00 0, #570 100%);
   color: white;

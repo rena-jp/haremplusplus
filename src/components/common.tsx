@@ -257,8 +257,8 @@ export const SharedTooltip: React.FC<SharedTooltipProps> = ({
     cssClasses === undefined
       ? []
       : Array.isArray(cssClasses)
-      ? cssClasses
-      : [cssClasses];
+        ? cssClasses
+        : [cssClasses];
   classes.push('qh-tooltip-wrapper');
 
   const tooltipContent = ReactDOMServer.renderToStaticMarkup(tooltip);
@@ -289,8 +289,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
     cssClasses === undefined
       ? []
       : Array.isArray(cssClasses)
-      ? cssClasses
-      : [cssClasses];
+        ? cssClasses
+        : [cssClasses];
   classes.push('qh-tooltip-wrapper');
 
   const [anchorId] = useState(randomAnchor);
@@ -557,14 +557,24 @@ export const BookIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'XP2' : `XP${item}`;
   const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
   const contentHostName2 = contentHost2(gameName);
-  return <img src={`https://${contentHostName2}/pictures/items/${icon}.png`} />;
+  return (
+    <img
+      alt=""
+      src={`https://${contentHostName2}/pictures/items/${icon}.png`}
+    />
+  );
 };
 
 export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'K2' : `K${item}`;
   const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
   const contentHostName2 = contentHost2(gameName);
-  return <img src={`https://${contentHostName2}/pictures/items/${icon}.png`} />;
+  return (
+    <img
+      alt=""
+      src={`https://${contentHostName2}/pictures/items/${icon}.png`}
+    />
+  );
 };
 
 export interface SimpleIconProps {
@@ -575,6 +585,7 @@ export const EnduranceIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
+      alt=""
       src={`https://${contentHostName2}/pictures/misc/items_icons/4.png`}
       className="endurance-icon"
     />
@@ -585,6 +596,7 @@ export const EgoIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
+      alt=""
       src={`https://${contentHostName2}/caracs/ego.png`}
       className="ego-icon"
     />
@@ -595,6 +607,7 @@ export const AttackIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
+      alt=""
       src={`https://${contentHostName2}/caracs/damage.png`}
       className="attack-icon"
     />
@@ -605,6 +618,7 @@ export const DefenseIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
   const contentHostName2 = contentHost2(gameName);
   return (
     <img
+      alt=""
       src={`https://${contentHostName2}/caracs/deff_undefined.png`}
       className="defense-icon"
     />

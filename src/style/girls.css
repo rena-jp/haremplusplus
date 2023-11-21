@@ -122,7 +122,10 @@
   background-size: 40px 40px;
 
   color: #80058b;
-  text-shadow: 1px 1px 0 #fff, -1px 1px 0 #fff, -1px -1px 0 #fff,
+  text-shadow:
+    1px 1px 0 #fff,
+    -1px 1px 0 #fff,
+    -1px -1px 0 #fff,
     1px -1px 0 #fff;
   font-weight: bold;
 }
@@ -135,7 +138,8 @@
 .girlTile > .avatar-area > .lazyload-wrapper > .tile-avatar {
   background-repeat: no-repeat;
   background-size: cover;
-  box-shadow: 0 0 5px 1px rgba(52, 0, 15, 0.75),
+  box-shadow:
+    0 0 5px 1px rgba(52, 0, 15, 0.75),
     inset 0 0 8px rgba(55, 30, 103, 0.4);
 }
 
@@ -222,7 +226,10 @@
     left: 50%;
     z-index: 1;
     transform: translateX(-50%);
-    text-shadow: 1px 1px 0 #000, -1px 1px 0 #000, -1px -1px 0 #000,
+    text-shadow:
+      1px 1px 0 #000,
+      -1px 1px 0 #000,
+      -1px -1px 0 #000,
       1px -1px 0 #000;
     font-size: 0.8em;
   }

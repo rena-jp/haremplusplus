@@ -1,6 +1,8 @@
 import {
+  Dispatch,
   EventHandler,
   MouseEvent,
+  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -8,12 +10,15 @@ import {
   useState
 } from 'react';
 import {
+  Class,
   CommonGirlData,
   EMPTY_INVENTORY_STATS,
+  Element,
   Equipment,
   EquipmentData,
   GameName,
-  InventoryStats
+  InventoryStats,
+  Pose
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
 import { BaseGirlTile } from './girl';
@@ -29,7 +34,15 @@ import {
   sumInventoryStats,
   updateInventory
 } from '../data/girls-equipment';
-import { AttackIcon, DefenseIcon, EgoIcon, StatIcon, Tooltip } from './common';
+import {
+  AttackIcon,
+  DefenseIcon,
+  EgoIcon,
+  ElementIcon,
+  PoseIcon,
+  StatIcon,
+  Tooltip
+} from './common';
 import { roundValue } from '../data/common';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import Popup from 'reactjs-popup';
@@ -138,6 +151,10 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
 
   const showFilterLengthWarning = girls.length > displayGirls.length;
 
+  const [girlClass, setGirlClass] = useState<Class | null>(null);
+  const [element, setElement] = useState<Element | null>(null);
+  const [pose, setPose] = useState<Pose | null>(null);
+
   return (
     <div className="girls-inventory">
       {showFilterLengthWarning ? (
@@ -159,6 +176,9 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
               equipSelected={equipSelected}
               unequipOne={unequipOne}
               gameName={gameName}
+              setGirlClass={setGirlClass}
+              setElement={setElement}
+              setPose={setPose}
             />
           ))}
           <InventoryTotalStatsEntry girls={displayGirls} />
@@ -170,6 +190,12 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
           setSelectedItem={setSelectedItem}
           unequipAll={unequipAll}
           gameName={gameName}
+          girlClass={girlClass}
+          element={element}
+          pose={pose}
+          setGirlClass={setGirlClass}
+          setElement={setElement}
+          setPose={setPose}
         />
       </div>
       <ReactTooltip
@@ -187,6 +213,9 @@ interface GirlsInventoryEntryProps {
   equipSelected(girl: CommonGirlData): Promise<void>;
   unequipOne(girl: CommonGirlData, equipment: Equipment): void;
   gameName: GameName;
+  setGirlClass: Dispatch<SetStateAction<Class | null>>;
+  setElement: Dispatch<SetStateAction<Element | null>>;
+  setPose: Dispatch<SetStateAction<Pose | null>>;
 }
 
 const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
@@ -194,7 +223,10 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
   selectedEquipment,
   equipSelected,
   unequipOne,
-  gameName
+  gameName,
+  setGirlClass,
+  setElement,
+  setPose
 }) => {
   const girlOnClick = useCallback(() => {
     /* Nothing */
@@ -205,6 +237,18 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
   const equippedItems = girl.equipment ?? { items: [] };
   const items = slotsArray(equippedItems.items);
 
+  const toggleGirlClassFilter = useCallback(
+    () => setGirlClass((old) => (old === girl.class ? null : girl.class)),
+    [setGirlClass, girl.class]
+  );
+  const toggleElementFilter = useCallback(
+    () => setElement((old) => (old === girl.element ? null : girl.element)),
+    [setElement, girl.element]
+  );
+  const togglePoseFilter = useCallback(
+    () => setPose((old) => (old === girl.pose ? null : girl.pose)),
+    [setPose, girl.pose]
+  );
   return (
     <>
       <BaseGirlTile girl={girl} onClick={girlOnClick} />
@@ -243,6 +287,21 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
               )
         }
       />
+      <div
+        className="equipment-resonance clickable"
+        onClick={toggleGirlClassFilter}
+      >
+        <StatIcon statClass={girl.class} />
+      </div>
+      <div
+        className="equipment-resonance clickable"
+        onClick={toggleElementFilter}
+      >
+        <ElementIcon element={girl.element} />
+      </div>
+      <div className="equipment-resonance clickable" onClick={togglePoseFilter}>
+        <PoseIcon pose={girl.pose} />
+      </div>
     </>
   );
 };
@@ -384,6 +443,9 @@ const GirlInventoryHeader: React.FC<{ gameName: GameName }> = ({
       <div className="header stat-res">
         <AttackIcon gameName={gameName} />%
       </div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
     </>
   );
 };
@@ -452,6 +514,9 @@ const EquipmentStatsEntry: React.FC<EquipmentStatsEntryProps> = ({
           {stats.rAtk > 0 ? `${stats.rAtk}%` : ''}
         </span>
       </div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
+      <div className="header equipment-resonance"></div>
     </>
   );
 };
@@ -602,6 +667,12 @@ interface InventoryItemsProps {
   setSelectedItem(item: Equipment | undefined): void;
   unequipAll(): void;
   gameName: GameName;
+  girlClass: Class | null;
+  element: Element | null;
+  pose: Pose | null;
+  setGirlClass: Dispatch<SetStateAction<Class | null>>;
+  setElement: Dispatch<SetStateAction<Element | null>>;
+  setPose: Dispatch<SetStateAction<Pose | null>>;
 }
 
 const InventoryItems: React.FC<InventoryItemsProps> = ({
@@ -610,8 +681,28 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
   selectedItem,
   setSelectedItem,
   unequipAll,
-  gameName
+  gameName,
+  girlClass,
+  element,
+  pose,
+  setGirlClass,
+  setElement,
+  setPose
 }) => {
+  const resetGirlClass = useCallback(() => {
+    setGirlClass(null);
+  }, [setGirlClass]);
+  const resetElement = useCallback(() => {
+    setElement(null);
+  }, [setElement]);
+  const resetPose = useCallback(() => {
+    setPose(null);
+  }, [setPose]);
+  const resetFilter = useCallback(() => {
+    resetGirlClass();
+    resetElement();
+    resetPose();
+  }, [resetGirlClass, resetElement, resetPose]);
   return (
     <div className="qh-inventory">
       <div className="qh-inventory-items">
@@ -619,23 +710,33 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
         {loading === false && inventory.items.length === 0 ? (
           <span>Inventory is empty.</span>
         ) : null}
-        {inventory.items.map((item) => {
-          const classNames =
-            item === selectedItem ? ['item-slot', 'selected'] : ['item-slot'];
-          return (
-            <SimpleEquipmentTile
-              equipment={item}
-              classNames={classNames}
-              slotId={item.slot}
-              key={item.uid}
-              onClick={(ev) => {
-                ev.preventDefault();
-                setSelectedItem(item === selectedItem ? undefined : item);
-              }}
-              gameName={gameName}
-            />
-          );
-        })}
+        {inventory.items
+          .map((item): [typeof item, boolean] => {
+            const resonance = item.resonance;
+            let visible = true;
+            if (girlClass != null) visible &&= girlClass === resonance.class;
+            if (element != null) visible &&= element === resonance.element;
+            if (pose != null) visible &&= pose === resonance.pose;
+            return [item, visible];
+          })
+          .map(([item, visible]) => {
+            const classNames =
+              item === selectedItem ? ['item-slot', 'selected'] : ['item-slot'];
+            return (
+              <SimpleEquipmentTile
+                equipment={item}
+                classNames={classNames}
+                slotId={item.slot}
+                key={item.uid}
+                onClick={(ev) => {
+                  ev.preventDefault();
+                  setSelectedItem(item === selectedItem ? undefined : item);
+                }}
+                gameName={gameName}
+                hidden={!visible}
+              />
+            );
+          })}
       </div>
       <div className="qh-inventory-actions">
         <Popup
@@ -672,7 +773,25 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
               // eslint-disable-next-line
             )) as any
           }
-        </Popup>
+        </Popup>{' '}
+        <button className="hh-action-button" onClick={resetFilter}>
+          Reset filter
+        </button>
+        {girlClass == null ? null : (
+          <div className="equipment-resonance" onClick={resetGirlClass}>
+            <StatIcon statClass={girlClass} />
+          </div>
+        )}
+        {element == null ? null : (
+          <div className="equipment-resonance" onClick={resetElement}>
+            <ElementIcon element={element} />
+          </div>
+        )}
+        {pose == null ? null : (
+          <div className="equipment-resonance" onClick={resetPose}>
+            <PoseIcon pose={pose} />
+          </div>
+        )}
       </div>
     </div>
   );

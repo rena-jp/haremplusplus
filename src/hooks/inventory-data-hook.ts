@@ -98,8 +98,8 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
       return newInventory === undefined || type === undefined
         ? []
         : type === 'book'
-        ? newInventory.books
-        : newInventory.gifts;
+          ? newInventory.books
+          : newInventory.gifts;
     },
     [setInventory]
   );

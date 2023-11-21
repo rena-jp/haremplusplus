@@ -1,10 +1,14 @@
-## 0.16.3 - 2023-11-21
+## 0.17.1 - 2023-11-21
 
 - Add style for CxH/PsH hair colors
-
-## 0.16.2 - 2023-11-20
-
 - Fix Hair Color blessing error
+
+## 0.17.0 - 2023-11-21
+
+- Add resonance filter to equipment inventory
+- Fix tooltip arrow
+- Update pose data
+- Update dependent libraries
 
 ## 0.16.1 - 2023-11-16
 

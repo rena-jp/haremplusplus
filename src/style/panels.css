@@ -234,8 +234,12 @@ button.toggle.qh-class {
       rgba(10, 10, 10, 0.9) 100%
     );
   /** Place the class image to the left, without overlapping the text */
-  background-position: 10px center, 0px 0px;
-  background-size: auto 80%, auto auto;
+  background-position:
+    10px center,
+    0px 0px;
+  background-size:
+    auto 80%,
+    auto auto;
   background-repeat: no-repeat;
   padding-left: 20px;
 }

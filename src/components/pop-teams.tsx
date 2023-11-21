@@ -140,8 +140,8 @@ export const PoPRepartition: React.FC<PoPRepartitionProps> = ({
             currentClass === Class.Hardcore
               ? girlsByHc
               : currentClass === Class.Charm
-              ? girlsByCh
-              : girlsByKh;
+                ? girlsByCh
+                : girlsByKh;
           for (const girl of girls.filter((g) => !usedGirls.has(g.id))) {
             const girlPower = getGirlValue(girl, currentClass, activeBlessing);
             currentPower += girlPower;
@@ -319,8 +319,8 @@ function getRepartitionResult(
       currentClass === Class.Hardcore
         ? hcGirls
         : currentClass === Class.Charm
-        ? chGirls
-        : khGirls
+          ? chGirls
+          : khGirls
     ).filter((girl) => !usedGirls.has(girl.id));
     let currentPower = 0;
     let count = 0;

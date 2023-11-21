@@ -107,8 +107,8 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
         newItems.length === 0
           ? undefined
           : newItems.length <= selectionIndex
-          ? newItems[newItems.length - 1]
-          : newItems[selectionIndex];
+            ? newItems[newItems.length - 1]
+            : newItems[selectionIndex];
       selectItem(nextItem);
     }
   }, [selectedItem, selectItem, currentGirl, gameAPI]);
@@ -550,8 +550,8 @@ export const AffStatus: React.FC<AffStatusProps> = ({
               girl.stars === girl.maxStars
                 ? 'Max.'
                 : girl.upgradeReady
-                ? 'Ready'
-                : format(affStats.maxAff - affStats.currentAff) + ' Aff'
+                  ? 'Ready'
+                  : format(affStats.maxAff - affStats.currentAff) + ' Aff'
             }
             overlay={upgradeOverlay}
           />
@@ -572,8 +572,8 @@ export const AffStatus: React.FC<AffStatusProps> = ({
             girl.stars === girl.maxStars
               ? 'Max.'
               : currentAff === affToMax
-              ? 'Ready'
-              : format(affStats.affToMax - affStats.currentAff) + ' Aff'
+                ? 'Ready'
+                : format(affStats.affToMax - affStats.currentAff) + ' Aff'
           }
         />
       </span>

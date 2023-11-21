@@ -377,15 +377,15 @@ const FilterHeader: React.FC<FilterHeaderProps> = ({
   const filterStatus = isActive
     ? 'active'
     : reapply !== undefined
-    ? 'ready'
-    : 'invalid';
+      ? 'ready'
+      : 'invalid';
 
   const statusTooltip =
     filterStatus === 'active'
       ? 'Active. Click to deactivate.'
       : filterStatus === 'ready'
-      ? 'Inactive. Click to activate.'
-      : 'Invalid. Modify the filter to activate it.';
+        ? 'Inactive. Click to activate.'
+        : 'Invalid. Modify the filter to activate it.';
   const delay = filterStatus === 'invalid' ? 500 : 1500;
 
   const descriptionLines = description.split('\n');

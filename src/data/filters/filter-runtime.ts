@@ -42,8 +42,8 @@ export class GradeRangeFilter extends AbstractFilter {
       maxStars === undefined
         ? `Grade: ≥ ${minStars}`
         : maxStars === minStars
-        ? `Grade: ${minStars}`
-        : `Grade: ${minStars}-${maxStars}`;
+          ? `Grade: ${minStars}`
+          : `Grade: ${minStars}-${maxStars}`;
   }
 
   includes(girl: CommonGirlData): boolean {
@@ -86,8 +86,8 @@ export class MaxGradeRangeFilter extends AbstractFilter {
       maxStars === undefined
         ? `Max Grade: ≥ ${minStars}`
         : maxStars === minStars
-        ? `Max Grade: ${minStars}`
-        : `Max Grade: ${minStars}-${maxStars}`;
+          ? `Max Grade: ${minStars}`
+          : `Max Grade: ${minStars}-${maxStars}`;
   }
 
   includes(girl: CommonGirlData): boolean {
@@ -130,8 +130,8 @@ export class LevelRangeFilter extends AbstractFilter {
       maxLevel === undefined
         ? `Level: ≥ ${minLevel}`
         : maxLevel === minLevel
-        ? `Level: ${minLevel}`
-        : `Level: ${minLevel}-${maxLevel}`;
+          ? `Level: ${minLevel}`
+          : `Level: ${minLevel}-${maxLevel}`;
   }
 
   includes(girl: CommonGirlData): boolean {
@@ -175,8 +175,8 @@ export class MaxLevelRangeFilter extends AbstractFilter {
       maxLevel === undefined
         ? `Level Cap Range: ≥ ${minLevel}`
         : maxLevel === minLevel
-        ? `Level Cap: ${minLevel}`
-        : `Level Cap Range: ${minLevel}-${maxLevel}`;
+          ? `Level Cap: ${minLevel}`
+          : `Level Cap Range: ${minLevel}-${maxLevel}`;
   }
 
   includes(girl: CommonGirlData): boolean {
@@ -480,8 +480,8 @@ export class MinimumPowerFilter extends AbstractFilter {
       blessing === 'none'
         ? 'Base Total Power'
         : blessing === 'current'
-        ? 'Current Total Power'
-        : 'Upcoming Total Power';
+          ? 'Current Total Power'
+          : 'Upcoming Total Power';
     this.label = `${prefix} ≥ ${threshold}`;
   }
 
@@ -552,8 +552,8 @@ export class MinimumPotentialFilter extends AbstractFilter {
       blessing === 'none'
         ? 'Base Total Power'
         : blessing === 'current'
-        ? 'Current Total Power'
-        : 'Upcoming Total Power';
+          ? 'Current Total Power'
+          : 'Upcoming Total Power';
     this.label = `${prefix} ≥ ${threshold}`;
   }
 
@@ -623,10 +623,10 @@ export class ShardsFilter extends AbstractFilter {
       shards === 'allshards'
         ? 'Owned girls'
         : shards === 'noshards'
-        ? 'Girls with 0 shard'
-        : shards === '40shards'
-        ? 'Girl with 40-99 shards'
-        : 'Girls with some shards';
+          ? 'Girls with 0 shard'
+          : shards === '40shards'
+            ? 'Girl with 40-99 shards'
+            : 'Girls with some shards';
   }
 
   includes(girl: CommonGirlData): boolean {
@@ -793,8 +793,8 @@ export class TeamsFilter extends AbstractFilter {
       teams.length === 0
         ? 'Loading teams...'
         : filteredTeams.length === this.teams.length
-        ? 'All teams'
-        : `Teams ${include}`;
+          ? 'All teams'
+          : `Teams ${include}`;
   }
 
   includes(girl: CommonGirlData): boolean {

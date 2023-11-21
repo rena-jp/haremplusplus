@@ -80,7 +80,9 @@
 .qh-scene-content > .side-bar > .navigate > button {
   width: 4em;
   height: 4em;
-  box-shadow: 0 3px 0 rgba(13, 22, 25, 0.35), inset 0 3px 0 #6df0ff;
+  box-shadow:
+    0 3px 0 rgba(13, 22, 25, 0.35),
+    inset 0 3px 0 #6df0ff;
   border: 1px solid #000;
   border-radius: 100%;
 

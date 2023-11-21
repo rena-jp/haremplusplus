@@ -205,7 +205,7 @@ const LockedTeamTile: React.FC = () => {
   return (
     <div className="team-overview tile inactive">
       <div className="bg">
-        <img src={icon} className="lock-icon" />
+        <img alt="" src={icon} className="lock-icon" />
       </div>
     </div>
   );
@@ -420,7 +420,11 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
           girl.equipment.items.length === 0 ? null : (
             <EquipmentDecorators equipment={girl.equipment} />
           )}
-          {girl === undefined ? <img src={icon} /> : <img src={icon} />}
+          {girl === undefined ? (
+            <img alt="" src={icon} />
+          ) : (
+            <img alt="" src={icon} />
+          )}
         </div>
       </div>
       {girl ? <ElementIcon element={girl.element} /> : null}
