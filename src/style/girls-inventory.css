@@ -205,6 +205,7 @@
 
 .girls-inventory-content > .girls-list > div.equipment-resonance {
   min-width: calc(var(--image-size) * 0.5);
+  cursor: pointer;
 }
 
 .girls-inventory-content > .girls-list > div.equipment-resonance > .stat-icon,
@@ -218,6 +219,21 @@
 .girls-inventory-content > .girls-list > div.equipment-resonance > .pose-icon {
   height: calc(var(--image-size) * 0.5);
   width: calc(var(--image-size) * 0.5);
+}
+
+.qh-inventory-actions > div.equipment-resonance {
+  display: inline-block;
+  margin-left: 0.25em;
+  cursor: pointer;
+}
+
+.qh-inventory-actions > div.equipment-resonance > .stat-icon,
+.qh-inventory-actions > div.equipment-resonance > .element,
+.qh-inventory-actions > div.equipment-resonance > .pose-icon {
+  height: 1.5em;
+  width: 1.5em;
+  min-height: 0;
+  min-width: 0;
 }
 
 .girls-inventory-content > .qh-inventory {

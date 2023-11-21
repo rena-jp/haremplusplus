@@ -613,6 +613,7 @@ export interface SimpleEquipmentTileProps {
   girl?: CommonGirlData;
   onClick?: EventHandler<MouseEvent<unknown>>;
   gameName: GameName;
+  hidden?: boolean;
 }
 
 export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
@@ -622,7 +623,8 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
   children,
   girl,
   onClick,
-  gameName
+  gameName,
+  hidden
 }) => {
   const img = equipment?.icon;
 
@@ -642,7 +644,11 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
   const slotLabel = getSlotLabel(slotId);
 
   return (
-    <div className={tileClassNames.join(' ')} onClick={onClick}>
+    <div
+      className={tileClassNames.join(' ')}
+      onClick={onClick}
+      style={hidden ? { display: 'none' } : {}}
+    >
       {equipment === undefined ? (
         <Tooltip tooltip={slotLabel}>{icon}</Tooltip>
       ) : (
