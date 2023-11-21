@@ -73,6 +73,12 @@
 .color > .bronze {
   --var-color: #ca8521;
 }
+.color > .ashBrown {
+  --var-color: #675B58;
+}
+.color > .bald {
+  --var-color: #fff;
+}
 .color > .rarity.starter {
   --var-color: #fff;
 }
