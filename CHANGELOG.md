@@ -1,3 +1,11 @@
+## 0.16.3 - 2023-11-21
+
+- Add style for CxH/PsH hair colors
+
+## 0.16.2 - 2023-11-20
+
+- Fix Hair Color blessing error
+
 ## 0.16.1 - 2023-11-16
 
 - Fix PsH poses error
