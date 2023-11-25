@@ -34,21 +34,23 @@ export class GradeRangeFilter extends AbstractFilter {
   id = GradeRangeFilter.ID;
 
   constructor(
-    public minStars: number,
+    public minStars?: number,
     public maxStars?: number
   ) {
     super();
     this.label =
       maxStars === undefined
         ? `Grade: ≥ ${minStars}`
-        : maxStars === minStars
-          ? `Grade: ${minStars}`
-          : `Grade: ${minStars}-${maxStars}`;
+        : minStars === undefined
+          ? `Grade: ≤ ${maxStars}`
+          : maxStars === minStars
+            ? `Grade: ${minStars}`
+            : `Grade: ${minStars}-${maxStars}`;
   }
 
   includes(girl: CommonGirlData): boolean {
     return (
-      girl.stars >= this.minStars &&
+      (this.minStars === undefined || girl.stars >= this.minStars) &&
       (this.maxStars === undefined || girl.stars <= this.maxStars)
     );
   }
@@ -78,21 +80,23 @@ export class MaxGradeRangeFilter extends AbstractFilter {
   id = MaxGradeRangeFilter.ID;
 
   constructor(
-    public minStars: number,
+    public minStars?: number,
     public maxStars?: number
   ) {
     super();
     this.label =
       maxStars === undefined
         ? `Max Grade: ≥ ${minStars}`
-        : maxStars === minStars
-          ? `Max Grade: ${minStars}`
-          : `Max Grade: ${minStars}-${maxStars}`;
+        : minStars === undefined
+          ? `Max Grade: ≤ ${maxStars}`
+          : maxStars === minStars
+            ? `Max Grade: ${minStars}`
+            : `Max Grade: ${minStars}-${maxStars}`;
   }
 
   includes(girl: CommonGirlData): boolean {
     return (
-      girl.maxStars >= this.minStars &&
+      (this.minStars === undefined || girl.maxStars >= this.minStars) &&
       (this.maxStars === undefined || girl.maxStars <= this.maxStars)
     );
   }
@@ -122,22 +126,24 @@ export class LevelRangeFilter extends AbstractFilter {
   id = LevelRangeFilter.ID;
 
   constructor(
-    public minLevel: number,
+    public minLevel?: number,
     public maxLevel?: number
   ) {
     super();
     this.label =
       maxLevel === undefined
         ? `Level: ≥ ${minLevel}`
-        : maxLevel === minLevel
-          ? `Level: ${minLevel}`
-          : `Level: ${minLevel}-${maxLevel}`;
+        : minLevel === undefined
+          ? `Level: ≤ ${maxLevel}`
+          : maxLevel === minLevel
+            ? `Level: ${minLevel}`
+            : `Level: ${minLevel}-${maxLevel}`;
   }
 
   includes(girl: CommonGirlData): boolean {
     const level = girl.level ?? 0;
     return (
-      level >= this.minLevel &&
+      (this.minLevel === undefined || level >= this.minLevel) &&
       (this.maxLevel === undefined || level <= this.maxLevel)
     );
   }
@@ -167,22 +173,24 @@ export class MaxLevelRangeFilter extends AbstractFilter {
   id = MaxLevelRangeFilter.ID;
 
   constructor(
-    public minLevel: number,
+    public minLevel?: number,
     public maxLevel?: number
   ) {
     super();
     this.label =
       maxLevel === undefined
         ? `Level Cap Range: ≥ ${minLevel}`
-        : maxLevel === minLevel
-          ? `Level Cap: ${minLevel}`
-          : `Level Cap Range: ${minLevel}-${maxLevel}`;
+        : minLevel === undefined
+          ? `Level Cap Range: ≤ ${maxLevel}`
+          : maxLevel === minLevel
+            ? `Level Cap: ${minLevel}`
+            : `Level Cap Range: ${minLevel}-${maxLevel}`;
   }
 
   includes(girl: CommonGirlData): boolean {
     const levelCap = girl.maxLevel ?? 250;
     return (
-      levelCap >= this.minLevel &&
+      (this.minLevel === undefined || levelCap >= this.minLevel) &&
       (this.maxLevel === undefined || levelCap <= this.maxLevel)
     );
   }

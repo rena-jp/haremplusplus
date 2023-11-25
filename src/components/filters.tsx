@@ -181,7 +181,7 @@ const MaxGradeForm: React.FC<FormProps> = ({
   removeFilter
 }) => {
   const createFilter = useCallback((range: Range) => {
-    return range.min !== undefined
+    return range.min !== undefined || range.max !== undefined
       ? new MaxGradeRangeFilter(range.min, range.max)
       : undefined;
   }, []);
@@ -213,7 +213,7 @@ const GradeForm: React.FC<FormProps> = ({
   removeFilter
 }) => {
   const createFilter = useCallback((range: Range) => {
-    return range.min !== undefined
+    return range.min !== undefined || range.max !== undefined
       ? new GradeRangeFilter(range.min, range.max)
       : undefined;
   }, []);
@@ -245,7 +245,7 @@ const LevelForm: React.FC<FormProps> = ({
   removeFilter
 }) => {
   const createFilter = useCallback((range: Range) => {
-    return range.min !== undefined
+    return range.min !== undefined || range.max !== undefined
       ? new LevelRangeFilter(range.min, range.max)
       : undefined;
   }, []);
@@ -277,7 +277,7 @@ const MaxLevelForm: React.FC<FormProps> = ({
   removeFilter
 }) => {
   const createFilter = useCallback((range: Range) => {
-    return range.min !== undefined
+    return range.min !== undefined || range.max !== undefined
       ? new MaxLevelRangeFilter(range.min, range.max)
       : undefined;
   }, []);
