@@ -1,3 +1,9 @@
+## 0.17.2 - 2023-11-25
+
+- Improve filter UI
+- Update pose data
+- Update dependent libraries
+
 ## 0.17.1 - 2023-11-21
 
 - Add style for CxH/PsH hair colors
