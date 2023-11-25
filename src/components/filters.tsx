@@ -689,38 +689,24 @@ const GirlSkillsForm: React.FC<FormProps> = ({
   removeFilter
 }) => {
   const options = useMemo<ToggleOption[]>(
-    () => [
-      {
-        label: 'Maxed skills',
-        description: 'Filter girls that have maxed skills'
-      },
-      {
-        label: 'Some skills',
-        description: 'Filter girls that have at least one skill but not maxed'
-      },
-      {
-        label: 'No skills',
-        description: 'Filter girls that have no skills'
-      }
-    ],
+    () =>
+      [...Array(6)].map((_, i) => ({
+        label: `Skill ${i}`,
+        description: `Filter girls that have just reached skill ${i}`
+      })),
     []
   );
 
   const createFilter = useCallback((values: boolean[]) => {
-    return values.every((v) => !v)
-      ? undefined
-      : new GirlSkillsFilter(
-          values[0] === true,
-          values[1] === true,
-          values[2] === true
-        );
+    values = [...Array(6)].map((_, i) => values[i] === true);
+    return values.every((v) => !v) ? undefined : new GirlSkillsFilter(values);
   }, []);
 
   const getValues = useCallback((filter: Filter) => {
     if (filter instanceof GirlSkillsFilter) {
-      return [filter.maxedSkills, filter.someSkills, filter.noSkills];
+      return [...filter.params];
     } else {
-      return Array(3).fill(false);
+      return Array(6).fill(false);
     }
   }, []);
 
@@ -734,8 +720,9 @@ const GirlSkillsForm: React.FC<FormProps> = ({
       getActiveFilter={getActiveFilter}
       updateFilter={updateFilter}
       removeFilter={removeFilter}
-      multipleChoices={false}
+      multipleChoices={true}
       filterId={GirlSkillsFilter.ID}
+      cssClasses={['skills']}
     />
   );
 };
