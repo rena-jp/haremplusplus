@@ -29,12 +29,13 @@ import {
 } from '../hooks/traits-filter-hooks';
 
 export interface TraitsSummaryProps extends PanelProps {
+  allGirls: CommonGirlData[];
   filteredGirls: CommonGirlData[];
   traitsFilterState: TraitsFilterState;
 }
 
 export const TraitsSummary = React.memo<TraitsSummaryProps>(
-  ({ filteredGirls, traitsFilterState, visible }) => {
+  ({ allGirls, filteredGirls, traitsFilterState, visible }) => {
     const className = `panel ${visible ? 'visible' : 'hidden'}`;
 
     return (
@@ -63,7 +64,8 @@ export const TraitsSummary = React.memo<TraitsSummaryProps>(
             />
           </p>
           <TraitSummaries
-            girls={filteredGirls}
+            allGirls={allGirls}
+            filteredGirls={filteredGirls}
             traitsFilterState={traitsFilterState}
           />
         </div>
@@ -86,12 +88,14 @@ const allTraitsMap: Map<TraitEnum, Trait[]> = (() => {
 })();
 
 interface TraitSummariesProps {
-  girls: CommonGirlData[];
+  allGirls: CommonGirlData[];
+  filteredGirls: CommonGirlData[];
   traitsFilterState: TraitsFilterState;
 }
 
 const TraitSummaries: React.FC<TraitSummariesProps> = ({
-  girls,
+  allGirls,
+  filteredGirls,
   traitsFilterState
 }) => {
   return (
@@ -107,7 +111,8 @@ const TraitSummaries: React.FC<TraitSummariesProps> = ({
             {traits.map((trait) => (
               <TraitSummary
                 key={getTraitKey(trait)}
-                girls={girls}
+                allGirls={allGirls}
+                filteredGirls={filteredGirls}
                 trait={trait}
                 traitsFilterState={traitsFilterState}
               />
@@ -130,20 +135,25 @@ function getTraitKey(trait: Trait): string {
 
 interface TraitSummaryProps {
   trait: Trait;
-  girls: CommonGirlData[];
+  allGirls: CommonGirlData[];
+  filteredGirls: CommonGirlData[];
   traitsFilterState: TraitsFilterState;
 }
 
 const TraitSummary: React.FC<TraitSummaryProps> = ({
-  girls,
+  allGirls,
+  filteredGirls,
   trait,
   traitsFilterState
 }) => {
+  const isValid = useMemo(() => {
+    return allGirls.some((girl) => matchesTraits(girl, [trait], false));
+  }, [allGirls, trait]);
   const filter = traitsFilterState.traitsFilter;
   const newTraits = { ...filter.traits, [trait.traitEnum]: trait };
   const traitsArray = Traits.values().map((key) => newTraits[key]);
   const matchingGirls = useMemo(() => {
-    return girls.filter((girl) =>
+    return filteredGirls.filter((girl) =>
       matchesTraits(
         girl,
         traitsArray.filter((e): e is Trait => e !== undefined),
@@ -151,7 +161,8 @@ const TraitSummary: React.FC<TraitSummaryProps> = ({
       )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [girls, filter.skilledOnly, ...traitsArray]);
+  }, [filteredGirls, filter.skilledOnly, ...traitsArray]);
+  if (!isValid) return null;
 
   let traitDescription;
   switch (trait.traitEnum) {

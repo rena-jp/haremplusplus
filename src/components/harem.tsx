@@ -160,6 +160,7 @@ export const Harem: React.FC<HaremProps> = ({
               gameName={gameAPI.getGameName()}
             />
             <TraitsSummary
+              allGirls={allGirls}
               filteredGirls={quickFilteredGirls}
               traitsFilterState={traitsFilterState}
               visible={displayedTab?.id === 'traits'}
