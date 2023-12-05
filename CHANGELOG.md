@@ -1,3 +1,8 @@
+## 0.17.3 - 2023-12-05
+
+- Hide filter for traits not used in current game
+- Update pose data
+
 ## 0.17.2 - 2023-11-25
 
 - Improve filter UI
