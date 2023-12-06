@@ -1,3 +1,8 @@
+## 0.17.4 - 2023-12-06
+
+- Add not 0 button to skill filter
+- Update pose data
+
 ## 0.17.3 - 2023-12-05
 
 - Hide filter for traits not used in current game
