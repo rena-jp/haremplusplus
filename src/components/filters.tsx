@@ -19,11 +19,13 @@ import {
   TeamsFilter
 } from '../data/filters/filter-runtime';
 import {
+  FilterHeader,
   InputControl,
   LabeledToggle,
   NumberInputWithOptions,
   NumberRangeControl,
   Range,
+  ToggleList,
   ToggleOption
 } from './filter-controls';
 import '../style/panels.css';
@@ -688,6 +690,46 @@ const GirlSkillsForm: React.FC<FormProps> = ({
   updateFilter,
   removeFilter
 }) => {
+  const activeFilter = getActiveFilter(GirlSkillsFilter.ID);
+
+  const [localFilter, setLocalFilter] = useState(activeFilter);
+
+  const filterToDisplay = activeFilter ?? localFilter;
+
+  if (localFilter !== filterToDisplay) {
+    setLocalFilter(filterToDisplay);
+  }
+
+  const values = useMemo(() => {
+    if (filterToDisplay instanceof GirlSkillsFilter) {
+      return [...filterToDisplay.params];
+    } else {
+      return Array(6).fill(false);
+    }
+  }, [filterToDisplay]);
+
+  const clear = useCallback(() => {
+    if (localFilter !== undefined) {
+      removeFilter(localFilter);
+    }
+  }, [localFilter]);
+
+  const reapply = useMemo(() => {
+    if (localFilter === undefined) return undefined;
+    return () => {
+      updateFilter(localFilter);
+    };
+  }, [localFilter]);
+
+  const setActive = useCallback(
+    (active: boolean) => {
+      if (active && localFilter !== undefined) {
+        updateFilter(localFilter);
+      }
+    },
+    [localFilter]
+  );
+
   const options = useMemo<ToggleOption[]>(
     () =>
       [...Array(6)].map((_, i) => ({
@@ -697,33 +739,69 @@ const GirlSkillsForm: React.FC<FormProps> = ({
     []
   );
 
-  const createFilter = useCallback((values: boolean[]) => {
-    values = [...Array(6)].map((_, i) => values[i] === true);
-    return values.every((v) => !v) ? undefined : new GirlSkillsFilter(values);
-  }, []);
+  const setValue = useCallback(
+    (option: ToggleOption, value: boolean) => {
+      const index = options.indexOf(option);
+      values[index] = value;
 
-  const getValues = useCallback((filter: Filter) => {
-    if (filter instanceof GirlSkillsFilter) {
-      return [...filter.params];
+      const newValues = [...Array(6)].map((_, i) => values[i] === true);
+      const newFilter = newValues.every((v) => !v)
+        ? undefined
+        : new GirlSkillsFilter(newValues);
+
+      if (newFilter === undefined) {
+        if (localFilter !== undefined) {
+          removeFilter(localFilter);
+          setLocalFilter(undefined);
+        }
+      } else {
+        updateFilter(newFilter);
+        setLocalFilter(newFilter);
+      }
+    },
+    [values, localFilter]
+  );
+
+  const isActive = activeFilter !== undefined;
+
+  const toggleNotZero = useCallback(() => {
+    const isPressed = !values[0] && values.slice(1).every(Boolean);
+    if (isActive && isPressed) {
+      if (localFilter !== undefined) {
+        removeFilter(localFilter);
+        setLocalFilter(undefined);
+      }
     } else {
-      return Array(6).fill(false);
+      const newFilter = new GirlSkillsFilter([false, ...Array(5).fill(true)]);
+      updateFilter(newFilter);
+      setLocalFilter(newFilter);
     }
-  }, []);
+  }, [isActive, localFilter]);
 
   return (
-    <ToggleOptionsForm
-      label="Girl skills"
-      description="Filter girl skills"
-      options={options}
-      getValues={getValues}
-      createFilter={createFilter}
-      getActiveFilter={getActiveFilter}
-      updateFilter={updateFilter}
-      removeFilter={removeFilter}
-      multipleChoices={true}
-      filterId={GirlSkillsFilter.ID}
-      cssClasses={['skills']}
-    />
+    <div className={`filter-entry${isActive ? '' : ' inactive'} skills`}>
+      <FilterHeader
+        label="Girl skills"
+        description="Filter girl skills"
+        isActive={isActive}
+        clear={clear}
+        reapply={reapply}
+      />
+      <ToggleList
+        options={options}
+        values={values}
+        setValue={setValue}
+        isActive={isActive}
+        setActive={setActive}
+      />
+      <button
+        className="toggle hh-action-button notpressed"
+        onClick={toggleNotZero}
+        title="Not 0"
+      >
+        Not 0
+      </button>
+    </div>
   );
 };
 

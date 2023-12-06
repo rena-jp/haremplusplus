@@ -357,7 +357,7 @@ interface FilterHeaderProps {
   reapply: (() => void) | undefined;
 }
 
-const FilterHeader: React.FC<FilterHeaderProps> = ({
+export const FilterHeader: React.FC<FilterHeaderProps> = ({
   label,
   description,
   isActive,
