@@ -1,3 +1,8 @@
+## 0.17.5 - 2023-12-10
+
+- Fix a bug that caused skill filter to reset
+- Update pose data
+
 ## 0.17.4 - 2023-12-06
 
 - Add not 0 button to skill filter
