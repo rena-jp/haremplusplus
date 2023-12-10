@@ -371,7 +371,7 @@ export class GirlSkillsFilter extends AbstractFilter {
   static FACTORY: FilterFactory<GirlSkillsFilter> = {
     type: GirlSkillsFilter.ID,
     create: (config) => {
-      const params = config.params;
+      const params = config.params?.params;
       return new GirlSkillsFilter(
         Array.isArray(params) ? params : Array(6).fill(false)
       );
