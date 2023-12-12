@@ -16,7 +16,8 @@ import {
   UpgradeReadyFilter,
   EquippedFilter,
   GirlSkillsFilter,
-  TeamsFilter
+  TeamsFilter,
+  BulbFilter
 } from '../data/filters/filter-runtime';
 import {
   FilterHeader,
@@ -168,6 +169,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <GirlSkillsForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <BulbForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -802,6 +808,63 @@ const GirlSkillsForm: React.FC<FormProps> = ({
         Not 0
       </button>
     </div>
+  );
+};
+
+const BulbForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      {
+        label: 'Maxed bulbs',
+        description: 'Filter girls that have maxed bulbs'
+      },
+      {
+        label: 'Some bulbs',
+        description: 'Filter girls that have at least one bulb but not maxed'
+      },
+      {
+        label: 'No bulbs',
+        description: 'Filter girls that have no bulbs'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    return values.every((v) => !v)
+      ? undefined
+      : new BulbFilter(
+          values[0] === true,
+          values[1] === true,
+          values[2] === true
+        );
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    if (filter instanceof BulbFilter) {
+      return [filter.maxedBulbs, filter.someBulbs, filter.noBulbs];
+    } else {
+      return Array(3).fill(false);
+    }
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Bulb"
+      description="Filter bulb"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={true}
+      filterId={BulbFilter.ID}
+    />
   );
 };
 

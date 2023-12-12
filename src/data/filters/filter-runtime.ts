@@ -379,6 +379,68 @@ export class GirlSkillsFilter extends AbstractFilter {
   };
 }
 
+export class BulbFilter extends AbstractFilter {
+  static ID = 'bulbs';
+  id = BulbFilter.ID;
+
+  constructor(
+    public maxedBulbs: boolean,
+    public someBulbs: boolean,
+    public noBulbs: boolean
+  ) {
+    super();
+    const list = Array<string>();
+    if (maxedBulbs) list.push('Maxed');
+    if (someBulbs) list.push('Some');
+    if (noBulbs) list.push('No');
+    this.label = `${list.join(', ')} bulbs`;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    if (girl.skillTiers == null) return false;
+    const skillTiers = Object.values(girl.skillTiers);
+    const hasSkills = skillTiers.some((e) => e.skill_points_used > 0);
+    if (this.noBulbs && !hasSkills) return true;
+    const maxPointsPerTierMap = {
+      [Rarity.starting]: [6, 6, 3, 3, 1],
+      [Rarity.common]: [6, 6, 3, 3, 1],
+      [Rarity.rare]: [6, 7, 3, 3, 2],
+      [Rarity.epic]: [6, 8, 4, 4, 3],
+      [Rarity.legendary]: [6, 9, 4, 4, 4],
+      [Rarity.mythic]: [6, 10, 5, 5, 5]
+    };
+    const maxPointsPerTier = maxPointsPerTierMap[girl.rarity];
+    const isMaxed = skillTiers.every(
+      (e) => e.skill_points_used >= maxPointsPerTier[e.tier - 1]
+    );
+    if (this.maxedBulbs && isMaxed) return true;
+    if (this.someBulbs && hasSkills && !isMaxed) return true;
+    return false;
+  }
+
+  getParams() {
+    return {
+      maxedBulbs: this.maxedBulbs,
+      someBulbs: this.someBulbs,
+      noBulbs: this.noBulbs
+    };
+  }
+
+  static FACTORY: FilterFactory<BulbFilter> = {
+    type: BulbFilter.ID,
+    create: (config) => {
+      const maxedBulbs = booleanParam(config, 'maxedBulbs');
+      const someBulbs = booleanParam(config, 'someBulbs');
+      const noBulbs = booleanParam(config, 'noBulbs');
+      return new BulbFilter(
+        maxedBulbs === true,
+        someBulbs === true,
+        noBulbs === true
+      );
+    }
+  };
+}
+
 export class SourceFilter extends AbstractFilter {
   static ID = 'source-event';
   id = SourceFilter.ID;
