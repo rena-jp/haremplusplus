@@ -1,3 +1,8 @@
+## 0.17.6 - 2023-12-12
+
+- Add bulb filter
+- Update pose data
+
 ## 0.17.5 - 2023-12-10
 
 - Fix a bug that caused skill filter to reset
