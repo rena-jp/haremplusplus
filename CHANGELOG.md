@@ -1,3 +1,9 @@
+## 0.17.7 - 2023-12-15
+
+- Update according to the game
+- Update girl source data
+- Update pose data
+
 ## 0.17.6 - 2023-12-12
 
 - Add bulb filter
