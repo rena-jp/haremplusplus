@@ -238,12 +238,12 @@ function importEquipmentResonance(
 }
 
 function getClass(gameClass: NumberString): Class {
-  switch (gameClass) {
-    case '1':
+  switch (+gameClass) {
+    case 1:
       return Class.Hardcore;
-    case '2':
+    case 2:
       return Class.Charm;
-    case '3':
+    case 3:
       return Class.Knowhow;
     default:
       console.warn('Unexpected girl class: ', gameClass);
