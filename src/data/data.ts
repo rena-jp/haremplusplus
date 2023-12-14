@@ -55,6 +55,7 @@ export type EventSource =
   | 'Anniv' // Done
   | 'CbC' // Done
   | 'DP' // Done
+  | 'LL'
   | 'unknown';
 
 export function isEventSource(_value: string): _value is EventSource {
@@ -846,6 +847,8 @@ export function getSourceLabel(source: EventSource): string {
       return 'Cumback Contest';
     case 'DP':
       return 'Double Penetration';
+    case 'LL':
+      return 'Love Labyrinth';
     case 'unknown':
       return 'Unknown';
   }
