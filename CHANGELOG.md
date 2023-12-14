@@ -1,3 +1,7 @@
+## 0.17.8 - 2023-12-15
+
+- Add Love Labyrinth to source data
+
 ## 0.17.7 - 2023-12-15
 
 - Update according to the game
