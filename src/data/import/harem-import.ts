@@ -354,6 +354,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
       sources.add(source)
     );
   }
+  if (girlData.source_selectors.labyrinth) {
+    sources.add('LL');
+  }
   return [...sources.values()];
 }
 
