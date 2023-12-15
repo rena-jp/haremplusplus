@@ -1,3 +1,8 @@
+## 0.17.9 - 2023-12-16
+
+- Avoid errors on error pages
+- Update pose data
+
 ## 0.17.8 - 2023-12-15
 
 - Add Love Labyrinth to source data
