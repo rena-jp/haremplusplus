@@ -1199,6 +1199,7 @@ export class GameAPIImpl implements GameAPI {
   }
 
   private installRequestsListener(): void {
+    if (window.$ == null) return;
     // Intercept responses to ajax requests. For now, this is used to refresh
     // harem salary data when "Collect all" is used from the home page.
     window
