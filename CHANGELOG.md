@@ -1,3 +1,8 @@
+## 0.17.10 - 2023-12-16
+
+- Update according to the game
+- Update pose data
+
 ## 0.17.9 - 2023-12-16
 
 - Avoid errors on error pages
