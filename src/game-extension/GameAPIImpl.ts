@@ -1402,7 +1402,7 @@ export function getTeams(teamData: TeamsData): Team[] {
 export function getTeam(teamEntry: TeamDataEntry): Team {
   return {
     active: !teamEntry.locked,
-    girlIds: teamEntry.girls_ids,
+    girlIds: teamEntry.girls_ids.map(String),
     teamId: teamEntry.id_team === null ? null : String(teamEntry.id_team),
     stats: { ...teamEntry.caracs, totalPower: teamEntry.total_power }
   };

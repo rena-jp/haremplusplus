@@ -509,7 +509,7 @@ export namespace TeamsData {
 
 export interface TeamDataEntry {
   caracs: TeamCaracsEntry;
-  girls_ids: string[];
+  girls_ids: NumberString[];
   id_team: NumberString | null;
   total_power: number;
   locked: boolean;
