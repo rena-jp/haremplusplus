@@ -1,3 +1,7 @@
+## 0.17.11 - 2024-01-05
+
+- Update pose data
+
 ## 0.17.10 - 2023-12-16
 
 - Update according to the game
