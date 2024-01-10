@@ -951,7 +951,7 @@ export class GameAPIImpl implements GameAPI {
     allowRequest: boolean
   ): Promise<T> {
     return this.requestFromFrame(
-      () => getOrCreateFrame('teams', 'teams.html', true),
+      () => getOrCreateFrame('teams', 'teams.html?battle_type=leagues', true),
       attribute,
       typeTester,
       allowRequest
