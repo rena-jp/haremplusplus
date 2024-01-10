@@ -1,3 +1,8 @@
+## 0.17.12 - 2024-01-10
+
+- Change the URL according to the game
+- Update pose data
+
 ## 0.17.11 - 2024-01-05
 
 - Update pose data
