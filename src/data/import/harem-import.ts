@@ -34,6 +34,7 @@ import {
   GirlsDataEntry,
   GirlsDataList,
   NumberString,
+  OwnedGirlEntry,
   ResonanceBonuses
 } from '../game-data';
 import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
@@ -160,6 +161,99 @@ export async function toHaremData(
 
   return {
     allGirls: allGirls,
+    activeBlessing: currentBlessings,
+    nextBlessing: upcomingBlessings
+  };
+}
+
+export async function toHaremDataFromWaifuData(
+  cachedGirls: CommonGirlData[],
+  waifuGirls: OwnedGirlEntry[],
+  blessingsData: GameBlessingData
+): Promise<HaremData> {
+  const allGirlMap = new Map<number, CommonGirlData>();
+
+  const { currentBlessings, upcomingBlessings } = getBlessings(blessingsData);
+
+  cachedGirls.forEach((e) => {
+    allGirlMap.set(+e.id, e);
+  });
+
+  waifuGirls.forEach((girlData) => {
+    const rarity = getRarity(girlData.rarity);
+    const quests = [...Array(girlData.nb_grades)].map((_, i) => {
+      return {
+        idQuest: girlData.upgrade_quests[i + 1],
+        done: i < girlData.graded,
+        ready: i === girlData.graded && girlData.can_upgrade
+      };
+    });
+    const equipmentData = importEquipment(girlData.armor!);
+    const baseCommonGirl: BaseGirlData = {
+      ...{
+        sources: []
+      },
+      ...allGirlMap.get(+girlData.id_girl)!,
+      id: String(girlData.id_girl),
+      name: girlData.name,
+      icon: girlData.ico,
+      icon0: get0Pose(girlData.ico),
+      poseImage: girlData.avatar,
+      poseImage0: get0Pose(girlData.avatar),
+      level: Number(girlData.level),
+      maxLevel: girlData.level_cap,
+      class: getClass(girlData.class),
+      own: true,
+      rarity: rarity,
+      stars: girlData.graded,
+      maxStars: Number(girlData.nb_grades),
+      shards: 100,
+      recruited: parseDate(girlData.date_added),
+      // Blessings
+      pose: getPoseFromValue(girlData.figure),
+      hairColor: getHairColor(girlData),
+      eyeColor: getEyeColor(girlData),
+      zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
+      element: getElement(girlData),
+      missingAff: getMissingAff({ ...girlData, own: true }, rarity),
+      currentAffection: +girlData.Affection.cur,
+      upgradeReady: girlData.can_upgrade === true,
+      currentGXP: +girlData.Xp.cur,
+      currentIcon: getCurrentIcon(girlData.avatar),
+      salaryTime: girlData.pay_time,
+      salary: girlData.salary,
+      salaryPerHour: girlData.salary_per_hour,
+      missingGems: countMissingGems(rarity, girlData.level_cap),
+      quests,
+      // fullName
+      // bio
+      // sources
+      // variations
+      // Lore
+      // location
+      // career
+      // hobby
+      birthday: girlData.anniversary,
+      // favoriteFood
+      // fetish
+      equipment: equipmentData,
+      skillTiers: girlData.skill_tiers_info
+    };
+
+    const commonGirl: CommonGirlData = {
+      ...baseCommonGirl,
+      stats: getStats(
+        baseCommonGirl,
+        girlData.caracs,
+        currentBlessings,
+        equipmentData
+      )
+    };
+
+    allGirlMap.set(+girlData.id_girl, commonGirl);
+  });
+  return {
+    allGirls: [...allGirlMap.values()],
     activeBlessing: currentBlessings,
     nextBlessing: upcomingBlessings
   };

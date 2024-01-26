@@ -1,5 +1,4 @@
 import './style/index.css';
-import { handleHarem } from './game-extension/harem-handler';
 import { handleHome } from './game-extension/home-handler';
 import { handleLocal } from './game-extension/local-handler';
 import {
@@ -31,10 +30,6 @@ if (window.$ != null) {
   // For Home, add a "Show Harem" button.
   if (window.location.pathname.startsWith('/home.html')) {
     handleHome();
-  }
-  // For Harem, location may be '/harem.html' or '/harem/1'
-  else if (window.location.pathname.startsWith('/harem')) {
-    handleHarem();
   }
   // Quests data
   else if (window.location.pathname.startsWith('/quest/')) {

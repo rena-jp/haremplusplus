@@ -184,6 +184,9 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   // Girls equipment
   armor?: ArmorData[];
   skill_tiers_info: SkillTiers;
+  zodiac: string;
+  anniversary: string;
+  upgrade_quests: number[];
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;
@@ -472,6 +475,11 @@ declare global {
     questData?: GameQuestStep;
     loadingAnimation: { isLoading: boolean };
     teams_data?: TeamsData;
+    hh_ajax(
+      params: any,
+      callback?: any,
+      err_callback?: any
+    ): { promise(): Promise<any> };
   }
 }
 

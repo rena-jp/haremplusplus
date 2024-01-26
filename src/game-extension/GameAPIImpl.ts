@@ -387,12 +387,9 @@ export class GameAPIImpl implements GameAPI {
     return result;
   }
 
-  async getGemsData(allowRequest: boolean): Promise<GemsData> {
-    return await this.requestFromHarem(
-      'player_gems_amount',
-      GemsData.is,
-      allowRequest
-    );
+  async getGemsData(): Promise<GemsData> {
+    const { hh_ajax } = window;
+    return (await hh_ajax({ action: 'hero_get_resources' }).promise()).gems;
   }
 
   // TODO Separate book inventory / gift inventory,
