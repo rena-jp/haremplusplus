@@ -1,3 +1,9 @@
+## 0.18.0 - 2024-01-26
+
+- Stop accessing the new harem
+- Update pose data
+- Update dependent libraries
+
 ## 0.17.12 - 2024-01-10
 
 - Change the URL according to the game
