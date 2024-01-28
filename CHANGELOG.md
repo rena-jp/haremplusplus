@@ -1,3 +1,7 @@
+## 0.18.1 - 2024-01-28
+
+- Fix missing full name bug
+
 ## 0.18.0 - 2024-01-26
 
 - Stop accessing the new harem
