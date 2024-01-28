@@ -191,6 +191,7 @@ export async function toHaremDataFromWaifuData(
     const equipmentData = importEquipment(girlData.armor!);
     const baseCommonGirl: BaseGirlData = {
       ...{
+        fullName: '',
         sources: []
       },
       ...allGirlMap.get(+girlData.id_girl)!,
