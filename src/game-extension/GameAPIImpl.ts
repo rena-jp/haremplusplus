@@ -948,7 +948,7 @@ export class GameAPIImpl implements GameAPI {
     allowRequest: boolean
   ): Promise<T> {
     return this.requestFromFrame(
-      () => getOrCreateFrame('teams', 'teams.html?battle_type=leagues', true),
+      () => getOrCreateFrame('teams', 'teams.html?battle_type=pantheon', true),
       attribute,
       typeTester,
       allowRequest
@@ -1120,7 +1120,8 @@ export class GameAPIImpl implements GameAPI {
       class: 'Hero',
       action: 'edit_team',
       'girls[]': team.girlIds,
-      id_team: team.teamId ?? undefined
+      id_team: team.teamId ?? undefined,
+      battle_type: 'pantheon'
     };
     const result = await this.postRequest(params);
     if (!isUnknownObject(result) || result.success !== true) {
@@ -1144,7 +1145,8 @@ export class GameAPIImpl implements GameAPI {
   async getTeamStats(team: Team): Promise<TeamStats> {
     const params = {
       action: 'team_calculate_caracs',
-      'girls[]': team.girlIds
+      'girls[]': team.girlIds,
+      battle_type: 'pantheon'
     };
     const result = await this.postRequest(params);
     if (TeamCaracsResult.is(result) && result.success) {
