@@ -1,3 +1,7 @@
+## 0.18.2 - 2024-01-29
+
+- Fix team editing did not work
+
 ## 0.18.1 - 2024-01-28
 
 - Fix missing full name bug
