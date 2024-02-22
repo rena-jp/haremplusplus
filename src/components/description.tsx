@@ -194,7 +194,10 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                 />
               )}
               <p>
-                <a href={`${domain}/harem/${girl.id}`} rel="noreferrer">
+                <a
+                  href={window.getDocumentHref(`${domain}/harem/${girl.id}`)}
+                  rel="noreferrer"
+                >
                   Go to original Harem
                 </a>
               </p>
@@ -295,7 +298,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
         <>
           <div className="upgrade-link">
             <a
-              href={`${domain}/girl/${girl.id}?resource=experience`}
+              href={window.getDocumentHref(
+                `${domain}/girl/${girl.id}?resource=experience`
+              )}
               rel="noreferrer"
               className="icon-link"
               onClick={(ev) => {
@@ -311,7 +316,9 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           </div>
           <div className="upgrade-link">
             <a
-              href={`${domain}/girl/${girl.id}?resource=affection`}
+              href={window.getDocumentHref(
+                `${domain}/girl/${girl.id}?resource=affection`
+              )}
               rel="noreferrer"
               className="icon-link"
               onClick={(ev) => {
@@ -699,7 +706,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
     return (
       <>
         <a
-          href={`${domain}/${link}`}
+          href={window.getDocumentHref(`${domain}/${link}`)}
           rel="noreferrer"
           onClick={(ev) => {
             if (quest.ready || quest.done) {

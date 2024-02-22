@@ -480,6 +480,7 @@ declare global {
       callback?: any,
       err_callback?: any
     ): { promise(): Promise<any> };
+    getDocumentHref(url?: string): string;
   }
 }
 
@@ -865,7 +866,7 @@ export function toQuestData(
     // For some reason, the scene picture is not directly part of the data when the scene
     // has already been unlocked (past scenes). We need to rebuild it...
     // In this case, there is also no cost and no portrait.
-    const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${data[2]}.jpg`;
+    const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${data[2].split('?')[0]}.jpg`;
     return {
       girlId,
       questId: gameQuestStep.id,

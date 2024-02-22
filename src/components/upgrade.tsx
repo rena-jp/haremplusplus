@@ -170,7 +170,9 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
             <div className="harem-upgrade-actions">
               <a
                 className="hh-action-button go-to-market"
-                href={`${domain}/shop.html?type=${marketType}`}
+                href={window.getDocumentHref(
+                  `${domain}/shop.html?type=${marketType}`
+                )}
               >
                 Go to Market
               </a>

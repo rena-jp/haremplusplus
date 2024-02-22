@@ -140,7 +140,9 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
 }) => {
   const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
-  const link = `${domain}/girl/${girl.id}?resource=equipment&equipment-slot=${slotId}`;
+  const link = window.getDocumentHref(
+    `${domain}/girl/${girl.id}?resource=equipment&equipment-slot=${slotId}`
+  );
   const img = equipment?.icon;
 
   const tileClassNames = ['item-tile', 'girl-item-tile'];

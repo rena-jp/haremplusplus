@@ -6,8 +6,8 @@
  * (added by scripts), such as event page.
  */
 export function handleHaremLinks() {
-  window.$("a[href='/harem.html']").each(function () {
-    window.$(this).attr('href', 'waifu.html?harem');
+  window.$("a[href^='/harem.html']").each(function () {
+    window.$(this).attr('href', window.getDocumentHref('/waifu.html?harem'));
   });
 
   window.$("a[href^='/harem/']").each(function () {
@@ -15,7 +15,9 @@ export function handleHaremLinks() {
     const match = window.$(this).attr('href').match(regex);
     if (match) {
       const girlId = match[1];
-      const newLink = `/waifu.html?harem&girl=${girlId}`;
+      const newLink = window.getDocumentHref(
+        `/waifu.html?harem&girl=${girlId}`
+      );
       window.$(this).attr('href', newLink);
     }
   });

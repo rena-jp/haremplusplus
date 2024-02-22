@@ -19,7 +19,10 @@ export interface SkillTierListProps {
 
 export const SkillTierList = React.memo<SkillTierListProps>(({ girl }) => {
   return (
-    <a className="skills-link" href={`/girl/${girl.id}?resource=skills`}>
+    <a
+      className="skills-link"
+      href={window.getDocumentHref(`/girl/${girl.id}?resource=skills`)}
+    >
       <div className="skills_row">
         {Array(5)
           .fill(0)

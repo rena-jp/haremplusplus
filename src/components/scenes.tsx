@@ -113,7 +113,11 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
       <h2>{girl.name}</h2>
       <div className="qh-scene-content">
         <div className="qh-scene-area">
-          <img alt="" className="qh-scene" src={checkedImage} />
+          <img
+            alt=""
+            className="qh-scene"
+            src={window.getDocumentHref(checkedImage)}
+          />
           {showText ? (
             <span className="qh-scene-dialogue overlay">{sceneText}</span>
           ) : null}
@@ -165,7 +169,9 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
  * @param imageSource the src of the image to check
  */
 async function checkImage(imageSource: string): Promise<boolean> {
-  const data = await fetch(imageSource, { cache: 'force-cache' });
+  const data = await fetch(window.getDocumentHref(imageSource), {
+    cache: 'force-cache'
+  });
   const blob = await data.blob();
   return blob.type !== 'image/svg+xml'; // Game uses SVG to display an error-image
 }

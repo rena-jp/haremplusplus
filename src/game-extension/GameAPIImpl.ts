@@ -330,7 +330,7 @@ export class GameAPIImpl implements GameAPI {
     return queue(async () => {
       this.fireRequestEvent('started');
       const action = this.paramsToString(params);
-      const response = await fetch('/ajax.php', {
+      const response = await fetch(window.getDocumentHref('/ajax.php'), {
         headers: {
           accept: 'application/json, text/javascript, */*; q=0.01',
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -1210,7 +1210,10 @@ export class GameAPIImpl implements GameAPI {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private handleRequest(_event: any, request: any, settings: any): void {
-    if (settings.url === '/ajax.php' && settings.type === 'POST') {
+    if (
+      (settings.url as Object).toString().startsWith('/ajax.php') &&
+      settings.type === 'POST'
+    ) {
       const params = settings.data;
       if (params !== undefined && params.includes('action=get_all_salaries')) {
         if (request.responseJSON && request.responseJSON.girls) {
@@ -1313,7 +1316,7 @@ async function getOrCreateFrame(
         if (wrapper) {
           frame = document.createElement('iframe');
           frame.setAttribute('id', id);
-          frame.setAttribute('src', url);
+          frame.setAttribute('src', window.getDocumentHref(url));
           frame.setAttribute('style', 'display: none;');
           wrapper.appendChild(frame);
           const initialLoad = Date.now();

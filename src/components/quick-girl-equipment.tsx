@@ -46,7 +46,9 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
         <button>a3</button>
         <button>a4</button> */}
         <a
-          href={`/girl/${girl.id}?resource=equipment&equipment-slot=${slot}`}
+          href={window.getDocumentHref(
+            `/girl/${girl.id}?resource=equipment&equipment-slot=${slot}`
+          )}
           rel="noreferrer"
         >
           Go to equipment page
