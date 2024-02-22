@@ -1,3 +1,7 @@
+## 0.18.3 - 2024-02-22
+
+- Change the URL according to the game
+
 ## 0.18.2 - 2024-01-29
 
 - Fix team editing did not work
