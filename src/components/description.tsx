@@ -54,6 +54,7 @@ import { UpgradePage } from './upgrade';
 import { EquipmentList } from './girls-equipment';
 import { SkillTierList } from './girls-skills';
 import { GirlTraits } from './girls-traits';
+import { getDocumentHref } from '../migration';
 
 export interface GirlDescriptionProps {
   /**
@@ -195,7 +196,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               )}
               <p>
                 <a
-                  href={window.getDocumentHref(`${domain}/harem/${girl.id}`)}
+                  href={getDocumentHref(`${domain}/harem/${girl.id}`)}
                   rel="noreferrer"
                 >
                   Go to original Harem
@@ -298,7 +299,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
         <>
           <div className="upgrade-link">
             <a
-              href={window.getDocumentHref(
+              href={getDocumentHref(
                 `${domain}/girl/${girl.id}?resource=experience`
               )}
               rel="noreferrer"
@@ -316,7 +317,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
           </div>
           <div className="upgrade-link">
             <a
-              href={window.getDocumentHref(
+              href={getDocumentHref(
                 `${domain}/girl/${girl.id}?resource=affection`
               )}
               rel="noreferrer"
@@ -706,7 +707,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
     return (
       <>
         <a
-          href={window.getDocumentHref(`${domain}/${link}`)}
+          href={getDocumentHref(`${domain}/${link}`)}
           rel="noreferrer"
           onClick={(ev) => {
             if (quest.ready || quest.done) {

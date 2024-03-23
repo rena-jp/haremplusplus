@@ -3,6 +3,7 @@ import { GameAPI } from '../api/GameAPI';
 import { CommonGirlData, QuestData } from '../data/data';
 import { CloseButton, formatCost } from './common';
 import '../style/scene-viewer.css';
+import { getDocumentHref } from '../migration';
 
 export interface SceneViewerProps {
   girl: CommonGirlData;
@@ -116,7 +117,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
           <img
             alt=""
             className="qh-scene"
-            src={window.getDocumentHref(checkedImage)}
+            src={getDocumentHref(checkedImage)}
           />
           {showText ? (
             <span className="qh-scene-dialogue overlay">{sceneText}</span>
@@ -169,7 +170,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
  * @param imageSource the src of the image to check
  */
 async function checkImage(imageSource: string): Promise<boolean> {
-  const data = await fetch(window.getDocumentHref(imageSource), {
+  const data = await fetch(getDocumentHref(imageSource), {
     cache: 'force-cache'
   });
   const blob = await data.blob();

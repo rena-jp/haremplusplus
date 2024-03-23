@@ -11,6 +11,7 @@ import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { GameAPIContext } from '../data/game-api-context';
 import { GameName } from '../data/data';
+import { getDocumentHref } from '../migration';
 
 export interface GameExtensionProps {
   visible: boolean;
@@ -127,7 +128,7 @@ const Loading: React.FC<{ loading: boolean; close(): void }> = ({
           <CloseButton close={close} />
           <p>Loading is complete, but no girls were found :(</p>
           <p>
-            <a href={window.getDocumentHref('harem.html')} rel="noreferrer">
+            <a href={getDocumentHref('harem.html')} rel="noreferrer">
               Open original Harem
             </a>
           </p>

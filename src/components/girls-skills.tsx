@@ -12,6 +12,7 @@ import {
 } from '../data/data';
 import '../style/girls-skills.css';
 import { Tooltip } from './common';
+import { getDocumentHref } from '../migration';
 
 export interface SkillTierListProps {
   girl: CommonGirlData;
@@ -21,7 +22,7 @@ export const SkillTierList = React.memo<SkillTierListProps>(({ girl }) => {
   return (
     <a
       className="skills-link"
-      href={window.getDocumentHref(`/girl/${girl.id}?resource=skills`)}
+      href={getDocumentHref(`/girl/${girl.id}?resource=skills`)}
     >
       <div className="skills_row">
         {Array(5)

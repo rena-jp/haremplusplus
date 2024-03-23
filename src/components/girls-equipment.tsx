@@ -38,6 +38,7 @@ import { QuickEquipment } from './quick-girl-equipment';
 import Popup from 'reactjs-popup';
 import { roundValue } from '../data/common';
 import { GirlsInventory } from './girls-inventory';
+import { getDocumentHref } from '../migration';
 
 export interface EquipmentListProps {
   equipment: EquipmentData;
@@ -140,7 +141,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
 }) => {
   const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
-  const link = window.getDocumentHref(
+  const link = getDocumentHref(
     `${domain}/girl/${girl.id}?resource=equipment&equipment-slot=${slotId}`
   );
   const img = equipment?.icon;

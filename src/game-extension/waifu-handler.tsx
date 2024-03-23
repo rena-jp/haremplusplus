@@ -3,18 +3,24 @@ import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
 import { GameName } from '../data/data';
 import { GirlsDataEntry } from '../data/game-data';
+import {
+  getDocumentHref,
+  getGirlConstructor,
+  getGirlSalaryManager
+} from '../migration';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
 
   const ownedGirls: any = {};
   const girlsDataList = window.girlsDataList as unknown as GirlsDataEntry[];
+  const Girl = getGirlConstructor();
   girlsDataList.forEach((girl) => {
     const girlId = girl.id_girl;
-    ownedGirls[girlId] = new window.Girl(girl);
+    ownedGirls[girlId] = new Girl(girl);
     ownedGirls[girlId]['gId'] = Number(girlId);
   });
-  window.GirlSalaryManager.init(ownedGirls, false);
+  getGirlSalaryManager().init(ownedGirls, false);
 
   const gameName = getGameName();
   const root = createRoot(gameName);
@@ -36,7 +42,7 @@ export async function handleWaifu(): Promise<void> {
       if (referrer !== '') {
         window.location.href = referrer;
       } else {
-        window.location.href = './home.html';
+        window.location.href = getDocumentHref('./home.html');
       }
     } else {
       visible = newVisible;

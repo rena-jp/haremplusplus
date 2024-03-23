@@ -55,6 +55,13 @@ import {
 import { getGemsToAwaken, getGemsToCap } from '../hooks/girl-gems-hooks';
 import { roundValue } from '../data/common';
 import { importEquipment } from '../data/import/harem-import';
+import {
+  getDocumentHref,
+  getGirlConstructor,
+  getGirlSalaryManager,
+  getLoadingAnimation,
+  hh_ajax
+} from '../migration';
 
 export const REQUEST_GIRLS = 'request_girls';
 export type REQUEST_GAME_DATA = 'request_game_data';
@@ -330,7 +337,7 @@ export class GameAPIImpl implements GameAPI {
     return queue(async () => {
       this.fireRequestEvent('started');
       const action = this.paramsToString(params);
-      const response = await fetch(window.getDocumentHref('/ajax.php'), {
+      const response = await fetch(getDocumentHref('/ajax.php'), {
         headers: {
           accept: 'application/json, text/javascript, */*; q=0.01',
           'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -352,7 +359,7 @@ export class GameAPIImpl implements GameAPI {
   }
 
   getSalaryData(): GirlsSalaryList {
-    const salaryManager = window.GirlSalaryManager;
+    const salaryManager = getGirlSalaryManager();
     const girlsMap = salaryManager.girlsMap;
     const result: GirlsSalaryList = {};
     for (const girlId in girlsMap) {
@@ -388,7 +395,6 @@ export class GameAPIImpl implements GameAPI {
   }
 
   async getGemsData(): Promise<GemsData> {
-    const { hh_ajax } = window;
     return (await hh_ajax({ action: 'hero_get_resources' }).promise()).gems;
   }
 
@@ -1295,7 +1301,7 @@ async function getOrCreateFrame(
       // Tentative fix: attempt to prevent the game from dispatching
       // a process_rewards_queue request while the (harem) frame is loading,
       // which would likely cause a 403 error
-      window.loadingAnimation.isLoading = true;
+      getLoadingAnimation().isLoading = true;
 
       let frame = document.getElementById(id) as HTMLIFrameElement;
       if (frame) {
@@ -1316,7 +1322,7 @@ async function getOrCreateFrame(
         if (wrapper) {
           frame = document.createElement('iframe');
           frame.setAttribute('id', id);
-          frame.setAttribute('src', window.getDocumentHref(url));
+          frame.setAttribute('src', getDocumentHref(url));
           frame.setAttribute('style', 'display: none;');
           wrapper.appendChild(frame);
           const initialLoad = Date.now();
@@ -1331,7 +1337,7 @@ async function getOrCreateFrame(
         }
       }
     }).then((res) => {
-      window.loadingAnimation.isLoading = false;
+      getLoadingAnimation().isLoading = false;
       return res;
     })
   );
@@ -1359,7 +1365,7 @@ function refreshSalaryManager(
 ): void {
   // Refresh the salaryManager (Used to update the collectButton when girls are ready,
   // including the Tooltips)
-  const salaryManager = window.GirlSalaryManager;
+  const salaryManager = getGirlSalaryManager();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ownedGirls: { [key: string]: any } = {};
 
@@ -1369,8 +1375,9 @@ function refreshSalaryManager(
   // on the GirlSalaryManager? Each time we reset the manager, we
   // introduce (minor) delay inconsistencies in the timers.
 
+  const Girl = getGirlConstructor();
   for (const girlId in salaryData) {
-    ownedGirls[girlId] = new window.Girl(salaryData[girlId]);
+    ownedGirls[girlId] = new Girl(salaryData[girlId]);
     ownedGirls[girlId]['gId'] = parseInt(girlId, 10);
   }
   salaryManager.init(ownedGirls, false);

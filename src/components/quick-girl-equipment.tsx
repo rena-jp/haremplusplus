@@ -6,6 +6,7 @@ import { importEquipment } from '../data/import/harem-import';
 import { Tooltip } from './common';
 import '../style/quick-girl-equipment.css';
 import { GameAPI } from '../api/GameAPI';
+import { getDocumentHref } from '../migration';
 
 export interface QuickEquipmentProps {
   girl: CommonGirlData;
@@ -46,7 +47,7 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
         <button>a3</button>
         <button>a4</button> */}
         <a
-          href={window.getDocumentHref(
+          href={getDocumentHref(
             `/girl/${girl.id}?resource=equipment&equipment-slot=${slot}`
           )}
           rel="noreferrer"

@@ -30,6 +30,7 @@ import Popup from 'reactjs-popup';
 import { useGemsStats } from '../hooks/girl-gems-hooks';
 import { OptionsContext } from '../data/options-context';
 import { SceneViewer } from './scenes';
+import { getDocumentHref } from '../migration';
 
 export type UpgradePage = 'books' | 'gifts';
 
@@ -170,9 +171,7 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
             <div className="harem-upgrade-actions">
               <a
                 className="hh-action-button go-to-market"
-                href={window.getDocumentHref(
-                  `${domain}/shop.html?type=${marketType}`
-                )}
+                href={getDocumentHref(`${domain}/shop.html?type=${marketType}`)}
               >
                 Go to Market
               </a>

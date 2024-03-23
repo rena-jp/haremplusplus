@@ -480,7 +480,23 @@ declare global {
       callback?: any,
       err_callback?: any
     ): { promise(): Promise<any> };
-    getDocumentHref(url?: string): string;
+    getDocumentHref?(url?: string): string;
+    shared?: {
+      Hero: Hero;
+      Girl: any;
+      GirlSalaryManager: GirlSalaryManager;
+      general: {
+        getDocumentHref?(url?: string): string;
+        hh_ajax(
+          params: any,
+          callback?: any,
+          err_callback?: any
+        ): { promise(): Promise<any> };
+      };
+      animations: {
+        loadingAnimation: { isLoading: boolean };
+      };
+    };
   }
 }
 
