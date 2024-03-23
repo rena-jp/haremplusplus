@@ -1,3 +1,7 @@
+## 0.18.4 - 2024-03-23
+
+- Prepare for the next update
+
 ## 0.18.3 - 2024-02-22
 
 - Change the URL according to the game
