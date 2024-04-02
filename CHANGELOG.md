@@ -1,3 +1,7 @@
+## 0.18.6 - 2024-04-03
+
+- Fix labyrinth power sort bug
+
 ## 0.18.5 - 2024-04-03
 
 - Fix affection upgrade
