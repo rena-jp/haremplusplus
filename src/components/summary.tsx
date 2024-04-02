@@ -314,33 +314,29 @@ export const GemsSummary: React.FC<GemsSummaryProps> = ({ girls }) => {
   return (
     <div className="gems-summary">
       {Elements.values().map((element) => {
-        const missingGemsAll = format(
-          girls
-            .filter((girl) => girl.own && girl.element === element)
-            .map((girl) => girl.missingGems)
-            .reduce((a, b) => a + b, 0)
-        );
-        const missingGemsELM = format(
-          girls
-            .filter(
-              (girl) =>
-                girl.own &&
-                girl.rarity > Rarity.rare &&
-                girl.element === element
-            )
-            .map((girl) => girl.missingGems)
-            .reduce((a, b) => a + b, 0)
-        );
+        const missingGemsAll = girls
+          .filter((girl) => girl.own && girl.element === element)
+          .map((girl) => girl.missingGems)
+          .reduce((a, b) => a + b, 0);
+        const missingGemsELM = girls
+          .filter(
+            (girl) =>
+              girl.own && girl.rarity > Rarity.rare && girl.element === element
+          )
+          .map((girl) => girl.missingGems)
+          .reduce((a, b) => a + b, 0);
         return (
           <div key={element}>
             <GemIcon element={element} />{' '}
             {missingGemsAll > missingGemsELM ? (
               <>
-                <span title="Epic, Legendary & Mythic">{missingGemsELM}</span>{' '}
-                <span title="All rarities">({missingGemsAll})</span>
+                <span title="Epic, Legendary & Mythic">
+                  {format(missingGemsELM)}
+                </span>{' '}
+                <span title="All rarities">({format(missingGemsAll)})</span>
               </>
             ) : (
-              <>{missingGemsAll}</>
+              <>{format(missingGemsAll)}</>
             )}
           </div>
         );
