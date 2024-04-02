@@ -2,6 +2,7 @@ import {
   BlessingDefinition,
   CommonGirlData,
   Element,
+  getLabyrinthPower,
   getNormalizedPower,
   getPower
 } from './data';
@@ -110,6 +111,10 @@ export function name(): Comparator {
 
 export function id(): Comparator {
   return (g1, g2) => Number(g1.id) - Number(g2.id);
+}
+
+export function reversedId(): Comparator {
+  return (g1, g2) => Number(g2.id) - Number(g1.id);
 }
 
 export function own(): Comparator {
@@ -326,6 +331,26 @@ export function UpcomingPowerSorter(
 }
 
 export const BasePowerSorter = PowerSorter('base-power', 'Base Power', []);
+
+export function labyrinthPower(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) =>
+    getLabyrinthPower(g1, blessings) - getLabyrinthPower(g2, blessings);
+}
+
+export function LabyrinthPowerSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: 'labyrinth',
+    direction: 'desc',
+    sorter: sorter(
+      'Labyrinth Power',
+      labyrinthPower(blessings),
+      shards(),
+      reversedId()
+    )
+  };
+}
 
 export function sortGirls(girls: CommonGirlData[]): void {
   girls.sort((girl1, girl2) => {

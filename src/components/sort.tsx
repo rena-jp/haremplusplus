@@ -7,6 +7,7 @@ import {
   CurrentPotentialSorter,
   CurrentPowerSorter,
   GradeSorter,
+  LabyrinthPowerSorter,
   LevelSorter,
   RaritySorter,
   RecruitedSorter,
@@ -51,7 +52,8 @@ export const SortPanel: React.FC<SortProps> = ({
       UpcomingPotentialSorter(upcomingBlessings),
       BasePowerSorter,
       CurrentPowerSorter(currentBlessings),
-      UpcomingPowerSorter(upcomingBlessings)
+      UpcomingPowerSorter(upcomingBlessings),
+      LabyrinthPowerSorter(currentBlessings)
     ];
   }, [currentBlessings, upcomingBlessings]);
 
