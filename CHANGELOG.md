@@ -1,3 +1,9 @@
+## 0.18.5 - 2024-04-03
+
+- Fix affection upgrade
+- Fix gem count
+- Add labyrinth power sort
+
 ## 0.18.4 - 2024-03-23
 
 - Prepare for the next update
