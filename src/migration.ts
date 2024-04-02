@@ -1,19 +1,17 @@
-import { GirlSalaryManager } from './data/game-data';
-
 export function getDocumentHref(url: string) {
-  return (window.shared?.general ?? window)?.getDocumentHref?.(url) as string;
+  return (window.shared?.general ?? window).getDocumentHref!(url);
 }
 
 export function getGirlConstructor() {
-  return window.Girl ?? window.shared?.Girl;
+  return (window.shared ?? window).Girl!;
 }
 
 export function getGirlSalaryManager() {
-  return (window.shared ?? window).GirlSalaryManager as GirlSalaryManager;
+  return (window.shared ?? window).GirlSalaryManager!;
 }
 
 export function hh_ajax(params: any, callback?: any, err_callback?: any) {
-  return (window.shared?.general ?? window).hh_ajax(
+  return (window.shared?.general ?? window).hh_ajax!(
     params,
     callback,
     err_callback
@@ -21,5 +19,9 @@ export function hh_ajax(params: any, callback?: any, err_callback?: any) {
 }
 
 export function getLoadingAnimation() {
-  return (window.shared?.animations ?? window).loadingAnimation;
+  return (window.shared?.animations ?? window).loadingAnimation!;
+}
+
+export function getHeroImpl() {
+  return (window.shared ?? window).Hero!;
 }

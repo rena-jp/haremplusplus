@@ -16,7 +16,10 @@ async function handleQuestData(): Promise<void> {
     ) {
       const questContent = script.textContent;
       const textToFind = 'var Q = new Quest(questData);';
-      const index = questContent.indexOf(textToFind);
+      let index = questContent.indexOf(textToFind);
+      if (index < 0) {
+        index = questContent.indexOf('var Q  = new quest.Quest(questData);');
+      }
       if (index >= 0) {
         const updatedContent =
           questContent.substring(0, index) +

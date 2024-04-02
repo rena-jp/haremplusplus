@@ -445,15 +445,15 @@ declare global {
     girlsDataList: GirlsDataList | GirlsSalaryList;
     girl_quests: GameQuests | undefined;
     player_gems_amount: GemsData;
-    Hero: Hero;
+    Hero?: Hero;
     blessings_data: unknown;
-    GirlSalaryManager: GirlSalaryManager;
-    Collect: Collect;
+    GirlSalaryManager?: GirlSalaryManager;
+    Collect?: Collect;
     /**
      * Predefined js class
      */
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Girl: any;
+    Girl?: any;
     /**
      * JQuery
      */
@@ -473,9 +473,9 @@ declare global {
     // exposes it at runtime. It may not be immediately available.
     setQuestData?(questData: GameQuestStep): void;
     questData?: GameQuestStep;
-    loadingAnimation: { isLoading: boolean };
+    loadingAnimation?: { isLoading: boolean };
     teams_data?: TeamsData;
-    hh_ajax(
+    hh_ajax?(
       params: any,
       callback?: any,
       err_callback?: any
@@ -486,12 +486,13 @@ declare global {
       Girl: any;
       GirlSalaryManager: GirlSalaryManager;
       general: {
-        getDocumentHref?(url?: string): string;
+        getDocumentHref(url?: string): string;
         hh_ajax(
           params: any,
           callback?: any,
           err_callback?: any
         ): { promise(): Promise<any> };
+        Collect: Collect;
       };
       animations: {
         loadingAnimation: { isLoading: boolean };

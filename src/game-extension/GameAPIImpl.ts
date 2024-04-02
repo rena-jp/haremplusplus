@@ -59,6 +59,7 @@ import {
   getDocumentHref,
   getGirlConstructor,
   getGirlSalaryManager,
+  getHeroImpl,
   getLoadingAnimation,
   hh_ajax
 } from '../migration';
@@ -1071,7 +1072,7 @@ export class GameAPIImpl implements GameAPI {
    */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getHero(): Hero {
-    return window.Hero;
+    return getHeroImpl();
   }
 
   addSalaryDataListener(listener: SalaryDataListener): void {
