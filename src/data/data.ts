@@ -711,8 +711,16 @@ export function getLabyrinthPower(
   if (stats === undefined) {
     return 0;
   }
+  const totalStats = { ...stats };
+  girl.equipment?.items.forEach((e) => {
+    totalStats.hardcore += e.stats.hardcore;
+    totalStats.charm += e.stats.charm;
+    totalStats.knowhow += e.stats.knowhow;
+  });
   const baseLabyrinthPower =
-    8 * stats.hardcore + 3.75 * stats.charm + 7.625 * stats.knowhow;
+    8 * totalStats.hardcore +
+    3.75 * totalStats.charm +
+    7.625 * totalStats.knowhow;
   const multiplier = getBlessingMultiplier(girl, blessings);
   const total = baseLabyrinthPower * multiplier;
   const roundedTotal = Math.ceil(total);
