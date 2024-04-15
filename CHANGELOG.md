@@ -1,3 +1,7 @@
+## 0.18.7 - 2024-04-15
+
+- Change the order by power to the same as the game
+
 ## 0.18.6 - 2024-04-03
 
 - Fix labyrinth power sort bug
