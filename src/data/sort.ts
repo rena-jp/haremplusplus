@@ -2,6 +2,7 @@ import {
   BlessingDefinition,
   CommonGirlData,
   Element,
+  getFullPower,
   getLabyrinthPower,
   getNormalizedPower,
   getPower
@@ -139,7 +140,7 @@ export function potential(blessings: BlessingDefinition[]): Comparator {
 }
 
 export function power(blessings: BlessingDefinition[]): Comparator {
-  return (g1, g2) => getPower(g1, blessings) - getPower(g2, blessings);
+  return (g1, g2) => getFullPower(g1, blessings) - getFullPower(g2, blessings);
 }
 
 export function element(): Comparator {

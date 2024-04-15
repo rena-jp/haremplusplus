@@ -703,6 +703,25 @@ export function getPower(
   return roundedTotal;
 }
 
+export function getFullPower(
+  girl: CommonGirlData,
+  blessings: BlessingDefinition[]
+): number {
+  const stats = girl.stats;
+  if (stats === undefined) {
+    return 0;
+  }
+  let basePower = getTotalPower(stats);
+  basePower +=
+    girl.equipment?.items
+      .map((e) => e.stats)
+      .reduce((p, c) => p + c.hardcore + c.charm + c.knowhow, 0) ?? 0;
+  const multiplier = getBlessingMultiplier(girl, blessings);
+  const total = basePower * multiplier;
+  const roundedTotal = roundValue(total);
+  return roundedTotal;
+}
+
 export function getLabyrinthPower(
   girl: CommonGirlData,
   blessings: BlessingDefinition[]
