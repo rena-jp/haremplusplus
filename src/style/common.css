@@ -478,16 +478,21 @@ requiring actual content. */
   vertical-align: top;
 }
 
-.role-icon {
-  background-size: cover;
-  display: inline-block;
-  height: 3.5em;
-  width: 3.5em;
-}
-
+.role-icon,
 .skill-icon {
   background-size: cover;
   display: inline-block;
-  height: 3.5em;
-  width: 3.5em;
+}
+
+.pose-and-stats .role-icon,
+.pose-and-stats .skill-icon {
+  height: 3em;
+  width: 3em;
+}
+
+.blessings-summary .role-icon,
+.blessings-summary .skill-icon {
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: 0.25em;
 }

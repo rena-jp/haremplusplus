@@ -23,6 +23,8 @@ import { FiltersContext, useFilters } from '../hooks/filter-hooks';
 import { useApplyFilters } from '../hooks/girls-data-hooks';
 import { OptionsContext } from '../data/options-context';
 import { useTeams } from '../hooks/teams-hooks';
+import { SkillsSummary } from './skill-summary';
+import { useSkillFilter } from '../hooks/skill-filter-hooks';
 
 export interface HaremProps {
   allGirls: CommonGirlData[];
@@ -66,7 +68,8 @@ export const Harem: React.FC<HaremProps> = ({
     const _presets: Tab = { id: 'presets', label: 'Presets' };
     const filters: Tab = { id: 'filters', label: 'Filters' };
     const traits: Tab = { id: 'traits', label: 'Traits' };
-    return [summary, filters, sort, traits];
+    const skill: Tab = { id: 'skill', label: 'Skill & Role' };
+    return [summary, filters, sort, traits, skill];
   }, []);
 
   const [activeTab, setActiveTab] = useState<Tab | undefined>(undefined);
@@ -100,12 +103,14 @@ export const Harem: React.FC<HaremProps> = ({
     upcomingBlessings
   );
   const traitsFilterState = useTraitsFilter();
+  const skillFilterState = useSkillFilter();
   const { filteredGirls, quickFilteredGirls, matchedGirls } = useApplyFilters(
     allGirls,
     sorterState.sorter,
     filtersState.activeFilter,
     quickFiltersState.activeQuickFilters,
     traitsFilterState.traitsFilter,
+    skillFilterState.skillFilter,
     filtersState.searchText
   );
 
@@ -164,6 +169,13 @@ export const Harem: React.FC<HaremProps> = ({
               filteredGirls={quickFilteredGirls}
               traitsFilterState={traitsFilterState}
               visible={displayedTab?.id === 'traits'}
+              close={closePanel}
+            />
+            <SkillsSummary
+              allGirls={allGirls}
+              filteredGirls={filteredGirls}
+              skillFilterState={skillFilterState}
+              visible={displayedTab?.id === 'skill'}
               close={closePanel}
             />
             <FiltersPanel

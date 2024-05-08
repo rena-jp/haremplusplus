@@ -9,6 +9,7 @@ import {
 import { Filter } from '../data/filters/filter-api';
 import { Sorter } from '../data/sort';
 import { TraitsFilter } from './traits-filter-hooks';
+import { SkillFilter } from './skill-filter-hooks';
 
 export const useApplyFilters = (
   allGirls: CommonGirlData[],
@@ -16,6 +17,7 @@ export const useApplyFilters = (
   activeFilter: Filter | undefined,
   quickFilters: QuickFilter[],
   traitsFilter: TraitsFilter,
+  skillFilter: SkillFilter,
   searchText: string
 ) => {
   const sortedGirls = useMemo(() => {
@@ -47,9 +49,37 @@ export const useApplyFilters = (
         );
   }, [quickFilteredGirls, traitsFilter]);
 
+  const skillFilteredGirls = useMemo(() => {
+    const { skill, labyrinthSkill, role } = skillFilter;
+    let filteredGirls = traitFilteredGirls;
+    if (skill != null) {
+      if (skill.elements.length === 0) {
+        filteredGirls = filteredGirls.filter((girl) => girl.maxStars < 5);
+      } else {
+        filteredGirls = filteredGirls.filter(
+          (girl) => girl.maxStars >= 5 && skill.elements.includes(girl.element)
+        );
+      }
+    }
+    if (labyrinthSkill != null) {
+      if (labyrinthSkill.element === null) {
+        filteredGirls = filteredGirls.filter((girl) => girl.maxStars < 5);
+      } else {
+        filteredGirls = filteredGirls.filter(
+          (girl) =>
+            girl.maxStars >= 5 && labyrinthSkill.element === girl.element
+        );
+      }
+    }
+    if (role != null) {
+      filteredGirls = filteredGirls.filter((girl) => girl.id_role === role.id);
+    }
+    return filteredGirls;
+  }, [traitFilteredGirls, skillFilter]);
+
   const textFilter = useMemo(
-    () => traitFilteredGirls.filter((girl) => matchesSearch(girl, searchText)),
-    [traitFilteredGirls, searchText]
+    () => skillFilteredGirls.filter((girl) => matchesSearch(girl, searchText)),
+    [skillFilteredGirls, searchText]
   );
 
   return {
