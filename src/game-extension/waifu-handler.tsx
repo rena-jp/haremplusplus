@@ -13,7 +13,7 @@ export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
 
   const ownedGirls: any = {};
-  const girlsDataList = window.girlsDataList as unknown as GirlsDataEntry[];
+  const girlsDataList = window.girls_data_list as unknown as GirlsDataEntry[];
   const Girl = getGirlConstructor();
   girlsDataList.forEach((girl) => {
     const girlId = girl.id_girl;

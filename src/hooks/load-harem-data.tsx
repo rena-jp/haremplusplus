@@ -174,7 +174,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   }, [setCachedGirls]);
 
   useEffect(() => {
-    const waifuGirls = window.girlsDataList as any as OwnedGirlEntry[];
+    const waifuGirls = window.girls_data_list as any as OwnedGirlEntry[];
     if (cachedGirls && gameBlessings && Array.isArray(waifuGirls)) {
       toHaremDataFromWaifuData(cachedGirls, waifuGirls, gameBlessings).then(
         updateResult

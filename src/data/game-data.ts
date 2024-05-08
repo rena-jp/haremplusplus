@@ -442,7 +442,7 @@ export interface GameQuest {
 
 declare global {
   export interface Window {
-    girlsDataList: GirlsDataList | GirlsSalaryList;
+    girls_data_list: GirlsDataList | GirlsSalaryList;
     girl_quests: GameQuests | undefined;
     player_gems_amount: GemsData;
     Hero?: Hero;

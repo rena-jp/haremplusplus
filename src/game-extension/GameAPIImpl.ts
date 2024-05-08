@@ -119,7 +119,7 @@ export class GameAPIImpl implements GameAPI {
     // Step 1: Check if the girls data list is already present in the memory.
     // This would only be the case on the harem page.
 
-    const gameGirlsObjects = window.girlsDataList;
+    const gameGirlsObjects = window.girls_data_list;
     let gameGirls: GirlsDataList | undefined = undefined;
     if (GirlsDataList.isFullHaremData(gameGirlsObjects)) {
       gameGirls = gameGirlsObjects;
