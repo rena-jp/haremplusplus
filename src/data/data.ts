@@ -122,6 +122,7 @@ export interface BaseGirlData {
 
   equipment?: EquipmentData; // WIP Experiment
   skillTiers?: SkillTiers;
+  id_role?: number | null;
 }
 
 export interface SkillTiers {

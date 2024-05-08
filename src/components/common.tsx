@@ -694,3 +694,16 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     <span className="trait-icon" style={{ backgroundImage: `url(${url})` }} />
   );
 };
+
+export interface RoleIconProps {
+  roleId: number;
+}
+
+export const RoleIcon: React.FC<RoleIconProps> = ({ roleId }) => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+  const url = `https://${contentHostName2}/pictures/design/girl_roles/role_${roleId}.png`;
+  return (
+    <span className="role-icon" style={{ backgroundImage: `url(${url})` }} />
+  );
+};

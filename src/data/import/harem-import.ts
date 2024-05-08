@@ -238,7 +238,8 @@ export async function toHaremDataFromWaifuData(
       // favoriteFood
       // fetish
       equipment: equipmentData,
-      skillTiers: girlData.skill_tiers_info
+      skillTiers: girlData.skill_tiers_info,
+      id_role: girlData.id_role
     };
 
     const commonGirl: CommonGirlData = {

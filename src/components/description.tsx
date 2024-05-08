@@ -46,7 +46,8 @@ import {
   SalaryIcon,
   StatsDescriptionTooltip,
   Tooltip,
-  contentHost2
+  contentHost2,
+  RoleIcon
 } from './common';
 import { SimpleGirlTile } from './girl';
 import { SceneViewer } from './scenes';
@@ -236,19 +237,18 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   return (
     <div className="details-section stats">
       <p>Full Name: {girl.fullName}</p>
-      {girl.stats || girl.pose !== Pose.unknown ? (
-        <div className="pose-and-stats">
-          <PoseIcon pose={girl.pose} />
-          {girl.stats ? (
-            <StatsDetails
-              girl={girl}
-              baseStats={girl.stats}
-              currentBlessing={currentBlessing}
-              upcomingBlessing={upcomingBlessing}
-            />
-          ) : null}
-        </div>
-      ) : null}
+      <div className="pose-and-stats">
+        {girl.pose !== Pose.unknown && <PoseIcon pose={girl.pose} />}
+        {girl.stats && (
+          <StatsDetails
+            girl={girl}
+            baseStats={girl.stats}
+            currentBlessing={currentBlessing}
+            upcomingBlessing={upcomingBlessing}
+          />
+        )}
+        {girl.id_role != null && <RoleIcon roleId={girl.id_role} />}
+      </div>
       {girl.equipment !== undefined ? (
         <>
           <p>Equipment:</p>

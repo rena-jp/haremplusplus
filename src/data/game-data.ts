@@ -161,6 +161,7 @@ export interface CommonGirlsDataEntry {
   source?: SourceEntry;
   source_selectors: SourceSelectorsEntry | [];
   html: HtmlString;
+  id_role?: number | null;
 }
 export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   own: true;

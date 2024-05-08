@@ -477,3 +477,10 @@ requiring actual content. */
 .details .girl-traits .trait-group span {
   vertical-align: top;
 }
+
+.role-icon {
+  background-size: cover;
+  display: inline-block;
+  height: 3.5em;
+  width: 3.5em;
+}
