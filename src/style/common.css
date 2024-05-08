@@ -484,3 +484,10 @@ requiring actual content. */
   height: 3.5em;
   width: 3.5em;
 }
+
+.skill-icon {
+  background-size: cover;
+  display: inline-block;
+  height: 3.5em;
+  width: 3.5em;
+}

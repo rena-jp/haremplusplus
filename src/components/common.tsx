@@ -707,3 +707,33 @@ export const RoleIcon: React.FC<RoleIconProps> = ({ roleId }) => {
     <span className="role-icon" style={{ backgroundImage: `url(${url})` }} />
   );
 };
+
+export interface SkillIconProps {
+  element: Element;
+}
+
+export const SkillIcon: React.FC<SkillIconProps> = ({ element }) => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+
+  const stun = 'pvp4_trigger_skills/stun_icon.png';
+  const shield = 'pvp4_trigger_skills/shield_icon.png';
+  const reflect = 'pvp3_active_skills/reflect_icon.png';
+  const execute = 'pvp3_active_skills/execute_icon.png';
+  const map = {
+    [Element.dark]: stun,
+    [Element.yellow]: stun,
+    [Element.orange]: shield,
+    [Element.white]: shield,
+    [Element.green]: reflect,
+    [Element.purple]: reflect,
+    [Element.red]: execute,
+    [Element.blue]: execute
+  } as Record<Element, string>;
+
+  const url = `https://${contentHostName2}/pictures/design/girl_skills/${map[element]}`;
+
+  return (
+    <span className="skill-icon" style={{ backgroundImage: `url(${url})` }} />
+  );
+};

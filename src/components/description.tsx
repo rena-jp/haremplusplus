@@ -47,7 +47,8 @@ import {
   StatsDescriptionTooltip,
   Tooltip,
   contentHost2,
-  RoleIcon
+  RoleIcon,
+  SkillIcon
 } from './common';
 import { SimpleGirlTile } from './girl';
 import { SceneViewer } from './scenes';
@@ -247,6 +248,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             upcomingBlessing={upcomingBlessing}
           />
         )}
+        {girl.skillTiers?.[5] != null && <SkillIcon element={girl.element} />}
         {girl.id_role != null && <RoleIcon roleId={girl.id_role} />}
       </div>
       {girl.equipment !== undefined ? (
