@@ -1,3 +1,9 @@
+## 0.19.0 - 2024-05-09
+
+- Add skill & role summary
+- Update pose data
+- Update dependent libraries
+
 ## 0.18.8 - 2024-05-09
 
 - Fix a bug caused by the game update
