@@ -1,3 +1,7 @@
+## 0.18.8 - 2024-05-09
+
+- Fix a bug caused by the game update
+
 ## 0.18.7 - 2024-04-15
 
 - Change the order by power to the same as the game
