@@ -737,3 +737,31 @@ export const SkillIcon: React.FC<SkillIconProps> = ({ element }) => {
     <span className="skill-icon" style={{ backgroundImage: `url(${url})` }} />
   );
 };
+
+export interface LabyrinthSkillIconProps {
+  element: Element;
+}
+
+export const LabyrinthSkillIcon: React.FC<LabyrinthSkillIconProps> = ({
+  element
+}) => {
+  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
+  const contentHostName2 = contentHost2(gameName);
+
+  const map = {
+    [Element.dark]: 'punch_icon.png',
+    [Element.yellow]: 'stun_icon.png',
+    [Element.orange]: 'defenses_up_icon.png',
+    [Element.white]: 'heal_up_icon.png',
+    [Element.green]: 'mana_boost_icon.png',
+    [Element.purple]: 'mana_steal_icon.png',
+    [Element.red]: 'burn_icon.png',
+    [Element.blue]: 'shield_icon.png'
+  } as Record<Element, string>;
+
+  const url = `https://${contentHostName2}/pictures/design/girl_skills/pvp4_trigger_skills/${map[element]}`;
+
+  return (
+    <span className="skill-icon" style={{ backgroundImage: `url(${url})` }} />
+  );
+};
