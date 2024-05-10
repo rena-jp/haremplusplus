@@ -9,7 +9,7 @@ export async function handleLocal(): Promise<void> {
 
   if (showHarem !== undefined) {
     const root = createRoot();
-    let visible = searchParams.has('harem');
+    let visible = searchParams.has('characters');
     const updateApp = () => {
       root.render(
         <React.StrictMode>

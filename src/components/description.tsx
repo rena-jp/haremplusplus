@@ -199,7 +199,7 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
               )}
               <p>
                 <a
-                  href={getDocumentHref(`${domain}/harem/${girl.id}`)}
+                  href={getDocumentHref(`${domain}/characters/${girl.id}`)}
                   rel="noreferrer"
                 >
                   Go to original Harem

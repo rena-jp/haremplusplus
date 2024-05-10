@@ -24,7 +24,7 @@ export async function handleWaifu(): Promise<void> {
 
   const gameName = getGameName();
   const root = createRoot(gameName);
-  let visible = searchParams.has('harem');
+  let visible = searchParams.has('characters');
   const updateApp = () => {
     root.render(
       <React.StrictMode>

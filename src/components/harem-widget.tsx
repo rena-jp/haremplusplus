@@ -200,8 +200,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
 
       // Update the location
       const params = new URLSearchParams(window.location.search);
-      if (!params.has('harem')) {
-        params.set('harem', '');
+      if (!params.has('characters')) {
+        params.set('characters', '');
       }
       if (girl !== undefined) {
         params.set('girl', girl.id);

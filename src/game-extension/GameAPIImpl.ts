@@ -1262,7 +1262,7 @@ const FRAME_REQUEST_DELAY = 2000; /* 2 seconds */
 async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
   const refreshFrame = lastFrameRequest + FRAME_REQUEST_DELAY < Date.now();
   lastFrameRequest = Date.now();
-  return getOrCreateFrame('harem-frame', 'harem.html', refreshFrame);
+  return getOrCreateFrame('harem-frame', 'characters.html', refreshFrame);
 }
 
 /**

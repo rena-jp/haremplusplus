@@ -8,16 +8,22 @@ import { getDocumentHref } from '../migration';
  * (added by scripts), such as event page.
  */
 export function handleHaremLinks() {
-  window.$("a[href^='/harem.html']").each(function (i: number, e: HTMLElement) {
-    window.$(e).attr('href', getDocumentHref('/waifu.html?harem'));
+  window.$("a[href^='/characters.html']").each(function (
+    i: number,
+    e: HTMLElement
+  ) {
+    window.$(e).attr('href', getDocumentHref('/waifu.html?characters'));
   });
 
-  window.$("a[href^='/harem/']").each(function (i: number, e: HTMLElement) {
-    const regex = /harem\/([0-9]+)/;
+  window.$("a[href^='/characters/']").each(function (
+    i: number,
+    e: HTMLElement
+  ) {
+    const regex = /characters\/([0-9]+)/;
     const match = window.$(e).attr('href').match(regex);
     if (match) {
       const girlId = match[1];
-      const newLink = getDocumentHref(`/waifu.html?harem&girl=${girlId}`);
+      const newLink = getDocumentHref(`/waifu.html?characters&girl=${girlId}`);
       window.$(e).attr('href', newLink);
     }
   });
