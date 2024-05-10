@@ -1,3 +1,7 @@
+## 0.19.1 - 2024-05-10
+
+- Fix a bug caused by the game update
+
 ## 0.19.0 - 2024-05-09
 
 - Add skill & role summary
