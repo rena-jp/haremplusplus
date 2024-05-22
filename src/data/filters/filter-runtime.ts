@@ -853,7 +853,9 @@ export class TeamsFilter extends AbstractFilter {
       return true;
     }
     const teams = this.getFilteredTeams();
-    return teams.some((team) => team.girlIds.some((id) => id === girl.id));
+    return teams.some(
+      (team) => team.active && team.girlIds.some((id) => id === girl.id)
+    );
   }
 
   private getFilteredTeams(): Team[] {
