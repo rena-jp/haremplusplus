@@ -1,3 +1,7 @@
+## 0.19.3 - 2024-06-06
+
+- Fix a bug caused by the game update
+
 ## 0.19.2 - 2024-05-22
 
 - Change team filter to ignore teams locked by expiring monthly card
