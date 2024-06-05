@@ -170,12 +170,12 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   fav_graded: NumberString;
   date_added: DateString;
   awakening_level: NumberString;
-  Affection: AffectionEntry;
+  Affection?: AffectionEntry;
   can_upgrade: boolean;
   caracs: CaracsEntry;
   caracs_sum: number;
   position_img: string;
-  level_cap: number;
+  level_cap?: number;
   salary: number;
   pay_in: number;
   pay_time: number;
@@ -188,6 +188,8 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   zodiac: string;
   anniversary: string;
   upgrade_quests: number[];
+  affection?: number;
+  xp?: number;
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;

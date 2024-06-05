@@ -90,6 +90,11 @@ export async function toHaremData(
         ? importEquipment(girlData.armor)
         : undefined;
     const skillTiers = girlData.own ? girlData.skill_tiers_info : undefined;
+    const maxLevel =
+      girlData.level_cap ??
+      (girlData.awakening_level != null
+        ? +girlData.awakening_level * 50 + 250
+        : undefined);
     const baseCommonGirl: BaseGirlData = {
       id: String(girlData.id_girl),
       name: girlData.name,
@@ -98,7 +103,7 @@ export async function toHaremData(
       poseImage: girlData.avatar,
       poseImage0: get0Pose(girlData.avatar),
       level: girlData.own ? Number(girlData.level) : undefined,
-      maxLevel: girlData.own ? girlData.level_cap : undefined,
+      maxLevel: girlData.own ? maxLevel : undefined,
       class: getClass(girlData.class),
       own: girlData.own,
       rarity: rarity,
@@ -113,16 +118,18 @@ export async function toHaremData(
       zodiac: getZodiac(girlData),
       element: getElement(girlData),
       missingAff: getMissingAff(girlData, rarity),
-      currentAffection: girlData.own ? girlData.Affection.cur : 0,
+      currentAffection: girlData.own
+        ? girlData.Affection?.cur ?? girlData.affection!
+        : 0,
       upgradeReady: girlData.can_upgrade === true,
-      currentGXP: girlData.own ? girlData.Xp.cur : 0,
+      currentGXP: girlData.own ? girlData.Xp?.cur ?? girlData.xp! : 0,
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.own ? girlData.pay_time : undefined,
       salary: girlData.own ? girlData.salary : undefined,
       salaryPerHour: girlData.own ? girlData.salary_per_hour : undefined,
       missingGems: countMissingGems(
         rarity,
-        girlData.own ? girlData.level_cap : 250
+        (girlData.own ? maxLevel : undefined) ?? 250
       ),
       quests: getQuests(quests, girlData),
       fullName: girlData.ref.full_name ?? '',
@@ -189,6 +196,7 @@ export async function toHaremDataFromWaifuData(
       };
     });
     const equipmentData = importEquipment(girlData.armor!);
+    const maxLevel = girlData.level_cap ?? +girlData.awakening_level * 50 + 250;
     const baseCommonGirl: BaseGirlData = {
       ...{
         fullName: '',
@@ -202,7 +210,7 @@ export async function toHaremDataFromWaifuData(
       poseImage: girlData.avatar,
       poseImage0: get0Pose(girlData.avatar),
       level: Number(girlData.level),
-      maxLevel: girlData.level_cap,
+      maxLevel: maxLevel,
       class: getClass(girlData.class),
       own: true,
       rarity: rarity,
@@ -217,14 +225,14 @@ export async function toHaremDataFromWaifuData(
       zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
       element: getElement(girlData),
       missingAff: getMissingAff({ ...girlData, own: true }, rarity),
-      currentAffection: +girlData.Affection.cur,
+      currentAffection: +(girlData.Affection?.cur ?? girlData.affection!),
       upgradeReady: girlData.can_upgrade === true,
-      currentGXP: +girlData.Xp.cur,
+      currentGXP: +(girlData.Xp?.cur ?? girlData.xp!),
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.pay_time,
       salary: girlData.salary,
       salaryPerHour: girlData.salary_per_hour,
-      missingGems: countMissingGems(rarity, girlData.level_cap),
+      missingGems: countMissingGems(rarity, maxLevel),
       quests,
       // fullName
       // bio
@@ -512,7 +520,9 @@ function getMissingAff(girlData: GirlsDataEntry, rarity: Rarity): number {
   const target = Math.ceil(
     multiplier * getStarValue(Number(girlData.nb_grades))
   );
-  const current = girlData.own ? girlData.Affection.cur : 0;
+  const current = girlData.own
+    ? girlData.Affection?.cur ?? girlData.affection!
+    : 0;
   return Math.max(0, target - current);
 }
 
