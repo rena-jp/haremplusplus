@@ -1,3 +1,7 @@
+## 0.19.4 - 2024-06-06
+
+- Fix salary bug caused by game update
+
 ## 0.19.3 - 2024-06-06
 
 - Fix a bug caused by the game update
