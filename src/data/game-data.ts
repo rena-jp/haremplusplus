@@ -172,7 +172,7 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   date_added: DateString;
   awakening_level: NumberString;
   Affection?: AffectionEntry;
-  can_upgrade: boolean;
+  can_upgrade?: boolean;
   caracs: CaracsEntry;
   caracs_sum: number;
   position_img: string;

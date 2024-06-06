@@ -40,6 +40,7 @@ import {
 import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
 import girlsPosesComixHarem from './poses_hh_comix.json';
 import girlsPosesPornstarHarem from './poses_hh_pornstar.json';
+import affectionTable from './aff-table.json';
 import eventTypes from './events.json';
 import { ArmorCaracs } from '../game-data';
 import { getTotalEquipmentStats } from '../girls-equipment';
@@ -188,11 +189,15 @@ export async function toHaremDataFromWaifuData(
 
   waifuGirls.forEach((girlData) => {
     const rarity = getRarity(girlData.rarity);
+    const currentAffection = +(girlData.Affection?.cur ?? girlData.affection!);
+    const upgradeReady =
+      +girlData.graded < +girlData.nb_grades &&
+      currentAffection >= affectionTable[girlData.rarity][girlData.graded + 1];
     const quests = [...Array(girlData.nb_grades)].map((_, i) => {
       return {
         idQuest: girlData.upgrade_quests[i + 1],
         done: i < girlData.graded,
-        ready: i === girlData.graded && girlData.can_upgrade
+        ready: i === girlData.graded && upgradeReady
       };
     });
     const equipmentData = importEquipment(girlData.armor!);
@@ -225,8 +230,8 @@ export async function toHaremDataFromWaifuData(
       zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
       element: getElement(girlData),
       missingAff: getMissingAff({ ...girlData, own: true }, rarity),
-      currentAffection: +(girlData.Affection?.cur ?? girlData.affection!),
-      upgradeReady: girlData.can_upgrade === true,
+      currentAffection: currentAffection,
+      upgradeReady: upgradeReady,
       currentGXP: +(girlData.Xp?.cur ?? girlData.xp!),
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.pay_time,
