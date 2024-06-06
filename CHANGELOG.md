@@ -1,3 +1,7 @@
+## 0.19.5 - 2024-06-07
+
+- Fix bug with girl upgrades due to game updates
+
 ## 0.19.4 - 2024-06-06
 
 - Fix salary bug caused by game update
