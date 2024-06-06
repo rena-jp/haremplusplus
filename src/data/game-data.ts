@@ -162,6 +162,7 @@ export interface CommonGirlsDataEntry {
   source_selectors: SourceSelectorsEntry | [];
   html: HtmlString;
   id_role?: number | null;
+  is_owned?: boolean;
 }
 export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   own: true;
@@ -598,6 +599,7 @@ export interface GirlObject {
   gData: GirlsSalaryEntry;
   gId: NumberString;
   readyForCollect: boolean;
+  onSalaryBtnClicked(event: MouseEvent, girls: GirlsDataEntry[]): void;
 }
 
 export interface Collect {

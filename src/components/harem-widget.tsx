@@ -105,8 +105,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   }, [salaryData, setGirlsSalaries]);
 
   const collectSalary = useCallback(
-    async (girl: CommonGirlData): Promise<boolean> => {
-      const result = gameAPI.collectSalary(girl);
+    async (event: MouseEvent, girl: CommonGirlData): Promise<boolean> => {
+      const result = gameAPI.collectSalary(event, girl);
       const newSalaries = new Map(salariesRef.current);
       newSalaries.set(
         girl.id,

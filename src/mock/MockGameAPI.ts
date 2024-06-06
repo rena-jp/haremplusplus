@@ -136,7 +136,10 @@ export class MockGameAPI implements GameAPI {
     });
   }
 
-  async collectSalary(girl: CommonGirlData): Promise<boolean> {
+  async collectSalary(
+    event: MouseEvent,
+    girl: CommonGirlData
+  ): Promise<boolean> {
     try {
       const result = await this.mockRequest(() => {
         return {

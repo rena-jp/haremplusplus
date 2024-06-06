@@ -20,6 +20,7 @@ import {
   GiftResult,
   GirlEquipment,
   GirlEquipmentResult,
+  GirlsDataEntry,
   GirlsDataList,
   GirlsSalaryEntry,
   GirlsSalaryList,
@@ -247,38 +248,17 @@ export class GameAPIImpl implements GameAPI {
     return Promise.reject('blessings_data is undefined.');
   }
 
-  async collectSalary(girl: CommonGirlData): Promise<boolean> {
+  async collectSalary(
+    event: MouseEvent,
+    girl: CommonGirlData
+  ): Promise<boolean> {
     if (!girl.own) {
       return false;
     }
-    const params = {
-      class: 'Girl',
-      id_girl: girl.id,
-      action: 'get_salary'
-    };
-    try {
-      // Immediately update the game data; don't wait for the request.
-      // Otherwise, UI won't immediately update.
-      const salaryData = this.getSalaryData();
-      if (salaryData && girl.salaryTime) {
-        const gameGirl = salaryData[girl.id];
-        if (gameGirl) {
-          refreshSalaryManager(gameGirl, girl.salaryTime, salaryData);
-        }
-      }
-
-      // Then, post the request. The in-game cash value will be updated only
-      // in case of success.
-
-      const result = await this.postRequest(params);
-      if (isSalaryResult(result)) {
-        this.getHero().update('soft_currency', result.money, true);
-        return result.success;
-      }
-    } catch (error) {
-      return false;
-    }
-    return false;
+    const girlsMap = getGirlSalaryManager().girlsMap;
+    const waifuList = window.girls_data_list as unknown as GirlsDataEntry[];
+    girlsMap[girl.id]?.onSalaryBtnClicked(event, waifuList);
+    return true;
   }
 
   async changePose(girl: CommonGirlData, pose: number): Promise<boolean> {

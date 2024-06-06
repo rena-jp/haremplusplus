@@ -99,7 +99,7 @@ export interface GameAPI {
    * @returns A Boolean Promise, resolving to true if salary collection was successful,
    * or false if it was unsuccessful.
    */
-  collectSalary(girl: CommonGirlData): Promise<boolean>;
+  collectSalary(event: MouseEvent, girl: CommonGirlData): Promise<boolean>;
   /**
    * Return the quest data (dialogue, cost, image...) for upgrading a girl (or viewing a past scene)
    * @param girl

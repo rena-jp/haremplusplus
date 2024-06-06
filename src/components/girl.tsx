@@ -26,7 +26,7 @@ export interface GirlTileProps {
 }
 
 export interface SimpleGirlTileProps extends GirlTileProps {
-  onClick: () => void;
+  onClick: (event: React.MouseEvent) => void;
   children?: ReactNode;
   avatarOverlay?: ReactNode;
   classNames?: string[];
@@ -79,7 +79,7 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
 
 export interface BaseGirlTileProps {
   girl: CommonGirlData | undefined;
-  onClick: () => void;
+  onClick: (event: React.MouseEvent) => void;
   children?: ReactNode;
   avatarOverlay?: ReactNode;
   bottom?: ReactNode;
@@ -210,7 +210,7 @@ const WrappedImage: React.FC<WrappedImageProps> = ({
 };
 
 export interface HaremGirlTileProps extends GirlTileProps {
-  collectSalary: (girl: CommonGirlData) => void;
+  collectSalary: (event: MouseEvent, girl: CommonGirlData) => void;
   /**
    * Timestamp of next salary, in ms
    */
@@ -267,13 +267,16 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       </>
     );
 
-  const onClick = useCallback(() => {
-    selectOnClick();
-    if (salaryReady && collectSalary !== undefined) {
-      setSalaryReady(false);
-      collectSalary(girl);
-    }
-  }, [collectSalary, selectOnClick, girl, salaryReady]);
+  const onClick = useCallback(
+    (event: React.MouseEvent) => {
+      selectOnClick();
+      if (salaryReady && collectSalary !== undefined) {
+        setSalaryReady(false);
+        collectSalary(event.nativeEvent, girl);
+      }
+    },
+    [collectSalary, selectOnClick, girl, salaryReady]
+  );
 
   const tooltipContent = useMemo(() => {
     return ReactDOMServer.renderToStaticMarkup(

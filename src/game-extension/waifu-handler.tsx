@@ -14,6 +14,7 @@ export async function handleWaifu(): Promise<void> {
 
   const ownedGirls: any = {};
   const girlsDataList = window.girls_data_list as unknown as GirlsDataEntry[];
+  girlsDataList.forEach((e) => (e.is_owned = true));
   const Girl = getGirlConstructor();
   girlsDataList.forEach((girl) => {
     const girlId = girl.id_girl;
