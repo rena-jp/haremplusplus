@@ -1,3 +1,7 @@
+## 0.20.0 - 2024-06-10
+
+- Add related games (TPH, GH, GPH)
+
 ## 0.19.5 - 2024-06-07
 
 - Fix bug with girl upgrades due to game updates
