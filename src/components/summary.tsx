@@ -162,6 +162,7 @@ export const Summary: React.FC<SummaryProps> = ({
           nextBlessing={nextBlessings}
         />
         <BlessingSummaries
+          allGirls={allGirls}
           girls={girls}
           excludeCommonRare={lmOnly}
           filters={filters}
@@ -192,6 +193,7 @@ export const Summary: React.FC<SummaryProps> = ({
 };
 
 export interface BlessingSummariesProps {
+  allGirls: CommonGirlData[];
   girls: CommonGirlData[];
   excludeCommonRare: boolean;
   toggleFilter(blessing: BlessingType | BlessingType[]): void;
@@ -199,6 +201,7 @@ export interface BlessingSummariesProps {
 }
 
 export const BlessingSummaries: React.FC<BlessingSummariesProps> = ({
+  allGirls,
   girls,
   excludeCommonRare,
   filters,
@@ -220,6 +223,7 @@ export const BlessingSummaries: React.FC<BlessingSummariesProps> = ({
           {list.map((blessing) => (
             <BlessingSummary
               key={getBlessingKey(blessing)}
+              allGirls={allGirls}
               girls={girls}
               blessing={blessing}
               excludeCommonRare={excludeCommonRare}
@@ -347,6 +351,7 @@ export const GemsSummary: React.FC<GemsSummaryProps> = ({ girls }) => {
 
 export interface BlessingSummaryProps {
   blessing: BlessingType;
+  allGirls: CommonGirlData[];
   girls: CommonGirlData[];
   excludeCommonRare: boolean;
   filters: QuickFilter[];
@@ -354,16 +359,21 @@ export interface BlessingSummaryProps {
 }
 
 export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
+  allGirls,
   girls,
   blessing,
   excludeCommonRare,
   filters,
   toggleFilter
 }) => {
+  const isValid = useMemo(() => {
+    return getMatchingGirls(allGirls, blessing, false).length > 0;
+  }, [allGirls, blessing]);
   const matchingGirls = getMatchingGirls(girls, blessing, excludeCommonRare);
   const total = matchingGirls.length;
   const owned = matchingGirls.filter((g) => g.own).length;
   const blessingEnum = Blessings.getEnumType(blessing.blessing);
+  if (!isValid) return null;
 
   const colorName =
     blessing.blessing === Blessing.EyeColor ||

@@ -109,7 +109,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   useEffect(() => {
     // Immediately load gems data from cache (if available), then load
     // gems data from the game (To ensure up-to-date data)
-    loadGemsData().then((gemsData) => setGemsCount(countGems(gemsData)));
+    loadGemsData().then((gemsData) => setGemsCount(countGems(gemsData)), () => {});
   }, []);
 
   const refresh = useCallback<() => Promise<void>>(async () => {
