@@ -62,9 +62,10 @@ export async function handleWaifu(): Promise<void> {
  * @returns The root element for the harem
  */
 function createRoot(gameName: GameName): ReactDOM.Root {
-  const targetBody = document.getElementById(gameName.valueOf());
+  let targetBody = document.getElementById(gameName.valueOf());
   if (targetBody === null) {
-    return ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+    targetBody = document.body;
+    targetBody.id = gameName;
   }
 
   const quickHaremWrapper = document.createElement('div');
