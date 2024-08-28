@@ -54,7 +54,7 @@ export function getBlessings(blessingData: GameBlessingData): {
 
 function parseBlessing(blessingData: GameBlessing[]): BlessingDefinition[] {
   const result: BlessingDefinition[] = [];
-  for (const activeBlessing of blessingData) {
+  for (const activeBlessing of blessingData.slice(0, 2)) {
     const description = activeBlessing.description;
     // const startTs = activeBlessing.startTs;
     // const endTs = activeBlessing.endTs;
