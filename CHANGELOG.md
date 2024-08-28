@@ -1,3 +1,7 @@
+## 0.20.1 - 2024-08-29
+
+- Change to ignore the third blessing
+
 ## 0.20.0 - 2024-06-10
 
 - Add related games (TPH, GH, GPH)
