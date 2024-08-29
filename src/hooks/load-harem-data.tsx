@@ -26,6 +26,7 @@ import {
 } from '../data/data';
 import { countGems, GameBlessingData, OwnedGirlEntry } from '../data/game-data';
 import { toHaremDataFromWaifuData } from '../data/import/harem-import';
+import { getBlessings } from '../data/import/blessing-import';
 
 export interface LoadHaremDataProps {
   gameAPI: GameAPI;
@@ -109,7 +110,10 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   useEffect(() => {
     // Immediately load gems data from cache (if available), then load
     // gems data from the game (To ensure up-to-date data)
-    loadGemsData().then((gemsData) => setGemsCount(countGems(gemsData)), () => {});
+    loadGemsData().then(
+      (gemsData) => setGemsCount(countGems(gemsData)),
+      () => {}
+    );
   }, []);
 
   const refresh = useCallback<() => Promise<void>>(async () => {
@@ -137,6 +141,14 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   useEffect(() => {
     // Immediately load the blessings, only once.
     loadBlessings(gameAPI)
+      .then((blessings) => {
+        try {
+          getBlessings(blessings);
+          return blessings;
+        } catch (e) {
+          return loadBlessings(gameAPI, true);
+        }
+      })
       .then((blessings) => {
         setGameBlessings(blessings);
       })

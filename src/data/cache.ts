@@ -165,22 +165,25 @@ async function persistBlessingsData(
  * @param gameAPI
  */
 export async function loadBlessings(
-  gameAPI: GameAPI
+  gameAPI: GameAPI,
+  disableCache?: boolean
 ): Promise<GameBlessingData> {
-  try {
-    const blessingsData = await loadBlessingsData();
-    if (blessingsData && blessingsData.active.length > 0) {
-      if (
-        // Blessings only change once a week; so if we have a version in
-        // cache that hasn't expired, there's no need to refresh.
-        blessingsData.active.every((blessing) => isActive(blessing))
-      ) {
-        return blessingsData;
+  if (disableCache !== true) {
+    try {
+      const blessingsData = await loadBlessingsData();
+      if (blessingsData && blessingsData.active.length > 0) {
+        if (
+          // Blessings only change once a week; so if we have a version in
+          // cache that hasn't expired, there's no need to refresh.
+          blessingsData.active.every((blessing) => isActive(blessing))
+        ) {
+          return blessingsData;
+        }
       }
+    } catch (error) {
+      // Failed to load blessings from cache. The cache is probably empty;
+      // let's just try to pull data from the game instead.
     }
-  } catch (error) {
-    // Failed to load blessings from cache. The cache is probably empty;
-    // let's just try to pull data from the game instead.
   }
   try {
     const blessingsData = await gameAPI.getBlessings();
