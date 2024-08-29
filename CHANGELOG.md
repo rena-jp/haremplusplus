@@ -1,3 +1,8 @@
+## 0.20.2 - 2024-08-29
+
+- Add support for the new blessing
+- Change to refresh cache on error
+
 ## 0.20.1 - 2024-08-29
 
 - Change to ignore the third blessing
