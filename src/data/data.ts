@@ -236,7 +236,8 @@ export enum Blessing {
   EyeColor,
   Zodiac,
   Pose,
-  Element
+  Element,
+  Role
 }
 export enum HairColor {
   pink,
@@ -348,6 +349,31 @@ export enum Element {
 
 export type TeamElement = 'rainbow' | Element;
 
+export enum Role {
+  none,
+  masochist,
+  spermcaster,
+  dominator,
+  fluffer,
+  corkscrewer,
+  bugger,
+  bondagee,
+  sadist,
+  pleasurelock,
+  sexomancer
+}
+
+export namespace Roles {
+  export function toString(role: Role): string {
+    return Role[role];
+  }
+
+  export function toDisplayString(role: Role): string {
+    if (role === Role.none) return 'None';
+    return window.GT.design[`girl_role_${role}_name`];
+  }
+}
+
 export namespace Blessings {
   export function values(): Blessing[] {
     return Object.values(Blessing).filter(
@@ -363,7 +389,8 @@ export namespace Blessings {
     | typeof EyeColor
     | typeof Zodiac
     | typeof Pose
-    | typeof Element {
+    | typeof Element
+    | typeof Role {
     switch (blessing) {
       case Blessing.HairColor:
         return HairColor;
@@ -377,6 +404,8 @@ export namespace Blessings {
         return Pose;
       case Blessing.Element:
         return Element;
+      case Blessing.Role:
+        return Role;
     }
   }
 
@@ -401,7 +430,14 @@ export namespace Blessings {
 
   export function stringValue(
     blessing: Blessing,
-    blessingValue: HairColor | Rarity | EyeColor | Zodiac | Pose | Element
+    blessingValue:
+      | HairColor
+      | Rarity
+      | EyeColor
+      | Zodiac
+      | Pose
+      | Element
+      | Role
   ): string {
     const valueType = getEnumType(blessing);
     return valueType[blessingValue];
@@ -409,7 +445,14 @@ export namespace Blessings {
 
   export function toDisplayString(
     blessing: Blessing,
-    blessingValue: HairColor | Rarity | EyeColor | Zodiac | Pose | Element
+    blessingValue:
+      | HairColor
+      | Rarity
+      | EyeColor
+      | Zodiac
+      | Pose
+      | Element
+      | Role
   ): string {
     switch (blessing) {
       case Blessing.Zodiac:
@@ -422,6 +465,8 @@ export namespace Blessings {
         return Poses.toDisplayString(blessingValue as Pose);
       case Blessing.Rarity:
         return Rarities.toDisplayString(blessingValue as Rarity);
+      case Blessing.Role:
+        return Roles.toDisplayString(blessingValue as Role);
       case Blessing.Element:
       default:
         return stringValue(blessing, blessingValue);
@@ -445,6 +490,8 @@ export namespace Blessings {
         return girl.pose;
       case Blessing.Element:
         return girl.element;
+      case Blessing.Role:
+        return girl.id_role ?? 0;
     }
   }
 }
@@ -554,7 +601,7 @@ export namespace HairColors {
 
 export interface BlessingType {
   blessing: Blessing;
-  blessingValue: Rarity | HairColor | EyeColor | Zodiac | Pose | Element;
+  blessingValue: Rarity | HairColor | EyeColor | Zodiac | Pose | Element | Role;
 }
 
 export interface BlessingDefinition extends BlessingType {
@@ -573,6 +620,22 @@ export function allBlessingTypes(): BlessingType[] {
 }
 
 export function getBlessingMultiplier(
+  girl: BaseGirlData,
+  blessings: BlessingDefinition[]
+): number {
+  let multiplier = 1.0;
+
+  for (const blessing of blessings) {
+    if (blessing.blessing === Blessing.Role) continue;
+    if (matchesBlessing(girl, blessing)) {
+      multiplier *= 1 + blessing.blessingBonus / 100.0;
+    }
+  }
+
+  return multiplier;
+}
+
+export function getBlessingMultiplierForLabyrinth(
   girl: BaseGirlData,
   blessings: BlessingDefinition[]
 ): number {
@@ -741,7 +804,7 @@ export function getLabyrinthPower(
     8 * totalStats.hardcore +
     3.75 * totalStats.charm +
     7.625 * totalStats.knowhow;
-  const multiplier = getBlessingMultiplier(girl, blessings);
+  const multiplier = getBlessingMultiplierForLabyrinth(girl, blessings);
   const total = baseLabyrinthPower * multiplier;
   const roundedTotal = Math.ceil(total);
   return roundedTotal;

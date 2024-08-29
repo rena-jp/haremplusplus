@@ -14,6 +14,7 @@ import {
   HairColor,
   Pose,
   Rarity,
+  Role,
   Zodiac,
   Zodiacs
 } from '../data';
@@ -54,7 +55,7 @@ export function getBlessings(blessingData: GameBlessingData): {
 
 function parseBlessing(blessingData: GameBlessing[]): BlessingDefinition[] {
   const result: BlessingDefinition[] = [];
-  for (const activeBlessing of blessingData.slice(0, 2)) {
+  for (const activeBlessing of blessingData) {
     const description = activeBlessing.description;
     // const startTs = activeBlessing.startTs;
     // const endTs = activeBlessing.endTs;
@@ -157,6 +158,16 @@ function extractBlessingFromCondition(
   allPrefixes.set('Element', Blessing.Element);
   allPrefixes.set('Редкость', Blessing.Rarity);
 
+  // from Game (may be incorrect)
+
+  allPrefixes.set(window.GT.design.filter_pose, Blessing.Pose);
+  allPrefixes.set(window.GT.design.haremdex_eye_color, Blessing.EyeColor);
+  allPrefixes.set(window.GT.design.haremdex_hair_color, Blessing.HairColor);
+  allPrefixes.set(window.GT.design.haremdex_zodiac_sign, Blessing.Zodiac);
+  allPrefixes.set(window.GT.design.element, Blessing.Element);
+  allPrefixes.set(window.GT.design.selectors_Rarity, Blessing.Rarity);
+  allPrefixes.set(window.GT.design.girl_role, Blessing.Role);
+
   for (const prefix of allPrefixes.keys()) {
     if (condition.startsWith(prefix)) {
       const blessing = allPrefixes.get(prefix)!;
@@ -179,7 +190,7 @@ function extractBlessingFromCondition(
 function parseBlessingValue(
   blessing: Blessing,
   rawValue: string
-): Rarity | HairColor | EyeColor | Zodiac | Pose | Element | undefined {
+): Rarity | HairColor | EyeColor | Zodiac | Pose | Element | Role | undefined {
   if (blessing === Blessing.Zodiac) {
     // Special case for Zodiac: the sign might not be part of the resulting text, and should be ignored
     for (const zodiacSymbol of Zodiacs.Symbols) {
@@ -199,6 +210,15 @@ function parseBlessingValue(
     }
   }
 
+  if (blessing === Blessing.Role) {
+    const set = new Set(
+      [...Array(10)].map((_, i) => window.GT.design[`girl_role_${i + 1}_name`])
+    );
+    if (set.has(rawValue)) {
+      return getBlessingValue(blessing, rawValue);
+    }
+  }
+
   for (const language in filtersKeys) {
     const allLanguageKeys: Translations = filtersKeys[
       language as keyof LanguageKeys
@@ -215,7 +235,7 @@ function parseBlessingValue(
 function getBlessingValue(
   blessing: Blessing,
   blessingValue: string
-): Rarity | HairColor | EyeColor | Zodiac | Pose | Element {
+): Rarity | HairColor | EyeColor | Zodiac | Pose | Element | Role {
   switch (blessing) {
     case Blessing.EyeColor:
       return toEyeColor(blessingValue);
@@ -229,6 +249,15 @@ function getBlessingValue(
       return getRarity(blessingValue as keyof typeof Rarity);
     case Blessing.Zodiac:
       return Zodiacs.fromString(blessingValue as keyof typeof Zodiac);
+    case Blessing.Role: {
+      const map = new Map(
+        [...Array(10)].map((_, i) => [
+          window.GT.design[`girl_role_${i + 1}_name`],
+          i + 1
+        ])
+      );
+      return map.get(blessingValue) as Role;
+    }
     default:
       console.error("Unknown blessing; can't parse value");
       return 0;
