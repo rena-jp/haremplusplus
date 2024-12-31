@@ -1,3 +1,7 @@
+## 0.20.3 - 2024-12-31
+
+- Change calculation of girls equipment resonance bonus from additive to multiplicative
+
 ## 0.20.2 - 2024-08-29
 
 - Add support for the new blessing
