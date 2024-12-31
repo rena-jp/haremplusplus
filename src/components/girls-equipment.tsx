@@ -58,7 +58,9 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
   gameName
 }) => {
   const [loading, setLoading] = useState(false);
-  const loadingTimeout = useRef<string | number | NodeJS.Timeout | undefined>();
+  const loadingTimeout = useRef<string | number | NodeJS.Timeout | undefined>(
+    undefined
+  );
 
   const delayedSetLoading = useCallback(
     (loading: boolean) => {
