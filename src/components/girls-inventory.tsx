@@ -334,6 +334,9 @@ interface EquipmentStatsTotalProps {
 
 const EquipmentStatsTotal: React.FC<EquipmentStatsTotalProps> = ({ girl }) => {
   const stats = getTotalInventoryStats(girl, girl.equipment?.items ?? []);
+  stats.rAtk = roundValue(stats.rAtk);
+  stats.rDef = roundValue(stats.rDef);
+  stats.rEgo = roundValue(stats.rEgo);
   return (
     <>
       <div className="stat total-stats">
@@ -532,6 +535,9 @@ const InventoryTotalStatsEntry: React.FC<InventoryTotalStatsEntryProps> = ({
   for (const girl of girls) {
     const girlStats = getTotalInventoryStats(girl, girl.equipment?.items ?? []);
     allTotalStats = sumInventoryStats(allTotalStats, girlStats);
+    allTotalStats.rAtk = roundValue(allTotalStats.rAtk);
+    allTotalStats.rDef = roundValue(allTotalStats.rDef);
+    allTotalStats.rEgo = roundValue(allTotalStats.rEgo);
   }
   return (
     <>

@@ -195,9 +195,9 @@ export function sumInventoryStats(
     charm: roundValue(stats1.charm + stats2.charm),
     knowhow: roundValue(stats1.knowhow + stats2.knowhow),
     totalStats: roundValue(stats1.totalStats + stats2.totalStats),
-    rAtk: roundValue(stats1.rAtk + stats2.rAtk),
-    rDef: roundValue(stats1.rDef + stats2.rDef),
-    rEgo: roundValue(stats1.rEgo + stats2.rEgo)
+    rAtk: (100 + stats1.rAtk) * (100 + stats2.rAtk) * 0.01 - 100,
+    rDef: (100 + stats1.rDef) * (100 + stats2.rDef) * 0.01 - 100,
+    rEgo: (100 + stats1.rEgo) * (100 + stats2.rEgo) * 0.01 - 100
   };
 }
 
