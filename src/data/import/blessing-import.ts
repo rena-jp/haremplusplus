@@ -212,7 +212,9 @@ function parseBlessingValue(
 
   if (blessing === Blessing.Role) {
     const set = new Set(
-      [...Array(10)].map((_, i) => window.GT.design[`girl_role_${i + 1}_name`])
+      [...Array(10)].map((_, i) =>
+        window.GT.design[`girl_role_${i + 1}_name`].trim()
+      )
     );
     if (set.has(rawValue)) {
       return getBlessingValue(blessing, rawValue);
