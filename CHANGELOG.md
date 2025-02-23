@@ -1,3 +1,7 @@
+## 0.20.4 - 2025-02-23
+
+- Fix a bug where the script does not work in Spanish
+
 ## 0.20.3 - 2024-12-31
 
 - Change calculation of girls equipment resonance bonus from additive to multiplicative
