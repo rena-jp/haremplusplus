@@ -585,7 +585,9 @@ export interface GemsEntry {
 }
 
 export interface GT {
-  design: { [key: string]: string };
+  design: Record<string, string>;
+  colors: Record<string, string>;
+  zodiac: Record<string, string>;
   // Etc.
 }
 

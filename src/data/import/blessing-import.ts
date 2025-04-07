@@ -191,6 +191,92 @@ function parseBlessingValue(
   blessing: Blessing,
   rawValue: string
 ): Rarity | HairColor | EyeColor | Zodiac | Pose | Element | Role | undefined {
+  rawValue = rawValue.trim();
+
+  if (blessing === Blessing.Rarity) {
+    const map = new Map<string, number>(
+      ['starting', 'common', 'rare', 'epic', 'legendary', 'mythic'].map(
+        (e, i) => [window.GT.design[`girls_rarity_${e}`].trim(), i]
+      )
+    );
+    const rarity = map.get(rawValue);
+    if (rarity != null) {
+      return rarity as Rarity;
+    }
+  }
+
+  if (blessing === Blessing.HairColor || blessing === Blessing.EyeColor) {
+    const map = new Map<string, string>(
+      Object.entries(window.GT.colors).map((e) => [e[1], e[0]])
+    );
+    const color = map.get(rawValue);
+    if (color != null) {
+      if (blessing === Blessing.HairColor) {
+        return toHairColor(color);
+      }
+      if (blessing === Blessing.EyeColor) {
+        return toEyeColor(color);
+      }
+    }
+  }
+
+  if (blessing === Blessing.Zodiac) {
+    const map = new Map<string, number>(
+      [
+        'aries',
+        'taurus',
+        'gemini',
+        'cancer',
+        'leo',
+        'virgo',
+        'libra',
+        'scorpio',
+        'sagittarius',
+        'capricorn',
+        'aquarius',
+        'pisces'
+      ].map((e, i) => [window.GT.zodiac[e], i])
+    );
+    const zodiac = map.get(rawValue);
+    if (zodiac != null) {
+      return zodiac as Zodiac;
+    }
+  }
+
+  if (blessing === Blessing.Element) {
+    const map = new Map<string, number>(
+      [
+        'fire',
+        'water',
+        'sun',
+        'stone',
+        'nature',
+        'psychic',
+        'light',
+        'darkness'
+      ].map((e, i) => [window.GT.design[`${e}_flavor_element`].trim(), i])
+    );
+    const element = map.get(rawValue);
+    if (element != null) {
+      return element as Element;
+    }
+  }
+
+  if (blessing === Blessing.Role) {
+    const map = new Map<string, number>(
+      [...Array(10)].map((_, i) => [
+        window.GT.design[`girl_role_${i + 1}_name`].trim(),
+        i + 1
+      ])
+    );
+    const role = map.get(rawValue);
+    if (role != null) {
+      return role as Role;
+    }
+  }
+
+  // Fall back to the older version
+
   if (blessing === Blessing.Zodiac) {
     // Special case for Zodiac: the sign might not be part of the resulting text, and should be ignored
     for (const zodiacSymbol of Zodiacs.Symbols) {
@@ -207,17 +293,6 @@ function parseBlessingValue(
           }
         }
       }
-    }
-  }
-
-  if (blessing === Blessing.Role) {
-    const set = new Set(
-      [...Array(10)].map((_, i) =>
-        window.GT.design[`girl_role_${i + 1}_name`].trim()
-      )
-    );
-    if (set.has(rawValue)) {
-      return getBlessingValue(blessing, rawValue);
     }
   }
 
