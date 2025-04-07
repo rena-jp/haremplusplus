@@ -1,3 +1,7 @@
+## 0.20.5 - 2025-04-08
+
+- Update for changes in game word translations
+
 ## 0.20.4 - 2025-02-23
 
 - Fix a bug where the script does not work in Spanish
