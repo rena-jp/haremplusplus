@@ -21,7 +21,8 @@
     "prettier:fix": "prettier ./src/**/*.{js,jsx,ts,tsx,css} --write",
     "update-poses": "node ./scripts/update-poses.js",
     "release": "node ./scripts/release.js",
-    "build-release": "npm run build && npm run release"
+    "build-release": "npm run build && npm run release",
+    "update-translations": "node ./scripts/update-translations.js"
   },
   "browserslist": {
     "production": [
