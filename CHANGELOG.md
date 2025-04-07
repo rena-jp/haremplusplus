@@ -1,3 +1,8 @@
+## 0.20.6 - 2025-04-08
+
+- Update pose data
+- Update translation table
+
 ## 0.20.5 - 2025-04-08
 
 - Update for changes in game word translations
