@@ -1,3 +1,8 @@
+## 0.20.5 - 2025-04-07
+
+- Change a blessing translation causing a bug in italian
+- Update pose data
+
 ## 0.20.4 - 2025-02-23
 
 - Fix a bug where the script does not work in Spanish
