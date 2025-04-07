@@ -588,6 +588,7 @@ export interface GT {
   design: Record<string, string>;
   colors: Record<string, string>;
   zodiac: Record<string, string>;
+  figures: string[];
   // Etc.
 }
 

@@ -196,7 +196,7 @@ function parseBlessingValue(
   if (blessing === Blessing.Rarity) {
     const map = new Map<string, number>(
       ['starting', 'common', 'rare', 'epic', 'legendary', 'mythic'].map(
-        (e, i) => [window.GT.design[`girls_rarity_${e}`].trim(), i]
+        (e, i) => [window.GT.design[`girls_rarity_${e}`]?.trim(), i]
       )
     );
     const rarity = map.get(rawValue);
@@ -207,7 +207,7 @@ function parseBlessingValue(
 
   if (blessing === Blessing.HairColor || blessing === Blessing.EyeColor) {
     const map = new Map<string, string>(
-      Object.entries(window.GT.colors).map((e) => [e[1], e[0]])
+      Object.entries(window.GT.colors).map((e) => [e[1]?.trim(), e[0]])
     );
     const color = map.get(rawValue);
     if (color != null) {
@@ -235,7 +235,7 @@ function parseBlessingValue(
         'capricorn',
         'aquarius',
         'pisces'
-      ].map((e, i) => [window.GT.zodiac[e], i])
+      ].map((e, i) => [window.GT.zodiac[e]?.trim(), i])
     );
     const zodiac = map.get(rawValue);
     if (zodiac != null) {
@@ -254,7 +254,7 @@ function parseBlessingValue(
         'psychic',
         'light',
         'darkness'
-      ].map((e, i) => [window.GT.design[`${e}_flavor_element`].trim(), i])
+      ].map((e, i) => [window.GT.design[`${e}_flavor_element`]?.trim(), i])
     );
     const element = map.get(rawValue);
     if (element != null) {
@@ -262,10 +262,20 @@ function parseBlessingValue(
     }
   }
 
+  if (blessing === Blessing.Pose) {
+    const map = new Map<string, number>(
+      window.GT.figures?.map((e, i) => [e.trim(), i])
+    );
+    const pose = map.get(rawValue);
+    if (pose != null) {
+      return pose as Pose;
+    }
+  }
+
   if (blessing === Blessing.Role) {
     const map = new Map<string, number>(
       [...Array(10)].map((_, i) => [
-        window.GT.design[`girl_role_${i + 1}_name`].trim(),
+        window.GT.design[`girl_role_${i + 1}_name`]?.trim(),
         i + 1
       ])
     );
