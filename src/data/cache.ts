@@ -77,11 +77,18 @@ export async function persistGemsData(gemsData: GemsData): Promise<void> {
   }
 }
 const HAREM_DATA_REQUEST = '/quickHaremData.json';
+const HAREM_DATA_REQUEST2 = '/quickHaremData2.json';
 
 export async function loadHaremData(): Promise<HaremData> {
   try {
     if (await caches.has(DATA_CACHE)) {
       const cache = await caches.open(DATA_CACHE);
+      const storedHaremData2 = await cache.match(
+        new Request(HAREM_DATA_REQUEST2)
+      );
+      if (storedHaremData2) {
+        return await storedHaremData2.json();
+      }
       const storedHaremData = await cache.match(
         new Request(HAREM_DATA_REQUEST)
       );
@@ -100,7 +107,7 @@ export async function persistHaremData(harem: HaremData): Promise<void> {
     try {
       const cache = await caches.open(DATA_CACHE);
       await cache.put(
-        new Request(HAREM_DATA_REQUEST),
+        new Request(HAREM_DATA_REQUEST2),
         new Response(JSON.stringify(harem), {
           headers: { 'Content-Type': 'application/json' }
         })

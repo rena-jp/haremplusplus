@@ -11,7 +11,8 @@ import {
   loadBlessings,
   loadGemsData,
   loadHaremData,
-  persistGemsData
+  persistGemsData,
+  persistHaremData
 } from '../data/cache';
 import {
   BlessingDefinition,
@@ -188,9 +189,15 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   useEffect(() => {
     const waifuGirls = window.girls_data_list as any as OwnedGirlEntry[];
     if (cachedGirls && gameBlessings && Array.isArray(waifuGirls)) {
-      toHaremDataFromWaifuData(cachedGirls, waifuGirls, gameBlessings).then(
-        updateResult
-      );
+      (async () => {
+        const data = await toHaremDataFromWaifuData(
+          cachedGirls,
+          waifuGirls,
+          gameBlessings
+        );
+        persistHaremData(data);
+        updateResult(data);
+      })();
     }
   }, [cachedGirls, gameBlessings, updateResult]);
 
