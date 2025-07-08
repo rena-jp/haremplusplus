@@ -58,6 +58,8 @@ import { EquipmentList } from './girls-equipment';
 import { SkillTierList } from './girls-skills';
 import { GirlTraits } from './girls-traits';
 import { getDocumentHref } from '../migration';
+import { GradeSkin } from '../data/game-data';
+import { Tooltip as ReactTooltip } from 'react-tooltip';
 
 export interface GirlDescriptionProps {
   /**
@@ -107,6 +109,16 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
     [gameAPI, girl]
   );
 
+  const changeGradeSkin = useCallback(
+    (skin: GradeSkin) => {
+      if (girl === undefined) {
+        return;
+      }
+      gameAPI.changeGradeSkin(girl, skin);
+    },
+    [gameAPI, girl]
+  );
+
   const [activeTab, setActiveTab] = useState<'stats' | 'lore' | 'variations'>(
     'stats'
   );
@@ -130,7 +142,11 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
         <>
           <div className="pose">
             <img src={poseImage} alt={girl.name} />
-            <PoseSwitcher girl={girl} selectPose={selectPose} />
+            <PoseSwitcher
+              girl={girl}
+              selectPose={selectPose}
+              changeGradeSkin={changeGradeSkin}
+            />
           </div>
           <div className="details">
             <div className="details-header general-attributes color">
@@ -604,31 +620,66 @@ export const StatsDetails: React.FC<StatsProps> = ({
 export interface PoseSwitcherProps {
   girl: CommonGirlData;
   selectPose(pose: number): void;
+  changeGradeSkin(skin: GradeSkin): void;
 }
 
 export const PoseSwitcher: React.FC<PoseSwitcherProps> = ({
   girl,
-  selectPose
+  selectPose,
+  changeGradeSkin
 }) => {
   const stars = girl.stars;
   const maxStars = girl.maxStars;
   const currentStar = girl.currentIcon;
+  const skinSelected =
+    girl.gradeSkins?.some((e) => e.is_selected === 1) ?? false;
 
   return (
-    <div className="pose-switcher">
-      {[...Array(stars + 1)].map((_v, i) => (
-        <PoseSelector
-          key={`full_${i}`}
-          kind="solid"
-          current={i === currentStar}
-          select={() => selectPose(i)}
-        />
-      ))}
+    <>
+      <div className="pose-switcher">
+        {[...Array(stars + 1)].map((_v, i) => (
+          <PoseSelector
+            key={`full_${i}`}
+            kind="solid"
+            current={!skinSelected && i === currentStar}
+            select={() => selectPose(i)}
+          />
+        ))}
 
-      {[...Array(maxStars - stars)].map((_v, i) => (
-        <PoseSelector key={`empty_${i}`} kind="empty" />
-      ))}
-    </div>
+        {[...Array(maxStars - stars)].map((_v, i) => (
+          <PoseSelector key={`empty_${i}`} kind="empty" />
+        ))}
+      </div>
+
+      <div className="pose-switcher">
+        {girl.gradeSkins
+          ?.sort((x, y) => y.num_order - x.num_order)
+          .filter((e) => e.is_released)
+          .map((e, i) =>
+            e.is_owned ? (
+              <PoseSelector
+                key={`skin_full_${i}`}
+                kind="solid"
+                current={e.is_selected === 1}
+                select={() => changeGradeSkin(e)}
+                tooltip={e.grade_skin_name}
+              />
+            ) : (
+              <PoseSelector
+                key={`skin_empty_${i}`}
+                kind="empty"
+                tooltip={`${e.grade_skin_name}<br/><span class="skin-shards skins_shard_icn"></span> ${e.shards_count} / 33`}
+              />
+            )
+          )}
+      </div>
+
+      <ReactTooltip
+        id="skin-tooltip"
+        className="qh-tooltip"
+        classNameArrow="qh-tooltip-arrow"
+      />
+    </>
   );
 };
 
@@ -636,15 +687,26 @@ interface PoseSelectorProps {
   kind: 'solid' | 'empty';
   current?: boolean;
   select?(): void;
+  tooltip?: string;
 }
 const PoseSelector: React.FC<PoseSelectorProps> = ({
   kind,
   current,
-  select
+  select,
+  tooltip
 }) => {
   const className = `pose-selector ${kind}${current ? ' current' : ''}`;
   const onClick = current ? undefined : select;
-  return <div className={className} onClick={onClick} />;
+  return tooltip == null ? (
+    <div className={className} onClick={onClick} />
+  ) : (
+    <div
+      className={className}
+      onClick={onClick}
+      data-tooltip-id="skin-tooltip"
+      data-tooltip-html={tooltip}
+    />
+  );
 };
 
 interface ScenesBrowserProps {

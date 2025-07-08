@@ -18,7 +18,8 @@ import {
   GemsEntry,
   GirlEquipment,
   GirlsDataList,
-  GirlsSalaryList
+  GirlsSalaryList,
+  GradeSkin
 } from '../data/game-data';
 import {
   GameAPI,
@@ -163,8 +164,30 @@ export class MockGameAPI implements GameAPI {
       return false;
     }
     girl.currentIcon = pose;
+    girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
     girl.poseImage = getPoseN(girl.poseImage, pose);
     girl.icon = getPoseN(girl.icon, pose);
+    if (this.updateGirl !== undefined) {
+      this.updateGirl(girl);
+    }
+    return true;
+  }
+
+  async changeGradeSkin(
+    girl: CommonGirlData,
+    skin: GradeSkin
+  ): Promise<boolean> {
+    if (!skin.is_released || !skin.is_owned) {
+      console.error(
+        "Tried to switch to a pose that isn't unlocked or doesn't exist"
+      );
+      return false;
+    }
+    girl.currentIcon = 1;
+    girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
+    skin.is_selected = 1;
+    girl.poseImage = skin.image_path;
+    girl.icon = skin.ico_path;
     if (this.updateGirl !== undefined) {
       this.updateGirl(girl);
     }

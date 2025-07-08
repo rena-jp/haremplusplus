@@ -17,7 +17,8 @@ import {
   EquippedFilter,
   GirlSkillsFilter,
   TeamsFilter,
-  BulbFilter
+  BulbFilter,
+  GradeSkinFilter
 } from '../data/filters/filter-runtime';
 import {
   FilterHeader,
@@ -174,6 +175,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <BulbForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <GradeSkinForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -864,6 +870,63 @@ const BulbForm: React.FC<FormProps> = ({
       removeFilter={removeFilter}
       multipleChoices={true}
       filterId={BulbFilter.ID}
+    />
+  );
+};
+
+const GradeSkinForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      {
+        label: 'Owned skins',
+        description: 'Filter girls that have at least one owned skins'
+      },
+      {
+        label: 'Unowned skins',
+        description: 'Filter girls that have at least one unowned skins'
+      },
+      {
+        label: 'No skins',
+        description: 'Filter girls that have no skins'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    return values.every((v) => !v)
+      ? undefined
+      : new GradeSkinFilter(
+          values[0] === true,
+          values[1] === true,
+          values[2] === true
+        );
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    if (filter instanceof GradeSkinFilter) {
+      return [filter.hasOwnedSkins, filter.hasUnownedSkins, filter.noSkins];
+    } else {
+      return Array(3).fill(false);
+    }
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Skin"
+      description="Filter skin"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={true}
+      filterId={GradeSkinFilter.ID}
     />
   );
 };

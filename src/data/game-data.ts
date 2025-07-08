@@ -191,6 +191,10 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   upgrade_quests: number[];
   affection?: number;
   xp?: number;
+
+  preview: {
+    grade_skins_data: Array<GradeSkin>;
+  };
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;
@@ -386,6 +390,19 @@ export interface ArmorSkin {
   weight: NumberString; // WTF?!
   name: string;
   ico: string;
+}
+
+export interface GradeSkin {
+  num_order: number;
+  girl_grade_num: number;
+  grade_skin_name: string;
+  image_path: string;
+  ico_path: string;
+  release_date: string;
+  is_released: boolean;
+  is_owned: boolean;
+  shards_count: number;
+  is_selected: number;
 }
 
 /**

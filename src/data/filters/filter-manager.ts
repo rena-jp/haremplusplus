@@ -22,7 +22,8 @@ import {
   EquippedFilter,
   GirlSkillsFilter,
   TeamsFilter,
-  BulbFilter
+  BulbFilter,
+  GradeSkinFilter
 } from './filter-runtime';
 import { BlessingDefinition, Team } from '../data';
 import { optionsManager } from '../options';
@@ -47,6 +48,7 @@ export class FiltersManagerImpl implements FiltersManager {
     this.register(EquippedFilter.FACTORY);
     this.register(GirlSkillsFilter.FACTORY);
     this.register(BulbFilter.FACTORY);
+    this.register(GradeSkinFilter.FACTORY);
     this.register(MinimumPotentialFilter.FACTORY);
     this.register(TeamsFilter.FACTORY);
 

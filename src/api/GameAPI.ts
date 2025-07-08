@@ -14,7 +14,8 @@ import {
   GemsData,
   GirlEquipment,
   GirlsDataList,
-  GirlsSalaryList
+  GirlsSalaryList,
+  GradeSkin
 } from '../data/game-data';
 
 /**
@@ -124,6 +125,7 @@ export interface GameAPI {
    * or false if it was unsuccessful.
    */
   changePose(girl: CommonGirlData, pose: number): Promise<boolean>;
+  changeGradeSkin(girl: CommonGirlData, skin: GradeSkin): Promise<boolean>;
 
   /**
    * Set an updateGirl callback, to be invoked when a girl object is modified

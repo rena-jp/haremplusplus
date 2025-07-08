@@ -120,10 +120,10 @@ export async function toHaremData(
       element: getElement(girlData),
       missingAff: getMissingAff(girlData, rarity),
       currentAffection: girlData.own
-        ? girlData.Affection?.cur ?? girlData.affection!
+        ? (girlData.Affection?.cur ?? girlData.affection!)
         : 0,
       upgradeReady: girlData.can_upgrade === true,
-      currentGXP: girlData.own ? girlData.Xp?.cur ?? girlData.xp! : 0,
+      currentGXP: girlData.own ? (girlData.Xp?.cur ?? girlData.xp!) : 0,
       currentIcon: getCurrentIcon(girlData.avatar),
       salaryTime: girlData.own ? girlData.pay_time : undefined,
       salary: girlData.own ? girlData.salary : undefined,
@@ -252,7 +252,8 @@ export async function toHaremDataFromWaifuData(
       // fetish
       equipment: equipmentData,
       skillTiers: girlData.skill_tiers_info,
-      id_role: girlData.id_role
+      id_role: girlData.id_role,
+      gradeSkins: [...girlData.preview.grade_skins_data]
     };
 
     const commonGirl: CommonGirlData = {
@@ -526,7 +527,7 @@ function getMissingAff(girlData: GirlsDataEntry, rarity: Rarity): number {
     multiplier * getStarValue(Number(girlData.nb_grades))
   );
   const current = girlData.own
-    ? girlData.Affection?.cur ?? girlData.affection!
+    ? (girlData.Affection?.cur ?? girlData.affection!)
     : 0;
   return Math.max(0, target - current);
 }

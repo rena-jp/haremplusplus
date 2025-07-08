@@ -1,7 +1,7 @@
 import { TeamStats } from '../api/GameAPI';
 import { firstToUpper } from '../components/common';
 import { roundValue } from './common';
-import { isUnknownObject } from './game-data';
+import { GradeSkin, isUnknownObject } from './game-data';
 
 export enum Rarity {
   starting,
@@ -123,6 +123,8 @@ export interface BaseGirlData {
   equipment?: EquipmentData; // WIP Experiment
   skillTiers?: SkillTiers;
   id_role?: number | null;
+
+  gradeSkins?: Array<GradeSkin>;
 }
 
 export interface SkillTiers {

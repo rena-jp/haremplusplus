@@ -441,6 +441,71 @@ export class BulbFilter extends AbstractFilter {
   };
 }
 
+export class GradeSkinFilter extends AbstractFilter {
+  static ID = 'skins';
+  id = GradeSkinFilter.ID;
+
+  constructor(
+    public hasOwnedSkins: boolean,
+    public hasUnownedSkins: boolean,
+    public noSkins: boolean
+  ) {
+    super();
+    const list = Array<string>();
+    if (hasOwnedSkins) list.push('Owned');
+    if (hasUnownedSkins) list.push('Unowned');
+    if (noSkins) list.push('No');
+    this.label = `${list.join(', ')} skins`;
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    if (girl.gradeSkins == null) return false;
+
+    if (this.hasOwnedSkins) {
+      const hasOwnedSkins = girl.gradeSkins.some(
+        (e) => e.is_released && e.is_owned
+      );
+      if (hasOwnedSkins) return true;
+    }
+
+    if (this.hasUnownedSkins) {
+      const hasUnownedSkins = girl.gradeSkins.some(
+        (e) => e.is_released && !e.is_owned
+      );
+      if (hasUnownedSkins) return true;
+    }
+
+    if (this.noSkins) {
+      const noSkins = girl.gradeSkins.every((e) => !e.is_released);
+      if (noSkins) return true;
+    }
+
+    return false;
+  }
+
+  getParams() {
+    return {
+      hasOwnedSkins: this.hasOwnedSkins,
+      hasUnownedSkins: this.hasUnownedSkins,
+      noSkins: this.noSkins
+    };
+  }
+
+  static FACTORY: FilterFactory<GradeSkinFilter> = {
+    type: GradeSkinFilter.ID,
+    create: (config) => {
+      const hasOwnedSkins = booleanParam(config, 'hasOwnedSkins');
+      const hasUnownedSkins = booleanParam(config, 'hasUnownedSkins');
+      const noSkins = booleanParam(config, 'noSkins');
+      return new GradeSkinFilter(
+        hasOwnedSkins === true,
+        hasUnownedSkins === true,
+        noSkins === true
+      );
+    }
+  };
+}
+
 export class SourceFilter extends AbstractFilter {
   static ID = 'source-event';
   id = SourceFilter.ID;

@@ -24,6 +24,7 @@ import {
   GirlsDataList,
   GirlsSalaryEntry,
   GirlsSalaryList,
+  GradeSkin,
   Hero,
   isUnknownObject,
   MaxOutResult,
@@ -283,6 +284,7 @@ export class GameAPIImpl implements GameAPI {
       if (this.updateGirl !== undefined) {
         // While we wait for the result, update the image to what we expect is going to happen...
         girl.currentIcon = pose;
+        girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
         girl.poseImage = getPoseN(girl.poseImage, pose);
         girl.icon = getPoseN(girl.icon, pose);
         this.updateGirl(girl);
@@ -292,6 +294,7 @@ export class GameAPIImpl implements GameAPI {
 
         if (ChangePoseResult.is(result) && result.success) {
           girl.currentIcon = pose;
+          girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
           girl.poseImage = result.ava;
           girl.icon = result.ico;
           this.updateGirl(girl);
@@ -303,6 +306,61 @@ export class GameAPIImpl implements GameAPI {
       console.error('Error while trying to update the girls pose: ', error);
       return Promise.reject([
         'Error while trying to update the girls pose: ',
+        error
+      ]);
+    }
+
+    return false;
+  }
+
+  async changeGradeSkin(
+    girl: CommonGirlData,
+    skin: GradeSkin
+  ): Promise<boolean> {
+    if (!skin.is_released || !skin.is_owned) {
+      console.error(
+        "Tried to switch to a skin that isn't unlocked or doesn't exist"
+      );
+      return false;
+    }
+
+    const action = {
+      action: 'select_grade_skin',
+      id_girl: girl.id,
+      num_order: skin.num_order,
+      only_preview: 0
+    };
+    try {
+      // Send the change pose request to the server
+      const requestResult = this.postRequest(action);
+
+      if (this.updateGirl !== undefined) {
+        // While we wait for the result, update the image to what we expect is going to happen...
+        girl.currentIcon = 1;
+        girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
+        skin.is_selected = 1;
+        girl.poseImage = skin.image_path;
+        girl.icon = skin.ico_path;
+        this.updateGirl(girl);
+
+        // Then wait for the proper result, and refresh again if necessary
+        const result = await requestResult;
+
+        if (ChangePoseResult.is(result) && result.success) {
+          girl.currentIcon = 1;
+          girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
+          skin.is_selected = 1;
+          girl.poseImage = result.ava;
+          girl.icon = result.ico;
+          this.updateGirl(girl);
+
+          return result.success;
+        }
+      }
+    } catch (error) {
+      console.error('Error while trying to update the girls skin: ', error);
+      return Promise.reject([
+        'Error while trying to update the girls skin: ',
         error
       ]);
     }
