@@ -1,3 +1,7 @@
+## 0.21.0 - 2025-07-08
+
+- Add support for skins
+
 ## 0.20.6 - 2025-04-08
 
 - Update pose data
