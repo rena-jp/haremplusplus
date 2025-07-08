@@ -238,9 +238,7 @@ export async function loadDefaultFilter(): Promise<FilterConfig> {
       const storedFilter = await cache.match(new Request(FILTERS_REQUEST));
       if (storedFilter) {
         const defaultConfig = await storedFilter.json();
-        return defaultConfig.id && defaultConfig.type
-          ? defaultConfig
-          : undefined;
+        if (defaultConfig.id && defaultConfig.type) return defaultConfig;
       }
     }
   } catch (error) {
@@ -286,9 +284,9 @@ export async function loadDefaultSort(): Promise<SortConfig> {
       const storedSorter = await cache.match(new Request(SORT_REQUEST));
       if (storedSorter) {
         const defaultConfig = await storedSorter.json();
-        return defaultConfig.sort && defaultConfig.direction
-          ? defaultConfig
-          : undefined;
+        if (defaultConfig.sort && defaultConfig.direction) {
+          return defaultConfig;
+        }
       }
     }
   } catch (error) {
