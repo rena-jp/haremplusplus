@@ -1,3 +1,8 @@
+## 0.22.1 - 2025-07-09
+
+- Fix cache issue
+- Fix refresh button
+
 ## 0.22.0 - 2025-07-09
 
 - Add data collectors that collect from original harem and other players' harem
