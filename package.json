@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "deep-equal": "^2.2.3",
+    "idb": "^8.0.3",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-lazyload": "^3.2.1",

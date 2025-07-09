@@ -10,6 +10,8 @@ import { handleQuest } from './game-extension/quest-handler';
 import { handleTeams } from './game-extension/teams-handler';
 import { handleHaremLinks } from './game-extension/harem-links-handler';
 import { handleWaifu } from './game-extension/waifu-handler';
+import { handleCharacters } from './game-extension/characters-handler';
+import { handleProfile } from './game-extension/profile-handler';
 
 if (window.$ != null) {
   // For localhost testing, host will be localhost:3000
@@ -43,4 +45,11 @@ if (window.$ != null) {
   else if (window.location.pathname.startsWith('/waifu.html')) {
     handleWaifu();
   }
+  // Characters (Harem)
+  else if (window.location.pathname.startsWith('/characters')) {
+    handleCharacters();
+  }
+
+  // Other hero's characters (Profile)
+  handleProfile();
 }
