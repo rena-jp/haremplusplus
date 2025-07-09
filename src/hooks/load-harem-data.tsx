@@ -123,28 +123,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     }
 
     setLoadingData(true);
-
-    const data = await gameAPI.getGemsData(true);
-    persistGemsData(data);
-    setGemsCount(countGems(data));
-
-    loadBlessings(gameAPI)
-      .then((blessings) => {
-        try {
-          getBlessings(blessings);
-          return blessings;
-        } catch (e) {
-          return loadBlessings(gameAPI, true);
-        }
-      })
-      .then((blessings) => {
-        setGameBlessings(blessings);
-      })
-      .catch((reason) => {
-        console.warn('Failed to get game blessings: ', reason);
-      });
-
-    setLoadingData(false);
+    window.location.reload();
   }, [gameAPI]);
 
   // Immediately load the data, only once.
@@ -152,7 +131,13 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     // Note: in dev mode with Strict Mode enabled, the extension
     // will be rendered twice, which may cause this refresh() to
     // be invoked twice and cause an exception ("Already loading...")
-    refresh();
+    (async () => {
+      setLoadingData(true);
+      const data = await gameAPI.getGemsData(true);
+      persistGemsData(data);
+      setGemsCount(countGems(data));
+      setLoadingData(false);
+    })();
   }, []);
 
   useEffect(() => {
