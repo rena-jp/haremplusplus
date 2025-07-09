@@ -1,3 +1,8 @@
+## 0.22.0 - 2025-07-09
+
+- Add data collectors that collect from original harem and other players' harem
+- Improve Pachinko Filter
+
 ## 0.21.0 - 2025-07-08
 
 - Add support for skins
