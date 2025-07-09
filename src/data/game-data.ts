@@ -98,6 +98,38 @@ export type GameRarity =
   | 'legendary'
   | 'mythic';
 
+export type GirlSourceKey =
+  | 'harem'
+  | 'world'
+  | 'pachinko_epic'
+  | 'troll_tier'
+  | 'pachinko_mythic'
+  | 'pachinko_event'
+  | 'event_troll'
+  | 'event_dm'
+  | 'event_champion_girl'
+  | 'big_new_player_gifts'
+  | 'pop'
+  | 'path_of_glory'
+  | 'legendary_contest'
+  | 'cumback_contest'
+  | 'poa_step'
+  | 'seasonal_event'
+  | 'kinky'
+  | 'season_tier'
+  | 'pachinko_great'
+  | 'crazy_cumback_contest'
+  | 'path_of_valor'
+  | 'club_champion'
+  | 'champion'
+  | 'league'
+  | 'referral_system'
+  | 'boss_bang'
+  | 'double_penetration'
+  | 'pantheon'
+  | 'lively_scene'
+  | 'labyrinth';
+
 export interface CommonGirlsDataEntry {
   id_girl: NumberString;
   nb_grades: NumberString;
@@ -160,6 +192,7 @@ export interface CommonGirlsDataEntry {
   ref: RefEntry;
   source?: SourceEntry;
   source_selectors: SourceSelectorsEntry | [];
+  source_list?: Record<GirlSourceKey, any[]>;
   html: HtmlString;
   id_role?: number | null;
   is_owned?: boolean;

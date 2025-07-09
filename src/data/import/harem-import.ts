@@ -36,7 +36,8 @@ import {
   GirlsDataList,
   NumberString,
   OwnedGirlEntry,
-  ResonanceBonuses
+  ResonanceBonuses,
+  GirlSourceKey
 } from '../game-data';
 import girlsPosesHentaiHeroes from './poses_hh_hentai.json';
 import girlsPosesComixHarem from './poses_hh_comix.json';
@@ -475,17 +476,65 @@ function getCurrentIcon(avatar: string): number {
 }
 
 function getSources(girlData: GirlsDataEntry): EventSource[] {
+  const sources: Set<EventSource> = new Set();
+
+  const { source_list } = girlData;
+  if (source_list != null) {
+    const records: Partial<Record<GirlSourceKey, EventSource>> = {
+      world: 'Story',
+      pachinko_epic: 'EP',
+      troll_tier: 'Troll',
+      pachinko_mythic: 'MP',
+      pachinko_event: 'EvP',
+      event_troll: 'EventTroll',
+      event_dm: 'EventDM',
+      event_champion_girl: 'EventChampion',
+      big_new_player_gifts: 'NewPlayerGift',
+      pop: 'PoP',
+      path_of_glory: 'PoG',
+      legendary_contest: 'LC',
+      cumback_contest: 'CbC',
+      poa_step: 'PoA',
+      seasonal_event: 'SE',
+      kinky: 'KC',
+      season_tier: 'Season',
+      pachinko_great: 'GP',
+      crazy_cumback_contest: 'CCbC',
+      path_of_valor: 'PoV',
+      club_champion: 'CC',
+      champion: 'Champion',
+      league: 'League',
+      referral_system: 'ReferralSystem',
+      boss_bang: 'BB',
+      double_penetration: 'DP',
+      pantheon: 'Pantheon',
+      lively_scene: 'LS',
+      labyrinth: 'LL'
+    };
+    Object.keys(source_list).forEach((key) => {
+      if (key in records) {
+        const value = records[key as GirlSourceKey];
+        if (value != null) sources.add(value);
+      }
+    });
+  }
+
   if (Array.isArray(girlData.source_selectors)) {
     // Cross-promo girls have a [] source instead of an object
     // Alt. Lyrsa as well
-    return ['unknown'];
+    if (sources.size > 0) {
+      return [...sources.values()];
+    } else {
+      return ['unknown'];
+    }
   }
-  const sources: Set<EventSource> = new Set();
+
   if (girlData.rarity === 'mythic') {
     sources.add('MD');
     return [...sources.values()];
   }
-  if (girlData.source_selectors.pachinko) {
+
+  if (!source_list && girlData.source_selectors.pachinko) {
     if (Number(girlData.nb_grades) === 1) {
       sources.add('GP');
     } else {
@@ -568,6 +617,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
   }
   if (girlData.source_selectors.labyrinth) {
     sources.add('LL');
+  }
+  if (sources.has('unknown') && sources.size >= 2) {
+    sources.delete('unknown');
   }
   return [...sources.values()];
 }

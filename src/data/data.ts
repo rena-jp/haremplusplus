@@ -31,31 +31,41 @@ export namespace Rarities {
 }
 
 export type EventSource =
-  | 'MP' // Done
-  | 'EP' // Done
-  | 'GP' // Done
-  | 'LD' // Done
-  | 'ED' // Done
-  | 'MD' // Done
-  | 'LC' // Done
-  | 'CE' // Done
-  | 'OD' // Done
-  | 'PoP' // Done
-  | 'Story' // Done
-  | 'CC' // Done
-  | 'Champion' // Done
-  | 'BB' // Done
-  | 'Season' // Done
-  | 'PoA' // Done
-  | 'League' // Done
-  | 'Pantheon' // Done
-  | 'KC' // Done
-  | 'PoV' // Done
-  | 'SE' // Done (Probably. Hard to distinguish from CE; use same IDs)
-  | 'Anniv' // Done
-  | 'CbC' // Done
-  | 'DP' // Done
-  | 'LL'
+  | 'MP' // Mythic Pachinko
+  | 'EP' // Epic Pachinko
+  | 'GP' // Great Pachinko
+  | 'LD' // Legendary Days
+  | 'ED' // Epic Days
+  | 'MD' // Mythic Days
+  | 'LC' // Legendary Contest
+  | 'CE' // Classic Event
+  | 'OD' // Orgy Days
+  | 'PoP' // Places of Power
+  | 'Story' // World
+  | 'CC' // Club Champion
+  | 'Champion' // Champion
+  | 'BB' // Boss Bang
+  | 'Season' // Season
+  | 'PoA' // Path of Attraction
+  | 'League' // League
+  | 'Pantheon' // Pantheon
+  | 'KC' // Kinky Cumpetition
+  | 'PoV' // Path of Valor
+  | 'SE' // Seasonal Event
+  | 'Anniv' // Anniversary Event
+  | 'CbC' // Cumback Contest
+  | 'DP' // Double Penetration
+  | 'LL' // Love Labirinth
+  | 'EvP' // Event Pachinko
+  | 'PoG' // Path of Glory
+  | 'CCbC' // Crazy Cumback Contest
+  | 'LS' // Lively Scene
+  | 'Troll' // Troll (not event)
+  | 'EventDM' // Event Daily Mission
+  | 'EventTroll' // Event Troll
+  | 'EventChampion' // Event Champion
+  | 'NewPlayerGift' // Gift
+  | 'ReferralSystem' // Referral System
   | 'unknown';
 
 export function isEventSource(_value: string): _value is EventSource {
@@ -958,6 +968,26 @@ export function getSourceLabel(source: EventSource): string {
       return 'Double Penetration';
     case 'LL':
       return 'Love Labyrinth';
+    case 'EvP':
+      return 'Event Pachinko';
+    case 'PoG':
+      return 'Path of Glory';
+    case 'CCbC':
+      return 'Crazy Cumback Contest';
+    case 'LS':
+      return 'Lively Scene';
+    case 'Troll':
+      return 'Troll (not event)';
+    case 'EventDM':
+      return 'Event Daily Mission';
+    case 'EventTroll':
+      return 'Event Troll';
+    case 'EventChampion':
+      return 'Event Champion';
+    case 'NewPlayerGift':
+      return 'New Player Gift';
+    case 'ReferralSystem':
+      return 'Referral System';
     case 'unknown':
       return 'Unknown';
   }
