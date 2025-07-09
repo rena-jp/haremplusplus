@@ -77,10 +77,8 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   }, [girls]);
 
   // On initial rendering, start with a small batch of girls.
-  const [renderedGirls, setRenderedGirls] = useState<CommonGirlData[]>(
-    groupedGirls.slice(0, INITIAL_RENDERED_GIRLS)
-  );
-  const [initialRender, setInitialRender] = useState(true);
+  const [renderedGirls, setRenderedGirls] =
+    useState<CommonGirlData[]>(groupedGirls);
 
   const [salaryData, setSalaryData] = useState(gameAPI.getSalaryData());
 
@@ -127,51 +125,9 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     return () => gameAPI.removeSalaryDataListener(listener);
   }, [gameAPI]);
 
-  // Render a subset of the girls, until all of them are displayed
-  // When removing girls, it's okay to simply refresh immediately,
-  // as it's a lot faster to remove elements than to create them.
   useEffect(() => {
-    if (renderedGirls.length < groupedGirls.length) {
-      // Use a slightly longer delay between the first update and the next ones,
-      // to make sure the page has enough time to render a valid initial
-      // state before we stress is with a thousand items.
-      const delay = initialRender ? INITIAL_CYCLE_DELAY : CYCLE_DELAY; /* ms */
-      const timeout = setTimeout(() => {
-        setInitialRender(false);
-        setRenderedGirls(
-          groupedGirls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
-        );
-      }, delay);
-      return () => {
-        clearTimeout(timeout);
-      };
-    } else {
-      setRenderedGirls(girls);
-    }
-  }, [groupedGirls, renderedGirls]);
-
-  // Render a subset of the girls, until all of them are displayed
-  // When removing girls, it's okay to simply refresh immediately,
-  // as it's a lot faster to remove elements than to create them.
-  useEffect(() => {
-    if (renderedGirls.length < girls.length) {
-      // Use a slightly longer delay between the first update and the next ones,
-      // to make sure the page has enough time to render a valid initial
-      // state before we stress is with a thousand items.
-      const delay = initialRender ? INITIAL_CYCLE_DELAY : CYCLE_DELAY; /* ms */
-      const timeout = setTimeout(() => {
-        setInitialRender(false);
-        setRenderedGirls(
-          groupedGirls.slice(0, renderedGirls.length + GIRLS_PER_CYCLE)
-        );
-      }, delay);
-      return () => {
-        clearTimeout(timeout);
-      };
-    } else {
-      setRenderedGirls(girls);
-    }
-  }, [girls, renderedGirls]);
+    setRenderedGirls(girls);
+  }, [girls]);
 
   const ownedGirls = renderedGirls.filter((g) => g.own);
   const missingGirls = renderedGirls.filter((g) => !g.own);

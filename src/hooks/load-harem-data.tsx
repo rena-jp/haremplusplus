@@ -159,8 +159,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
   }, []);
 
   const updateResult = useCallback((haremData: HaremData) => {
-    const currentGirls = allGirls.current;
-    const updatedGirls = reconcileGirls(currentGirls, haremData.allGirls);
+    const updatedGirls = haremData.allGirls;
     setAllGirls(updatedGirls);
     setCurrentBlessings(haremData.activeBlessing);
     setUpcomingBlessings(haremData.nextBlessing);
