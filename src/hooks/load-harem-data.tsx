@@ -128,6 +128,22 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     persistGemsData(data);
     setGemsCount(countGems(data));
 
+    loadBlessings(gameAPI)
+      .then((blessings) => {
+        try {
+          getBlessings(blessings);
+          return blessings;
+        } catch (e) {
+          return loadBlessings(gameAPI, true);
+        }
+      })
+      .then((blessings) => {
+        setGameBlessings(blessings);
+      })
+      .catch((reason) => {
+        console.warn('Failed to get game blessings: ', reason);
+      });
+
     setLoadingData(false);
   }, [gameAPI]);
 
