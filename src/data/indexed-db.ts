@@ -56,6 +56,19 @@ export async function updateGirlsList(girlsList: any[]): Promise<void> {
   }
 }
 
+export async function loadGirlsList(): Promise<any[]> {
+  try {
+    const db = await openMyDB();
+    return await db.getAll(GIRLS_LIST_STORE.name);
+  } catch (error) {
+    console.warn(
+      'An error occurred while trying to load girlsList. Reason: ',
+      error
+    );
+  }
+  return [];
+}
+
 export async function updateGirl(girl: any): Promise<void> {
   try {
     const db = await openMyDB();
@@ -67,6 +80,19 @@ export async function updateGirl(girl: any): Promise<void> {
     );
     return Promise.reject(['Failed to update girl', error]);
   }
+}
+
+export async function loadGirls(): Promise<any[]> {
+  try {
+    const db = await openMyDB();
+    return await db.getAll(GIRL_STORE.name);
+  } catch (error) {
+    console.warn(
+      'An error occurred while trying to load girls. Reason: ',
+      error
+    );
+  }
+  return [];
 }
 
 export async function updateGirlsSource(girlsSource: any): Promise<void> {
@@ -88,4 +114,17 @@ export async function updateGirlsSource(girlsSource: any): Promise<void> {
     );
     return Promise.reject(['Failed to update girls source', error]);
   }
+}
+
+export async function loadGirlsSource(): Promise<any[]> {
+  try {
+    const db = await openMyDB();
+    return await db.getAll(GIRL_SOURCE_STORE.name);
+  } catch (error) {
+    console.warn(
+      'An error occurred while trying to load girls source. Reason: ',
+      error
+    );
+  }
+  return [];
 }

@@ -23,7 +23,8 @@ import {
   Equipment,
   EquipmentStats,
   EMPTY_STATS,
-  EquipmentResonance
+  EquipmentResonance,
+  Rarities
 } from '../data';
 import {
   ArmorData,
@@ -44,6 +45,7 @@ import affectionTable from './aff-table.json';
 import eventTypes from './events.json';
 import { ArmorCaracs } from '../game-data';
 import { getTotalEquipmentStats } from '../girls-equipment';
+import { loadGirlsList, loadGirlsSource } from '../indexed-db';
 
 export interface DataFormat {
   blessings: GameBlessingData;
@@ -187,6 +189,87 @@ export async function toHaremDataFromWaifuData(
     allGirlMap.set(+e.id, e);
   });
 
+  const girlsList = await loadGirlsList();
+  girlsList.forEach((girlData) => {
+    if (girlData.is_owned) return;
+
+    const oldData = allGirlMap.get(girlData.id_girl);
+    if (oldData != null && oldData.own) return;
+
+    const rarity = getRarity(girlData.rarity);
+    const quests = [...Array(girlData.nb_grades)].map((_, i) => {
+      return {
+        idQuest: girlData.upgrade_quests[i + 1],
+        done: false,
+        ready: false
+      };
+    });
+    const maxLevel = girlData.level_cap ?? +girlData.awakening_level * 50 + 250;
+    const ava = girlData.default_avatar.replace('ava0', 'avb0');
+    const baseCommonGirl: BaseGirlData = {
+      // Unknown
+      fullName: '',
+      bio: '',
+      sources: [],
+      variations: [],
+      location: '',
+      career: '',
+      hobby: '',
+      favoriteFood: '',
+      fetish: '',
+      // Old Data
+      ...oldData,
+      // Reset
+      equipment: undefined,
+      skillTiers: undefined,
+      level: undefined,
+      maxLevel: undefined,
+      recruited: undefined,
+      stars: 0,
+      missingAff: 0,
+      currentGXP: 0,
+      currentAffection: 0,
+      upgradeReady: false,
+      // New Data
+      id: String(girlData.id_girl),
+      name: girlData.name,
+      icon: girlData.ico,
+      icon0: get0Pose(girlData.ico),
+      poseImage: ava,
+      poseImage0: get0Pose(ava),
+      class: getClass(girlData.class),
+      own: false,
+      rarity: rarity,
+      maxStars: Number(girlData.nb_grades),
+      pose: getPoseFromValue(girlData.figure),
+      hairColor: getHairColor(girlData),
+      eyeColor: getEyeColor(girlData),
+      zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
+      element: getElement(girlData),
+      currentIcon: getCurrentIcon(girlData.default_avatar),
+      salaryTime: girlData.pay_time,
+      salary: girlData.salary,
+      salaryPerHour: girlData.salary_per_hour,
+      missingGems: countMissingGems(rarity, maxLevel),
+      quests,
+      id_role: girlData.id_role,
+      gradeSkins: girlData.grade_skins_data,
+      birthday: girlData.anniversary,
+      shards: girlData.shards ?? 0
+    };
+
+    const commonGirl: CommonGirlData = {
+      ...baseCommonGirl,
+      stats: {
+        hardcore: girlData.carac1 / 10,
+        charm: girlData.carac2 / 10,
+        knowhow: girlData.carac3 / 10
+      }
+    };
+
+    allGirlMap.set(+commonGirl.id, commonGirl);
+  });
+
   waifuGirls.forEach((girlData) => {
     const rarity = getRarity(girlData.rarity);
     const currentAffection = +(girlData.Affection?.cur ?? girlData.affection!);
@@ -268,6 +351,25 @@ export async function toHaremDataFromWaifuData(
 
     allGirlMap.set(+girlData.id_girl, commonGirl);
   });
+
+  const girlsSource = await loadGirlsSource();
+  girlsSource.forEach((girlSource) => {
+    const oldData = allGirlMap.get(girlSource.id_girl);
+    if (oldData != null) {
+      const sources = getSources({
+        rarity: Rarities.toString(oldData.rarity),
+        nb_grades: oldData.maxStars,
+        ...girlSource
+      });
+      if (sources.length >= oldData.sources.length) {
+        allGirlMap.set(girlSource.id_girl, {
+          ...oldData,
+          sources
+        });
+      }
+    }
+  });
+
   return {
     allGirls: [...allGirlMap.values()],
     activeBlessing: currentBlessings,

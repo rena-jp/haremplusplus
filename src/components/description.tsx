@@ -265,7 +265,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             upcomingBlessing={upcomingBlessing}
           />
         )}
-        {girl.skillTiers?.[5] != null && (
+        {girl.maxStars >= 5 && (
           <>
             <SkillIcon element={girl.element} />
             <LabyrinthSkillIcon element={girl.element} />
