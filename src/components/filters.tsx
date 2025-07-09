@@ -579,6 +579,16 @@ const SourceForm: React.FC<FormProps> = ({
         label: 'Epic',
         description: 'Filters girls from the Epic Pachinko',
         source: 'EP'
+      },
+      {
+        label: 'Great',
+        description: 'Filters girls from the Great Pachinko',
+        source: 'GP'
+      },
+      {
+        label: 'Event',
+        description: 'Filters girls from the Event Pachinko',
+        source: 'EvP'
       }
     ],
     []
