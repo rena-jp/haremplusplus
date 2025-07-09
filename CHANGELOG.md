@@ -1,3 +1,7 @@
+## 0.22.2 - 2025-07-09
+
+- Change refresh button to reload due to a cache inconsistency issue
+
 ## 0.22.1 - 2025-07-09
 
 - Fix cache issue
