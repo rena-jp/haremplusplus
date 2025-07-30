@@ -1007,6 +1007,47 @@ export namespace MaxOutResult {
     );
   }
 }
+export interface FullMaxOutAffectionResult extends RequestResult {
+  selection: { [key: string]: number };
+  fill_amount: number;
+  needed_affection: number;
+  needed_currency: { hc: number; sc: number };
+  excess: number;
+  success: true;
+}
+export interface FullMaxOutAffectionConfirmResult extends RequestResult {
+  girl: unknown;
+  hero: { currencies: Currencies };
+  selection: { [key: string]: number };
+  success: true;
+}
+export namespace FullMaxOutAffectionResult {
+  export function is(object: unknown): object is FullMaxOutAffectionResult {
+    if (isUnknownObject(object)) {
+      return (
+        object.success === true &&
+        typeof object.excess === 'number' &&
+        isUnknownObject(object.selection) &&
+        typeof object.fill_amount === 'number' &&
+        typeof object.needed_affection === 'number' &&
+        isUnknownObject(object.needed_currency) &&
+        typeof object.needed_currency.hc === 'number' &&
+        typeof object.needed_currency.sc === 'number'
+      );
+    }
+    return false;
+  }
+  export function isConfirm(
+    object: unknown
+  ): object is FullMaxOutAffectionConfirmResult {
+    return (
+      isUnknownObject(object) &&
+      isUnknownObject(object.hero) &&
+      isUnknownObject(object.selection) &&
+      object.success === true
+    );
+  }
+}
 
 export function fixBlessing(blessing: GameBlessingData): GameBlessingData {
   const active = blessing.active.map(toAbsoluteTime);
