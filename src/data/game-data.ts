@@ -941,7 +941,9 @@ export function toQuestData(
     // For some reason, the scene picture is not directly part of the data when the scene
     // has already been unlocked (past scenes). We need to rebuild it...
     // In this case, there is also no cost and no portrait.
-    const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${data[2].split('?')[0]}.jpg`;
+    const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${
+      data[2].split('?')[0]
+    }.jpg`;
     return {
       girlId,
       questId: gameQuestStep.id,
@@ -1004,6 +1006,47 @@ export namespace MaxOutResult {
       isUnknownObject(object) &&
       isUnknownObject(object.girl_data) &&
       MaxOutResult.is(object)
+    );
+  }
+}
+export interface FullMaxOutAffectionResult extends RequestResult {
+  selection: { [key: string]: number };
+  fill_amount: number;
+  needed_affection: number;
+  needed_currency: { hc: number; sc: number };
+  excess: number;
+  success: true;
+}
+export interface FullMaxOutAffectionConfirmResult extends RequestResult {
+  girl: unknown;
+  hero: { currencies: Currencies };
+  selection: { [key: string]: number };
+  success: true;
+}
+export namespace FullMaxOutAffectionResult {
+  export function is(object: unknown): object is FullMaxOutAffectionResult {
+    if (isUnknownObject(object)) {
+      return (
+        object.success === true &&
+        typeof object.excess === 'number' &&
+        isUnknownObject(object.selection) &&
+        typeof object.fill_amount === 'number' &&
+        typeof object.needed_affection === 'number' &&
+        isUnknownObject(object.needed_currency) &&
+        typeof object.needed_currency.hc === 'number' &&
+        typeof object.needed_currency.sc === 'number'
+      );
+    }
+    return false;
+  }
+  export function isConfirm(
+    object: unknown
+  ): object is FullMaxOutAffectionConfirmResult {
+    return (
+      isUnknownObject(object) &&
+      isUnknownObject(object.hero) &&
+      isUnknownObject(object.selection) &&
+      object.success === true
     );
   }
 }
