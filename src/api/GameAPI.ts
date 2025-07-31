@@ -8,6 +8,7 @@ import {
   Team
 } from '../data/data';
 import {
+  FullMaxOutAffectionResult,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -93,6 +94,23 @@ export interface GameAPI {
    * @param questId The id of the upgrade quest
    */
   upgrade(girl: CommonGirlData, questId: number): Promise<boolean>;
+  /**
+   * Request the full max out of affection for the selected girl, needs to be passed to the confirmFullMaxOutAffection
+   * @param girl The girl to max out
+   * @returns A promise resolving to the result of the full max out request,
+   */
+  requestFullMaxOutAffection(
+    girl: CommonGirlData
+  ): Promise<FullMaxOutAffectionResult>;
+  /**
+   * Confirms the full max out of affection for the selected girl. Items & Money from the request will be consumed.
+   * @param girl the girl to confirm the full max out of affection for
+   * @param request previoous request from requestFullMaxOutAffection
+   */
+  confirmFullMaxOutAffection(
+    girl: CommonGirlData,
+    request: FullMaxOutAffectionResult
+  ): Promise<MaxOutItems>;
   /**
    * Collect salary for the selected girl. If the action succeeds,
    * the callback will be invoked with an updated version of the girls data.
