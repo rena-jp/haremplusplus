@@ -1051,6 +1051,48 @@ export namespace FullMaxOutAffectionResult {
   }
 }
 
+export interface FullMaxOutXpResult extends RequestResult {
+  excess: number;
+  needed_gems: number;
+  selection: { [key: string]: number };
+  success: true;
+  target_awakening: number;
+  target_level: number;
+  total_experience: number;
+}
+export interface FullMaxOutXpConfirmResult extends RequestResult {
+  girl: unknown;
+  hero: { gems: GemsData };
+  selection: { [key: string]: number };
+  success: true;
+}
+export namespace FullMaxOutXpResult {
+  export function is(object: unknown): object is FullMaxOutXpResult {
+    if (isUnknownObject(object)) {
+      return (
+        object.success === true &&
+        typeof object.excess === 'number' &&
+        typeof object.needed_gems === 'number' &&
+        isUnknownObject(object.selection) &&
+        typeof object.target_awakening === 'number' &&
+        typeof object.target_level === 'number' &&
+        typeof object.total_experience === 'number'
+      );
+    }
+    return false;
+  }
+  export function isConfirm(
+    object: unknown
+  ): object is FullMaxOutXpConfirmResult {
+    return (
+      isUnknownObject(object) &&
+      isUnknownObject(object.hero) &&
+      isUnknownObject(object.selection) &&
+      object.success === true
+    );
+  }
+}
+
 export function fixBlessing(blessing: GameBlessingData): GameBlessingData {
   const active = blessing.active.map(toAbsoluteTime);
   const upcoming = blessing.upcoming.map(toAbsoluteTime);
