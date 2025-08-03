@@ -12,7 +12,6 @@ import {
   ChangePoseResult,
   EquipActionResult,
   fixBlessing,
-  FullMaxOutAffectionConfirmResult,
   FullMaxOutAffectionResult,
   GameBlessingData,
   GameInventory,
@@ -955,12 +954,11 @@ export class GameAPIImpl implements GameAPI {
   ): Promise<MaxOutItems> {
     const params = {
       action: 'max_out_girl_affection',
-      id_girl: girl.id,
-      pay_HC: 'hard_currency'
+      id_girl: girl.id
     };
     const result = await this.postRequest(params);
     if (FullMaxOutAffectionResult.isConfirm(result)) {
-      const items = toFullMaxOutItems(result, request);
+      const items = fromFulltoMaxOutItems(request);
       this.updateGirlAffStats(girl, request.fill_amount);
       if (this.updateGirl) {
         this.updateGirl(girl);
@@ -1480,16 +1478,15 @@ function toMaxOutItems(result: MaxOutResult): MaxOutItems {
   };
 }
 
-function toFullMaxOutItems(
-  result: FullMaxOutAffectionConfirmResult,
+export function fromFulltoMaxOutItems(
   request: FullMaxOutAffectionResult
 ): MaxOutItems {
   const excess = request.excess;
-  const selection: ItemSelection[] = Object.keys(result.selection).map(
+  const selection: ItemSelection[] = Object.keys(request.selection).map(
     (key) => {
       return {
         id: Number(key),
-        count: result.selection[key]
+        count: request.selection[key]
       };
     }
   );
