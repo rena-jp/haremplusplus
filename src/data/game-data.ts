@@ -1016,10 +1016,12 @@ export interface FullMaxOutAffectionResult extends RequestResult {
   needed_currency: { hc: number; sc: number };
   excess: number;
   success: true;
+  target_grade: number;
 }
 export interface FullMaxOutAffectionConfirmResult extends RequestResult {
   girl: unknown;
   hero: { currencies: Currencies };
+  quest: string;
   selection: { [key: string]: number };
   success: true;
 }
@@ -1034,7 +1036,8 @@ export namespace FullMaxOutAffectionResult {
         typeof object.needed_affection === 'number' &&
         isUnknownObject(object.needed_currency) &&
         typeof object.needed_currency.hc === 'number' &&
-        typeof object.needed_currency.sc === 'number'
+        typeof object.needed_currency.sc === 'number' &&
+        typeof object.target_grade === 'number'
       );
     }
     return false;
