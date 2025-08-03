@@ -949,6 +949,7 @@ export class GameAPIImpl implements GameAPI {
     );
   }
   async confirmFullMaxOutAffection(
+    // not yet perfectly implemented for the visual update
     girl: CommonGirlData,
     request: FullMaxOutAffectionResult
   ): Promise<MaxOutItems> {
@@ -959,6 +960,7 @@ export class GameAPIImpl implements GameAPI {
     const result = await this.postRequest(params);
     if (FullMaxOutAffectionResult.isConfirm(result)) {
       const items = fromFulltoMaxOutItems(request);
+      //not the correcto way to update
       this.updateGirlAffStats(girl, request.fill_amount);
       if (this.updateGirl) {
         this.updateGirl(girl);

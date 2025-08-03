@@ -30,7 +30,8 @@ import {
   getDomain,
   ProgressBar,
   CloseButton,
-  GemIcon
+  GemIcon,
+  formatCost
 } from './common';
 import { SimpleGirlTile } from './girl';
 import Popup from 'reactjs-popup';
@@ -38,6 +39,8 @@ import { useGemsStats } from '../hooks/girl-gems-hooks';
 import { OptionsContext } from '../data/options-context';
 import { SceneViewer } from './scenes';
 import { getDocumentHref } from '../migration';
+import { FullMaxOutAffectionResult } from '../data/game-data';
+import { fromFulltoMaxOutItems } from '../game-extension/GameAPIImpl';
 
 export type UpgradePage = 'books' | 'gifts';
 
@@ -199,12 +202,20 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
                 />
               ) : null}
               {page === 'gifts' ? (
-                <MaxAffection
-                  girl={currentGirl}
-                  gameAPI={gameAPI}
-                  items={items}
-                  consumeItems={consumeItems}
-                />
+                <>
+                  <MaxAffection
+                    girl={currentGirl}
+                    gameAPI={gameAPI}
+                    items={items}
+                    consumeItems={consumeItems}
+                  />
+                  <FullMaxAffection
+                    girl={currentGirl}
+                    gameAPI={gameAPI}
+                    items={items}
+                    consumeItems={consumeItems}
+                  />
+                </>
               ) : null}
             </div>
           </>
@@ -714,6 +725,49 @@ export const MaxAffection: React.FC<MaxAffProps> = ({
   );
 };
 
+export interface FullMaxAffectionProps {
+  girl: CommonGirlData;
+  gameAPI: GameAPI;
+  items: ItemEntry<Item>[];
+  consumeItems(items: ItemEntry<Item>[]): void;
+}
+
+export const FullMaxAffection: React.FC<FullMaxAffectionProps> = ({
+  girl,
+  gameAPI,
+  items,
+  consumeItems
+}) => {
+  const canFullMaxUpgrade = girl.stars < girl.maxStars && !girl.upgradeReady;
+  return (
+    <Popup
+      modal
+      trigger={
+        <button
+          className="hh-action-button full-max"
+          disabled={!canFullMaxUpgrade}
+        >
+          Full Max
+        </button>
+      }
+    >
+      {
+        ((close: () => void) => (
+          <FullMaxing
+            gameAPI={gameAPI}
+            girl={girl}
+            items={items}
+            close={close}
+            type="gift"
+            consumeItems={consumeItems}
+          />
+          // eslint-disable-next-line
+        )) as any
+      }
+    </Popup>
+  );
+};
+
 interface MaxItemsProps {
   girl: CommonGirlData;
   gameAPI: GameAPI;
@@ -837,6 +891,157 @@ const MaxItems: React.FC<MaxItemsProps> = ({
             >
               Yes
             </button>
+            <button className="hh-action-button cancel-max-out" onClick={close}>
+              No
+            </button>
+          </div>
+        </>
+      ) : null}
+      {!ready ? <p>Loading items...</p> : null}
+    </div>
+  );
+};
+
+interface FullMaxingProps {
+  girl: CommonGirlData;
+  gameAPI: GameAPI;
+  items: ItemEntry<Item>[];
+  type: 'book' | 'gift'; // Only gift implemented for now
+  close(): void;
+  consumeItems(items: ItemEntry<Item>[]): void;
+}
+
+const FullMaxing: React.FC<FullMaxingProps> = ({
+  girl,
+  gameAPI,
+  items,
+  type,
+  close,
+  consumeItems
+}) => {
+  const [usedItems, setUsedItems] = useState<ItemEntry<Item>[] | undefined>(
+    undefined
+  );
+  const [ready, setReady] = useState(false);
+  const [request, setRequest] = useState<FullMaxOutAffectionResult | undefined>(
+    undefined
+  );
+
+  const stat = type === 'book' ? 'experience' : 'affection';
+
+  useEffect(() => {
+    async function requestFullItems(): Promise<void> {
+      try {
+        const requestResponse = await gameAPI.requestFullMaxOutAffection(girl); // For now only Affection
+        setRequest(requestResponse);
+        const itemsInfo = fromFulltoMaxOutItems(requestResponse);
+        if (itemsInfo.selection.length === 0) {
+          setUsedItems([]);
+        }
+        const newUsedItems = [];
+        for (const item of itemsInfo.selection) {
+          const itemEntry = items.find((i) => i.item.itemId === item.id);
+          if (itemEntry === undefined) {
+            throw new Error(
+              'Failed to find item in current inventory: ' +
+                JSON.stringify(item)
+            );
+          }
+          const useEntry = {
+            item: itemEntry?.item,
+            count: item.count
+          };
+          newUsedItems.push(useEntry);
+        }
+        setUsedItems(newUsedItems);
+      } catch (error) {
+        console.error('Error: ', error);
+      }
+      setReady(true);
+    }
+    requestFullItems();
+  }, [girl, items, gameAPI]);
+
+  const confirm = useCallback(() => {
+    async function confirmFullMaxOut() {
+      console.log(request);
+      if (request === undefined) {
+        console.error('No request data available for full max out.');
+        return;
+      }
+      const appliedItems = await gameAPI.confirmFullMaxOutAffection(
+        girl,
+        request
+      );
+      const consumedItems: ItemEntry<Item>[] = [];
+      for (const item of appliedItems.selection) {
+        const itemEntry = items.find((i) => i.item.itemId === item.id);
+        if (itemEntry === undefined) {
+          throw new Error(
+            'Failed to find item in current inventory: ' + JSON.stringify(item)
+          );
+        }
+        const useEntry = {
+          item: itemEntry?.item,
+          count: item.count
+        };
+        consumedItems.push(useEntry);
+      }
+      consumeItems(consumedItems);
+    }
+    confirmFullMaxOut();
+    close();
+  }, [request]);
+
+  return (
+    <div className="qh-popup full-max-content-popup">
+      <CloseButton close={close} />
+      {ready && (usedItems === undefined || request === undefined) ? (
+        <p>An error occurred.</p>
+      ) : null}
+      {ready && usedItems !== undefined && request !== undefined ? (
+        <>
+          <h2>
+            {request!.excess > 0 ? (
+              <>Maxing your {stat} will cost you:</>
+            ) : type === 'gift' ? (
+              request.target_grade < girl.maxStars ? (
+                <span style={{ color: 'red' }}>
+                  You will only go up to {request?.target_grade} for {stat}
+                </span>
+              ) : (
+                <>Maxing your {stat} will cost you:</>
+              )
+            ) : (
+              <>Maxing your {stat} will cost you:</>
+            )}
+          </h2>
+          <ItemsList
+            items={usedItems}
+            selectedItem={undefined}
+            selectItem={() => {
+              /* No selection */
+            }}
+          />
+          {request.excess > 0 ? (
+            <p className="note">
+              Note: <span className="value">{request.excess}</span> {stat} will
+              be lost using these items!
+            </p>
+          ) : null}
+          <div className="max-out-actions">
+            <span>Do you want to proceed?</span>
+            {type === 'gift' ? (
+              <button
+                className="hh-game-action confirm-full-max-out-affection"
+                onClick={confirm}
+              >
+                {formatCost(request.needed_currency.sc)}
+                <div className="currency-icon"></div>
+              </button>
+            ) : (
+              <span>Not yet implemented</span>
+            )}
             <button className="hh-action-button cancel-max-out" onClick={close}>
               No
             </button>

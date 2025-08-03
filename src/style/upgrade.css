@@ -326,7 +326,7 @@ button.upgrade.overlay:active {
   box-shadow: none;
 }
 
-.max-content-popup {
+.max-content-popup, .full-max-content-popup {
   display: flex;
   flex-direction: column;
   font-size: 1.2em;
@@ -338,19 +338,36 @@ button.upgrade.overlay:active {
   padding-bottom: 0.6em;
 }
 
-.max-content-popup > .qh-inventory {
+.max-content-popup > .qh-inventory, .full-max-content-popup > .qh-inventory {
   padding-top: 1em;
   flex-grow: 1;
 }
 
-.max-content-popup > .note {
+.max-content-popup > .note, .full-max-content-popup > .note {
   border-block: 1px solid #8e0333;
   text-align: center;
   padding-block: 1em;
 }
 
-.max-content-popup > .note > .value {
+.max-content-popup > .note > .value , .full-max-content-popup > .note > .value {
   color: #ffb918;
+}
+
+.full-max-content-popup > .max-out-actions > .confirm-full-max-out-affection{
+    align-items: center;
+    -moz-column-gap: .5em;
+    column-gap: .5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-inline: 1em;
+}
+
+.full-max-content-popup > .max-out-actions > .confirm-full-max-out-affection > .currency-icon {
+    background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
+    background-size: cover;
+    height: 1.5em;
+    width: 1.5em;
 }
 
 .max-out-actions {
