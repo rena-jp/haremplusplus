@@ -11,6 +11,7 @@ import {
 } from '../data/data';
 import {
   fixBlessing,
+  FullMaxOutAffectionResult,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -355,6 +356,55 @@ export class MockGameAPI implements GameAPI {
       true,
       200
     );
+  }
+  async requestFullMaxOutAffection(
+    girl: CommonGirlData
+  ): Promise<FullMaxOutAffectionResult> {
+    if (girl.stars === girl.maxStars) {
+      throw new Error('Girl Affection is already maxed out');
+    }
+    return this.mockRequest(() => {
+      const result: FullMaxOutAffectionResult = {
+        target_grade: 6,
+        needed_currency: { hc: 1017, sc: 175050000 },
+        needed_affection: 437625,
+        fill_amount: 437625,
+        selection: {
+          '184': 25,
+          '183': 63,
+          '182': 72,
+          '181': 71,
+          '27': 201,
+          '24': 284,
+          '21': 11,
+          '26': 2
+        },
+        excess: 95,
+        success: true
+      };
+      return result;
+    });
+  }
+  async confirmFullMaxOutAffection(
+    girl: CommonGirlData,
+    request: FullMaxOutAffectionResult
+  ): Promise<MaxOutItems> {
+    if (!request || !request.success) {
+      throw new Error('Invalid request for full max out affection');
+    }
+    console.log('Full Max Out Affection', girl.name);
+    return this.mockRequest(() => {
+      const result: MaxOutItems = {
+        excess: 12,
+        selection: [
+          {
+            id: 183,
+            count: 30
+          }
+        ]
+      };
+      return result;
+    });
   }
 
   async awaken(girl: CommonGirlData): Promise<void> {
