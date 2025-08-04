@@ -964,7 +964,6 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
 
   const confirm = useCallback(() => {
     async function confirmFullMaxOut() {
-      console.log(request);
       if (request === undefined) {
         console.error('No request data available for full max out.');
         return;
