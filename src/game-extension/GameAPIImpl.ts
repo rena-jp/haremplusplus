@@ -960,8 +960,36 @@ export class GameAPIImpl implements GameAPI {
     const result = await this.postRequest(params);
     if (FullMaxOutAffectionResult.isConfirm(result)) {
       const items = fromFulltoMaxOutItems(request);
-      //not the correcto way to update
-      this.updateGirlAffStats(girl, request.fill_amount);
+      //update
+      this.getHero().update(
+        'soft_currency',
+        result.hero.currencies.soft_currency,
+        false
+      );
+      girl.stars = result.girl.graded;
+      girl.currentIcon = girl.stars;
+      girl.poseImage = getPoseN(girl.poseImage, girl.stars);
+      girl.icon = getPoseN(girl.icon, girl.stars);
+      girl.upgradeReady = false;
+      girl.currentAffection = result.girl.affection;
+      const questMatch = result.quest.match(/\/quest\/(\d+)/);
+      const questId = questMatch ? questMatch[1] : '';
+      if (!questMatch) {
+        throw new Error(
+          'Failed to parse quest ID from the result: ' + result.quest
+        );
+      }
+      const questIdNum = parseInt(questId, 10);
+      for (let i = 1; i < girl.stars; i++) {
+        if (!girl.quests[i].done) {
+          girl.quests[i] = {
+            idQuest: questIdNum - (girl.stars - 1 - i), //guessing by substracting
+            ready: false,
+            done: true
+          };
+        }
+      }
+
       if (this.updateGirl) {
         this.updateGirl(girl);
       }

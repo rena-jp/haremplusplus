@@ -1019,9 +1019,9 @@ export interface FullMaxOutAffectionResult extends RequestResult {
   target_grade: number;
 }
 export interface FullMaxOutAffectionConfirmResult extends RequestResult {
-  girl: unknown;
+  girl: { affection: number; fav_graded?: number; graded: number }; //unsure of fav_graded but shouldn't be useful
   hero: { currencies: Currencies };
-  quest: string;
+  quest: string; // gives the url to the quest
   selection: { [key: string]: number };
   success: true;
 }
