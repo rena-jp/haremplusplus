@@ -824,7 +824,7 @@ const MaxItems: React.FC<MaxItemsProps> = ({
       setReady(true);
     }
     requestItems();
-  }, [gameAPI, girl, items, type]);
+  }, []);
 
   const confirm = useCallback(() => {
     async function confirmMaxOut() {
@@ -847,7 +847,7 @@ const MaxItems: React.FC<MaxItemsProps> = ({
     }
     confirmMaxOut();
     close();
-  }, [gameAPI, girl, type, items, consumeItems, close]);
+  }, []);
 
   const message =
     excess < 0 ? (
