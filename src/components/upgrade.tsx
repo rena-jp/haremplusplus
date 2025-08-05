@@ -24,7 +24,12 @@ import {
   getMissingAffection,
   useAffectionStats
 } from '../hooks/girl-aff-hooks';
-import { getAwakeningThreshold, useXpStats } from '../hooks/girl-xp-hooks';
+import {
+  getAwakeningThreshold,
+  getMissingGXP,
+  getMissingGXPToCap,
+  useXpStats
+} from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
 import {
@@ -757,13 +762,15 @@ export const FullMaxAffection: React.FC<FullMaxAffectionProps> = ({
   consumeItems
 }) => {
   const totalValueNonMythic = items
-    .filter((item) => item.item.rarity !== Rarity.mythic)
+    .filter(
+      (item) => item.item.rarity !== Rarity.mythic && item.item.type === 'gift'
+    )
     .map((item) => getValue(item.item) * item.count)
     .reduce((a, b) => a + b, 0);
   const canFullMaxUpgrade =
     girl.stars < girl.maxStars &&
     !girl.upgradeReady &&
-    getMissingAffection(girl, girl.stars + 1) <= totalValueNonMythic; // use Max instead
+    getMissingAffection(girl, girl.stars + 1) < totalValueNonMythic; // use Max instead
   // Handle Money
   return (
     <Popup
@@ -824,7 +831,18 @@ export const FullMaxXP: React.FC<FullMaxXPProps> = ({
     .filter((ownedGirl) => ownedGirl.level! >= (girl.maxLevel ?? 0)).length;
   const canAwaken =
     currentGirls >= minGirlsToAwaken && gemsStats.gemsToNextCap <= currentGems;
-  const canFullMaxXP = canAwaken; // Grey it if they can't awaken to next level, if they want to use it instead use Max
+
+  const totalValueNonMythic = items
+    .filter(
+      (item) => item.item.rarity !== Rarity.mythic && item.item.type === 'book'
+    )
+    .map((item) => getValue(item.item) * item.count)
+    .reduce((a, b) => a + b, 0);
+  // Grey it if they can't awaken to next level, if they want to use it instead use Max
+  const canFullMaxXP =
+    canAwaken &&
+    girl.maxLevel &&
+    getMissingGXPToCap(girl, girl.maxLevel) < totalValueNonMythic;
   return (
     <Popup
       modal
