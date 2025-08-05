@@ -1033,6 +1033,9 @@ export class GameAPIImpl implements GameAPI {
       girl.level = request.target_level;
       girl.maxLevel = 250 + request.target_awakening * 50;
       consumeGems(girl.element, request.needed_gems);
+      if (this.updateGirl) {
+        this.updateGirl(girl);
+      }
       return items;
     }
     throw new Error(
