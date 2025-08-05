@@ -7,7 +7,8 @@ import {
   getRarity,
   Gift,
   QuestData,
-  Team
+  Team,
+  Element
 } from '../data/data';
 import {
   fixBlessing,
@@ -428,7 +429,8 @@ export class MockGameAPI implements GameAPI {
 
   async confirmFullMaxOutXp(
     girl: CommonGirlData,
-    request: FullMaxOutXpResult
+    request: FullMaxOutXpResult,
+    _consumeGems: (element: Element, gems: number) => void
   ): Promise<MaxOutItems> {
     if (!request || !request.success) {
       throw new Error('Invalid request for full max out affection');

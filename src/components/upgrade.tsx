@@ -39,7 +39,11 @@ import { useGemsStats } from '../hooks/girl-gems-hooks';
 import { OptionsContext } from '../data/options-context';
 import { SceneViewer } from './scenes';
 import { getDocumentHref } from '../migration';
-import { FullMaxOutAffectionResult } from '../data/game-data';
+import {
+  FullMaxOutAffectionResult,
+  FullMaxOutResult,
+  FullMaxOutXpResult
+} from '../data/game-data';
 import { fromFulltoMaxOutItems } from '../game-extension/GameAPIImpl';
 
 export type UpgradePage = 'books' | 'gifts';
@@ -194,12 +198,23 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
                 Use
               </button>
               {page === 'books' ? (
-                <MaxXP
-                  girl={currentGirl}
-                  gameAPI={gameAPI}
-                  items={items}
-                  consumeItems={consumeItems}
-                />
+                <>
+                  <MaxXP
+                    girl={currentGirl}
+                    gameAPI={gameAPI}
+                    items={items}
+                    consumeItems={consumeItems}
+                  />
+                  <FullMaxXP
+                    girl={currentGirl}
+                    allGirls={allGirls}
+                    gameAPI={gameAPI}
+                    items={items}
+                    gemsCount={gemsCount}
+                    consumeItems={consumeItems}
+                    consumeGems={consumeGems}
+                  />
+                </>
               ) : null}
               {page === 'gifts' ? (
                 <>
@@ -768,6 +783,63 @@ export const FullMaxAffection: React.FC<FullMaxAffectionProps> = ({
   );
 };
 
+export interface FullMaxXPProps {
+  girl: CommonGirlData;
+  allGirls: CommonGirlData[];
+  gameAPI: GameAPI;
+  items: ItemEntry<Item>[];
+  gemsCount: Map<Element, number>;
+  consumeItems(items: ItemEntry<Item>[]): void;
+  consumeGems(element: Element, gems: number): void;
+}
+
+export const FullMaxXP: React.FC<FullMaxXPProps> = ({
+  girl,
+  allGirls,
+  gameAPI,
+  items,
+  gemsCount,
+  consumeItems,
+  consumeGems
+}) => {
+  const gemsStats = useGemsStats(girl);
+  const currentGems = gemsCount.get(girl.element) ?? 0;
+  const minGirlsToAwaken =
+    girl.level === undefined || girl.level > 700
+      ? 0
+      : getAwakeningThreshold(girl.maxLevel ?? 0);
+  const currentGirls = allGirls
+    .filter((g) => g.own)
+    .filter((ownedGirl) => ownedGirl.level! >= (girl.maxLevel ?? 0)).length;
+  const canAwaken =
+    currentGirls >= minGirlsToAwaken && gemsStats.gemsToNextCap <= currentGems;
+  const canFullMaxXP = // Either car awaken if maxed, or can use items to max out XP
+    (girl.level !== undefined && girl.level !== girl.maxLevel) || canAwaken;
+  return (
+    <Popup
+      modal
+      trigger={
+        <button className="hh-action-button full-max" disabled={!canFullMaxXP}>
+          Full Max
+        </button>
+      }
+    >
+      {
+        ((close: () => void) => (
+          <FullMaxing
+            gameAPI={gameAPI}
+            girl={girl}
+            items={items}
+            close={close}
+            type="book"
+            consumeItems={consumeItems}
+            consumeGems={consumeGems}
+          />
+        )) as any
+      }
+    </Popup>
+  );
+};
 interface MaxItemsProps {
   girl: CommonGirlData;
   gameAPI: GameAPI;
@@ -909,6 +981,7 @@ interface FullMaxingProps {
   type: 'book' | 'gift'; // Only gift implemented for now
   close(): void;
   consumeItems(items: ItemEntry<Item>[]): void;
+  consumeGems?(element: Element, gems: number): void; // Optional, only used for FullMaxXP
 }
 
 const FullMaxing: React.FC<FullMaxingProps> = ({
@@ -917,13 +990,14 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
   items,
   type,
   close,
-  consumeItems
+  consumeItems,
+  consumeGems
 }) => {
   const [usedItems, setUsedItems] = useState<ItemEntry<Item>[] | undefined>(
     undefined
   );
   const [ready, setReady] = useState(false);
-  const [request, setRequest] = useState<FullMaxOutAffectionResult | undefined>(
+  const [request, setRequest] = useState<FullMaxOutResult | undefined>(
     undefined
   );
 
@@ -932,7 +1006,10 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
   useEffect(() => {
     async function requestFullItems(): Promise<void> {
       try {
-        const requestResponse = await gameAPI.requestFullMaxOutAffection(girl); // For now only Affection
+        const requestResponse =
+          stat === 'affection'
+            ? await gameAPI.requestFullMaxOutAffection(girl)
+            : await gameAPI.requestFullMaxOutXp(girl);
         setRequest(requestResponse);
         const itemsInfo = fromFulltoMaxOutItems(requestResponse);
         if (itemsInfo.selection.length === 0) {
@@ -960,7 +1037,32 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
       setReady(true);
     }
     requestFullItems();
-  }, [girl, items, gameAPI]);
+  }, [girl, items, gameAPI, stat]);
+
+  const getMaxingMessage = useCallback(() => {
+    if (!request) return <>Maxing your {stat} will cost you:</>;
+
+    if (stat === 'affection') {
+      const affectionRequest = request as FullMaxOutAffectionResult;
+      if (request.excess > 0) {
+        return <>Maxing your {stat} will cost you:</>;
+      }
+      if (affectionRequest.target_grade < girl.maxStars) {
+        return (
+          <span style={{ color: 'red' }}>
+            You will only go up to {affectionRequest.target_grade} for {stat}
+          </span>
+        );
+      } else {
+        return <>Maxing your {stat} will cost you:</>;
+      }
+    } else {
+      const xpRequest = request as FullMaxOutXpResult;
+      return (
+        <>Leveling-up and Awakening to {xpRequest.target_level} will cost you</>
+      );
+    }
+  }, [request, stat, girl.maxStars]);
 
   const confirm = useCallback(() => {
     async function confirmFullMaxOut() {
@@ -968,10 +1070,17 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
         console.error('No request data available for full max out.');
         return;
       }
-      const appliedItems = await gameAPI.confirmFullMaxOutAffection(
-        girl,
-        request
-      );
+      const appliedItems =
+        stat === 'affection'
+          ? await gameAPI.confirmFullMaxOutAffection(
+              girl,
+              request as FullMaxOutAffectionResult
+            )
+          : await gameAPI.confirmFullMaxOutXp(
+              girl,
+              request as FullMaxOutXpResult,
+              consumeGems!
+            );
       const consumedItems: ItemEntry<Item>[] = [];
       for (const item of appliedItems.selection) {
         const itemEntry = items.find((i) => i.item.itemId === item.id);
@@ -990,7 +1099,7 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
     }
     confirmFullMaxOut();
     close();
-  }, [request]);
+  }, [close, consumeGems, consumeItems, gameAPI, girl, items, request, stat]);
 
   return (
     <div className="qh-popup full-max-content-popup">
@@ -1000,21 +1109,7 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
       ) : null}
       {ready && usedItems !== undefined && request !== undefined ? (
         <>
-          <h2>
-            {request!.excess > 0 ? (
-              <>Maxing your {stat} will cost you:</>
-            ) : type === 'gift' ? (
-              request.target_grade < girl.maxStars ? (
-                <span style={{ color: 'red' }}>
-                  You will only go up to {request?.target_grade} for {stat}
-                </span>
-              ) : (
-                <>Maxing your {stat} will cost you:</>
-              )
-            ) : (
-              <>Maxing your {stat} will cost you:</>
-            )}
-          </h2>
+          <h2>{getMaxingMessage()}</h2>
           <ItemsList
             items={usedItems}
             selectedItem={undefined}
@@ -1035,11 +1130,21 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
                 className="hh-game-action confirm-full-max-out-affection"
                 onClick={confirm}
               >
-                {formatCost(request.needed_currency.sc)}
+                {formatCost(
+                  (request as FullMaxOutAffectionResult).needed_currency.sc
+                )}
                 <div className="currency-icon"></div>
               </button>
             ) : (
-              <span>Not yet implemented</span>
+              <button
+                className="hh-game-action confirm-full-max-out-xp"
+                onClick={confirm}
+              >
+                <span className="gems-cost">
+                  {formatCost((request as FullMaxOutXpResult).needed_gems)}
+                  <GemIcon element={girl.element} />
+                </span>
+              </button>
             )}
             <button className="hh-action-button cancel-max-out" onClick={close}>
               No

@@ -6,7 +6,8 @@ import {
   getPoseN,
   Gift,
   QuestData,
-  Team
+  Team,
+  Element
 } from '../data/data';
 import {
   ChangePoseResult,
@@ -1019,7 +1020,8 @@ export class GameAPIImpl implements GameAPI {
 
   async confirmFullMaxOutXp(
     girl: CommonGirlData,
-    request: FullMaxOutXpResult
+    request: FullMaxOutXpResult,
+    consumeGems: (element: Element, gems: number) => void
   ): Promise<MaxOutItems> {
     const params = {
       id_girl: girl.id,
@@ -1030,8 +1032,7 @@ export class GameAPIImpl implements GameAPI {
       const items = fromFulltoMaxOutItems(request);
       girl.level = request.target_level;
       girl.maxLevel = 250 + request.target_awakening * 50;
-      //TODO : gems update
-
+      consumeGems(girl.element, request.needed_gems);
       return items;
     }
     throw new Error(

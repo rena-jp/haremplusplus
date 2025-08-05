@@ -5,7 +5,8 @@ import {
   GameName,
   Gift,
   QuestData,
-  Team
+  Team,
+  Element
 } from '../data/data';
 import {
   FullMaxOutAffectionResult,
@@ -127,7 +128,8 @@ export interface GameAPI {
    */
   confirmFullMaxOutXp(
     girl: CommonGirlData,
-    request: FullMaxOutXpResult
+    request: FullMaxOutXpResult,
+    consumeGems: (element: Element, gems: number) => void
   ): Promise<MaxOutItems>;
   /**
    * Collect salary for the selected girl. If the action succeeds,
