@@ -1009,13 +1009,17 @@ export namespace MaxOutResult {
     );
   }
 }
-export interface FullMaxOutAffectionResult extends RequestResult {
+
+export interface FullMaxOutResult extends RequestResult {
   selection: { [key: string]: number };
+  excess: number;
+  success: true;
+}
+
+export interface FullMaxOutAffectionResult extends FullMaxOutResult {
   fill_amount: number;
   needed_affection: number;
   needed_currency: { hc: number; sc: number };
-  excess: number;
-  success: true;
   target_grade: number;
 }
 export interface FullMaxOutAffectionConfirmResult extends RequestResult {
@@ -1054,11 +1058,8 @@ export namespace FullMaxOutAffectionResult {
   }
 }
 
-export interface FullMaxOutXpResult extends RequestResult {
-  excess: number;
+export interface FullMaxOutXpResult extends FullMaxOutResult {
   needed_gems: number;
-  selection: { [key: string]: number };
-  success: true;
   target_awakening: number;
   target_level: number;
   total_experience: number;
@@ -1075,8 +1076,8 @@ export namespace FullMaxOutXpResult {
       return (
         object.success === true &&
         typeof object.excess === 'number' &&
-        typeof object.needed_gems === 'number' &&
         isUnknownObject(object.selection) &&
+        typeof object.needed_gems === 'number' &&
         typeof object.target_awakening === 'number' &&
         typeof object.target_level === 'number' &&
         typeof object.total_experience === 'number'
