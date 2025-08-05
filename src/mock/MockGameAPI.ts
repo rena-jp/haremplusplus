@@ -12,6 +12,7 @@ import {
 import {
   fixBlessing,
   FullMaxOutAffectionResult,
+  FullMaxOutXpResult,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -392,7 +393,7 @@ export class MockGameAPI implements GameAPI {
     if (!request || !request.success) {
       throw new Error('Invalid request for full max out affection');
     }
-    console.log('Full Max Out Affection', girl.name);
+    console.log('Full Max Out Affection ', girl.name);
     return this.mockRequest(() => {
       const result: MaxOutItems = {
         excess: 12,
@@ -400,6 +401,58 @@ export class MockGameAPI implements GameAPI {
           {
             id: 183,
             count: 30
+          }
+        ]
+      };
+      return result;
+    });
+  }
+
+  async requestFullMaxOutXp(girl: CommonGirlData): Promise<FullMaxOutXpResult> {
+    if (girl.level === 750) {
+      throw new Error('Girl is already at max level');
+    }
+    return this.mockRequest(() => {
+      const result: FullMaxOutXpResult = {
+        total_experience: 675825,
+        target_level: 650,
+        selection: { '323': 257, '322': 2, '48': 1, '50': 1 },
+        excess: 75,
+        target_awakening: 8,
+        needed_gems: 4950,
+        success: true
+      };
+      return result;
+    });
+  }
+
+  async confirmFullMaxOutXp(
+    girl: CommonGirlData,
+    request: FullMaxOutXpResult
+  ): Promise<MaxOutItems> {
+    if (!request || !request.success) {
+      throw new Error('Invalid request for full max out affection');
+    }
+    console.log('Full Max Out XP ', girl.name);
+    return this.mockRequest(() => {
+      const result: MaxOutItems = {
+        excess: 75,
+        selection: [
+          {
+            id: 323,
+            count: 257
+          },
+          {
+            id: 322,
+            count: 2
+          },
+          {
+            id: 48,
+            count: 1
+          },
+          {
+            id: 50,
+            count: 1
           }
         ]
       };
