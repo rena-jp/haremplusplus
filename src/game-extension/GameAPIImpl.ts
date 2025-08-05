@@ -13,6 +13,8 @@ import {
   EquipActionResult,
   fixBlessing,
   FullMaxOutAffectionResult,
+  FullMaxOutResult,
+  FullMaxOutXpResult,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -944,12 +946,11 @@ export class GameAPIImpl implements GameAPI {
       return result;
     }
     throw new Error(
-      'Failed to get the items list to fully max out the girl. Result: ' +
+      'Failed to get the items list to fully max out the girl affection. Result: ' +
         JSON.stringify(result)
     );
   }
   async confirmFullMaxOutAffection(
-    // not yet perfectly implemented for the visual update
     girl: CommonGirlData,
     request: FullMaxOutAffectionResult
   ): Promise<MaxOutItems> {
@@ -997,6 +998,44 @@ export class GameAPIImpl implements GameAPI {
     }
     throw new Error(
       'Failed to fully max girl affection. Result: ' + JSON.stringify(result)
+    );
+  }
+
+  async requestFullMaxOutXp(girl: CommonGirlData): Promise<FullMaxOutXpResult> {
+    const params = {
+      action: 'get_girl_max_out_items',
+      type: 'potion',
+      id_girl: girl.id
+    };
+    const result = await this.postRequest(params);
+    if (FullMaxOutXpResult.is(result)) {
+      return result;
+    }
+    throw new Error(
+      'Failed to get the items list to fully max out the girl XP. Result: ' +
+        JSON.stringify(result)
+    );
+  }
+
+  async confirmFullMaxOutXp(
+    girl: CommonGirlData,
+    request: FullMaxOutXpResult
+  ): Promise<MaxOutItems> {
+    const params = {
+      id_girl: girl.id,
+      action: 'max_out_girl_xp'
+    };
+    const result = await this.postRequest(params);
+    if (FullMaxOutXpResult.isConfirm(result)) {
+      const items = fromFulltoMaxOutItems(request);
+      girl.level = request.target_level;
+      girl.maxLevel = 250 + request.target_awakening * 50;
+      //TODO : gems update
+
+      return items;
+    }
+    throw new Error(
+      'Failed to fully max out the XP. Result: ' + JSON.stringify(result)
     );
   }
 
@@ -1508,9 +1547,7 @@ function toMaxOutItems(result: MaxOutResult): MaxOutItems {
   };
 }
 
-export function fromFulltoMaxOutItems(
-  request: FullMaxOutAffectionResult
-): MaxOutItems {
+export function fromFulltoMaxOutItems(request: FullMaxOutResult): MaxOutItems {
   const excess = request.excess;
   const selection: ItemSelection[] = Object.keys(request.selection).map(
     (key) => {

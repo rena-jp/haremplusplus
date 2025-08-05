@@ -9,6 +9,7 @@ import {
 } from '../data/data';
 import {
   FullMaxOutAffectionResult,
+  FullMaxOutXpResult,
   GameBlessingData,
   GameInventory,
   GameQuests,
@@ -96,7 +97,7 @@ export interface GameAPI {
   upgrade(girl: CommonGirlData, questId: number): Promise<boolean>;
   /**
    * Request the full max out of affection for the selected girl, needs to be passed to the confirmFullMaxOutAffection
-   * @param girl The girl to max out
+   * @param girl The girl to fully max out affection
    * @returns A promise resolving to the result of the full max out request,
    */
   requestFullMaxOutAffection(
@@ -105,11 +106,28 @@ export interface GameAPI {
   /**
    * Confirms the full max out of affection for the selected girl. Items & Money from the request will be consumed.
    * @param girl the girl to confirm the full max out of affection for
-   * @param request previoous request from requestFullMaxOutAffection
+   * @param request previous request from requestFullMaxOutAffection
+   * @returns A promise to the list of items consumed by this action.
    */
   confirmFullMaxOutAffection(
     girl: CommonGirlData,
     request: FullMaxOutAffectionResult
+  ): Promise<MaxOutItems>;
+  /**
+   * Request the full max out of XP for the selected girl, needs to be passed to the confirmFullMaxOutXp
+   * @param girl the girl to fully max out XP for
+   * @returns A promise resolving to the result of the full max out request,
+   */
+  requestFullMaxOutXp(girl: CommonGirlData): Promise<FullMaxOutXpResult>;
+  /**
+   * Confirms the full max out of XP for the selected girl, needs to be passed to the confirmFullMaxOutXp
+   * @param girl the girl to confirm the full max out of XP for
+   * @param request previous request from requestFullMaxOutXp
+   * @returns A promise to the list of items consumed by this action.
+   */
+  confirmFullMaxOutXp(
+    girl: CommonGirlData,
+    request: FullMaxOutXpResult
   ): Promise<MaxOutItems>;
   /**
    * Collect salary for the selected girl. If the action succeeds,
