@@ -20,7 +20,10 @@ import {
   ItemEntry,
   Rarity
 } from '../data/data';
-import { useAffectionStats } from '../hooks/girl-aff-hooks';
+import {
+  getMissingAffection,
+  useAffectionStats
+} from '../hooks/girl-aff-hooks';
 import { getAwakeningThreshold, useXpStats } from '../hooks/girl-xp-hooks';
 import { useInventory } from '../hooks/inventory-data-hook';
 import '../style/upgrade.css';
@@ -753,7 +756,15 @@ export const FullMaxAffection: React.FC<FullMaxAffectionProps> = ({
   items,
   consumeItems
 }) => {
-  const canFullMaxUpgrade = girl.stars < girl.maxStars && !girl.upgradeReady;
+  const totalValueNonMythic = items
+    .filter((item) => item.item.rarity !== Rarity.mythic)
+    .map((item) => getValue(item.item) * item.count)
+    .reduce((a, b) => a + b, 0);
+  const canFullMaxUpgrade =
+    girl.stars < girl.maxStars &&
+    !girl.upgradeReady &&
+    getMissingAffection(girl, girl.stars + 1) <= totalValueNonMythic; // use Max instead
+  // Handle Money
   return (
     <Popup
       modal
@@ -1046,6 +1057,13 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
       if (request.excess > 0) {
         return <>Maxing your {stat} will cost you:</>;
       }
+      if (affectionRequest.target_grade === undefined) {
+        return (
+          <span style={{ color: 'red' }}>
+            You won't go up a grade for {stat}
+          </span>
+        );
+      }
       if (affectionRequest.target_grade < girl.maxStars) {
         return (
           <span style={{ color: 'red' }}>
@@ -1129,9 +1147,14 @@ const FullMaxing: React.FC<FullMaxingProps> = ({
                 className="hh-game-action confirm-full-max-out-affection"
                 onClick={confirm}
               >
-                {formatCost(
-                  (request as FullMaxOutAffectionResult).needed_currency.sc
-                )}
+                {(() => {
+                  const requestAff = request as FullMaxOutAffectionResult;
+                  return requestAff.needed_currency ? (
+                    formatCost(requestAff.needed_currency.sc)
+                  ) : (
+                    <>Confirm</> // Fallback for no currency needed because can't affort to go up a lvl
+                  );
+                })()}
                 <div className="currency-icon"></div>
               </button>
             ) : (

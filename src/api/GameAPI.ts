@@ -97,6 +97,7 @@ export interface GameAPI {
    */
   upgrade(girl: CommonGirlData, questId: number): Promise<boolean>;
   /**
+   * /!\ All info won't be received if you can't go above 1 affection level ressource wise
    * Request the full max out of affection for the selected girl, needs to be passed to the confirmFullMaxOutAffection
    * @param girl The girl to fully max out affection
    * @returns A promise resolving to the result of the full max out request,
@@ -115,6 +116,7 @@ export interface GameAPI {
     request: FullMaxOutAffectionResult
   ): Promise<MaxOutItems>;
   /**
+   * /!\ All info won't be received if you can't go above next level cap ressource wise
    * Request the full max out of XP for the selected girl, needs to be passed to the confirmFullMaxOutXp
    * @param girl the girl to fully max out XP for
    * @returns A promise resolving to the result of the full max out request,

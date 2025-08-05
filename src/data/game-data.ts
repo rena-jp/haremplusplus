@@ -1018,9 +1018,10 @@ export interface FullMaxOutResult extends RequestResult {
 
 export interface FullMaxOutAffectionResult extends FullMaxOutResult {
   fill_amount: number;
-  needed_affection: number;
-  needed_currency: { hc: number; sc: number };
-  target_grade: number;
+  // If not available to go above 1 affection level game won't send all (use Max instead)
+  needed_affection?: number;
+  needed_currency?: { hc: number; sc: number };
+  target_grade?: number;
 }
 export interface FullMaxOutAffectionConfirmResult extends RequestResult {
   girl: { affection: number; fav_graded?: number; graded: number }; //unsure of fav_graded but shouldn't be useful
@@ -1036,12 +1037,7 @@ export namespace FullMaxOutAffectionResult {
         object.success === true &&
         typeof object.excess === 'number' &&
         isUnknownObject(object.selection) &&
-        typeof object.fill_amount === 'number' &&
-        typeof object.needed_affection === 'number' &&
-        isUnknownObject(object.needed_currency) &&
-        typeof object.needed_currency.hc === 'number' &&
-        typeof object.needed_currency.sc === 'number' &&
-        typeof object.target_grade === 'number'
+        typeof object.fill_amount === 'number'
       );
     }
     return false;
@@ -1058,16 +1054,18 @@ export namespace FullMaxOutAffectionResult {
   }
 }
 
+// If not available to go above next level cap game won't send all (use Max instead)
 export interface FullMaxOutXpResult extends FullMaxOutResult {
+  total_experience: number;
+  target_level: number;
+  // Here I suppose only the total XP, and target LVL is sent if you can't go above next level cap
   needed_gems: number;
   target_awakening: number;
-  target_level: number;
-  total_experience: number;
 }
 export interface FullMaxOutXpConfirmResult extends RequestResult {
+  selection: { [key: string]: number };
   girl: unknown;
   hero: { gems: GemsData };
-  selection: { [key: string]: number };
   success: true;
 }
 export namespace FullMaxOutXpResult {
