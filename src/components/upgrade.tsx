@@ -813,8 +813,7 @@ export const FullMaxXP: React.FC<FullMaxXPProps> = ({
     .filter((ownedGirl) => ownedGirl.level! >= (girl.maxLevel ?? 0)).length;
   const canAwaken =
     currentGirls >= minGirlsToAwaken && gemsStats.gemsToNextCap <= currentGems;
-  const canFullMaxXP = // Either car awaken if maxed, or can use items to max out XP
-    (girl.level !== undefined && girl.level !== girl.maxLevel) || canAwaken;
+  const canFullMaxXP = canAwaken; // Grey it if they can't awaken to next level, if they want to use it instead use Max
   return (
     <Popup
       modal
