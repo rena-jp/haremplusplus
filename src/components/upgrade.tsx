@@ -847,7 +847,7 @@ const MaxItems: React.FC<MaxItemsProps> = ({
     }
     confirmMaxOut();
     close();
-  }, [gameAPI]);
+  }, [gameAPI, girl, type, items, consumeItems, close]);
 
   const message =
     excess < 0 ? (
