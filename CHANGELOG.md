@@ -1,3 +1,7 @@
+## 0.23.0 - 2025-08-06
+
+- Add Full Max button for XP and Affection (thanks to infarctus)
+
 ## 0.22.2 - 2025-07-09
 
 - Change refresh button to reload due to a cache inconsistency issue

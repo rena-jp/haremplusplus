@@ -32,3 +32,4 @@ This project provides a userscript (To be used with Tampermonkey, or similar bro
 - rena-jp
 - bohammettuz
 - Iron Man
+- infarctus
