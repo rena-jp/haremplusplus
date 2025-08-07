@@ -1,3 +1,7 @@
+## 0.23.1 - 2025-08-07
+
+- Fix the bug that was preventing currency updates
+
 ## 0.23.0 - 2025-08-06
 
 - Add Full Max button for XP and Affection (thanks to infarctus)
