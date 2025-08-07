@@ -660,7 +660,7 @@ export interface Collect {
 }
 
 /**
- * Game object "window.Hero"
+ * Game object "window.Hero" or "shared.Hero"
  */
 export interface Hero {
   caracs: string[];
@@ -669,10 +669,10 @@ export interface Hero {
   energy_fields: unknown;
   infos: HeroInfos;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  update(property: string, value: any, add: boolean): void;
+  update(property: string, value: any, add: boolean | undefined): void;
 }
 
-// Properties of game object "window.Hero.infos"
+// Properties of game object "window.Hero.infos" or "shared.Hero.infos"
 export interface HeroInfos {
   Xp: unknown;
   xp: number;
@@ -916,8 +916,10 @@ export interface UpgradeResult extends RequestResult {
   success: true;
   next_step: unknown;
   changes: {
-    soft_currency?: number;
-    hard_currency?: number;
+    currency: {
+      soft_currency?: number;
+      hard_currency?: number;
+    };
   };
 }
 

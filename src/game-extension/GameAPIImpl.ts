@@ -565,9 +565,13 @@ export class GameAPIImpl implements GameAPI {
       };
       const result = await this.postRequest(params);
       if (UpgradeResult.is(result) && result.success) {
-        const newSoftCurrency = result.changes.soft_currency;
+        const newSoftCurrency = result.changes.currency.soft_currency;
         if (newSoftCurrency !== undefined) {
-          this.getHero().update('soft_currency', newSoftCurrency, false);
+          this.getHero().update(
+            'currency',
+            { soft_currency: newSoftCurrency },
+            false
+          );
         }
         const currentQuest = girl.stars;
         girl.stars++;
@@ -964,8 +968,8 @@ export class GameAPIImpl implements GameAPI {
       const items = fromFulltoMaxOutItems(request);
       //update
       this.getHero().update(
-        'soft_currency',
-        result.hero.currencies.soft_currency,
+        'currency',
+        { soft_currency: result.hero.currencies.soft_currency },
         false
       );
       girl.stars = result.girl.graded;
