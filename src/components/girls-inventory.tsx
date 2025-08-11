@@ -695,6 +695,7 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
   setElement,
   setPose
 }) => {
+  const [slotFilter, setSlotFilter] = useState(0);
   const resetGirlClass = useCallback(() => {
     setGirlClass(null);
   }, [setGirlClass]);
@@ -708,7 +709,8 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
     resetGirlClass();
     resetElement();
     resetPose();
-  }, [resetGirlClass, resetElement, resetPose]);
+    setSlotFilter(0);
+  }, [resetGirlClass, resetElement, resetPose, setSlotFilter]);
   return (
     <div className="qh-inventory">
       <div className="qh-inventory-items">
@@ -717,6 +719,7 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
           <span>Inventory is empty.</span>
         ) : null}
         {inventory.items
+          .filter((item) => slotFilter === 0 || item.slot === slotFilter)
           .map((item): [typeof item, boolean] => {
             const resonance = item.resonance;
             let visible = true;
@@ -783,6 +786,15 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
         <button className="hh-action-button" onClick={resetFilter}>
           Reset filter
         </button>
+        <span>&nbsp;</span>
+        {[...Array(7)].map((_, i) => (
+          <button
+            className={`hh-action-button toggle ${slotFilter === i ? 'pressed' : 'nopressed'}`}
+            onClick={() => setSlotFilter(i)}
+          >
+            {i === 0 ? 'All' : i}
+          </button>
+        ))}
         {girlClass == null ? null : (
           <div className="equipment-resonance" onClick={resetGirlClass}>
             <StatIcon statClass={girlClass} />
