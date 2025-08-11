@@ -1,3 +1,7 @@
+## 0.23.2 - 2025-08-11
+
+- Add girl equipment slot filter
+
 ## 0.23.1 - 2025-08-07
 
 - Fix the bug that was preventing currency updates
