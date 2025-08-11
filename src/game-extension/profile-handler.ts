@@ -27,7 +27,6 @@ export async function handleProfile(): Promise<void> {
       const all_possible_girls = Function(
         `${code}; return all_possible_girls;`
       )();
-      console.log(all_possible_girls);
       updateGirlsSource(all_possible_girls);
     }
   });
