@@ -1,3 +1,7 @@
+## 0.23.3 - 2025-08-12
+
+- Fix links to Harem on Daily Goals
+
 ## 0.23.2 - 2025-08-11
 
 - Add girl equipment slot filter
