@@ -27,6 +27,9 @@ if (window.$ != null) {
     }
   } else {
     handleHaremLinks();
+    window.$(document).ready(() => {
+      handleHaremLinks();
+    });
   }
 
   // For Home, add a "Show Harem" button.
