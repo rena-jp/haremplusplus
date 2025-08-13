@@ -1,3 +1,7 @@
+## 0.23.4 - 2025-08-13
+
+- Update the Book and Gift Maxing Up feature to match the game change
+
 ## 0.23.3 - 2025-08-12
 
 - Fix links to Harem on Daily Goals
