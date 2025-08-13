@@ -761,16 +761,14 @@ export const FullMaxAffection: React.FC<FullMaxAffectionProps> = ({
   items,
   consumeItems
 }) => {
-  const totalValueNonMythic = items
-    .filter(
-      (item) => item.item.rarity !== Rarity.mythic && item.item.type === 'gift'
-    )
+  const totalValueGift = items
+    .filter((item) => item.item.type === 'gift')
     .map((item) => getValue(item.item) * item.count)
     .reduce((a, b) => a + b, 0);
   const canFullMaxUpgrade =
     girl.stars < girl.maxStars &&
     !girl.upgradeReady &&
-    getMissingAffection(girl, girl.stars + 1) < totalValueNonMythic; // use Max instead
+    getMissingAffection(girl, girl.stars + 1) < totalValueGift; // use Max instead
   // Handle Money
   return (
     <Popup
@@ -832,17 +830,15 @@ export const FullMaxXP: React.FC<FullMaxXPProps> = ({
   const canAwaken =
     currentGirls >= minGirlsToAwaken && gemsStats.gemsToNextCap <= currentGems;
 
-  const totalValueNonMythic = items
-    .filter(
-      (item) => item.item.rarity !== Rarity.mythic && item.item.type === 'book'
-    )
+  const totalValueBooks = items
+    .filter((item) => item.item.type === 'book')
     .map((item) => getValue(item.item) * item.count)
     .reduce((a, b) => a + b, 0);
   // Grey it if they can't awaken to next level, if they want to use it instead use Max
   const canFullMaxXP =
     canAwaken &&
     girl.maxLevel &&
-    getMissingGXPToCap(girl, girl.maxLevel) < totalValueNonMythic;
+    getMissingGXPToCap(girl, girl.maxLevel) < totalValueBooks;
   return (
     <Popup
       modal
