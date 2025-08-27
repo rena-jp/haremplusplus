@@ -986,7 +986,7 @@ export class GameAPIImpl implements GameAPI {
         );
       }
       const questIdNum = parseInt(questId, 10);
-      for (let i = 1; i < girl.stars; i++) {
+      for (let i = 0; i < girl.stars; i++) {
         if (!girl.quests[i].done) {
           girl.quests[i] = {
             idQuest: questIdNum - (girl.stars - 1 - i), //guessing by substracting
