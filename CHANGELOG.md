@@ -1,3 +1,8 @@
+## 0.23.5 - 2025-09-02
+
+- Fix the bug where the first affection scene would not update after Max Grade-up
+- Fix the names of the girl's equipment
+
 ## 0.23.4 - 2025-08-13
 
 - Update the Book and Gift Maxing Up feature to match the game change
