@@ -95,9 +95,9 @@ export function getSlotLabel(slotId: number): string {
     case 4:
       return 'Boots';
     case 5:
-      return 'Accessory';
-    case 6:
       return 'Item';
+    case 6:
+      return 'Accessory';
 
     default:
       return 'Slot';
