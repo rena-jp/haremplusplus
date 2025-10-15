@@ -176,6 +176,9 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
               equipSelected={equipSelected}
               unequipOne={unequipOne}
               gameName={gameName}
+              girlClass={girlClass}
+              element={element}
+              pose={pose}
               setGirlClass={setGirlClass}
               setElement={setElement}
               setPose={setPose}
@@ -213,6 +216,9 @@ interface GirlsInventoryEntryProps {
   equipSelected(girl: CommonGirlData): Promise<void>;
   unequipOne(girl: CommonGirlData, equipment: Equipment): void;
   gameName: GameName;
+  girlClass: Class | null;
+  element: Element | null;
+  pose: Pose | null;
   setGirlClass: Dispatch<SetStateAction<Class | null>>;
   setElement: Dispatch<SetStateAction<Element | null>>;
   setPose: Dispatch<SetStateAction<Pose | null>>;
@@ -224,6 +230,9 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
   equipSelected,
   unequipOne,
   gameName,
+  girlClass,
+  element,
+  pose,
   setGirlClass,
   setElement,
   setPose
@@ -257,6 +266,16 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
         const classNames = ['item-slot'];
         if (selectedSlot) {
           classNames.push('selected');
+        }
+        if (item != null) {
+          const r = item.resonance;
+          if (
+            (girlClass != null && girlClass !== r.class) ||
+            (element != null && element !== r.element) ||
+            (pose != null && pose !== r.pose)
+          ) {
+            classNames.push('filtered');
+          }
         }
         return (
           <EquipmentTile

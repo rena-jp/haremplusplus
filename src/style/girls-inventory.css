@@ -29,6 +29,10 @@
   border-color: dodgerblue;
 }
 
+.item-slot.filtered img.girls-equipment-icon {
+  opacity: 0.5;
+}
+
 .girls-inventory-content > * {
   overflow-y: auto;
   overflow-x: hidden;
