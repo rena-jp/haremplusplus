@@ -2,14 +2,6 @@ export function getDocumentHref(url: string) {
   return (window.shared?.general ?? window).getDocumentHref!(url);
 }
 
-export function getGirlConstructor() {
-  return (window.shared ?? window).Girl!;
-}
-
-export function getGirlSalaryManager() {
-  return (window.shared ?? window).GirlSalaryManager!;
-}
-
 export function hh_ajax(params: any, callback?: any, err_callback?: any) {
   return (window.shared?.general ?? window).hh_ajax!(
     params,

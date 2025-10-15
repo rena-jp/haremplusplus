@@ -24,10 +24,7 @@ import {
   GiftResult,
   GirlEquipment,
   GirlEquipmentResult,
-  GirlsDataEntry,
   GirlsDataList,
-  GirlsSalaryEntry,
-  GirlsSalaryList,
   GradeSkin,
   Hero,
   isUnknownObject,
@@ -49,7 +46,6 @@ import {
   RequestEvent,
   RequestEventType,
   RequestListener,
-  SalaryDataListener,
   TeamStats
 } from '../api/GameAPI';
 import { getGXPToCap, getLevel, getXpStats } from '../hooks/girl-xp-hooks';
@@ -63,8 +59,6 @@ import { roundValue } from '../data/common';
 import { importEquipment } from '../data/import/harem-import';
 import {
   getDocumentHref,
-  getGirlConstructor,
-  getGirlSalaryManager,
   getHeroImpl,
   getLoadingAnimation,
   hh_ajax
@@ -108,14 +102,11 @@ export namespace HaremMessage {
 }
 
 export class GameAPIImpl implements GameAPI {
-  private salaryListeners: SalaryDataListener[] = [];
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
   private gameName = GameName.HentaiHeroes;
 
-  constructor(private updateGirl?: (girl: CommonGirlData) => void) {
-    this.installRequestsListener();
-  }
+  constructor(private updateGirl?: (girl: CommonGirlData) => void) {}
 
   setUpdateGirl(updateGirl: (girl: CommonGirlData) => void): void {
     this.updateGirl = updateGirl;
@@ -253,19 +244,6 @@ export class GameAPIImpl implements GameAPI {
     return Promise.reject('blessings_data is undefined.');
   }
 
-  async collectSalary(
-    event: MouseEvent,
-    girl: CommonGirlData
-  ): Promise<boolean> {
-    if (!girl.own) {
-      return false;
-    }
-    const girlsMap = getGirlSalaryManager().girlsMap;
-    const waifuList = window.girls_data_list as unknown as GirlsDataEntry[];
-    girlsMap[girl.id]?.onSalaryBtnClicked(event, waifuList);
-    return true;
-  }
-
   async changePose(girl: CommonGirlData, pose: number): Promise<boolean> {
     if (pose > girl.stars) {
       console.error(
@@ -399,20 +377,6 @@ export class GameAPIImpl implements GameAPI {
         throw response;
       }
     });
-  }
-
-  getSalaryData(): GirlsSalaryList {
-    const salaryManager = getGirlSalaryManager();
-    const girlsMap = salaryManager.girlsMap;
-    const result: GirlsSalaryList = {};
-    for (const girlId in girlsMap) {
-      const girlObj = girlsMap[girlId];
-      if (girlObj.gData) {
-        const data = girlObj.gData;
-        result[girlId] = data;
-      }
-    }
-    return result;
   }
 
   paramsToString(params: HHAction): string {
@@ -1230,17 +1194,6 @@ export class GameAPIImpl implements GameAPI {
     return getHeroImpl();
   }
 
-  addSalaryDataListener(listener: SalaryDataListener): void {
-    this.salaryListeners.push(listener);
-  }
-
-  removeSalaryDataListener(listener: SalaryDataListener): void {
-    const index = this.salaryListeners.indexOf(listener);
-    if (index >= 0) {
-      this.salaryListeners.splice(index, 1);
-    }
-  }
-
   addRequestListener(listener: RequestListener): void {
     this.requestListeners.add(listener);
   }
@@ -1359,35 +1312,6 @@ export class GameAPIImpl implements GameAPI {
     }
   }
 
-  private installRequestsListener(): void {
-    if (window.$ == null) return;
-    // Intercept responses to ajax requests. For now, this is used to refresh
-    // harem salary data when "Collect all" is used from the home page.
-    window
-      .$(document)
-      .ajaxComplete((event: unknown, request: unknown, settings: unknown) => {
-        this.handleRequest(event, request, settings);
-      });
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private handleRequest(_event: any, request: any, settings: any): void {
-    if (
-      (settings.url as Object).toString().startsWith('/ajax.php') &&
-      settings.type === 'POST'
-    ) {
-      const params = settings.data;
-      if (params !== undefined && params.includes('action=get_all_salaries')) {
-        if (request.responseJSON && request.responseJSON.girls) {
-          const girls = request.responseJSON.girls;
-          for (const listener of this.salaryListeners) {
-            listener(girls);
-          }
-        }
-      }
-    }
-  }
-
   setGameName(gameName: GameName): void {
     this.gameName = gameName;
   }
@@ -1497,46 +1421,6 @@ async function getOrCreateFrame(
       return res;
     })
   );
-}
-
-interface SalaryResult {
-  success: boolean;
-  money: number;
-  time: number;
-}
-
-function isSalaryResult(data: unknown): data is SalaryResult {
-  if (isUnknownObject(data)) {
-    if (data.success && typeof data['money'] === 'number') {
-      return true;
-    }
-  }
-  return false;
-}
-
-function refreshSalaryManager(
-  girlSalaryEntry: GirlsSalaryEntry,
-  salaryTime: number,
-  salaryData: GirlsSalaryList
-): void {
-  // Refresh the salaryManager (Used to update the collectButton when girls are ready,
-  // including the Tooltips)
-  const salaryManager = getGirlSalaryManager();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ownedGirls: { [key: string]: any } = {};
-
-  girlSalaryEntry.pay_in = salaryTime + 10;
-
-  // FIXME: Is there a better way to refresh, relying more heavily
-  // on the GirlSalaryManager? Each time we reset the manager, we
-  // introduce (minor) delay inconsistencies in the timers.
-
-  const Girl = getGirlConstructor();
-  for (const girlId in salaryData) {
-    ownedGirls[girlId] = new Girl(salaryData[girlId]);
-    ownedGirls[girlId]['gId'] = parseInt(girlId, 10);
-  }
-  salaryManager.init(ownedGirls, false);
 }
 
 function toMaxOutItems(result: MaxOutResult): MaxOutItems {

@@ -17,7 +17,6 @@ import {
   GemsData,
   GirlEquipment,
   GirlsDataList,
-  GirlsSalaryList,
   GradeSkin
 } from '../data/game-data';
 
@@ -134,14 +133,6 @@ export interface GameAPI {
     consumeGems: (element: Element, gems: number) => void
   ): Promise<MaxOutItems>;
   /**
-   * Collect salary for the selected girl. If the action succeeds,
-   * the callback will be invoked with an updated version of the girls data.
-   * @param girl The girl to collect salary from.
-   * @returns A Boolean Promise, resolving to true if salary collection was successful,
-   * or false if it was unsuccessful.
-   */
-  collectSalary(event: MouseEvent, girl: CommonGirlData): Promise<boolean>;
-  /**
    * Return the quest data (dialogue, cost, image...) for upgrading a girl (or viewing a past scene)
    * @param girl
    * @param step
@@ -152,10 +143,6 @@ export interface GameAPI {
     step: number,
     allowRequest: boolean
   ): Promise<QuestData>;
-  /**
-   * Return the current salary data for all girls
-   */
-  getSalaryData(): GirlsSalaryList;
   /**
    * Change the selected pose for the girl. If the action succeeds,
    * the callback will be invoked with an updated version of the girls data.
@@ -178,21 +165,6 @@ export interface GameAPI {
    * Return the gems data from the game (Number of gems per element)
    */
   getGemsData(allowRequest: boolean): Promise<GemsData>;
-
-  /**
-   * Add a listener to be notified when the SalaryData is updated
-   * (When "Collect all" is pressed). Note: no update will be triggered
-   * for individual girls salary updates; only full updates from Collect
-   * All will cause listeners to be notified.
-   * @param listener
-   */
-  addSalaryDataListener(listener: SalaryDataListener): void;
-
-  /**
-   * Remove a salary listener.
-   * @param listener
-   */
-  removeSalaryDataListener(listener: SalaryDataListener): void;
 
   /**
    * Get the current amount of currency owned by the player
@@ -289,8 +261,6 @@ export type TeamStats = {
   chance: number;
   totalPower: number;
 };
-
-export type SalaryDataListener = (data: GirlsSalaryList) => void;
 
 export type RequestListener = (event: RequestEvent) => void;
 

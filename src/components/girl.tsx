@@ -3,14 +3,13 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useRef,
-  useState
+  useRef
 } from 'react';
 import LazyLoad from 'react-lazyload';
 import { BlessingDefinition, CommonGirlData, Rarity } from '../data/data';
 import '../style/colors.css';
 import '../style/girls.css';
-import { ElementIcon, Grade, SalaryIcon, UpgradeIcon } from './common';
+import { ElementIcon, Grade, UpgradeIcon } from './common';
 import { EquipmentDecorators } from './girls-equipment';
 import { GirlTooltip } from './girl-tooltip';
 import ReactDOMServer from 'react-dom/server';
@@ -210,11 +209,6 @@ const WrappedImage: React.FC<WrappedImageProps> = ({
 };
 
 export interface HaremGirlTileProps extends GirlTileProps {
-  collectSalary: (event: MouseEvent, girl: CommonGirlData) => void;
-  /**
-   * Timestamp of next salary, in ms
-   */
-  payAt: number | undefined;
   selectGirl(girl: CommonGirlData): void;
   currentBlessings?: BlessingDefinition[];
 }
@@ -227,31 +221,11 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   selected,
   selectGirl,
   show0Pose,
-  collectSalary,
-  payAt,
   lazy,
   currentBlessings
 }) => {
   const selectOnClick = useCallback(() => selectGirl(girl), [selectGirl, girl]);
 
-  const [salaryReady, setSalaryReady] = useState(
-    payAt !== undefined && payAt <= Date.now()
-  );
-
-  // Add a timeout to show the salary when ready.
-  // Update the timers when the harem is shown, remove
-  // them when the harem is hidden.
-  useEffect(() => {
-    if (payAt !== undefined && payAt > Date.now()) {
-      setSalaryReady(false);
-      const salaryTimeout = setTimeout(() => {
-        setSalaryReady(true);
-      }, payAt - Date.now());
-      return () => clearTimeout(salaryTimeout);
-    }
-  }, [salaryReady, payAt]);
-
-  const classNames = salaryReady ? ['salary'] : [];
   const displayedLevel =
     girl.level === undefined ? (
       <>&nbsp;</>
@@ -267,16 +241,7 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       </>
     );
 
-  const onClick = useCallback(
-    (event: React.MouseEvent) => {
-      selectOnClick();
-      if (salaryReady && collectSalary !== undefined) {
-        setSalaryReady(false);
-        collectSalary(event.nativeEvent, girl);
-      }
-    },
-    [collectSalary, selectOnClick, girl, salaryReady]
-  );
+  const onClick = selectOnClick;
 
   const tooltipContent = useMemo(() => {
     return ReactDOMServer.renderToStaticMarkup(
@@ -290,13 +255,11 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       onClick={onClick}
       selected={selected}
       show0Pose={show0Pose}
-      classNames={classNames}
       avatarOverlay={
         <>
           {girl.equipment && girl.equipment?.items.length > 0 ? (
             <EquipmentDecorators equipment={girl.equipment} />
           ) : null}
-          <SalaryIcon />
           {girl.own || girl.shards === 0 ? null : (
             <span className="qh_shards">{girl.shards}/100</span>
           )}

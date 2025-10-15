@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { forceCheck } from 'react-lazyload';
-import { GameAPI, SalaryDataListener } from '../api/GameAPI';
+import { GameAPI } from '../api/GameAPI';
 import {
   BlessingDefinition,
   CommonGirlData,
@@ -79,51 +79,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
   // On initial rendering, start with a small batch of girls.
   const [renderedGirls, setRenderedGirls] =
     useState<CommonGirlData[]>(groupedGirls);
-
-  const [salaryData, setSalaryData] = useState(gameAPI.getSalaryData());
-
-  const [girlsSalaries, setGirlsSalariesMap] = useState<Map<string, number>>(
-    new Map()
-  );
-  const salariesRef = useRef(girlsSalaries);
-  const setGirlsSalaries = useCallback((salaries: Map<string, number>) => {
-    setGirlsSalariesMap(salaries);
-    salariesRef.current = salaries;
-  }, []);
-
-  useMemo(() => {
-    const now = Date.now();
-    const payAt: Map<string, number> = new Map();
-    Object.keys(salaryData).forEach((girlId) => {
-      const payIn = salaryData[girlId].pay_in;
-
-      payAt.set(girlId, payIn * 1000 + now);
-    });
-    setGirlsSalaries(payAt);
-  }, [salaryData, setGirlsSalaries]);
-
-  const collectSalary = useCallback(
-    async (event: MouseEvent, girl: CommonGirlData): Promise<boolean> => {
-      const result = gameAPI.collectSalary(event, girl);
-      const newSalaries = new Map(salariesRef.current);
-      newSalaries.set(
-        girl.id,
-        Date.now() + ((girl.salaryTime ?? 0) + 10) * 1000
-      );
-      setGirlsSalaries(newSalaries);
-      const success = await result;
-      return success;
-    },
-    [gameAPI, setGirlsSalaries]
-  );
-
-  useEffect(() => {
-    const listener: SalaryDataListener = (newSalaryData) => {
-      setSalaryData(newSalaryData);
-    };
-    gameAPI.addSalaryDataListener(listener);
-    return () => gameAPI.removeSalaryDataListener(listener);
-  }, [gameAPI]);
 
   useEffect(() => {
     setRenderedGirls(girls);
@@ -219,7 +174,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       <div className={`girlsList${hideTooltips ? ' hide-tooltips' : ''}`}>
         <div className="owned">
           {ownedGirls.map((girl) => {
-            const payAt = girlsSalaries.get(girl.id);
             return (
               <GirlTile
                 key={girl.id}
@@ -229,8 +183,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
                 }
                 selectGirl={selectGirl}
                 show0Pose={show0Pose}
-                collectSalary={collectSalary}
-                payAt={payAt}
                 currentBlessings={currentBlessings}
               />
             );
@@ -246,8 +198,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
               }
               selectGirl={selectGirl}
               show0Pose={show0Pose}
-              collectSalary={collectSalary}
-              payAt={undefined}
               currentBlessings={currentBlessings}
             />
           ))}

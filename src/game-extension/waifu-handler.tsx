@@ -2,26 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
 import { GameName } from '../data/data';
-import { GirlsDataEntry } from '../data/game-data';
-import {
-  getDocumentHref,
-  getGirlConstructor,
-  getGirlSalaryManager
-} from '../migration';
+import { getDocumentHref } from '../migration';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
-
-  const ownedGirls: any = {};
-  const girlsDataList = window.girls_data_list as unknown as GirlsDataEntry[];
-  girlsDataList.forEach((e) => (e.is_owned = true));
-  const Girl = getGirlConstructor();
-  girlsDataList.forEach((girl) => {
-    const girlId = girl.id_girl;
-    ownedGirls[girlId] = new Girl(girl);
-    ownedGirls[girlId]['gId'] = Number(girlId);
-  });
-  getGirlSalaryManager().init(ownedGirls, false);
 
   const gameName = getGameName();
   const root = createRoot(gameName);
