@@ -4,7 +4,6 @@ import '../style/App.css';
 import '../style/game-extension.css';
 import '../style/game-ext-local.css';
 import { GameAPIImpl } from '../game-extension/GameAPIImpl';
-import { MockGameAPI } from '../mock/MockGameAPI';
 import { GameAPI } from '../api/GameAPI';
 import { CloseButton } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
@@ -34,13 +33,7 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
 
   const hide = useCallback(() => setVisible(false), [setVisible]);
 
-  const gameAPI: GameAPI = useMemo(
-    () =>
-      window.location.host === 'localhost:3000'
-        ? new MockGameAPI()
-        : new GameAPIImpl(),
-    []
-  );
+  const gameAPI: GameAPI = useMemo(() => new GameAPIImpl(), []);
   gameAPI.setGameName(gameName);
 
   return (
