@@ -1,3 +1,10 @@
+## 0.23.6 - 2025-10-15
+
+- Remove test code
+- Remove mock
+- Remove salary management
+- Change girl equipment filter to affect equipped items
+
 ## 0.23.5 - 2025-09-02
 
 - Fix the bug where the first affection scene would not update after Max Grade-up
