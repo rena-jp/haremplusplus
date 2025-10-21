@@ -8,6 +8,7 @@ import { handleCharacters } from './game-extension/characters-handler';
 import { handleProfile } from './game-extension/profile-handler';
 
 if (window.$ != null) {
+  handleHaremLinks();
   window.$(() => {
     handleHaremLinks();
   });
