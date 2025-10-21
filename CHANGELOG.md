@@ -1,3 +1,7 @@
+## 0.23.7 - 2025-10-21
+
+- Fix the bug where links to Harem are not switching to Harem++ on Nutaku
+
 ## 0.23.6 - 2025-10-15
 
 - Remove test code
