@@ -1,3 +1,7 @@
+## 0.23.8 - 2025-10-23
+
+- Add new roles
+
 ## 0.23.7 - 2025-10-21
 
 - Fix the bug where links to Harem are not switching to Harem++ on Nutaku
