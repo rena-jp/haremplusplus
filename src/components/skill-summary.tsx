@@ -72,13 +72,16 @@ const SkillSummaries: React.FC<SkillSummariesProps> = ({
     { element: Element.red, name: 'Burnout' },
     { element: Element.blue, name: 'Protection' }
   ];
-  const roleList: Role[] = [
-    { id: null, name: 'None' },
-    { id: 3, name: 'Dominator' },
-    { id: 4, name: 'Fluffer' },
-    { id: 9, name: 'Pleasurelock' },
-    { id: 10, name: 'Sexomancer' }
-  ];
+  const roleList: Role[] = useMemo(
+    () => [
+      { id: null, name: 'None' },
+      ...[...Array(10)].map((_, i) => ({
+        id: i + 1,
+        name: window.GT.design[`girl_role_${i + 1}_name`]
+      }))
+    ],
+    []
+  );
   return (
     <div className="blessings-summary">
       <div key="cat_skill" className="cat_skill">
