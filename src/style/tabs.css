@@ -58,8 +58,8 @@
   top: 50%;
   padding: 15px 30px;
   transition:
-    transform 0.5s ease-in,
-    visibility 0.5s ease-in;
+    transform 0.25s ease-in,
+    visibility 0.25s ease-in;
   z-index: 2;
 }
 #hh_hentai .qh-panel {
