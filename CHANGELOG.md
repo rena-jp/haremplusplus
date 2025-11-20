@@ -1,3 +1,7 @@
+## 0.23.9 - 2025-11-21
+
+- Improve animation speed
+
 ## 0.23.8 - 2025-10-23
 
 - Add new roles
