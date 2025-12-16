@@ -438,6 +438,36 @@ export function PentaDrillSpeedSorter(
   };
 }
 
+export function skinReleaseDate(): Comparator {
+  return (g1, g2) => {
+    const getLatestDate = (g: CommonGirlData) =>
+      g?.gradeSkins
+        ?.map((e) => e.release_date)
+        ?.reduce((p, c) => (p < c ? c : p), '');
+    const date1 = getLatestDate(g1);
+    const date2 = getLatestDate(g2);
+    if (date1 != null && date2 != null) {
+      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+    }
+    if (date1 != null) return -1;
+    if (date2 != null) return 1;
+    return 0; // date1 == null && date2 == null
+  };
+}
+
+export function SkinReleaseDateSorter(): ConfiguredSort {
+  return {
+    id: 'skinReleaseDateSorter',
+    direction: 'desc',
+    sorter: sorter(
+      'Skin Release Date',
+      skinReleaseDate(),
+      shards(),
+      reversedId()
+    )
+  };
+}
+
 export function sortGirls(girls: CommonGirlData[]): void {
   girls.sort((girl1, girl2) => {
     // Owned girls always on top

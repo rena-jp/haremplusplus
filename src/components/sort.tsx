@@ -17,7 +17,8 @@ import {
   RecruitedSorter,
   SalarySorter,
   UpcomingPotentialSorter,
-  UpcomingPowerSorter
+  UpcomingPowerSorter,
+  SkinReleaseDateSorter
 } from '../data/sort';
 import { Tooltip } from './common';
 import { PanelProps } from './panels';
@@ -61,7 +62,8 @@ export const SortPanel: React.FC<SortProps> = ({
       PentaDrillEgoSorter(currentBlessings),
       PentaDrillDamageSorter(currentBlessings),
       PentaDrillDefenseSorter(currentBlessings),
-      PentaDrillSpeedSorter(currentBlessings)
+      PentaDrillSpeedSorter(currentBlessings),
+      SkinReleaseDateSorter()
     ];
   }, [currentBlessings, upcomingBlessings]);
 
