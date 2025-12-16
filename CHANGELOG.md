@@ -1,3 +1,10 @@
+## 0.24.0 - 2025-12-17
+
+- Add support for Penta Drill
+  - Penta Drill Stats Sorter
+  - Penta Drill Stats Tooltip
+- Add Skin Release Date Sorter
+
 ## 0.23.9 - 2025-11-21
 
 - Improve animation speed
