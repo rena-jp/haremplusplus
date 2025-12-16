@@ -15,6 +15,7 @@ import {
   GameName,
   getBlessedStats,
   getBlessingMultiplier,
+  getPentaDrillStats,
   getSourceLabel,
   HairColor,
   HairColors,
@@ -265,13 +266,15 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             upcomingBlessing={upcomingBlessing}
           />
         )}
+        {girl.id_role != null && (
+          <PentaDrillStats girl={girl} currentBlessing={currentBlessing} />
+        )}
         {girl.maxStars >= 5 && (
           <>
             <SkillIcon element={girl.element} />
             <LabyrinthSkillIcon element={girl.element} />
           </>
         )}
-        {girl.id_role != null && <RoleIcon roleId={girl.id_role} />}
       </div>
       {girl.equipment !== undefined ? (
         <>
@@ -614,6 +617,53 @@ export const StatsDetails: React.FC<StatsProps> = ({
         upcomingBlessingMultiplier={upcomingBlessingMultiplier}
       />
     </>
+  );
+};
+
+export interface PentaDrillStatsProps {
+  girl: CommonGirlData;
+  currentBlessing: BlessingDefinition[];
+}
+
+export const PentaDrillStats: React.FC<PentaDrillStatsProps> = ({
+  girl,
+  currentBlessing
+}) => {
+  const { id_role } = girl;
+  if (id_role == null) return null;
+
+  const stats = getPentaDrillStats(girl, currentBlessing);
+  if (stats == null) return null;
+
+  const name = window.GT.design[`girl_role_${id_role}_name`];
+  // const description = window.GT.design[`girl_role_${id_role}_pvp4`];
+
+  return (
+    <Tooltip
+      place="bottom"
+      tooltip={
+        <div>
+          {name}
+          <hr />
+          <div style={{ display: 'inline-block' }}>
+            <div {...{ carac: 'ego' }}>{format(stats.ego)}</div>
+            <div {...{ carac: 'chance' }}>{format(stats.chance)}</div>
+            <div {...{ carac: 'damage' }}>{format(stats.damage)}</div>
+            <div {...{ carac: 'def0' }}>{format(stats.defense)}</div>
+          </div>
+          <div style={{ display: 'inline-block' }}>
+            <div {...{ carac: 'mana' }}>{format(stats.mana_starting)}</div>
+            <div {...{ carac: 'mana-generation' }}>
+              {format(stats.mana_generation)}
+            </div>
+            <div {...{ carac: 'speed' }}>{format(stats.speed)}</div>
+            <div>&nbsp;</div>
+          </div>
+        </div>
+      }
+    >
+      <RoleIcon roleId={id_role} />
+    </Tooltip>
   );
 };
 
