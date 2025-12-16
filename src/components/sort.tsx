@@ -9,6 +9,10 @@ import {
   GradeSorter,
   LabyrinthPowerSorter,
   LevelSorter,
+  PentaDrillEgoSorter,
+  PentaDrillDamageSorter,
+  PentaDrillDefenseSorter,
+  PentaDrillSpeedSorter,
   RaritySorter,
   RecruitedSorter,
   SalarySorter,
@@ -53,7 +57,11 @@ export const SortPanel: React.FC<SortProps> = ({
       BasePowerSorter,
       CurrentPowerSorter(currentBlessings),
       UpcomingPowerSorter(upcomingBlessings),
-      LabyrinthPowerSorter(currentBlessings)
+      LabyrinthPowerSorter(currentBlessings),
+      PentaDrillEgoSorter(currentBlessings),
+      PentaDrillDamageSorter(currentBlessings),
+      PentaDrillDefenseSorter(currentBlessings),
+      PentaDrillSpeedSorter(currentBlessings)
     ];
   }, [currentBlessings, upcomingBlessings]);
 

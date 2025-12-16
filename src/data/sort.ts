@@ -5,6 +5,7 @@ import {
   getFullPower,
   getLabyrinthPower,
   getNormalizedPower,
+  getPentaDrillStats,
   getPower
 } from './data';
 
@@ -347,6 +348,90 @@ export function LabyrinthPowerSorter(
     sorter: sorter(
       'Labyrinth Power',
       labyrinthPower(blessings),
+      shards(),
+      reversedId()
+    )
+  };
+}
+
+export function pentadrillEgo(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) =>
+    (getPentaDrillStats(g1, blessings)?.ego ?? 0) -
+    (getPentaDrillStats(g2, blessings)?.ego ?? 0);
+}
+
+export function PentaDrillEgoSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: 'pentadrillEgo',
+    direction: 'desc',
+    sorter: sorter(
+      'Penta Drill Ego',
+      pentadrillEgo(blessings),
+      shards(),
+      reversedId()
+    )
+  };
+}
+
+export function pentadrillDamage(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) =>
+    (getPentaDrillStats(g1, blessings)?.damage ?? 0) -
+    (getPentaDrillStats(g2, blessings)?.damage ?? 0);
+}
+
+export function PentaDrillDamageSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: 'pentadrillDamage',
+    direction: 'desc',
+    sorter: sorter(
+      'Penta Drill Damage',
+      pentadrillDamage(blessings),
+      shards(),
+      reversedId()
+    )
+  };
+}
+
+export function pentadrillDefense(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) =>
+    (getPentaDrillStats(g1, blessings)?.defense ?? 0) -
+    (getPentaDrillStats(g2, blessings)?.defense ?? 0);
+}
+
+export function PentaDrillDefenseSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: 'pentadrillDefense',
+    direction: 'desc',
+    sorter: sorter(
+      'Penta Drill Defense',
+      pentadrillDefense(blessings),
+      shards(),
+      reversedId()
+    )
+  };
+}
+
+export function pentadrillSpeed(blessings: BlessingDefinition[]): Comparator {
+  return (g1, g2) =>
+    (getPentaDrillStats(g1, blessings)?.speed ?? 0) -
+    (getPentaDrillStats(g2, blessings)?.speed ?? 0);
+}
+
+export function PentaDrillSpeedSorter(
+  blessings: BlessingDefinition[]
+): ConfiguredSort {
+  return {
+    id: 'pentadrillSpeed',
+    direction: 'desc',
+    sorter: sorter(
+      'Penta Drill Speed',
+      pentadrillSpeed(blessings),
       shards(),
       reversedId()
     )

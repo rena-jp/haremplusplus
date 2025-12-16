@@ -822,6 +822,46 @@ export function getLabyrinthPower(
   return roundedTotal;
 }
 
+export interface PentaDrillStats {
+  ego: number;
+  damage: number;
+  defense: number;
+  chance: number;
+  speed: number;
+  mana_starting: number;
+  mana_generation: number;
+}
+
+export function getPentaDrillStats(
+  girl: CommonGirlData,
+  blessings: BlessingDefinition[]
+): PentaDrillStats | null {
+  const stats = girl.stats;
+  if (stats == null) return null;
+
+  const totalStats = { ...stats };
+  girl.equipment?.items.forEach((e) => {
+    totalStats.hardcore += e.stats.hardcore;
+    totalStats.charm += e.stats.charm;
+    totalStats.knowhow += e.stats.knowhow;
+  });
+
+  const multiplier = getBlessingMultiplierForLabyrinth(girl, blessings);
+  totalStats.hardcore *= multiplier;
+  totalStats.charm *= multiplier;
+  totalStats.knowhow *= multiplier;
+
+  return {
+    ego: Math.ceil(8 * totalStats.hardcore),
+    damage: Math.ceil(totalStats.knowhow),
+    defense: Math.ceil(0.5 * totalStats.charm),
+    chance: Math.ceil(0.2 * totalStats.knowhow),
+    speed: Math.ceil(0.2 * totalStats.knowhow),
+    mana_starting: Math.ceil(Math.min(35, 10 + 0.002 * totalStats.knowhow)),
+    mana_generation: Math.ceil(20)
+  };
+}
+
 export function equalBlessing(
   blessing1: BlessingType,
   blessing2: BlessingType
