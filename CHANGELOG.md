@@ -1,3 +1,8 @@
+## 0.24.1 - 2025-12-18
+
+- Add Not Ready to Upgrade Filter
+- Fix Level Limit Reached Filter bug
+
 ## 0.24.0 - 2025-12-17
 
 - Add support for Penta Drill
