@@ -639,23 +639,33 @@ const UpgradeReadyForm: React.FC<FormProps> = ({
       {
         label: 'Ready to Upgrade',
         description: 'Filter girls that are ready to upgrade'
+      },
+      {
+        label: 'Not ready',
+        description: 'Filter girls that are not ready to upgrade'
       }
     ],
     []
   );
 
   const createFilter = useCallback((values: boolean[]) => {
-    return values[0] ? new UpgradeReadyFilter() : undefined;
+    return values.every((v) => !v)
+      ? undefined
+      : new UpgradeReadyFilter(values[0] === true);
   }, []);
 
   const getValues = useCallback((filter: Filter) => {
-    return filter instanceof UpgradeReadyFilter ? [true] : [false];
+    if (filter instanceof UpgradeReadyFilter) {
+      return filter.ready ? [true, false] : [false, true];
+    } else {
+      return [false, false];
+    }
   }, []);
 
   return (
     <ToggleOptionsForm
       label="Ready to Upgrade"
-      description="Filter girls that are ready to upgrade"
+      description="Filter girls that are (not) ready to upgrade"
       options={options}
       getValues={getValues}
       createFilter={createFilter}

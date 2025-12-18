@@ -295,23 +295,26 @@ export class UpgradeReadyFilter extends AbstractFilter {
   static ID = 'upgrade-ready';
   id = UpgradeReadyFilter.ID;
 
-  constructor() {
+  constructor(public ready: boolean) {
     super();
-    this.label = 'Upgrade ready';
+    this.label = ready ? 'Upgrade ready' : 'Not upgrade ready';
   }
 
   includes(girl: CommonGirlData): boolean {
-    return girl.upgradeReady;
+    return girl.upgradeReady === this.ready;
   }
 
   getParams() {
-    return undefined;
+    return {
+      ready: this.ready
+    };
   }
 
   static FACTORY: FilterFactory<UpgradeReadyFilter> = {
     type: UpgradeReadyFilter.ID,
-    create: (_config) => {
-      return new UpgradeReadyFilter();
+    create: (config) => {
+      const ready = booleanParam(config, 'ready') ?? true;
+      return new UpgradeReadyFilter(ready);
     }
   };
 }
