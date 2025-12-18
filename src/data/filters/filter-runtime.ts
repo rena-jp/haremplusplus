@@ -235,7 +235,7 @@ export class LevelLimitReachedFilter extends AbstractFilter {
   includes(girl: CommonGirlData): boolean {
     const level = girl.level ?? 0;
     const maxLevel = girl.maxLevel ?? 250;
-    return (level === maxLevel) === this.reached;
+    return level >= maxLevel === this.reached;
   }
 
   getParams() {
