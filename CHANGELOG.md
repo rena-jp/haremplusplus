@@ -1,3 +1,7 @@
+## 0.24.2 - 2025-12-28
+
+- Add Release Date Sorter
+
 ## 0.24.1 - 2025-12-18
 
 - Add Not Ready to Upgrade Filter
