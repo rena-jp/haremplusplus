@@ -468,6 +468,27 @@ export function SkinReleaseDateSorter(): ConfiguredSort {
   };
 }
 
+export function releaseDate(): Comparator {
+  return (g1, g2) => {
+    const date1 = g1?.release_date;
+    const date2 = g2?.release_date;
+    if (date1 != null && date2 != null) {
+      return date1 < date2 ? -1 : date1 > date2 ? 1 : 0;
+    }
+    if (date1 != null) return -1;
+    if (date2 != null) return 1;
+    return 0; // date1 == null && date2 == null
+  };
+}
+
+export function ReleaseDateSorter(): ConfiguredSort {
+  return {
+    id: 'releaseDateSorter',
+    direction: 'desc',
+    sorter: sorter('Release Date', releaseDate(), shards(), id())
+  };
+}
+
 export function sortGirls(girls: CommonGirlData[]): void {
   girls.sort((girl1, girl2) => {
     // Owned girls always on top

@@ -337,7 +337,8 @@ export async function toHaremDataFromWaifuData(
       equipment: equipmentData,
       skillTiers: girlData.skill_tiers_info,
       id_role: girlData.id_role,
-      gradeSkins: [...girlData.preview.grade_skins_data]
+      gradeSkins: [...girlData.preview.grade_skins_data],
+      release_date: girlData.release_date
     };
 
     const commonGirl: CommonGirlData = {

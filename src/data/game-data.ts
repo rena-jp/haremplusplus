@@ -228,6 +228,8 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   preview: {
     grade_skins_data: Array<GradeSkin>;
   };
+
+  release_date: string;
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;

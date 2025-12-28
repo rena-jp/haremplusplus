@@ -135,6 +135,8 @@ export interface BaseGirlData {
   id_role?: number | null;
 
   gradeSkins?: Array<GradeSkin>;
+
+  release_date?: string;
 }
 
 export interface SkillTiers {
