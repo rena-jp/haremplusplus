@@ -141,7 +141,7 @@ export function getXpStats(
       maxXpToCap: getGXPToCap(girl, nextCap),
       xpToMax,
       canUse,
-      level: book === undefined ? girl.level ?? 0 : getLevel(girl, book.xp),
+      level: book === undefined ? (girl.level ?? 0) : getLevel(girl, book.xp),
       maxLevel: girl.maxLevel ?? 250,
       xpGain: book?.xp ?? 0
     };

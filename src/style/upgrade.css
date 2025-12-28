@@ -211,7 +211,8 @@ button.awaken {
 }
 
 button.awaken.overlay {
-  background-image: url('https://hh2.hh-content.com/design/ic_gem.svg'),
+  background-image:
+    url('https://hh2.hh-content.com/design/ic_gem.svg'),
     linear-gradient(to top, #008ed5 0, #05719c 100%);
   border-radius: 100%;
   background-origin: content-box, border-box;
@@ -301,7 +302,8 @@ button.upgrade.overlay {
   right: 0;
   top: 50%;
   transform: translateX(30%) translateY(-50%);
-  background-image: url(https://hh2.hh-content.com/design_v2/upgrade_icn.png),
+  background-image:
+    url(https://hh2.hh-content.com/design_v2/upgrade_icn.png),
     linear-gradient(to top, #008ed5 0, #05719c 100%);
 
   box-shadow:
@@ -326,7 +328,8 @@ button.upgrade.overlay:active {
   box-shadow: none;
 }
 
-.max-content-popup, .full-max-content-popup {
+.max-content-popup,
+.full-max-content-popup {
   display: flex;
   flex-direction: column;
   font-size: 1.2em;
@@ -338,36 +341,42 @@ button.upgrade.overlay:active {
   padding-bottom: 0.6em;
 }
 
-.max-content-popup > .qh-inventory, .full-max-content-popup > .qh-inventory {
+.max-content-popup > .qh-inventory,
+.full-max-content-popup > .qh-inventory {
   padding-top: 1em;
   flex-grow: 1;
 }
 
-.max-content-popup > .note, .full-max-content-popup > .note {
+.max-content-popup > .note,
+.full-max-content-popup > .note {
   border-block: 1px solid #8e0333;
   text-align: center;
   padding-block: 1em;
 }
 
-.max-content-popup > .note > .value , .full-max-content-popup > .note > .value {
+.max-content-popup > .note > .value,
+.full-max-content-popup > .note > .value {
   color: #ffb918;
 }
 
-.full-max-content-popup > .max-out-actions > .confirm-full-max-out-affection{
-    align-items: center;
-    -moz-column-gap: .5em;
-    column-gap: .5em;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    padding-inline: 1em;
+.full-max-content-popup > .max-out-actions > .confirm-full-max-out-affection {
+  align-items: center;
+  -moz-column-gap: 0.5em;
+  column-gap: 0.5em;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-inline: 1em;
 }
 
-.full-max-content-popup > .max-out-actions > .confirm-full-max-out-affection > .currency-icon {
-    background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
-    background-size: cover;
-    height: 1.5em;
-    width: 1.5em;
+.full-max-content-popup
+  > .max-out-actions
+  > .confirm-full-max-out-affection
+  > .currency-icon {
+  background-image: url(https://hh2.hh-content.com/pictures/design/ic_soft_currency.png);
+  background-size: cover;
+  height: 1.5em;
+  width: 1.5em;
 }
 
 .max-out-actions {

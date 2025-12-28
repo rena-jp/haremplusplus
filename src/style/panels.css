@@ -228,7 +228,8 @@
 
 button.toggle.qh-class {
   /** For Class toggle, use both the class image and the pressed/unpressed background gradient */
-  background-image: var(--class-image),
+  background-image:
+    var(--class-image),
     linear-gradient(
       to bottom,
       rgba(60, 60, 60, 0.7) 0,
@@ -246,12 +247,13 @@ button.toggle.qh-class {
 }
 
 button.toggle.qh-class.pressed {
-  background-image: var(--class-image),
-    linear-gradient(to bottom, #ffa23e 0, #c41b53 100%);
+  background-image:
+    var(--class-image), linear-gradient(to bottom, #ffa23e 0, #c41b53 100%);
 }
 
 .inactive > button.toggle.qh-class.pressed {
-  background-image: var(--class-image),
+  background-image:
+    var(--class-image),
     linear-gradient(to bottom, rgba(0, 0, 0, 0.3) 0, rgba(88, 88, 88, 0.3) 100%);
 }
 

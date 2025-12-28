@@ -101,11 +101,13 @@
 }
 
 .qh-scene-content > .side-bar > .navigate > button.previous {
-  background-image: url(https://hh2.hh-content.com/design/ic_arrow-left-ffffff.svg),
+  background-image:
+    url(https://hh2.hh-content.com/design/ic_arrow-left-ffffff.svg),
     linear-gradient(to top, #008ed5 0, #05719c 100%);
 }
 .qh-scene-content > .side-bar > .navigate > button.next {
-  background-image: url(https://hh2.hh-content.com/design/ic_arrow-right-ffffff.svg),
+  background-image:
+    url(https://hh2.hh-content.com/design/ic_arrow-right-ffffff.svg),
     linear-gradient(to top, #008ed5 0, #05719c 100%);
 }
 

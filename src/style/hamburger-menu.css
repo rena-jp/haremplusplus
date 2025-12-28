@@ -36,7 +36,8 @@
 }
 
 .qh-menu-toggle {
-  background-image: url(https://hh2.hh-content.com/design/ic_menu.svg),
+  background-image:
+    url(https://hh2.hh-content.com/design/ic_menu.svg),
     linear-gradient(to top, #008ed5 0, #05719c 100%);
   padding: 0.25em;
 
