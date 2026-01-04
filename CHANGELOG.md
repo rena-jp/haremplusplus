@@ -1,3 +1,7 @@
+## 0.24.3 - 2026-01-04
+
+- Fix CSS side effects
+
 ## 0.24.2 - 2025-12-28
 
 - Add Release Date Sorter
