@@ -1,3 +1,8 @@
+## 0.24.4 - 2026-01-12
+
+- Fix CSS bugs
+- Change Role order to match the game
+
 ## 0.24.3 - 2026-01-04
 
 - Fix CSS side effects
