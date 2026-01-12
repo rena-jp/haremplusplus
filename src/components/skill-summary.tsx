@@ -75,9 +75,9 @@ const SkillSummaries: React.FC<SkillSummariesProps> = ({
   const roleList: Role[] = useMemo(
     () => [
       { id: null, name: 'None' },
-      ...[...Array(10)].map((_, i) => ({
-        id: i + 1,
-        name: window.GT.design[`girl_role_${i + 1}_name`]
+      ...[4, 10, 9, 3, 1, 2, 5, 6].map((e) => ({
+        id: e,
+        name: window.GT.design[`girl_role_${e}_name`]
       }))
     ],
     []
