@@ -128,7 +128,8 @@ requiring actual content. */
   background-image: url(https://hh2.hh-content.com/pictures/design/battle_positions/12.png);
 }
 
-#quick-harem-wrapper .close-popup {
+.QuickHarem .close-popup,
+#popup-root .close-popup {
   cursor: pointer;
   background-image: url(https://hh2.hh-content.com/clubs/ic_xCross.png);
   background-size: cover;
@@ -136,7 +137,8 @@ requiring actual content. */
   height: 2.5em;
 }
 
-#quick-harem-wrapper .return-button {
+.QuickHarem .return-button,
+#popup-root .return-button {
   cursor: pointer;
   box-shadow:
     0 3px 0 rgba(13, 22, 25, 0.35),
@@ -146,7 +148,8 @@ requiring actual content. */
   border-radius: 50%;
 }
 
-#quick-harem-wrapper .return-button-content {
+.QuickHarem .return-button-content,
+#popup-root .return-button-content {
   background-image: url(https://hh2.hh-content.com/design/ic_arrow-back.svg);
   width: 2em;
   height: 2em;
