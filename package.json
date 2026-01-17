@@ -1,6 +1,6 @@
 {
   "name": "harem-plus-plus",
-  "version": "0.24.4",
+  "version": "0.25.0",
   "private": true,
   "dependencies": {
     "deep-equal": "^2.2.3",
@@ -43,13 +43,13 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/deep-equal": "^1.0.4",
     "@types/jest": "^30.0.0",
-    "@types/node": "^25.0.3",
-    "@types/react": "^19.2.7",
+    "@types/node": "^25.0.9",
+    "@types/react": "^19.2.8",
     "@types/react-dom": "^19.2.3",
     "@types/react-lazyload": "^3.2.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-config-react-app": "^7.0.1",
-    "eslint-plugin-prettier": "^5.5.4",
+    "eslint-plugin-prettier": "^5.5.5",
     "react-scripts": "^5.0.1",
     "typescript": "^5.9.3"
   },

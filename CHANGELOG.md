@@ -1,3 +1,9 @@
+## 0.25.0 - 2026-01-17
+
+- Add API for other scripts
+- Fix reload feature
+- Change URL
+
 ## 0.24.4 - 2026-01-12
 
 - Fix CSS bugs
