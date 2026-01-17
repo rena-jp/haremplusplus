@@ -17,7 +17,8 @@ import {
   GemsData,
   GirlEquipment,
   GirlsDataList,
-  GradeSkin
+  GradeSkin,
+  OwnedGirlEntry
 } from '../data/game-data';
 
 /**
@@ -31,6 +32,7 @@ export interface GameAPI {
    * work on the in-game harem page)
    */
   getGirls(allowRequest: boolean): Promise<GirlsDataList>;
+  getWaifuGirls(allowRequest: boolean): Promise<OwnedGirlEntry[]>;
   /**
    * Get the quests list from the game.
    * @param allowRequest If true, a request may be sent to the server to load the quests.

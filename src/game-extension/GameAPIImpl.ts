@@ -29,6 +29,7 @@ import {
   Hero,
   isUnknownObject,
   MaxOutResult,
+  OwnedGirlEntry,
   RequestResult,
   TeamCaracsResult,
   TeamDataEntry,
@@ -191,6 +192,76 @@ export class GameAPIImpl implements GameAPI {
 
     // Step 3: girlsDataList is not already present, and we didn't allow a request.
     // Nothing we can do...
+
+    return Promise.reject('GirlsDataList is undefined');
+  }
+
+  async getWaifuGirls(allowRequest: boolean): Promise<OwnedGirlEntry[]> {
+    if (!allowRequest) {
+      const { girls_data_list } = window;
+      if (Array.isArray(girls_data_list)) {
+        return girls_data_list;
+      }
+    }
+
+    if (allowRequest) {
+      try {
+        const waifuFrame = await getOrCreateWaifuFrame();
+        if (!waifuFrame.contentWindow) {
+          console.error('Found frame, but contentWindow is missing?');
+          return Promise.reject(
+            'Failed to load harem from the game. Harem Frame not found or not valid.'
+          );
+        }
+
+        const girlsPromise = new Promise<OwnedGirlEntry[]>(
+          (resolve, reject) => {
+            if (!waifuFrame || !waifuFrame.contentWindow) {
+              reject(
+                'Harem Frame is no longer available. Cant load girls data...'
+              );
+              return;
+            }
+            let resolved = false;
+            const timeout = setTimeout(() => {
+              if (!resolved) {
+                waifuFrame.contentWindow?.removeEventListener(
+                  'message',
+                  messageListener
+                );
+                console.warn('Frame timeout. Reject girls promise.');
+                reject('Timeout');
+              }
+            }, 30 * 1000 /* 30s Timeout */);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const messageListener = (event: MessageEvent<any>) => {
+              if (event.origin === window.location.origin) {
+                const data = event.data;
+                if (Array.isArray(data)) {
+                  resolved = true;
+                  resolve(data);
+                  clearTimeout(timeout);
+                  window.removeEventListener('message', messageListener);
+                }
+              }
+            };
+
+            window.addEventListener('message', messageListener);
+            waifuFrame.contentWindow?.postMessage(
+              REQUEST_GIRLS,
+              window.location.origin
+            );
+          }
+        );
+        return girlsPromise;
+      } catch (error) {
+        console.error('Error while trying to load or get the frame: ', error);
+        return Promise.reject(
+          'Failed to load harem from the game. Harem Frame not found or not valid.'
+        );
+      }
+    }
 
     return Promise.reject('GirlsDataList is undefined');
   }
@@ -1068,6 +1139,19 @@ export class GameAPIImpl implements GameAPI {
     );
   }
 
+  private async requestFromWaifu<T>(
+    attribute: keyof Window,
+    typeTester: (value: unknown) => value is T,
+    allowRequest: boolean
+  ): Promise<T> {
+    return this.requestFromFrame(
+      () => getOrCreateWaifuFrame(),
+      attribute,
+      typeTester,
+      allowRequest
+    );
+  }
+
   private async requestFromTeams<T>(
     attribute: keyof Window,
     typeTester: (value: unknown) => value is T,
@@ -1350,6 +1434,10 @@ async function getOrCreateHaremFrame(): Promise<HTMLIFrameElement> {
  */
 async function getOrCreateMarketFrame(): Promise<HTMLIFrameElement> {
   return getOrCreateFrame('market-frame', 'shop.html', true);
+}
+
+async function getOrCreateWaifuFrame(): Promise<HTMLIFrameElement> {
+  return getOrCreateFrame('waifu-frame', 'waifu.html', true);
 }
 
 async function getOrCreateUpgradeFrame(

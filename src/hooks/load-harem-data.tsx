@@ -1,11 +1,4 @@
-import {
-  ReactElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState
-} from 'react';
+import { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   loadBlessings,
@@ -27,7 +20,6 @@ import {
 } from '../data/data';
 import { countGems, GameBlessingData, OwnedGirlEntry } from '../data/game-data';
 import { toHaremDataFromWaifuData } from '../data/import/harem-import';
-import { getBlessings } from '../data/import/blessing-import';
 
 export interface LoadHaremDataProps {
   gameAPI: GameAPI;
@@ -108,13 +100,77 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     [setGemsCount]
   );
 
+  const [cachedGirls, setCachedGirls] = useState<
+    CommonGirlData[] | undefined
+  >();
+
   useEffect(() => {
-    // Immediately load gems data from cache (if available), then load
-    // gems data from the game (To ensure up-to-date data)
-    loadGemsData().then(
-      (gemsData) => setGemsCount(countGems(gemsData)),
-      () => {}
+    let inited = false;
+
+    const gemsDataFromDB = loadGemsData().catch(() => null);
+    const blessingsFromDB = loadBlessings(gameAPI, false).catch(() => null);
+    const haremDataFromDB = loadHaremData().catch((error) => {
+      console.info(
+        'Failed to load initial harem data from cache. Private mode or first time?',
+        error
+      );
+      return null;
+    });
+
+    Promise.all([gemsDataFromDB, blessingsFromDB, haremDataFromDB]).then(
+      ([gemsData, blessings, haremData]) => {
+        if (!inited && gemsData && blessings && haremData) {
+          setGemsCount(countGems(gemsData));
+          setGameBlessings(blessings);
+          setCachedGirls(haremData.allGirls);
+          updateResult(haremData);
+        }
+      }
     );
+
+    (async () => {
+      setLoadingData(true);
+
+      const gemsData = await gameAPI.getGemsData(true).catch((reason) => {
+        console.warn('Failed to get gems data: ', reason);
+        return null;
+      });
+
+      if (gemsData) {
+        gemsDataFromDB.then(() => {
+          persistGemsData(gemsData);
+        });
+      }
+
+      const blessings = await blessingsFromDB
+        .then(() => loadBlessings(gameAPI, true))
+        .catch((reason) => {
+          console.warn('Failed to get game blessings: ', reason);
+          return null;
+        });
+
+      const cachedGirls = await haremDataFromDB;
+
+      if (gemsData && blessings) {
+        let waifuGirls = window.girls_data_list as any as OwnedGirlEntry[];
+        if (waifuGirls == null) {
+          waifuGirls = await gameAPI.getWaifuGirls(true);
+        }
+        if (Array.isArray(waifuGirls)) {
+          const data = await toHaremDataFromWaifuData(
+            cachedGirls?.allGirls ?? [],
+            waifuGirls,
+            blessings
+          );
+          inited = true;
+          setGemsCount(countGems(gemsData));
+          setGameBlessings(blessings);
+          persistHaremData(data);
+          updateResult(data);
+        }
+      }
+      setLoadingData(false);
+    })();
   }, []);
 
   const refresh = useCallback<() => Promise<void>>(async () => {
@@ -122,42 +178,38 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
       return Promise.reject('Refresh is already in progress');
     }
 
-    setLoadingData(true);
-    window.location.reload();
-  }, [gameAPI]);
-
-  // Immediately load the data, only once.
-  useEffect(() => {
-    // Note: in dev mode with Strict Mode enabled, the extension
-    // will be rendered twice, which may cause this refresh() to
-    // be invoked twice and cause an exception ("Already loading...")
     (async () => {
       setLoadingData(true);
-      const data = await gameAPI.getGemsData(true);
-      persistGemsData(data);
-      setGemsCount(countGems(data));
+
+      const gemsData = await gameAPI.getGemsData(true).catch((reason) => {
+        console.warn('Failed to get gems data: ', reason);
+        return null;
+      });
+
+      if (gemsData) persistGemsData(gemsData);
+
+      const blessings = await loadBlessings(gameAPI, true).catch((reason) => {
+        console.warn('Failed to get game blessings: ', reason);
+        return null;
+      });
+
+      if (gemsData && blessings) {
+        let waifuGirls = await gameAPI.getWaifuGirls(true);
+        if (Array.isArray(waifuGirls)) {
+          const data = await toHaremDataFromWaifuData(
+            cachedGirls ?? [],
+            waifuGirls,
+            blessings
+          );
+          persistHaremData(data);
+          setGemsCount(countGems(gemsData));
+          setGameBlessings(blessings);
+          updateResult(data);
+        }
+      }
       setLoadingData(false);
     })();
-  }, []);
-
-  useEffect(() => {
-    // Immediately load the blessings, only once.
-    loadBlessings(gameAPI)
-      .then((blessings) => {
-        try {
-          getBlessings(blessings);
-          return blessings;
-        } catch (e) {
-          return loadBlessings(gameAPI, true);
-        }
-      })
-      .then((blessings) => {
-        setGameBlessings(blessings);
-      })
-      .catch((reason) => {
-        console.warn('Failed to get game blessings: ', reason);
-      });
-  }, []);
+  }, [gameAPI]);
 
   const updateResult = useCallback((haremData: HaremData) => {
     const updatedGirls = haremData.allGirls;
@@ -165,41 +217,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     setCurrentBlessings(haremData.activeBlessing);
     setUpcomingBlessings(haremData.nextBlessing);
   }, []);
-
-  const [cachedGirls, setCachedGirls] = useState<
-    CommonGirlData[] | undefined
-  >();
-
-  // Load from cache
-  useEffect(() => {
-    loadHaremData()
-      .catch((error) => {
-        console.info(
-          'Failed to load initial harem data from cache. Private mode or first time?',
-          error
-        );
-        return emptyHarem;
-      })
-      .then((cacheData) => {
-        setCachedGirls(cacheData.allGirls);
-        updateResult(cacheData);
-      });
-  }, [setCachedGirls]);
-
-  useEffect(() => {
-    const waifuGirls = window.girls_data_list as any as OwnedGirlEntry[];
-    if (cachedGirls && gameBlessings && Array.isArray(waifuGirls)) {
-      (async () => {
-        const data = await toHaremDataFromWaifuData(
-          cachedGirls,
-          waifuGirls,
-          gameBlessings
-        );
-        persistHaremData(data);
-        updateResult(data);
-      })();
-    }
-  }, [cachedGirls, gameBlessings, updateResult]);
 
   const result: LoadHaremDataResult = {
     allGirls: allGirlsValue,

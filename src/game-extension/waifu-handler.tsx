@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { GameExtension } from '../components/game-extension';
 import { GameName } from '../data/data';
 import { getDocumentHref } from '../migration';
+import { GameAPIImpl, REQUEST_GIRLS } from './GameAPIImpl';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
@@ -37,6 +38,34 @@ export async function handleWaifu(): Promise<void> {
   if (visible) {
     window.$('#waifu-page').remove();
     updateApp();
+  } else {
+    await updateGirlsAndDispatch();
+  }
+}
+
+async function updateGirlsAndDispatch(): Promise<void> {
+  try {
+    const gameAPI = new GameAPIImpl();
+    const girls = await gameAPI.getWaifuGirls(false);
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage(girls, window.location.origin);
+
+      const messageListener = (event: MessageEvent) => {
+        if (event.origin === window.origin) {
+          const message = event.data;
+          if (
+            message === REQUEST_GIRLS &&
+            window.parent &&
+            window.parent !== window
+          ) {
+            window.parent.postMessage(girls, window.location.origin);
+          }
+        }
+      };
+      window.addEventListener('message', messageListener);
+    }
+  } catch (error) {
+    console.error('Failed to get girls data from harem. Reason: ', error);
   }
 }
 
