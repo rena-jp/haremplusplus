@@ -7,10 +7,21 @@ import { GameAPIImpl, REQUEST_GIRLS } from './GameAPIImpl';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
+  if (searchParams.has('characters')) {
+    const url = new URL(window.location.href);
+    if (searchParams.has('girl')) {
+      const id = searchParams.get('girl');
+      url.hash = `characters-${id}`;
+    } else {
+      url.hash = 'characters';
+    }
+    url.search = '';
+    window.history.replaceState('', '', url.toString());
+  }
 
   const gameName = getGameName();
   const root = createRoot(gameName);
-  let visible = searchParams.has('characters');
+  let visible = window.location.hash.startsWith('#characters');
   const updateApp = () => {
     root.render(
       <React.StrictMode>

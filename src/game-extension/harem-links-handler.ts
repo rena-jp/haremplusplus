@@ -12,7 +12,7 @@ export function handleHaremLinks() {
     i: number,
     e: HTMLElement
   ) {
-    window.$(e).attr('href', getDocumentHref('/waifu.html?characters'));
+    window.$(e).attr('href', getDocumentHref('/waifu.html#characters'));
   });
 
   window.$("a[href^='/characters/']").each(function (
@@ -23,7 +23,7 @@ export function handleHaremLinks() {
     const match = window.$(e).attr('href').match(regex);
     if (match) {
       const girlId = match[1];
-      const newLink = getDocumentHref(`/waifu.html?characters&girl=${girlId}`);
+      const newLink = getDocumentHref(`/waifu.html#characters-${girlId}`);
       window.$(e).attr('href', newLink);
     }
   });

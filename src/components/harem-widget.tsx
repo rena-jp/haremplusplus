@@ -89,9 +89,10 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
 
   const [selectedGirl, setSelectedGirl] = useState<CommonGirlData | undefined>(
     () => {
-      const searchParams = new URLSearchParams(window.location.search);
-      if (searchParams.has('girl')) {
-        const girlId = searchParams.get('girl');
+      const { hash } = window.location;
+      const match = hash.match(/#characters-(\d+)/);
+      if (match) {
+        const girlId = match[1];
         const girl = allGirls.find((girl) => girl.id === girlId);
         if (girl !== undefined) {
           return girl;
@@ -110,17 +111,12 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
       setSelectedGirl(girl);
 
       // Update the location
-      const params = new URLSearchParams(window.location.search);
-      if (!params.has('characters')) {
-        params.set('characters', '');
-      }
-      if (girl !== undefined) {
-        params.set('girl', girl.id);
-      } else {
-        params.delete('girl');
-      }
       const url = new URL(window.location.toString());
-      url.search = params.toString();
+      if (girl !== undefined) {
+        url.hash = `characters-${girl.id}`;
+      } else {
+        url.hash = 'characters';
+      }
       window.history.replaceState('', '', url.toString());
 
       // Notify the team editor of the selected girl, if it is listening.
