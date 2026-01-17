@@ -45,7 +45,7 @@ export async function handleWaifu(): Promise<void> {
  * Must be called only once.
  * @returns The root element for the harem
  */
-function createRoot(gameName: GameName): ReactDOM.Root {
+export function createRoot(gameName: GameName): ReactDOM.Root {
   let targetBody = document.getElementById(gameName.valueOf());
   if (targetBody === null) {
     targetBody = document.body;
@@ -59,7 +59,7 @@ function createRoot(gameName: GameName): ReactDOM.Root {
   return root;
 }
 
-function getGameName(): GameName {
+export function getGameName(): GameName {
   if (document.getElementById('hh_hentai')) {
     return GameName.HentaiHeroes;
   }
