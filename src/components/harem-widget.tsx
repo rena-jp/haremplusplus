@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { forceCheck } from 'react-lazyload';
 import { GameAPI } from '../api/GameAPI';
 import {
@@ -13,6 +20,7 @@ import { Teams } from './teams';
 import { UpgradePage } from './upgrade';
 import { TeamsData } from '../hooks/teams-hooks';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { SelectedGirlIdContext } from '../export-api';
 
 /**
  * Number of girls to be rendered immediately. Should be small (< 100 items)
@@ -126,6 +134,12 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
     },
     [setSelectedGirl, teamsGirlListenerRef]
   );
+
+  const [girlId, count] = useContext(SelectedGirlIdContext);
+  useEffect(() => {
+    const girl = allGirls.find((e) => e.id === girlId);
+    if (girl) selectGirl(girl);
+  }, [allGirls, girlId, count]);
 
   useEffect(() => {
     // Refresh selection when girls data change

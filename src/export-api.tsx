@@ -3,28 +3,40 @@ import { GameExtension } from './components/game-extension';
 import { createRoot, getGameName } from './game-extension/waifu-handler';
 import { Root } from 'react-dom/client';
 
+export const SelectedGirlIdContext = React.createContext<
+  [string | undefined, number]
+>([undefined, 0]);
+
 export function exportAPI() {
   const gameName = getGameName();
   let root: Root | undefined;
   let visible = false;
+  let girlId: string | undefined;
+  let count = 0;
 
-  const updateApp = (visible: boolean) => {
+  const updateApp = (visible: boolean, girlId?: string) => {
     root ??= createRoot(gameName);
     root.render(
       <React.StrictMode>
-        <GameExtension
-          visible={visible}
-          setVisible={setVisible}
-          gameName={gameName}
-        />
+        <SelectedGirlIdContext value={[girlId, ++count]}>
+          <GameExtension
+            visible={visible}
+            setVisible={setVisible}
+            gameName={gameName}
+          />
+        </SelectedGirlIdContext>
       </React.StrictMode>
     );
   };
 
-  const setVisible = (newVisible: boolean) => {
-    if (newVisible === visible) return;
+  const setVisible = (newVisible: boolean, newGirlId?: string) => {
+    if (!newVisible && !visible) return;
+    if (newVisible && visible && newGirlId == null) {
+      return;
+    }
     visible = newVisible;
-    updateApp(newVisible);
+    girlId = newGirlId;
+    updateApp(newVisible, girlId);
     const qh = document.querySelector<HTMLElement>('.quick-harem-wrapper');
     if (qh == null) return;
     qh.style.display = newVisible ? '' : 'none';
@@ -32,8 +44,13 @@ export function exportAPI() {
 
   const w = window as any;
   w.HaremPlusPlus = {
-    open() {
-      setVisible(true);
+    open(id_girl?: string | number) {
+      if (id_girl != null) {
+        const url = new URL(window.location.toString());
+        url.hash = `characters-${id_girl}`;
+        window.history.replaceState('', '', url.toString());
+      }
+      setVisible(true, String(id_girl));
     },
     close() {
       setVisible(false);
