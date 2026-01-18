@@ -5,5 +5,5 @@ import { getDocumentHref } from '../migration';
  */
 export async function handleHamburgerMenu(): Promise<void> {
   const haremLink = window.$("nav a[href^='/characters.html']");
-  haremLink.attr('href', getDocumentHref('/waifu.html#characters'));
+  haremLink.attr('href', getDocumentHref('/waifu.html') + '#characters');
 }

@@ -15,7 +15,9 @@ export async function handleWaifu(): Promise<void> {
     } else {
       url.hash = 'characters';
     }
-    url.search = '';
+    searchParams.delete('characters');
+    searchParams.delete('girl');
+    url.search = searchParams.toString();
     window.history.replaceState('', '', url.toString());
   }
 
