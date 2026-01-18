@@ -19,7 +19,7 @@ export interface GirlTooltipProps {
 
 export const GirlTooltip: React.FC<GirlTooltipProps> = ({
   girl,
-  currentBlessings,
+  currentBlessings = [],
   classNames
 }) => {
   const classes = ['girl-tooltip'];
@@ -32,20 +32,13 @@ export const GirlTooltip: React.FC<GirlTooltipProps> = ({
   let equippedPower: number;
   let blessed = false;
   if (girl.stats) {
-    const blessedStats = getBlessedStats(
-      girl,
-      girl.stats,
-      currentBlessings ?? []
-    );
+    const blessedStats = getBlessedStats(girl, girl.stats, currentBlessings);
     totalPower =
       blessedStats.charm + blessedStats.hardcore + blessedStats.knowhow;
     blessed = blessedStats.charm > girl.stats.charm;
     if (girl.equipment) {
       const equipmentStats = getTotalEquipmentStats(girl.equipment);
-      const blessingMultiplier =
-        currentBlessings === undefined
-          ? 1
-          : getBlessingMultiplier(girl, currentBlessings);
+      const blessingMultiplier = getBlessingMultiplier(girl, currentBlessings);
       const rawEquipPower =
         equipmentStats.hardcore + equipmentStats.charm + equipmentStats.knowhow;
       const blessedEquipPower = blessingMultiplier * rawEquipPower;
@@ -97,12 +90,12 @@ const LevelRarityHeader: React.FC<GirlTooltipProps> = ({ girl }) => {
 
 const StatsDescription: React.FC<GirlTooltipProps> = ({
   girl,
-  currentBlessings: currentBlessing
+  currentBlessings = []
 }) => {
   if (!girl.stats) {
     return null;
   }
-  const blessedStats = getBlessedStats(girl, girl.stats, currentBlessing ?? []);
+  const blessedStats = getBlessedStats(girl, girl.stats, currentBlessings);
   const potentialLevelMultiplier = 1 / (girl.level ?? 1);
   const potentialGradeMultiplier =
     (1 + 0.3 * girl.maxStars) / (1 + 0.3 * girl.stars);

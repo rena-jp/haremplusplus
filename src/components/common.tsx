@@ -30,14 +30,14 @@ export interface GemProps {
 
 export const GemIcon: React.FC<GemProps> = ({
   element,
-  className,
+  className = '',
   noTitle
 }) => {
   const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
   const icon = getGemIcon(element, gameName);
   const elementName =
     element === 'rainbow' ? 'rainbow' : Elements.toString(element);
-  const cssClass = `elementIcon ${className ?? ''}`;
+  const cssClass = `elementIcon ${className}`;
   const title = noTitle === true ? undefined : elementName;
   return (
     <img src={icon} title={title} alt={elementName} className={cssClass} />
@@ -202,8 +202,8 @@ export interface GemsCountProps {
 
 export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
   const tooltipContent = useMemo(() => {
-    const totalCount = [...gemsCount.values()].reduce(
-      (a, b) => (a ?? 0) + (b ?? 0),
+    const totalCount = [...gemsCount.values()].reduce<number>(
+      (a, b = 0) => a + b,
       0
     );
     return (
@@ -216,11 +216,7 @@ export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
           />
         ))}
         <hr />
-        <GemsCountEntry
-          key="rainbow"
-          element="rainbow"
-          count={totalCount ?? 0}
-        />
+        <GemsCountEntry key="rainbow" element="rainbow" count={totalCount} />
       </div>
     );
   }, [gemsCount]);
@@ -351,7 +347,7 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
   upcomingStats,
   potentialMultiplier,
   blessed,
-  statIcon,
+  statIcon = Class.Knowhow,
   currentBlessingMultiplier,
   upcomingBlessingMultiplier
 }) => {
@@ -371,7 +367,7 @@ export const StatsDescriptionTooltip: React.FC<StatsDescriptionProps> = ({
           />
         }
       >
-        <StatIcon statClass={statIcon ?? Class.Knowhow} blessed={blessed} />
+        <StatIcon statClass={statIcon} blessed={blessed} />
       </Tooltip>
     </span>
   );
@@ -521,12 +517,12 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   min,
   max,
   curr,
-  extra,
+  extra = 0,
   label,
   overlay
 }) => {
   const ratio = Math.min(1, Math.max(0, (curr - min) / (max - min)));
-  const extraValue = curr + (extra ?? 0);
+  const extraValue = curr + extra;
   const extraRatio = Math.min(1, Math.max(0, (extraValue - min) / (max - min)));
 
   const classNames = ['qh-progress-bar'];
