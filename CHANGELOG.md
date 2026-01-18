@@ -1,3 +1,7 @@
+## 0.25.1 - 2026-01-19
+
+- Fix an incorrect URL on Nutaku
+
 ## 0.25.0 - 2026-01-17
 
 - Add API for other scripts
