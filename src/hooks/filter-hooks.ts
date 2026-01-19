@@ -68,16 +68,6 @@ export interface FilterState {
   setSearchText(searchText: string): void;
 }
 
-export interface HaremStateResult {
-  // Toolbar properties
-  sorter: Sorter;
-  // Callbacks for Panels
-  setSort(sorter: Sorter): void;
-  // Others
-  show0Pose: boolean;
-  setShow0Pose(show: boolean): void;
-}
-
 export function useFilters(
   options: HaremOptions,
   currentBlessings: BlessingDefinition[],

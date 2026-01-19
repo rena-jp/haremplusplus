@@ -65,10 +65,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     setAllGirlsValue(girls);
   }, []);
 
-  const [gameBlessings, setGameBlessings] = useState<
-    GameBlessingData | undefined
-  >(undefined);
-
   const updateGirl = useCallback((girl: CommonGirlData) => {
     if (allGirls.current !== undefined) {
       const newGirl: CommonGirlData = { ...girl };
@@ -121,7 +117,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
       ([gemsData, blessings, haremData]) => {
         if (!inited && gemsData && blessings && haremData) {
           setGemsCount(countGems(gemsData));
-          setGameBlessings(blessings);
           setCachedGirls(haremData.allGirls);
           updateResult(haremData);
         }
@@ -164,7 +159,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
           );
           inited = true;
           setGemsCount(countGems(gemsData));
-          setGameBlessings(blessings);
           persistHaremData(data);
           updateResult(data);
         }
@@ -203,7 +197,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
           );
           persistHaremData(data);
           setGemsCount(countGems(gemsData));
-          setGameBlessings(blessings);
           updateResult(data);
         }
       }
