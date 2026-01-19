@@ -48,7 +48,6 @@ export interface HaremWidgetProps {
   girls: CommonGirlData[];
   allGirls: CommonGirlData[];
   visible: boolean;
-  show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
   gameAPI: GameAPI;
@@ -63,7 +62,6 @@ export interface HaremWidgetProps {
 export const HaremWidget: React.FC<HaremWidgetProps> = ({
   girls,
   allGirls,
-  show0Pose,
   currentBlessings,
   upcomingBlessings,
   gameAPI,
@@ -192,7 +190,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
                   selectedGirl !== undefined && selectedGirl.id === girl.id
                 }
                 selectGirl={selectGirl}
-                show0Pose={show0Pose}
                 currentBlessings={currentBlessings}
               />
             );
@@ -207,7 +204,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
                 selectedGirl !== undefined && selectedGirl.id === girl.id
               }
               selectGirl={selectGirl}
-              show0Pose={show0Pose}
               currentBlessings={currentBlessings}
             />
           ))}
@@ -222,7 +218,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         <Teams
           allGirls={allGirls}
           close={() => setHaremMode('standard')}
-          show0Pose={show0Pose}
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
           girlListener={teamsGirlListenerRef}
@@ -235,7 +230,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
         girl={selectedGirl}
         activeBlessing={currentBlessings}
         nextBlessing={upcomingBlessings}
-        show0Pose={show0Pose}
         selectGirl={selectGirl}
         openUpgrade={openUpgrade}
         setSingleTrait={setSingleTrait}
@@ -246,7 +240,6 @@ export const HaremWidget: React.FC<HaremWidgetProps> = ({
             currentGirl={selectedGirl}
             displayedGirls={girls}
             allGirls={allGirls}
-            show0Pose={show0Pose}
             gameAPI={gameAPI}
             page={page}
             setPage={setPage}

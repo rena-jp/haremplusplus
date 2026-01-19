@@ -44,7 +44,7 @@ export const useApplyFilters = (
             Traits.values()
               .map((key) => traitsFilter.traits[key])
               .filter(<T>(e?: T): e is T => e !== undefined),
-            traitsFilter.skilledOnly
+            traitsFilter.filterBySkill3
           )
         );
   }, [quickFilteredGirls, traitsFilter]);

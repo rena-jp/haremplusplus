@@ -59,8 +59,8 @@ export const TraitsSummary = React.memo<TraitsSummaryProps>(
             <input
               id="traitSkillMatching"
               type="checkbox"
-              onChange={traitsFilterState.toggleSkilledOnly}
-              checked={!traitsFilterState.traitsFilter.skilledOnly}
+              onChange={traitsFilterState.toggleFilterBySkill3}
+              checked={!traitsFilterState.traitsFilter.filterBySkill3}
             />
           </p>
           <TraitSummaries
@@ -157,11 +157,11 @@ const TraitSummary: React.FC<TraitSummaryProps> = ({
       matchesTraits(
         girl,
         traitsArray.filter((e): e is Trait => e !== undefined),
-        filter.skilledOnly
+        filter.filterBySkill3
       )
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredGirls, filter.skilledOnly, ...traitsArray]);
+  }, [filteredGirls, filter.filterBySkill3, ...traitsArray]);
   if (!isValid) return null;
 
   let traitDescription;

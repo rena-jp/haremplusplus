@@ -15,11 +15,12 @@ import { BaseGirlTile } from './girl';
 import { GameAPIContext } from '../data/game-api-context';
 import { EquipmentDecorators } from './girls-equipment';
 import { TeamsData } from '../hooks/teams-hooks';
+import { useAtomValue } from 'jotai';
+import { showPose0Atom } from '../data/atoms';
 
 export interface TeamsProps {
   allGirls: CommonGirlData[];
   close?: () => void;
-  show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
   girlListener: MutableRefObject<(girl: CommonGirlData) => void>;
@@ -29,7 +30,6 @@ export interface TeamsProps {
 export const Teams: React.FC<TeamsProps> = ({
   allGirls,
   close,
-  show0Pose,
   currentBlessings,
   upcomingBlessings,
   girlListener,
@@ -91,7 +91,6 @@ export const Teams: React.FC<TeamsProps> = ({
                   key={team.teamId ?? teamIndex}
                   edit={() => editTeam(team)}
                   cancel={cancel}
-                  show0Pose={show0Pose}
                   currentBlessings={currentBlessings}
                   upcomingBlessings={upcomingBlessings}
                 />
@@ -107,7 +106,6 @@ export const Teams: React.FC<TeamsProps> = ({
           team={team}
           allGirls={allGirls}
           girlListener={girlListener}
-          show0Pose={show0Pose}
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
         />
@@ -119,7 +117,6 @@ export const Teams: React.FC<TeamsProps> = ({
 export interface TeamProps {
   team: Team;
   allGirls: CommonGirlData[];
-  show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
 }
@@ -140,7 +137,6 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
   team,
   allGirls,
   edit,
-  show0Pose,
   currentBlessings,
   upcomingBlessings
 }) => {
@@ -178,7 +174,6 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
           selectTile={() => {
             /* Do nothing */
           }}
-          show0Pose={show0Pose}
           currentBlessings={currentBlessings}
           upcomingBlessings={upcomingBlessings}
         />
@@ -188,7 +183,6 @@ export const TeamOverview: React.FC<TeamOverviewProps> = ({
         <BaseGirlTile
           girl={firstGirl}
           onClick={onClick}
-          show0Pose={show0Pose}
           selected={false}
           avatarOverlay={elementNodes}
           classNames={classNames}
@@ -215,7 +209,6 @@ export interface TeamSectionProps {
   selectedTile: number | undefined;
   selectTile(tile: number): void;
   teamStats: TeamStats;
-  show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
 }
@@ -224,7 +217,6 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
   teamStats,
   selectedTile,
   selectTile,
-  show0Pose,
   currentBlessings,
   upcomingBlessings
 }) => {
@@ -259,7 +251,6 @@ export const TeamSection: React.FC<TeamSectionProps> = ({
             tileId={i}
             key={i++}
             classNames={[`item_${i + 1}`]}
-            show0Pose={show0Pose}
             currentBlessings={currentBlessings}
             upcomingBlessings={upcomingBlessings}
           />
@@ -287,7 +278,6 @@ export const TeamEditor: React.FC<TeamEditorProps> = ({
   saveAndClose,
   cancel,
   allGirls,
-  show0Pose,
   currentBlessings,
   upcomingBlessings,
   girlListener
@@ -350,7 +340,6 @@ export const TeamEditor: React.FC<TeamEditorProps> = ({
         teamStats={teamStats}
         selectTile={selectTile}
         selectedTile={selectedTile}
-        show0Pose={show0Pose}
         currentBlessings={currentBlessings}
         upcomingBlessings={upcomingBlessings}
       />
@@ -376,7 +365,6 @@ interface TeamGirlProps {
   tileId: number;
   select(tile: number): void;
   classNames: string[];
-  show0Pose: boolean;
   currentBlessings: BlessingDefinition[];
   upcomingBlessings: BlessingDefinition[];
 }
@@ -387,7 +375,6 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
   select,
   selected,
   classNames,
-  show0Pose,
   currentBlessings
 }) => {
   const outerClasses = ['hex-tile', ...classNames];
@@ -399,7 +386,8 @@ const TeamGirl: React.FC<TeamGirlProps> = ({
     innerClasses.push('empty-slot');
   }
 
-  const icon = show0Pose ? girl?.icon0 : girl?.icon;
+  const showPose0 = useAtomValue(showPose0Atom);
+  const icon = showPose0 ? girl?.icon0 : girl?.icon;
 
   return (
     <Tooltip

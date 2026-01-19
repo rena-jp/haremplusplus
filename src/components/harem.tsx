@@ -21,7 +21,6 @@ import { useSorter } from '../hooks/sort-hooks';
 import { useTraitsFilter } from '../hooks/traits-filter-hooks';
 import { FiltersContext, useFilters } from '../hooks/filter-hooks';
 import { useApplyFilters } from '../hooks/girls-data-hooks';
-import { OptionsContext } from '../data/options-context';
 import { useTeams } from '../hooks/teams-hooks';
 import { SkillsSummary } from './skill-summary';
 import { useSkillFilter } from '../hooks/skill-filter-hooks';
@@ -114,13 +113,6 @@ export const Harem: React.FC<HaremProps> = ({
     filtersState.searchText
   );
 
-  const [is0Pose, set0Pose] = useState(false);
-
-  const toggle0Pose = useCallback(
-    () => set0Pose(!is0Pose),
-    [set0Pose, is0Pose]
-  );
-
   const [displayedTab, setDisplayedTab] = useState(activeTab);
 
   const [haremMode, setHaremMode] = useState<HaremMode>('standard');
@@ -150,89 +142,84 @@ export const Harem: React.FC<HaremProps> = ({
   return (
     <>
       <FiltersContext.Provider value={filtersState}>
-        <OptionsContext.Provider value={{ show0Pose: is0Pose }}>
-          <TabFolder tabs={tabs} toggleTab={toggleTab} activeTab={activeTab}>
-            <Summary
-              filteredGirls={filteredGirls}
-              allGirls={allGirls}
-              toggleFilter={quickFiltersState.toggleQuickFilter}
-              clearFilters={quickFiltersState.clearQuickFilters}
-              filters={quickFiltersState.activeQuickFilters}
-              currentBlessings={currentBlessings}
-              nextBlessings={upcomingBlessings}
-              visible={displayedTab?.id === 'summary'}
-              close={closePanel}
-              gameName={gameAPI.getGameName()}
-            />
-            <TraitsSummary
-              allGirls={allGirls}
-              filteredGirls={quickFilteredGirls}
-              traitsFilterState={traitsFilterState}
-              visible={displayedTab?.id === 'traits'}
-              close={closePanel}
-            />
-            <SkillsSummary
-              allGirls={allGirls}
-              filteredGirls={filteredGirls}
-              skillFilterState={skillFilterState}
-              visible={displayedTab?.id === 'skill'}
-              close={closePanel}
-            />
-            <FiltersPanel
-              visible={displayedTab?.id === 'filters'}
-              close={closePanel}
-              currentBlessings={currentBlessings}
-              upcomingBlessings={upcomingBlessings}
-              teams={teamsData.teams}
-            />
-            <SortPanel
-              visible={displayedTab?.id === 'sort'}
-              close={closePanel}
-              sortConfig={sorterState.sortConfig}
-              setSortConfig={sorterState.setSortConfig}
-              currentBlessings={currentBlessings}
-              upcomingBlessings={upcomingBlessings}
-              persistDefaultSort={sorterState.persistDefaultSort}
-              isDefaultSort={sorterState.isDefaultSort}
-            />
-          </TabFolder>
-          <div className={classNames.join(' ')}>
-            <HaremToolbar
-              gameAPI={gameAPI}
-              loading={loading}
-              refresh={refresh}
-              close={close}
-              totalGirlsCount={allGirls.length}
-              visibleGirlsCount={matchedGirls.length}
-              activeQuickFilters={quickFiltersState.activeQuickFilters}
-              clearQuickFilters={quickFiltersState.clearQuickFilters}
-              traitsFilter={traitsFilterState.traitsFilter}
-              clearTraitsFilter={traitsFilterState.clearTraits}
-              show0Pose={is0Pose}
-              toggle0Pose={toggle0Pose}
-              toggleTab={togglePanel}
-              isOpenTab={activeTab !== undefined}
-              gemsCount={gemsCount}
-              haremMode={haremMode}
-              setHaremMode={setHaremMode}
-            />
-            <HaremWidget
-              allGirls={allGirls}
-              girls={matchedGirls}
-              currentBlessings={currentBlessings}
-              upcomingBlessings={upcomingBlessings}
-              show0Pose={is0Pose}
-              visible={haremVisible}
-              gameAPI={gameAPI}
-              gemsCount={gemsCount}
-              consumeGems={consumeGems}
-              haremMode={haremMode}
-              setHaremMode={setHaremMode}
-              teamsData={teamsData}
-              setSingleTrait={traitsFilterState.toggleSingleTrait}
-            />
-          </div>
-        </OptionsContext.Provider>
+        <TabFolder tabs={tabs} toggleTab={toggleTab} activeTab={activeTab}>
+          <Summary
+            filteredGirls={filteredGirls}
+            allGirls={allGirls}
+            toggleFilter={quickFiltersState.toggleQuickFilter}
+            clearFilters={quickFiltersState.clearQuickFilters}
+            filters={quickFiltersState.activeQuickFilters}
+            currentBlessings={currentBlessings}
+            nextBlessings={upcomingBlessings}
+            visible={displayedTab?.id === 'summary'}
+            close={closePanel}
+            gameName={gameAPI.getGameName()}
+          />
+          <TraitsSummary
+            allGirls={allGirls}
+            filteredGirls={quickFilteredGirls}
+            traitsFilterState={traitsFilterState}
+            visible={displayedTab?.id === 'traits'}
+            close={closePanel}
+          />
+          <SkillsSummary
+            allGirls={allGirls}
+            filteredGirls={filteredGirls}
+            skillFilterState={skillFilterState}
+            visible={displayedTab?.id === 'skill'}
+            close={closePanel}
+          />
+          <FiltersPanel
+            visible={displayedTab?.id === 'filters'}
+            close={closePanel}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+            teams={teamsData.teams}
+          />
+          <SortPanel
+            visible={displayedTab?.id === 'sort'}
+            close={closePanel}
+            sortConfig={sorterState.sortConfig}
+            setSortConfig={sorterState.setSortConfig}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+            persistDefaultSort={sorterState.persistDefaultSort}
+            isDefaultSort={sorterState.isDefaultSort}
+          />
+        </TabFolder>
+        <div className={classNames.join(' ')}>
+          <HaremToolbar
+            gameAPI={gameAPI}
+            loading={loading}
+            refresh={refresh}
+            close={close}
+            totalGirlsCount={allGirls.length}
+            visibleGirlsCount={matchedGirls.length}
+            activeQuickFilters={quickFiltersState.activeQuickFilters}
+            clearQuickFilters={quickFiltersState.clearQuickFilters}
+            traitsFilter={traitsFilterState.traitsFilter}
+            clearTraitsFilter={traitsFilterState.clearTraits}
+            toggleTab={togglePanel}
+            isOpenTab={activeTab !== undefined}
+            gemsCount={gemsCount}
+            haremMode={haremMode}
+            setHaremMode={setHaremMode}
+          />
+          <HaremWidget
+            allGirls={allGirls}
+            girls={matchedGirls}
+            currentBlessings={currentBlessings}
+            upcomingBlessings={upcomingBlessings}
+            visible={haremVisible}
+            gameAPI={gameAPI}
+            gemsCount={gemsCount}
+            consumeGems={consumeGems}
+            haremMode={haremMode}
+            setHaremMode={setHaremMode}
+            teamsData={teamsData}
+            setSingleTrait={traitsFilterState.toggleSingleTrait}
+          />
+        </div>
       </FiltersContext.Provider>
     </>
   );

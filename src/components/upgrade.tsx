@@ -1,11 +1,4 @@
-import {
-  JSX,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import { JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import {
   asBook,
@@ -26,7 +19,6 @@ import {
 } from '../hooks/girl-aff-hooks';
 import {
   getAwakeningThreshold,
-  getMissingGXP,
   getMissingGXPToCap,
   useXpStats
 } from '../hooks/girl-xp-hooks';
@@ -44,7 +36,6 @@ import {
 import { SimpleGirlTile } from './girl';
 import Popup from 'reactjs-popup';
 import { useGemsStats } from '../hooks/girl-gems-hooks';
-import { OptionsContext } from '../data/options-context';
 import { SceneViewer } from './scenes';
 import { getDocumentHref } from '../migration';
 import {
@@ -53,6 +44,8 @@ import {
   FullMaxOutXpResult
 } from '../data/game-data';
 import { fromFulltoMaxOutItems } from '../game-extension/GameAPIImpl';
+import { showPose0Atom } from '../data/atoms';
+import { useAtomValue } from 'jotai';
 
 export type UpgradePage = 'books' | 'gifts';
 
@@ -64,7 +57,6 @@ export interface UpgradePageProps {
   page: UpgradePage;
   setPage(page: UpgradePage): void;
   selectGirl(girl: CommonGirlData): void;
-  show0Pose: boolean;
   close(): void;
   gemsCount: Map<Element, number>;
   consumeGems(element: Element, gems: number): void;
@@ -78,7 +70,6 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
   page,
   setPage,
   selectGirl,
-  show0Pose,
   close,
   gemsCount,
   consumeGems
@@ -154,7 +145,6 @@ export const UpgradePage: React.FC<UpgradePageProps> = ({
           displayedGirls={displayedGirls}
           allGirls={allGirls}
           selectGirl={selectGirl}
-          show0Pose={show0Pose}
         />
         <div className="harem-upgrade-pages">
           <span
@@ -296,15 +286,13 @@ export interface GirlSelectorProps {
   displayedGirls: CommonGirlData[];
   allGirls: CommonGirlData[];
   selectGirl(girl: CommonGirlData): void;
-  show0Pose: boolean;
 }
 
 export const GirlsSelector: React.FC<GirlSelectorProps> = ({
   currentGirl,
   displayedGirls,
   allGirls,
-  selectGirl,
-  show0Pose
+  selectGirl
 }) => {
   const allGirlsByDate = useMemo(() => {
     const ownedGirls = allGirls.filter((girl) => girl.own);
@@ -359,12 +347,10 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
         girl={previousGirl}
         onClick={() => selectGirl(previousGirl)}
         selected={false}
-        show0Pose={show0Pose}
       />
       <SimpleGirlTile
         girl={currentGirl}
         selected={true}
-        show0Pose={show0Pose}
         onClick={() => {
           /* Do nothing */
         }}
@@ -374,7 +360,6 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
         girl={nextGirl}
         onClick={() => selectGirl(nextGirl)}
         selected={false}
-        show0Pose={show0Pose}
       />
       <span className="girl-rank">
         {rankCount}/{ownedGirlsCount}
@@ -1211,8 +1196,8 @@ export const Awaken: React.FC<AwakenProps> = ({
   consumeGems
 }) => {
   const gemsStats = useGemsStats(girl);
-  const { show0Pose } = useContext(OptionsContext);
-  const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
+  const showPose0 = useAtomValue(showPose0Atom);
+  const poseImage = showPose0 ? girl?.poseImage0 : girl?.poseImage;
   const currentGems = gemsCount.get(girl.element) ?? 0;
   const doAwaken = useCallback(() => {
     gameAPI

@@ -13,13 +13,14 @@ import { ElementIcon, Grade, UpgradeIcon } from './common';
 import { EquipmentDecorators } from './girls-equipment';
 import { GirlTooltip } from './girl-tooltip';
 import ReactDOMServer from 'react-dom/server';
+import { useAtomValue } from 'jotai';
+import { showPose0Atom } from '../data/atoms';
 
 export const GIRL_TOOLTIP_ID = 'harem-tooltip';
 
 export interface GirlTileProps {
   girl: CommonGirlData;
   selected: boolean;
-  show0Pose: boolean;
   lazy?: boolean;
   tooltipContent?: string;
 }
@@ -37,7 +38,6 @@ export interface SimpleGirlTileProps extends GirlTileProps {
 export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
   girl,
   selected,
-  show0Pose,
   onClick,
   children,
   avatarOverlay,
@@ -70,7 +70,6 @@ export const SimpleGirlTile: React.FC<SimpleGirlTileProps> = ({
       children={children}
       classNames={classNames}
       lazy={lazy}
-      show0Pose={show0Pose}
       tooltipContent={tooltipContent}
     />
   );
@@ -84,7 +83,6 @@ export interface BaseGirlTileProps {
   bottom?: ReactNode;
   classNames?: string[];
   selected?: boolean;
-  show0Pose?: boolean;
   lazy?: boolean;
   tooltipContent?: string;
 }
@@ -104,7 +102,6 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
   bottom,
   classNames,
   selected,
-  show0Pose,
   lazy,
   tooltipContent
 }) => {
@@ -121,8 +118,9 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
     allClassNames.push('selected');
   }
 
+  const showPose0 = useAtomValue(showPose0Atom);
   const icon =
-    girl === undefined ? '' : show0Pose === true ? girl.icon0 : girl.icon;
+    girl === undefined ? '' : showPose0 === true ? girl.icon0 : girl.icon;
 
   /**
    * Use a 1x1 transparent image as placeholder. This will force proper image layout during image loading,
@@ -220,7 +218,6 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
   girl,
   selected,
   selectGirl,
-  show0Pose,
   lazy,
   currentBlessings
 }) => {
@@ -254,7 +251,6 @@ export const HaremGirlTile: React.FC<HaremGirlTileProps> = ({
       girl={girl}
       onClick={onClick}
       selected={selected}
-      show0Pose={show0Pose}
       avatarOverlay={
         <>
           {girl.equipment && girl.equipment?.items.length > 0 ? (

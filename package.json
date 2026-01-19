@@ -5,6 +5,7 @@
   "dependencies": {
     "deep-equal": "^2.2.3",
     "idb": "^8.0.3",
+    "jotai": "^2.16.2",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "react-lazyload": "^3.2.1",

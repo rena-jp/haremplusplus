@@ -2,6 +2,7 @@ import React from 'react';
 import { GameExtension } from './components/game-extension';
 import { createRoot, getGameName } from './game-extension/waifu-handler';
 import { Root } from 'react-dom/client';
+import { loadSettings } from './data/atoms';
 
 export const SelectedGirlIdContext = React.createContext<
   [string | undefined, number]
@@ -14,8 +15,11 @@ export function exportAPI() {
   let girlId: string | undefined;
   let count = 0;
 
-  const updateApp = (visible: boolean, girlId?: string) => {
-    root ??= createRoot(gameName);
+  const updateApp = async (visible: boolean, girlId?: string) => {
+    if (root == null) {
+      await loadSettings();
+      root = createRoot(gameName);
+    }
     root.render(
       <React.StrictMode>
         <SelectedGirlIdContext value={[girlId, ++count]}>
@@ -29,14 +33,14 @@ export function exportAPI() {
     );
   };
 
-  const setVisible = (newVisible: boolean, newGirlId?: string) => {
+  const setVisible = async (newVisible: boolean, newGirlId?: string) => {
     if (!newVisible && !visible) return;
     if (newVisible && visible && newGirlId == null) {
       return;
     }
     visible = newVisible;
     girlId = newGirlId;
-    updateApp(newVisible, girlId);
+    await updateApp(newVisible, girlId);
     const qh = document.querySelector<HTMLElement>('.quick-harem-wrapper');
     if (qh == null) return;
     qh.style.display = newVisible ? '' : 'none';
@@ -50,10 +54,10 @@ export function exportAPI() {
         url.hash = `characters-${id_girl}`;
         window.history.replaceState('', '', url.toString());
       }
-      setVisible(true, String(id_girl));
+      return setVisible(true, String(id_girl));
     },
     close() {
-      setVisible(false);
+      return setVisible(false);
     }
   };
 }

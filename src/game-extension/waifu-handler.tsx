@@ -4,6 +4,7 @@ import { GameExtension } from '../components/game-extension';
 import { GameName } from '../data/data';
 import { getDocumentHref } from '../migration';
 import { GameAPIImpl, REQUEST_GIRLS } from './GameAPIImpl';
+import { loadSettings } from '../data/atoms';
 
 export async function handleWaifu(): Promise<void> {
   const searchParams = new URLSearchParams(window.location.search);
@@ -50,6 +51,7 @@ export async function handleWaifu(): Promise<void> {
   };
   if (visible) {
     window.$('#waifu-page').remove();
+    await loadSettings();
     updateApp();
   } else {
     await updateGirlsAndDispatch();

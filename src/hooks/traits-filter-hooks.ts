@@ -1,11 +1,13 @@
 import { useCallback, useState } from 'react';
 import { TraitEnum, Trait, Traits, equalTrait } from '../data/data';
+import { useAtom } from 'jotai';
+import { filterBySkill3Atom } from '../data/atoms';
+
+type TraitsFilterTraits = Partial<Record<TraitEnum, Trait | undefined>>;
 
 export type TraitsFilter = {
-  skilledOnly: boolean;
-  traits: {
-    [key in TraitEnum]?: Trait | undefined;
-  };
+  filterBySkill3: boolean;
+  traits: TraitsFilterTraits;
 };
 
 export interface TraitsFilterState {
@@ -13,57 +15,48 @@ export interface TraitsFilterState {
   toggleSingleTrait(trait: Trait): void;
   toggleMultipleTraits(trait: Trait): void;
   clearTraits(): void;
-  toggleSkilledOnly(): void;
+  toggleFilterBySkill3(): void;
 }
 
-export const useTraitsFilter = (skilledOnly = false): TraitsFilterState => {
-  const [traitsFilter, setTraitsFilter] = useState<TraitsFilter>({
-    skilledOnly,
-    traits: {}
-  });
+export const useTraitsFilter = (): TraitsFilterState => {
+  const [filterBySkill3, setFilterBySkill3] = useAtom(filterBySkill3Atom);
+  const [traits, setTraitsFilter] = useState<TraitsFilterTraits>({});
 
   const toggleSingleTrait = useCallback(
     (trait: Trait) => {
       setTraitsFilter((old) => {
-        if (!old.skilledOnly) {
+        if (filterBySkill3) {
+          setFilterBySkill3(false);
+        } else {
           const match = Traits.values().every((key) => {
             if (key === trait.traitEnum) {
-              return old.traits[key]?.traitValue === trait.traitValue;
+              return old[key]?.traitValue === trait.traitValue;
             } else {
-              return old.traits[key] === undefined;
+              return old[key] === undefined;
             }
           });
           if (match) {
             return {
-              skilledOnly: false,
-              traits: {
-                ...old.traits,
-                [trait.traitEnum]: undefined
-              }
+              ...old,
+              [trait.traitEnum]: undefined
             };
           }
         }
-        return {
-          skilledOnly: false,
-          traits: { [trait.traitEnum]: trait }
-        };
+        return { [trait.traitEnum]: trait };
       });
     },
-    [setTraitsFilter]
+    [filterBySkill3, setFilterBySkill3, setTraitsFilter]
   );
 
   const toggleMultipleTraits = useCallback(
     (trait: Trait) => {
       setTraitsFilter((old) => {
-        const newFilter = {
-          skilledOnly: old.skilledOnly,
-          traits: { ...old.traits } // must copy
-        };
-        const oldTrait = old.traits[trait.traitEnum];
+        const newFilter = { ...old }; // must copy
+        const oldTrait = old[trait.traitEnum];
         if (oldTrait !== undefined && equalTrait(oldTrait, trait)) {
-          newFilter.traits[trait.traitEnum] = undefined;
+          newFilter[trait.traitEnum] = undefined;
         } else {
-          newFilter.traits[trait.traitEnum] = trait;
+          newFilter[trait.traitEnum] = trait;
         }
         return newFilter;
       });
@@ -72,25 +65,22 @@ export const useTraitsFilter = (skilledOnly = false): TraitsFilterState => {
   );
 
   const clearTraits = useCallback(() => {
-    setTraitsFilter((old) => {
-      if (!isTraitsFilterActive(old)) return old;
-      return { skilledOnly: old.skilledOnly, traits: {} };
-    });
+    setTraitsFilter({});
   }, [setTraitsFilter]);
 
-  const toggleSkilledOnly = useCallback(() => {
-    setTraitsFilter((old) => ({
-      skilledOnly: !old.skilledOnly,
-      traits: old.traits
-    }));
-  }, [setTraitsFilter]);
+  const toggleFilterBySkill3 = useCallback(() => {
+    setFilterBySkill3((old) => !old);
+  }, [setFilterBySkill3]);
 
   return {
-    traitsFilter,
+    traitsFilter: {
+      filterBySkill3,
+      traits
+    },
     toggleSingleTrait,
     toggleMultipleTraits,
     clearTraits,
-    toggleSkilledOnly
+    toggleFilterBySkill3
   };
 };
 

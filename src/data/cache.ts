@@ -21,7 +21,7 @@ const DATA_CACHE = 'harem-cache-0.10.0';
  * Config cache should be preserved (maybe migrated) as much as possible.
  * Clearing it will remove all user settings, and should be avoided.
  */
-const CONFIG_CACHE = 'harem-cache-0.10.0';
+export const CONFIG_CACHE = 'harem-cache-0.10.0';
 
 async function clearOldCaches(): Promise<void> {
   for (const deprecatedCache of DEPRECATED_CACHES) {

@@ -61,6 +61,8 @@ import { GirlTraits } from './girls-traits';
 import { getDocumentHref } from '../migration';
 import { GradeSkin } from '../data/game-data';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
+import { useAtomValue } from 'jotai';
+import { showPose0Atom } from '../data/atoms';
 
 export interface GirlDescriptionProps {
   /**
@@ -78,7 +80,6 @@ export interface GirlDescriptionProps {
   girl?: CommonGirlData;
   activeBlessing: BlessingDefinition[];
   nextBlessing: BlessingDefinition[];
-  show0Pose: boolean;
   selectGirl(girl: CommonGirlData): void;
   openUpgrade(page: UpgradePage): void;
   setSingleTrait(trait: Trait): void;
@@ -88,14 +89,14 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   girl,
   activeBlessing,
   nextBlessing,
-  show0Pose,
   allGirls,
   listGirls,
   selectGirl,
   openUpgrade,
   setSingleTrait
 }) => {
-  const poseImage = show0Pose ? girl?.poseImage0 : girl?.poseImage;
+  const showPose0 = useAtomValue<boolean>(showPose0Atom);
+  const poseImage = showPose0 ? girl?.poseImage0 : girl?.poseImage;
   const gameAPI = useContext(GameAPIContext).gameAPI!;
 
   const domain = getDomain();
@@ -199,7 +200,6 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                   variations={girl.variations!}
                   selectGirl={selectGirl}
                   selectedGirl={girl}
-                  show0Pose={show0Pose}
                 />
               ) : (
                 <BlessingSection
@@ -872,15 +872,13 @@ export interface VariationsListProps {
   variations: string[];
   selectGirl(girl: CommonGirlData): void;
   selectedGirl: CommonGirlData;
-  show0Pose: boolean;
 }
 
 export const VariationsList: React.FC<VariationsListProps> = ({
   allGirls,
   variations,
   selectedGirl,
-  selectGirl,
-  show0Pose
+  selectGirl
 }) => {
   return (
     <div className="variations-list">
@@ -895,7 +893,6 @@ export const VariationsList: React.FC<VariationsListProps> = ({
             girl={girl}
             selectGirl={selectGirl}
             selected={selectedGirl.id === girl.id}
-            show0Pose={show0Pose}
           />
         );
       })}
@@ -907,22 +904,13 @@ export interface VariationTileProps {
   girl: CommonGirlData;
   selectGirl(girl: CommonGirlData): void;
   selected: boolean;
-  show0Pose: boolean;
 }
 
 export const VariationTile: React.FC<VariationTileProps> = ({
   girl,
   selectGirl,
-  selected,
-  show0Pose
+  selected
 }) => {
   const onClick = useCallback(() => selectGirl(girl), [girl]);
-  return (
-    <SimpleGirlTile
-      girl={girl}
-      onClick={onClick}
-      show0Pose={show0Pose}
-      selected={selected}
-    />
-  );
+  return <SimpleGirlTile girl={girl} onClick={onClick} selected={selected} />;
 };

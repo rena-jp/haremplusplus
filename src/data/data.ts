@@ -1193,14 +1193,14 @@ export function equalTrait(trait1: Trait, trait2: Trait): boolean {
 export function matchesTraits(
   girl: BaseGirlData,
   traits: Trait[],
-  skilledOnly: boolean
+  matchesSkill3: boolean
 ): boolean {
   if (traits.length <= 0) return true;
   const hasEveryTrait = traits.every((trait) =>
     matchesBlessing(girl, Traits.toBlessingType(trait))
   );
   if (!hasEveryTrait) return false;
-  if (skilledOnly) {
+  if (matchesSkill3) {
     const hasSkill = traits.some((trait) => matchesTraitSkill(girl, trait));
     if (!hasSkill) return false;
   }

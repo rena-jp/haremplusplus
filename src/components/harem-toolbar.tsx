@@ -1,4 +1,4 @@
-import { ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, useCallback, useContext, useMemo } from 'react';
 import { GameAPI } from '../api/GameAPI';
 import { Element } from '../data/data';
 import { FiltersContext } from '../hooks/filter-hooks';
@@ -16,6 +16,8 @@ import {
   TraitsFilter,
   isTraitsFilterActive
 } from '../hooks/traits-filter-hooks';
+import { useAtom } from 'jotai';
+import { showPose0Atom } from '../data/atoms';
 
 export interface HaremToolbarProps {
   gameAPI: GameAPI;
@@ -29,9 +31,6 @@ export interface HaremToolbarProps {
   // Trait filters
   traitsFilter: TraitsFilter;
   clearTraitsFilter(): void;
-  // Others
-  show0Pose: boolean;
-  toggle0Pose(): void;
   /**
    * An optional callback that can be invoked
    * to close the harem, when displayed as a popup
@@ -51,8 +50,6 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
   clearQuickFilters,
   traitsFilter,
   clearTraitsFilter,
-  show0Pose,
-  toggle0Pose,
   loading,
   refresh,
   close,
@@ -72,6 +69,11 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
     clearFilters,
     isDefaultFilter
   } = useContext(FiltersContext);
+
+  const [showPose0, setShowPose0] = useAtom(showPose0Atom);
+  const togglePose0 = useCallback(() => {
+    setShowPose0((old) => !old);
+  }, [setShowPose0]);
 
   // Toolbar content is placed in the toolbar and/or in the hamburger menu
   const toolbarContent = (
@@ -149,8 +151,8 @@ export const HaremToolbar: React.FC<HaremToolbarProps> = ({
         <input
           id="0pose"
           type="checkbox"
-          onChange={toggle0Pose}
-          checked={show0Pose}
+          onChange={togglePose0}
+          checked={showPose0}
         />
       </span>
       <div className="owned-gems-summary">
