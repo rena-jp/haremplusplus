@@ -1,3 +1,7 @@
+## 0.25.2 - 2026-01-20
+
+- Add persistence for several settings
+
 ## 0.25.1 - 2026-01-19
 
 - Fix an incorrect URL on Nutaku
