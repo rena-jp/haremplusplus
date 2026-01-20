@@ -483,7 +483,8 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
 
   const { source_list } = girlData;
   if (source_list != null) {
-    const records: Partial<Record<GirlSourceKey, EventSource>> = {
+    const records: Record<GirlSourceKey, EventSource | undefined> = {
+      harem: undefined,
       world: 'Story',
       pachinko_epic: 'EP',
       troll_tier: 'Troll',
@@ -512,7 +513,9 @@ function getSources(girlData: GirlsDataEntry): EventSource[] {
       double_penetration: 'DP',
       pantheon: 'Pantheon',
       lively_scene: 'LS',
-      labyrinth: 'LL'
+      labyrinth: 'LL',
+      world_boss_event: 'WBT',
+      penta_drill: 'PD'
     };
     Object.keys(source_list).forEach((key) => {
       if (key in records) {

@@ -128,7 +128,9 @@ export type GirlSourceKey =
   | 'double_penetration'
   | 'pantheon'
   | 'lively_scene'
-  | 'labyrinth';
+  | 'labyrinth'
+  | 'world_boss_event'
+  | 'penta_drill';
 
 export interface CommonGirlsDataEntry {
   id_girl: NumberString;

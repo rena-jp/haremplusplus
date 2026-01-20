@@ -66,6 +66,8 @@ export type EventSource =
   | 'EventChampion' // Event Champion
   | 'NewPlayerGift' // Gift
   | 'ReferralSystem' // Referral System
+  | 'WBT' // World Boss Tournament
+  | 'PD' // Penta Drill
   | 'unknown';
 
 export function isEventSource(_value: string): _value is EventSource {
@@ -1031,6 +1033,10 @@ export function getSourceLabel(source: EventSource): string {
       return 'New Player Gift';
     case 'ReferralSystem':
       return 'Referral System';
+    case 'WBT':
+      return 'World Boss Tournament';
+    case 'PD':
+      return 'Penta Drill';
     case 'unknown':
       return 'Unknown';
   }
