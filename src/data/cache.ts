@@ -190,6 +190,7 @@ export async function loadBlessings(
     } catch (error) {
       // Failed to load blessings from cache. The cache is probably empty;
       // let's just try to pull data from the game instead.
+      return Promise.reject('Failed to load blessings from the game.');
     }
   }
   try {
