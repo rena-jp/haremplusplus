@@ -79,6 +79,7 @@ export interface BaseGirlData {
   icon0: string;
   poseImage: string;
   poseImage0: string;
+  poses?: string[];
   class: Class;
   level?: number;
   maxLevel?: number;
@@ -134,7 +135,7 @@ export interface BaseGirlData {
   skillTiers?: SkillTiers;
   id_role?: number | null;
 
-  gradeSkins?: Array<GradeSkin>;
+  gradeSkins?: GradeSkin[];
 
   release_date?: string;
 }

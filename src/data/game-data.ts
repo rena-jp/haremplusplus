@@ -226,8 +226,10 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   xp?: number;
 
   preview: {
-    grade_skins_data: Array<GradeSkin>;
+    grade_skins_data: GradeSkin[];
+    poses: string[];
   };
+  default_avatar: string;
 
   release_date: string;
 }

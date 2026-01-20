@@ -338,13 +338,18 @@ export class GameAPIImpl implements GameAPI {
         // While we wait for the result, update the image to what we expect is going to happen...
         girl.currentIcon = pose;
         girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
-        girl.poseImage = getPoseN(girl.poseImage, pose);
-        girl.icon = getPoseN(girl.icon, pose);
+        if (girl.poses !== undefined) {
+          const newPose = girl.poses[pose];
+          girl.poseImage = newPose;
+          girl.icon = newPose.replace('ava', 'ico');
+        }
         this.updateGirl(girl);
+      }
 
-        // Then wait for the proper result, and refresh again if necessary
-        const result = await requestResult;
+      // Then wait for the proper result, and refresh again if necessary
+      const result = await requestResult;
 
+      if (this.updateGirl !== undefined) {
         if (ChangePoseResult.is(result) && result.success) {
           girl.currentIcon = pose;
           girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
@@ -395,10 +400,12 @@ export class GameAPIImpl implements GameAPI {
         girl.poseImage = skin.image_path;
         girl.icon = skin.ico_path;
         this.updateGirl(girl);
+      }
 
-        // Then wait for the proper result, and refresh again if necessary
-        const result = await requestResult;
+      // Then wait for the proper result, and refresh again if necessary
+      const result = await requestResult;
 
+      if (this.updateGirl !== undefined) {
         if (ChangePoseResult.is(result) && result.success) {
           girl.currentIcon = 1;
           girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
