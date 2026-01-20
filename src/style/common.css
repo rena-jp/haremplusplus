@@ -485,6 +485,7 @@ requiring actual content. */
 .skill-icon {
   background-size: cover;
   display: inline-block;
+  text-align: center;
 }
 
 .pose-and-stats .role-icon,

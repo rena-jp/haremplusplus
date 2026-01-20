@@ -14,7 +14,8 @@ import {
   HairColor,
   Pose,
   Poses,
-  Rarity
+  Rarity,
+  Role
 } from '../data/data';
 import { getMissingGXP } from '../hooks/girl-xp-hooks';
 import '../style/harem.css';
@@ -24,7 +25,8 @@ import {
   format,
   GemIcon,
   PoseIcon,
-  Tooltip
+  Tooltip,
+  RoleIcon
 } from './common';
 import { QuickFilter } from './harem';
 import { PanelProps } from './panels';
@@ -396,6 +398,21 @@ export const BlessingSummary: React.FC<BlessingSummaryProps> = ({
             <span className="unknown-pose">?</span>
           ) : (
             <PoseIcon pose={blessing.blessingValue as Pose} />
+          )}
+        </Tooltip>
+      </span>
+    ) : blessing.blessing === Blessing.Role ? (
+      <span className="role-blessing">
+        <Tooltip
+          tooltip={Blessings.toDisplayString(
+            blessing.blessing,
+            blessing.blessingValue
+          )}
+        >
+          {blessing.blessingValue === Role.none ? (
+            <span className="role-icon">?</span>
+          ) : (
+            <RoleIcon roleId={blessing.blessingValue} />
           )}
         </Tooltip>
       </span>

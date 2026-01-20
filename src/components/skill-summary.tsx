@@ -309,7 +309,7 @@ const RoleSummary: React.FC<RoleSummaryProps> = ({
 const SkillLabel = React.memo<{ skill: Skill }>(({ skill }) => (
   <>
     {skill.elements.length === 0 ? (
-      <span className="skill-icon" />
+      <span className="skill-icon">?</span>
     ) : (
       <SkillIcon element={skill.elements[0]} />
     )}
@@ -321,7 +321,7 @@ const LabyrinthSkillLabel = React.memo<{ skill: LabyrinthSkill }>(
   ({ skill }) => (
     <>
       {skill.element == null ? (
-        <span className="skill-icon" />
+        <span className="skill-icon">?</span>
       ) : (
         <LabyrinthSkillIcon element={skill.element} />
       )}
@@ -333,7 +333,7 @@ const LabyrinthSkillLabel = React.memo<{ skill: LabyrinthSkill }>(
 const RoleLabel = React.memo<{ role: Role }>(({ role }) => (
   <>
     {role.id == null ? (
-      <span className="role-icon" />
+      <span className="role-icon">?</span>
     ) : (
       <RoleIcon roleId={role.id} />
     )}
