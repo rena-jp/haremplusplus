@@ -35,49 +35,47 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
 
   return (
     <div className={`QuickHarem game-extension ${visible ? '' : 'hidden'}`}>
-      <Provider>
-        <GameAPIContext.Provider value={{ gameAPI }}>
-          <LoadHaremData gameAPI={gameAPI}>
-            {({
-              loading,
-              allGirls,
-              currentBlessings,
-              upcomingBlessings,
-              refresh,
-              gemsCount,
-              consumeGems
-            }) => {
-              const haremReady =
-                options &&
-                allGirls &&
-                allGirls.length > 0 &&
-                currentBlessings &&
-                upcomingBlessings;
-              return (
-                <>
-                  {haremReady ? (
-                    <Harem
-                      allGirls={allGirls}
-                      currentBlessings={currentBlessings}
-                      upcomingBlessings={upcomingBlessings}
-                      haremVisible={visible}
-                      gameAPI={gameAPI}
-                      refresh={refresh}
-                      loading={loading}
-                      options={options}
-                      close={hide}
-                      gemsCount={gemsCount}
-                      consumeGems={consumeGems}
-                    />
-                  ) : (
-                    <Loading loading={loading} close={hide} />
-                  )}
-                </>
-              );
-            }}
-          </LoadHaremData>
-        </GameAPIContext.Provider>
-      </Provider>
+      <GameAPIContext.Provider value={{ gameAPI }}>
+        <LoadHaremData gameAPI={gameAPI}>
+          {({
+            loading,
+            allGirls,
+            currentBlessings,
+            upcomingBlessings,
+            refresh,
+            gemsCount,
+            consumeGems
+          }) => {
+            const haremReady =
+              options &&
+              allGirls &&
+              allGirls.length > 0 &&
+              currentBlessings &&
+              upcomingBlessings;
+            return (
+              <>
+                {haremReady ? (
+                  <Harem
+                    allGirls={allGirls}
+                    currentBlessings={currentBlessings}
+                    upcomingBlessings={upcomingBlessings}
+                    haremVisible={visible}
+                    gameAPI={gameAPI}
+                    refresh={refresh}
+                    loading={loading}
+                    options={options}
+                    close={hide}
+                    gemsCount={gemsCount}
+                    consumeGems={consumeGems}
+                  />
+                ) : (
+                  <Loading loading={loading} close={hide} />
+                )}
+              </>
+            );
+          }}
+        </LoadHaremData>
+      </GameAPIContext.Provider>
     </div>
   );
 };

@@ -1,29 +1,30 @@
-import { atomWithStorage } from 'jotai/utils';
-import { type SyncStorage } from 'jotai/vanilla/utils/atomWithStorage';
+import { atom, SetStateAction, WritableAtom } from 'jotai';
+import { atomWithLazy } from 'jotai/vanilla/utils';
 import { CONFIG_CACHE } from './cache';
 
 const SETTINGS_REQUEST = '/settings.json';
 
 let settings: Record<string, any> = {};
-const subscriber = new Map<string, [(newValue: any) => void, any]>();
 let hasChanged = false;
 let isUpdating = false;
 
-async function updateSettings() {
+function saveSettings() {
   if (window.caches == null) return;
   hasChanged = true;
   if (isUpdating) return;
   isUpdating = true;
-  const cache = await caches.open(CONFIG_CACHE);
-  while (hasChanged) {
-    hasChanged = false;
-    const json = JSON.stringify(settings);
-    await cache.put(
-      new Request(SETTINGS_REQUEST),
-      new Response(json, { headers: { 'Content-Type': 'application/json' } })
-    );
-  }
-  isUpdating = false;
+  queueMicrotask(async () => {
+    const cache = await caches.open(CONFIG_CACHE);
+    while (hasChanged) {
+      hasChanged = false;
+      const json = JSON.stringify(settings);
+      await cache.put(
+        new Request(SETTINGS_REQUEST),
+        new Response(json, { headers: { 'Content-Type': 'application/json' } })
+      );
+    }
+    isUpdating = false;
+  });
 }
 
 export async function loadSettings() {
@@ -32,44 +33,34 @@ export async function loadSettings() {
   const cache = await caches.open(CONFIG_CACHE);
   const storedSettings = await cache.match(new Request(SETTINGS_REQUEST));
   if (!storedSettings) return;
-  const newSettings = await storedSettings.json();
-  const oldSettings = settings;
-  settings = newSettings;
-  [...subscriber.entries()].forEach(([key, [callback, initialValue]]) => {
-    if (oldSettings[key] !== newSettings[key]) {
-      callback(settings[key] ?? initialValue);
-    }
-  });
+  settings = await storedSettings.json();
 }
 
-const memoryStorage: SyncStorage<any> = {
-  getItem(key, initialValue) {
-    return settings[key] ?? initialValue;
-  },
-  setItem(key, newValue) {
-    settings[key] = newValue;
-    updateSettings();
-  },
-  removeItem(key) {
-    delete settings[key];
-    updateSettings();
-  },
-  subscribe(key, callback, initialValue) {
-    subscriber.set(key, [callback, initialValue]);
-    return () => {
-      subscriber.delete(key);
-    };
-  }
-};
+export function atomWithStorage<Value>(
+  key: string,
+  initialValue: Value,
+  ..._args: unknown[]
+): WritableAtom<Value, [SetStateAction<Value>], void> {
+  const baseAtom = atomWithLazy(() => settings[key] ?? initialValue);
+  const anAtom = atom(
+    (get) => get(baseAtom),
+    (get, set, update: SetStateAction<Value>) => {
+      const nextValue =
+        typeof update === 'function'
+          ? (update as (prev: Value) => Value)(get(baseAtom))
+          : update;
+      set(baseAtom, nextValue);
+      settings[key] = nextValue;
+      saveSettings();
+    }
+  );
 
-export const showPose0Atom = atomWithStorage<boolean>(
-  'showPose0',
-  false,
-  memoryStorage
-);
+  return anAtom;
+}
+
+export const showPose0Atom = atomWithStorage<boolean>('showPose0', false);
 
 export const filterBySkill3Atom = atomWithStorage<boolean>(
   'filterBySkill3',
-  false,
-  memoryStorage
+  false
 );
