@@ -1,3 +1,10 @@
+## 0.25.3 - 2026-01-20
+
+- Fix default pose URL for girl with the selected skin
+- Fix bug where blessing data was fetched twice
+- Change character avatar images to WebP format
+- Replace some text labels with icons
+
 ## 0.25.2 - 2026-01-20
 
 - Add persistence for several settings
