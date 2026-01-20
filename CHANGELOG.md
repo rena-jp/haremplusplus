@@ -1,3 +1,8 @@
+## 0.25.4 - 2026-01-21
+
+- Add new event source
+- Improve translations
+
 ## 0.25.3 - 2026-01-20
 
 - Fix default pose URL for girl with the selected skin
