@@ -392,7 +392,7 @@ export class BulbFilter extends AbstractFilter {
     public noBulbs: boolean
   ) {
     super();
-    const list = Array<string>();
+    const list: string[] = [];
     if (maxedBulbs) list.push('Maxed');
     if (someBulbs) list.push('Some');
     if (noBulbs) list.push('No');
@@ -454,7 +454,7 @@ export class GradeSkinFilter extends AbstractFilter {
     public noSkins: boolean
   ) {
     super();
-    const list = Array<string>();
+    const list: string[] = [];
     if (hasOwnedSkins) list.push('Owned');
     if (hasUnownedSkins) list.push('Unowned');
     if (noSkins) list.push('No');

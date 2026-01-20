@@ -501,9 +501,9 @@ export interface GameQuest {
 declare global {
   export interface Window {
     IMAGES_URL: string;
-    girls_data_list: GirlsDataList | GirlsSalaryList;
+    girls_data_list?: GirlsDataList | GirlsSalaryList;
     girl_quests: GameQuests | undefined;
-    player_gems_amount: GemsData;
+    player_gems_amount?: GemsData;
     Hero?: Hero;
     blessings_data: unknown;
     GirlSalaryManager?: GirlSalaryManager;
