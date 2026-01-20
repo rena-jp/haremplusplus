@@ -18,7 +18,7 @@ import {
   SkillTiers,
   Stats
 } from '../data/data';
-import { countGems, GameBlessingData, OwnedGirlEntry } from '../data/game-data';
+import { countGems, OwnedGirlEntry } from '../data/game-data';
 import { toHaremDataFromWaifuData } from '../data/import/harem-import';
 
 export interface LoadHaremDataProps {
@@ -65,16 +65,19 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     setAllGirlsValue(girls);
   }, []);
 
-  const updateGirl = useCallback((girl: CommonGirlData) => {
-    if (allGirls.current !== undefined) {
-      const newGirl: CommonGirlData = { ...girl };
-      replace(allGirls.current, newGirl);
-      const newAllGirls = [...allGirls.current];
-      setAllGirls(newAllGirls);
-    } else {
-      console.warn('Tried to update girl data, but data is not loaded yet');
-    }
-  }, []);
+  const updateGirl = useCallback(
+    (girl: CommonGirlData) => {
+      if (allGirls.current !== undefined) {
+        const newGirl: CommonGirlData = { ...girl };
+        const newAllGirls = [...allGirls.current];
+        replace(newAllGirls, newGirl);
+        setAllGirls(newAllGirls);
+      } else {
+        console.warn('Tried to update girl data, but data is not loaded yet');
+      }
+    },
+    [setAllGirls]
+  );
 
   useEffect(() => {
     gameAPI.setUpdateGirl(updateGirl);

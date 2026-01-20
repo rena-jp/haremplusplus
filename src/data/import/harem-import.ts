@@ -771,7 +771,7 @@ function getZodiac(girlData: GirlsDataEntry): Zodiac {
   const zodiac = girlData.ref.zodiac.substring(0, 2);
   const result = Zodiacs.fromSymbol(zodiac);
   if (result === undefined) {
-    throw `Unexpected zodiac value: "${girlData.ref.zodiac}"`;
+    throw new Error(`Unexpected zodiac value: "${girlData.ref.zodiac}"`);
   }
   return result;
 }

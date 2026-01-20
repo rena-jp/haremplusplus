@@ -13,7 +13,7 @@ import {
   Zodiac
 } from '../data/data';
 import { PlacesType, Tooltip as ReactTooltip } from 'react-tooltip';
-import { ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
+import { ReactElement, ReactNode, useMemo, useState } from 'react';
 
 import { roundValue } from '../data/common';
 import ReactDOMServer from 'react-dom/server';
