@@ -7,7 +7,7 @@ export interface FilterControlProps {
   isActive: boolean;
   clear(): void;
   reapply: (() => void) | undefined;
-  cssClasses?: string[];
+  cssClasses?: string[] | undefined;
 }
 
 export interface Range {
@@ -163,7 +163,7 @@ export const ToggleList: React.FC<ToggleListProps> = ({
       if (values[index] && !isActive) {
         setActive(true);
       } else {
-        setValue(options[index], !values[index]);
+        setValue(options[index]!, !values[index]);
       }
     },
     [options, values, setValue, isActive, setActive]
@@ -193,8 +193,7 @@ export const ToggleList: React.FC<ToggleListProps> = ({
 };
 
 export interface NumberInputWithOptionsProps
-  extends FilterControlProps,
-    ToggleListProps {
+  extends FilterControlProps, ToggleListProps {
   input: number | undefined;
   setInput(value: number | undefined): void;
 }
@@ -268,8 +267,7 @@ export const NumberInputWithOptions: React.FC<NumberInputWithOptionsProps> = ({
 };
 
 export interface LabeledToggleProps
-  extends FilterControlProps,
-    ToggleListProps {
+  extends FilterControlProps, ToggleListProps {
   // No extra props
 }
 

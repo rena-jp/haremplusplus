@@ -362,7 +362,7 @@ export class GirlSkillsFilter extends AbstractFilter {
     const tier = skillTiers
       .filter((e) => e.skill_points_used > 0)
       .reduce((p, c) => Math.max(p, c.tier), 0);
-    return this.params[tier];
+    return this.params[tier]!;
   }
 
   getParams() {
@@ -414,7 +414,7 @@ export class BulbFilter extends AbstractFilter {
     };
     const maxPointsPerTier = maxPointsPerTierMap[girl.rarity];
     const isMaxed = skillTiers.every(
-      (e) => e.skill_points_used >= maxPointsPerTier[e.tier - 1]
+      (e) => e.skill_points_used >= maxPointsPerTier[e.tier - 1]!
     );
     if (this.maxedBulbs && isMaxed) return true;
     if (this.someBulbs && hasSkills && !isMaxed) return true;
@@ -955,7 +955,7 @@ export class TeamsFilter extends AbstractFilter {
     const result: Team[] = [];
     for (const teamNumber of teams) {
       if (teamNumber < this.teams.length) {
-        result.push(this.teams[teamNumber - 1]);
+        result.push(this.teams[teamNumber - 1]!);
       }
     }
     return result;

@@ -87,7 +87,7 @@ export async function toHaremData(
 
   // girlsDataList is an object indexed by girlId: {girlId1: girlData, girlId2: girlData, ...}
   Object.keys(girlsDataList).forEach((key) => {
-    const girlData = girlsDataList[key];
+    const girlData = girlsDataList[key]!;
     const rarity = getRarity(girlData.rarity);
     const equipmentData =
       girlData.own && girlData.armor !== undefined
@@ -277,10 +277,10 @@ export async function toHaremDataFromWaifuData(
     const currentAffection = +(girlData.Affection?.cur ?? girlData.affection!);
     const upgradeReady =
       +girlData.graded < +girlData.nb_grades &&
-      currentAffection >= affectionTable[girlData.rarity][girlData.graded + 1];
+      currentAffection >= affectionTable[girlData.rarity][girlData.graded + 1]!;
     const quests = [...Array(girlData.nb_grades)].map((_, i) => {
       return {
-        idQuest: girlData.upgrade_quests[i + 1],
+        idQuest: girlData.upgrade_quests[i + 1]!,
         done: i < girlData.graded,
         ready: i === girlData.graded && upgradeReady
       };

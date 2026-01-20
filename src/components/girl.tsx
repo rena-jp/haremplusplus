@@ -21,7 +21,7 @@ export const GIRL_TOOLTIP_ID = 'harem-tooltip';
 export interface GirlTileProps {
   girl: CommonGirlData;
   selected: boolean;
-  lazy?: boolean;
+  lazy?: boolean | undefined;
   tooltipContent?: string;
 }
 
@@ -81,10 +81,10 @@ export interface BaseGirlTileProps {
   children?: ReactNode;
   avatarOverlay?: ReactNode;
   bottom?: ReactNode;
-  classNames?: string[];
+  classNames?: string[] | undefined;
   selected?: boolean;
-  lazy?: boolean;
-  tooltipContent?: string;
+  lazy?: boolean | undefined;
+  tooltipContent?: string | undefined;
 }
 
 /**
@@ -137,7 +137,7 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
   useEffect(() => {
     if (selected && tileRef.current !== null) {
       const observer = new IntersectionObserver((entries) => {
-        if (entries[0].intersectionRatio < 0.7) {
+        if (entries[0]!.intersectionRatio < 0.7) {
           if (selected && tileRef.current !== null) {
             tileRef.current.scrollIntoView({ block: 'nearest' });
           }
@@ -155,7 +155,7 @@ export const BaseGirlTile: React.FC<BaseGirlTileProps> = ({
       title={girl?.name}
       ref={tileRef}
       data-tooltip-id={GIRL_TOOLTIP_ID}
-      data-tooltip-html={tooltipContent}
+      data-tooltip-html={tooltipContent ?? ''}
     >
       {children}
       <div className="avatar-area">

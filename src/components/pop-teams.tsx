@@ -182,10 +182,10 @@ export const PoPRepartition: React.FC<PoPRepartitionProps> = ({
         <ul className="pop">
           {result.map((classs) => {
             const count = girlsCount[i];
-            const value = values[i];
-            const pctValue = pctValues[i];
+            const value = values[i]!;
+            const pctValue = pctValues[i]!;
             const pct = pctValue < 100 ? ` (${pctValue.toFixed(2)}%)` : '';
-            const className = pctValues[i] < 100 ? 'nok' : 'ok';
+            const className = pctValues[i]! < 100 ? 'nok' : 'ok';
             return (
               <li className={className} key={`${i++}`}>
                 {Class[classs]}: {value.toFixed(0)} ({count}){pct}
@@ -215,8 +215,8 @@ async function getOptimalRepartition(
   // combinations
   combinations.sort((c1, c2) => {
     for (let i = 0; i < c1.length; i++) {
-      const c1Prio = priorities.indexOf(c1[i]);
-      const c2Prio = priorities.indexOf(c2[i]);
+      const c1Prio = priorities.indexOf(c1[i]!);
+      const c2Prio = priorities.indexOf(c2[i]!);
       if (c1Prio !== c2Prio) {
         return c1Prio - c2Prio;
       }
@@ -251,8 +251,8 @@ function getPriorities(places: number[]): Class[] {
   // [0, 1, 2]
   const classes = [Class.Hardcore, Class.Charm, Class.Knowhow];
   return classes.sort((c1, c2) => {
-    const p1 = places[c1];
-    const p2 = places[c2];
+    const p1 = places[c1]!;
+    const p2 = places[c2]!;
     return p2 - p1;
   });
 }
@@ -264,14 +264,14 @@ function getCombinations(
 ): Class[][] {
   if (length === -1) {
     length =
-      places[Class.Hardcore] + places[Class.Charm] + places[Class.Knowhow];
+      places[Class.Hardcore]! + places[Class.Charm]! + places[Class.Knowhow]!;
   }
   if (length > 9) {
     console.log('ERROR: Too many places of power.');
     return [];
   }
 
-  if (places[0] + places[1] + places[2] === 1) {
+  if (places[0]! + places[1]! + places[2]! === 1) {
     const lastSlot = places.indexOf(1);
     const result = [...base];
     result.push(lastSlot);
@@ -279,25 +279,25 @@ function getCombinations(
   }
 
   let result: Class[][] = [];
-  if (places[0] > 0) {
+  if (places[0]! > 0) {
     const newBase = [...base];
     newBase.push(0);
     const newPlaces = [...places];
-    newPlaces[0]--;
+    newPlaces[0]!--;
     result = result.concat(getCombinations(newPlaces, length, newBase));
   }
-  if (places[1] > 0) {
+  if (places[1]! > 0) {
     const newBase = [...base];
     newBase.push(1);
     const newPlaces = [...places];
-    newPlaces[1]--;
+    newPlaces[1]!--;
     result = result.concat(getCombinations(newPlaces, length, newBase));
   }
-  if (places[2] > 0) {
+  if (places[2]! > 0) {
     const newBase = [...base];
     newBase.push(2);
     const newPlaces = [...places];
-    newPlaces[2]--;
+    newPlaces[2]!--;
     result = result.concat(getCombinations(newPlaces, length, newBase));
   }
 

@@ -24,7 +24,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
   const [sceneData, setSceneData] = useState<QuestData | undefined>(undefined);
   const [sceneText, setSceneText] = useState('...');
   const [canUnlock, setCanUnlock] = useState(() => {
-    const quest = girl.quests[scene];
+    const quest = girl.quests[scene]!;
     return quest.ready;
   });
 
@@ -45,7 +45,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
   );
 
   useLayoutEffect(() => {
-    const quest = girl.quests[scene];
+    const quest = girl.quests[scene]!;
     const questId = quest.idQuest;
     const sceneImage = `/img/quests/${questId}/1/1600x900cut/${questId}.jpg`;
     setImage(sceneImage);
@@ -82,7 +82,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
 
   const goToScene = useCallback(
     (toScene: number) => {
-      const quest = girl.quests[toScene];
+      const quest = girl.quests[toScene]!;
       const questId = quest.idQuest;
       // /img/quests/1002156/1/1600x/1002156.jpg  // Old format
       // /img/quests/1002156/1/1600x900cut/1002156.jpg // New format
@@ -103,7 +103,7 @@ export const SceneViewer: React.FC<SceneViewerProps> = ({
   const nextSceneReady =
     nextScene === girl.stars &&
     girl.quests.length > nextScene &&
-    girl.quests[nextScene].ready;
+    girl.quests[nextScene]!.ready;
   const goToNextScene =
     nextSceneReady || nextScene < girl.stars
       ? () => goToScene(nextScene)

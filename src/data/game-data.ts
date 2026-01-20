@@ -26,7 +26,7 @@ export type GameBlessing = RelativeGameBlessing | AbsoluteGameBlessing;
 export type RelativeGameBlessing = {
   title: string;
   description: string;
-  icon_url?: string; // Removed?
+  icon_url?: string | undefined; // Removed?
   remaining_time: number;
   starts_in: number;
 };
@@ -34,7 +34,7 @@ export type RelativeGameBlessing = {
 export type AbsoluteGameBlessing = {
   title: string;
   description: string;
-  icon_url?: string; // Removed?
+  icon_url?: string | undefined; // Removed?
   start_ts: number;
   end_ts: number;
 };
@@ -56,7 +56,7 @@ export namespace GirlsDataList {
         return false;
       }
       // Only test the first girl. Assume that all thousand girls have a similar data format.
-      const anyGirl = gameGirls[girlKeys[0]];
+      const anyGirl = gameGirls[girlKeys[0]!];
       if (isUnknownObject(anyGirl)) {
         // Test a few keys that are specifically defined in the harem,
         // but missing from the compact girlsDataList
@@ -949,18 +949,18 @@ export function toQuestData(
   girlId: string,
   gameQuestStep: GameQuestStep
 ): QuestData {
-  const data = gameQuestStep.steps[0];
+  const data = gameQuestStep.steps[0]!;
   if (Array.isArray(data)) {
     // For some reason, the scene picture is not directly part of the data when the scene
     // has already been unlocked (past scenes). We need to rebuild it...
     // In this case, there is also no cost and no portrait.
     const scene = `/img/quests/${gameQuestStep.id}/1/800x450cut/${
-      data[2].split('?')[0]
+      data[2]!.split('?')[0]
     }.jpg`;
     return {
       girlId,
       questId: gameQuestStep.id,
-      dialogue: data[0],
+      dialogue: data[0]!,
       scene,
       sceneFull: resizeScene(scene),
       step: gameQuestStep.currentStepNum

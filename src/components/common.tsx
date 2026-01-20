@@ -210,7 +210,7 @@ export const GemsCount: React.FC<GemsCountProps> = ({ gemsCount }) => {
 export interface TooltipProps {
   children: ReactNode;
   tooltip: ReactNode;
-  place?: PlacesType;
+  place?: PlacesType | undefined;
   cssClasses?: string | string[];
   delay?: number;
 }
@@ -223,9 +223,9 @@ export interface SharedTooltipProps extends TooltipProps {
 export const SharedTooltip: React.FC<SharedTooltipProps> = ({
   tooltip,
   children,
-  place,
+  place = 'top',
   cssClasses,
-  delay,
+  delay = 0,
   tooltipId
 }) => {
   const classes =
@@ -256,9 +256,9 @@ export const SharedTooltip: React.FC<SharedTooltipProps> = ({
 export const Tooltip: React.FC<TooltipProps> = ({
   tooltip,
   children,
-  place,
+  place = 'top',
   cssClasses,
-  delay
+  delay = 0
 }) => {
   const classes =
     cssClasses === undefined

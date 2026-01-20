@@ -268,7 +268,7 @@ export interface RequestEvent {
   type: RequestEventType;
   success: boolean;
   pendingRequests: number;
-  duration?: number; // If type==='completed', delay between 'queued' and 'completed' events
+  duration?: number | undefined; // If type==='completed', delay between 'queued' and 'completed' events
 }
 
 const requestsQueue: Promise<unknown>[] = [];

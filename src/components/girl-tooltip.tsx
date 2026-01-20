@@ -13,7 +13,7 @@ import { getTotalEquipmentStats } from '../data/girls-equipment';
 
 export interface GirlTooltipProps {
   girl: CommonGirlData;
-  currentBlessings?: BlessingDefinition[];
+  currentBlessings?: BlessingDefinition[] | undefined;
   classNames?: string[];
 }
 

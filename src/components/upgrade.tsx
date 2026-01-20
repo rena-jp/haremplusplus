@@ -326,14 +326,14 @@ export const GirlsSelector: React.FC<GirlSelectorProps> = ({
     previousGirl =
       allGirlsByDate[
         (allGirlsByDate.length + index - 1) % allGirlsByDate.length
-      ];
-    nextGirl = allGirlsByDate[(index + 1) % allGirlsByDate.length];
+      ]!;
+    nextGirl = allGirlsByDate[(index + 1) % allGirlsByDate.length]!;
   } else {
     previousGirl =
       ownedDisplayedGirls[
         (ownedDisplayedGirls.length + index - 1) % ownedDisplayedGirls.length
-      ];
-    nextGirl = ownedDisplayedGirls[(index + 1) % ownedDisplayedGirls.length];
+      ]!;
+    nextGirl = ownedDisplayedGirls[(index + 1) % ownedDisplayedGirls.length]!;
   }
 
   const rankCount =
@@ -623,7 +623,7 @@ const ItemsList: React.FC<ItemsListProps> = ({
     .map((item) => getValue(item.item) * item.count)
     .reduce((a, b) => a + b, 0);
   const unit =
-    items.length === 0 ? '' : items[0].item.type === 'book' ? 'XP' : 'Aff';
+    items.length === 0 ? '' : items[0]!.item.type === 'book' ? 'XP' : 'Aff';
   return (
     <div className="qh-inventory">
       <h3>

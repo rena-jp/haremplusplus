@@ -77,7 +77,7 @@ const SkillSummaries: React.FC<SkillSummariesProps> = ({
       { id: null, name: 'None' },
       ...[4, 10, 9, 3, 1, 2, 5, 6].map((e) => ({
         id: e,
-        name: window.GT.design[`girl_role_${e}_name`]
+        name: window.GT.design[`girl_role_${e}_name`]!
       }))
     ],
     []
@@ -311,7 +311,7 @@ const SkillLabel = React.memo<{ skill: Skill }>(({ skill }) => (
     {skill.elements.length === 0 ? (
       <span className="skill-icon">?</span>
     ) : (
-      <SkillIcon element={skill.elements[0]} />
+      <SkillIcon element={skill.elements[0]!} />
     )}
     <span>{skill.name}</span>
   </>

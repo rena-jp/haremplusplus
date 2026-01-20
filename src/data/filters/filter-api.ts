@@ -19,7 +19,7 @@ export interface FilterConfig {
   /**
    * The config parameters. Specific to each config type.
    */
-  params?: UnknownObject;
+  params?: UnknownObject | undefined;
 }
 
 /**

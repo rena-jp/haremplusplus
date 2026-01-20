@@ -131,7 +131,7 @@ export const Harem: React.FC<HaremProps> = ({
 
   const togglePanel = useCallback(() => {
     if (activeTab === undefined) {
-      toggleTab(displayedTab ?? tabs[1]);
+      toggleTab(displayedTab ?? tabs[1]!);
     } else {
       toggleTab(activeTab);
     }

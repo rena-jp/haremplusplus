@@ -80,7 +80,7 @@ interface EquipmentTileProps {
   equipment: Equipment;
   gameAPI: GameAPI;
   currentEquipment: Equipment | undefined;
-  close?: () => void;
+  close?: (() => void) | undefined;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({

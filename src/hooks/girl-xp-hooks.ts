@@ -153,7 +153,7 @@ function getXpRange(
   girl: CommonGirlData
 ): { min: number; max: number } {
   const values = getXpEntry(level, girl);
-  return { min: values[0], max: values[1] };
+  return { min: values[0]!, max: values[1]! };
 }
 
 export function getLevel(girl: CommonGirlData, addXp: number): number {
@@ -162,8 +162,8 @@ export function getLevel(girl: CommonGirlData, addXp: number): number {
   for (let level = girl.level ?? 1; level <= MAX_LEVEL; level++) {
     const values = getXpEntry(level, girl);
     if (
-      newXpValue >= values[0] &&
-      (level === MAX_LEVEL || newXpValue < values[1])
+      newXpValue >= values[0]! &&
+      (level === MAX_LEVEL || newXpValue < values[1]!)
     ) {
       return level;
     }
@@ -202,7 +202,7 @@ export function getGXPToCap(girl: CommonGirlData, cap?: number): number {
     );
   }
   const targetXP = getXpEntry(cap, girl);
-  return targetXP[0];
+  return targetXP[0]!;
 }
 
 export function getMissingGXP(girl: CommonGirlData): number {

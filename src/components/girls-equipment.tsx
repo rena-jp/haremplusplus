@@ -371,8 +371,8 @@ const StatsDiff: React.FC<StatsDiffProps> = ({ diff }) => {
 
 interface ResonanceSectionProps {
   equipment: Equipment;
-  currentEquipment?: Equipment;
-  girl?: CommonGirlData;
+  currentEquipment?: Equipment | undefined;
+  girl?: CommonGirlData | undefined;
 }
 
 const ResonanceSection: React.FC<ResonanceSectionProps> = ({
@@ -601,10 +601,10 @@ function getStatsDiff(
 export interface SimpleEquipmentTileProps {
   equipment: Equipment | undefined;
   slotId: number;
-  classNames?: string[];
+  classNames?: string[] | undefined;
   children?: ReactNode;
   girl?: CommonGirlData;
-  onClick?: EventHandler<MouseEvent<unknown>>;
+  onClick?: EventHandler<MouseEvent<unknown>> | undefined;
   hidden?: boolean;
 }
 

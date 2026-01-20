@@ -27,9 +27,9 @@ export interface LoadHaremDataProps {
 }
 
 export interface LoadHaremDataResult {
-  allGirls?: CommonGirlData[];
-  currentBlessings?: BlessingDefinition[];
-  upcomingBlessings?: BlessingDefinition[];
+  allGirls?: CommonGirlData[] | undefined;
+  currentBlessings?: BlessingDefinition[] | undefined;
+  upcomingBlessings?: BlessingDefinition[] | undefined;
   refresh(): Promise<void>;
   gemsCount: Map<Element, number>;
   consumeGems(element: Element, gems: number): void;
@@ -320,8 +320,8 @@ function equalEquipment(
     return false;
   }
   for (let i = 0; i < equip1.items.length; i++) {
-    const item1 = equip1.items[i];
-    const item2 = equip2.items[i];
+    const item1 = equip1.items[i]!;
+    const item2 = equip2.items[i]!;
     if (!equalItem(item1, item2)) {
       return false;
     }

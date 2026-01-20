@@ -273,7 +273,7 @@ export class GameAPIImpl implements GameAPI {
     step: number,
     allowRequest: boolean
   ): Promise<QuestData> {
-    const quest = girl.quests[step];
+    const quest = girl.quests[step]!;
     const questId = quest.idQuest;
     const gameQuestData = await this.requestFromFrame(
       () => getOrCreateUpgradeFrame(questId),
@@ -337,7 +337,7 @@ export class GameAPIImpl implements GameAPI {
         girl.currentIcon = pose;
         girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
         if (girl.poses !== undefined) {
-          const newPose = girl.poses[pose];
+          const newPose = girl.poses[pose]!;
           girl.poseImage = newPose;
           girl.icon = newPose.replace('ava', 'ico');
         }
@@ -620,10 +620,10 @@ export class GameAPIImpl implements GameAPI {
         girl.icon = getPoseN(girl.icon, girl.stars);
         girl.upgradeReady = false;
         girl.upgradeReady = isUpgradeReady(girl, 0);
-        girl.quests[currentQuest].done = true;
-        girl.quests[currentQuest].ready = false;
+        girl.quests[currentQuest]!.done = true;
+        girl.quests[currentQuest]!.ready = false;
         if (girl.stars < girl.maxStars) {
-          girl.quests[currentQuest + 1].ready = girl.upgradeReady;
+          girl.quests[currentQuest + 1]!.ready = girl.upgradeReady;
         }
         if (this.updateGirl !== undefined) {
           this.updateGirl(girl);
@@ -1019,7 +1019,7 @@ export class GameAPIImpl implements GameAPI {
       girl.upgradeReady = false;
       girl.currentAffection = result.girl.affection;
       const questMatch = result.quest.match(/\/quest\/(\d+)/);
-      const questId = questMatch ? questMatch[1] : '';
+      const questId = questMatch ? questMatch[1]! : '';
       if (!questMatch) {
         throw new Error(
           'Failed to parse quest ID from the result: ' + result.quest
@@ -1027,7 +1027,7 @@ export class GameAPIImpl implements GameAPI {
       }
       const questIdNum = parseInt(questId, 10);
       for (let i = 0; i < girl.stars; i++) {
-        if (!girl.quests[i].done) {
+        if (!girl.quests[i]!.done) {
           girl.quests[i] = {
             idQuest: questIdNum - (girl.stars - 1 - i), //guessing by substracting
             ready: false,
@@ -1097,8 +1097,8 @@ export class GameAPIImpl implements GameAPI {
     girl.currentAffection += addAff;
     girl.missingAff = Math.max(0, girl.missingAff - addAff);
     if (girl.upgradeReady) {
-      girl.quests[girl.stars] = {
-        ...girl.quests[girl.stars],
+      girl.quests[girl.stars]! = {
+        ...girl.quests[girl.stars]!,
         ready: true
       };
     }
@@ -1514,7 +1514,7 @@ function toMaxOutItems(result: MaxOutResult): MaxOutItems {
     (key) => {
       return {
         id: Number(key),
-        count: result.selection[key]
+        count: result.selection[key]!
       };
     }
   );
@@ -1530,7 +1530,7 @@ export function fromFulltoMaxOutItems(request: FullMaxOutResult): MaxOutItems {
     (key) => {
       return {
         id: Number(key),
-        count: request.selection[key]
+        count: request.selection[key]!
       };
     }
   );
@@ -1543,7 +1543,7 @@ export function fromFulltoMaxOutItems(request: FullMaxOutResult): MaxOutItems {
 export function getTeams(teamData: TeamsData): Team[] {
   const result: Team[] = [];
   for (const teamIndex in teamData) {
-    const teamEntry = teamData[teamIndex];
+    const teamEntry = teamData[teamIndex]!;
     result.push(getTeam(teamEntry));
   }
   return result;

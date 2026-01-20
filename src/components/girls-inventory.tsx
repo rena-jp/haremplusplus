@@ -608,7 +608,9 @@ interface EquipmentTileProps {
   slotId: number;
   classNames?: string[];
   onClick?: EventHandler<MouseEvent<unknown>>;
-  unequipOne?: (girl: CommonGirlData, equipment: Equipment) => void;
+  unequipOne?:
+    | ((girl: CommonGirlData, equipment: Equipment) => void)
+    | undefined;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({

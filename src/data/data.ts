@@ -26,7 +26,7 @@ export namespace Rarities {
   }
 
   export function toDisplayString(rarity: Rarity): string {
-    return window.GT.design[`girls_rarity_${Rarity[rarity]}`];
+    return window.GT.design[`girls_rarity_${Rarity[rarity]}`]!;
   }
 }
 
@@ -83,8 +83,8 @@ export interface BaseGirlData {
   poseImage0: string;
   poses?: string[];
   class: Class;
-  level?: number;
-  maxLevel?: number;
+  level?: number | undefined;
+  maxLevel?: number | undefined;
   own: boolean;
   rarity: Rarity;
   maxStars: number;
@@ -105,19 +105,19 @@ export interface BaseGirlData {
   sources: EventSource[];
   quests: Quest[];
   /** Timestamp */
-  recruited?: number;
+  recruited?: number | undefined;
   /**
    * Salary frequency, in seconds. Only for owned girls.
    */
-  salaryTime?: number;
+  salaryTime?: number | undefined;
   /**
    * Salary value. Only for owned girls.
    */
-  salary?: number;
+  salary?: number | undefined;
   /**
    * Salary value per hour. Only for owned girls.
    */
-  salaryPerHour?: number;
+  salaryPerHour?: number | undefined;
   /**
    * Variations of this character. Ids.
    */
@@ -133,9 +133,9 @@ export interface BaseGirlData {
   hobby: string;
   fetish: string;
 
-  equipment?: EquipmentData; // WIP Experiment
-  skillTiers?: SkillTiers;
-  id_role?: number | null;
+  equipment?: EquipmentData | undefined; // WIP Experiment
+  skillTiers?: SkillTiers | undefined;
+  id_role?: number | null | undefined;
 
   gradeSkins?: GradeSkin[];
 
@@ -232,7 +232,7 @@ export interface CommonGirlData extends BaseGirlData {
    * The current (base) stats for the girl. Includes bonus
    * from level and stars, but ignores blessings.
    */
-  stats?: Stats;
+  stats?: Stats | undefined;
 }
 
 export interface Stats {
@@ -335,7 +335,7 @@ export namespace Poses {
     if (window.GT.figures != null) {
       const { figures } = window.GT;
       if (0 < pose && pose < figures.length) {
-        return figures[pose];
+        return figures[pose]!;
       }
     }
 
@@ -394,7 +394,7 @@ export namespace Roles {
 
   export function toDisplayString(role: Role): string {
     if (role === Role.none) return 'None';
-    return window.GT.design[`girl_role_${role}_name`];
+    return window.GT.design[`girl_role_${role}_name`]!;
   }
 }
 
@@ -464,7 +464,7 @@ export namespace Blessings {
       | Role
   ): string {
     const valueType = getEnumType(blessing);
-    return valueType[blessingValue];
+    return valueType[blessingValue]!;
   }
 
   export function toDisplayString(
@@ -1059,7 +1059,7 @@ export interface QuestData {
   sceneFull: string;
   dialogue: string;
   portrait?: string;
-  cost?: number;
+  cost?: number | undefined;
 }
 
 export interface Team {

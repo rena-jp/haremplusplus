@@ -389,7 +389,7 @@ const AffectionCapReachedForm: React.FC<FormProps> = ({
     if (values.every((v) => !v)) {
       return undefined;
     }
-    const reached = values[0];
+    const reached = values[0]!;
     return new GradeLimitReachedFilter(reached);
   }, []);
 
@@ -447,7 +447,12 @@ const ShardsForm: React.FC<FormProps> = ({
     if (values.every((v) => !v)) {
       return undefined;
     }
-    return new ShardsMultiFilter(values[0], values[1], values[3], values[2]);
+    return new ShardsMultiFilter(
+      values[0]!,
+      values[1]!,
+      values[3]!,
+      values[2]!
+    );
   }, []);
 
   const getValues = useCallback((filter: Filter) => {
@@ -520,12 +525,12 @@ const RarityForm: React.FC<FormProps> = ({
       return undefined;
     }
     return new RarityMultiFilter(
-      values[0],
-      values[1],
-      values[2],
-      values[3],
-      values[4],
-      values[5]
+      values[0]!,
+      values[1]!,
+      values[2]!,
+      values[3]!,
+      values[4]!,
+      values[5]!
     );
   }, []);
 
@@ -600,7 +605,7 @@ const SourceForm: React.FC<FormProps> = ({
     }
     const sources: EventSource[] = values
       .map((value, index) => {
-        return value ? options[index].source : undefined;
+        return value ? options[index]!.source : undefined;
       })
       .filter((optSource) => optSource !== undefined)
       .map((optSource) => optSource!);
@@ -981,7 +986,7 @@ const ClassForm: React.FC<FormProps> = ({
     if (values.every((v) => !v)) {
       return undefined;
     }
-    return new ClassMultiFilter(values[0], values[1], values[2]);
+    return new ClassMultiFilter(values[0]!, values[1]!, values[2]!);
   }, []);
 
   const getValues = useCallback((filter: Filter) => {

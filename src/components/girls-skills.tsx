@@ -53,7 +53,7 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
   const skillTier = girl.skillTiers?.[tier];
   if (skillTier === undefined) return null;
   const { icon, icon_path, skill_points_used } = skillTier;
-  const maxPoints = maxPointsPerTierMap[girl.rarity][tier - 1];
+  const maxPoints = maxPointsPerTierMap[girl.rarity][tier - 1]!;
   const count = `${skill_points_used}${
     skill_points_used < maxPoints ? `/${maxPoints}` : ''
   }`;
@@ -73,7 +73,7 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
   if (tier === 3) {
     switch (icon) {
       case 'hair_color': {
-        const firstHairColor = girl.hairColor[0];
+        const firstHairColor = girl.hairColor[0]!;
         const name = HairColors.toDisplayString(firstHairColor);
         const colorName = HairColor[firstHairColor];
         tooltip = (
@@ -86,7 +86,7 @@ const SkillWrapper: React.FC<SkillWrapperProps> = ({ girl, tier }) => {
         break;
       }
       case 'eye_color': {
-        const firstEyeColor = girl.eyeColor[0];
+        const firstEyeColor = girl.eyeColor[0]!;
         const name = EyeColors.toDisplayString(firstEyeColor);
         const colorName = EyeColor[firstEyeColor];
         tooltip = (

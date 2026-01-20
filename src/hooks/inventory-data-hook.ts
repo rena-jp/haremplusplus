@@ -50,7 +50,7 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
     (consumedItems: ItemEntry<Item>[]) => {
       let newInventory: Inventory | undefined;
       const type =
-        consumedItems.length > 0 ? consumedItems[0].item.type : undefined;
+        consumedItems.length > 0 ? consumedItems[0]!.item.type : undefined;
       setInventory((currentInventory) => {
         newInventory = {
           books: [...currentInventory.books],
@@ -63,7 +63,7 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
                 (item) => item.item.itemId === consumedItemEntry.item.itemId
               );
               if (bookIndex >= 0) {
-                const usedBook = newInventory.books[bookIndex];
+                const usedBook = newInventory.books[bookIndex]!;
                 const newBookEntry = {
                   ...usedBook,
                   count: usedBook.count - consumedItemEntry.count
@@ -79,7 +79,7 @@ export function useInventory(gameAPI: GameAPI): InventoryResult {
                 (item) => item.item.itemId === consumedItemEntry.item.itemId
               );
               if (giftIndex >= 0) {
-                const usedGift = newInventory.gifts[giftIndex];
+                const usedGift = newInventory.gifts[giftIndex]!;
                 const newGiftEntry = {
                   ...usedGift,
                   count: usedGift.count - consumedItemEntry.count

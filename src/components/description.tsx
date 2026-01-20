@@ -76,7 +76,7 @@ export interface GirlDescriptionProps {
   /**
    * The currently selected girl (optional)
    */
-  girl?: CommonGirlData;
+  girl?: CommonGirlData | undefined;
   activeBlessing: BlessingDefinition[];
   nextBlessing: BlessingDefinition[];
   selectGirl(girl: CommonGirlData): void;
@@ -793,7 +793,7 @@ const ScenesBrowser: React.FC<ScenesBrowserProps> = ({
 interface QuestStepProps {
   girl: CommonGirlData;
   gameAPI: GameAPI;
-  quest?: Quest;
+  quest?: Quest | undefined;
   step: number;
   domain: string;
 }
