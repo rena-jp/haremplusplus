@@ -555,6 +555,10 @@ declare global {
       };
     };
   }
+
+  interface String {
+    toImageUrl(resizingType: 'ava' | 'avb' | 'ico'): string;
+  }
 }
 
 export interface TeamsData {

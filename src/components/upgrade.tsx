@@ -1197,7 +1197,9 @@ export const Awaken: React.FC<AwakenProps> = ({
 }) => {
   const gemsStats = useGemsStats(girl);
   const showPose0 = useAtomValue(showPose0Atom);
-  const poseImage = showPose0 ? girl?.poseImage0 : girl?.poseImage;
+  const poseImage = (
+    showPose0 ? girl?.poseImage0 : girl?.poseImage
+  )?.toImageUrl('ava');
   const currentGems = gemsCount.get(girl.element) ?? 0;
   const doAwaken = useCallback(() => {
     gameAPI

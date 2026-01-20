@@ -96,7 +96,9 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
   setSingleTrait
 }) => {
   const showPose0 = useAtomValue<boolean>(showPose0Atom);
-  const poseImage = showPose0 ? girl?.poseImage0 : girl?.poseImage;
+  const poseImage = (
+    showPose0 ? girl?.poseImage0 : girl?.poseImage
+  )?.toImageUrl('ava');
   const gameAPI = useContext(GameAPIContext).gameAPI!;
 
   const domain = getDomain();
