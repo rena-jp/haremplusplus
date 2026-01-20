@@ -4,7 +4,6 @@ import {
   Element,
   Elements,
   EyeColor,
-  GameName,
   HairColor,
   Pose,
   Poses,
@@ -18,7 +17,6 @@ import { ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 
 import { roundValue } from '../data/common';
 import ReactDOMServer from 'react-dom/server';
-import { GameAPIContext } from '../data/game-api-context';
 
 export type GemType = Element | 'rainbow';
 
@@ -33,8 +31,7 @@ export const GemIcon: React.FC<GemProps> = ({
   className = '',
   noTitle
 }) => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const icon = getGemIcon(element, gameName);
+  const icon = getGemIcon(element);
   const elementName =
     element === 'rainbow' ? 'rainbow' : Elements.toString(element);
   const cssClass = `elementIcon ${className}`;
@@ -44,28 +41,28 @@ export const GemIcon: React.FC<GemProps> = ({
   );
 };
 
-export function getGemIcon(element: GemType, gameName: GameName): string {
-  const contentHostName2 = contentHost2(gameName);
+export function getGemIcon(element: GemType): string {
+  const contentHost = getContentHost();
 
   switch (element) {
     case 'rainbow':
-      return `https://${contentHostName2}/pictures/design/gems/all.png`;
+      return `${contentHost}/pictures/design/gems/all.png`;
     case Element.blue:
-      return `https://${contentHostName2}/pictures/design/gems/water.png`;
+      return `${contentHost}/pictures/design/gems/water.png`;
     case Element.red:
-      return `https://${contentHostName2}/pictures/design/gems/fire.png`;
+      return `${contentHost}/pictures/design/gems/fire.png`;
     case Element.dark:
-      return `https://${contentHostName2}/pictures/design/gems/darkness.png`;
+      return `${contentHost}/pictures/design/gems/darkness.png`;
     case Element.green:
-      return `https://${contentHostName2}/pictures/design/gems/nature.png`;
+      return `${contentHost}/pictures/design/gems/nature.png`;
     case Element.orange:
-      return `https://${contentHostName2}/pictures/design/gems/stone.png`;
+      return `${contentHost}/pictures/design/gems/stone.png`;
     case Element.purple:
-      return `https://${contentHostName2}/pictures/design/gems/psychic.png`;
+      return `${contentHost}/pictures/design/gems/psychic.png`;
     case Element.white:
-      return `https://${contentHostName2}/pictures/design/gems/light.png`;
+      return `${contentHost}/pictures/design/gems/light.png`;
     case Element.yellow:
-      return `https://${contentHostName2}/pictures/design/gems/sun.png`;
+      return `${contentHost}/pictures/design/gems/sun.png`;
   }
 }
 
@@ -142,26 +139,8 @@ export function formatTime(value: number): string {
   }
 }
 
-export function contentHost(gameName: GameName): string {
-  switch (gameName) {
-    case GameName.HentaiHeroes:
-      return 'hh.hh-content.com';
-    case GameName.ComixHarem:
-      return 'ch.hh-content.com';
-    case GameName.PornstarHarem:
-      return 'th.hh-content.com';
-  }
-}
-
-export function contentHost2(gameName: GameName): string {
-  switch (gameName) {
-    case GameName.HentaiHeroes:
-      return 'hh2.hh-content.com';
-    case GameName.ComixHarem:
-      return 'ch.hh-content.com';
-    case GameName.PornstarHarem:
-      return 'th.hh-content.com';
-  }
+export function getContentHost(): string {
+  return window.IMAGES_URL ?? 'https://hh2.hh-content.com';
 }
 
 export interface GradeProps {
@@ -551,71 +530,51 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
 
 export const BookIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'XP2' : `XP${item}`;
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
-  return (
-    <img
-      alt=""
-      src={`https://${contentHostName2}/pictures/items/${icon}.png`}
-    />
-  );
+  const contentHost = getContentHost();
+  return <img alt="" src={`${contentHost}/pictures/items/${icon}.png`} />;
 };
 
 export const GiftIcon: React.FC<{ item?: number }> = ({ item }) => {
   const icon = item === undefined ? 'K2' : `K${item}`;
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
-  return (
-    <img
-      alt=""
-      src={`https://${contentHostName2}/pictures/items/${icon}.png`}
-    />
-  );
+  const contentHost = getContentHost();
+  return <img alt="" src={`${contentHost}/pictures/items/${icon}.png`} />;
 };
 
-export interface SimpleIconProps {
-  gameName: GameName;
-}
-
-export const EnduranceIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
-  const contentHostName2 = contentHost2(gameName);
+export const EnduranceIcon: React.FC = () => {
+  const contentHost = getContentHost();
   return (
     <img
       alt=""
-      src={`https://${contentHostName2}/pictures/misc/items_icons/4.png`}
+      src={`${contentHost}/pictures/misc/items_icons/4.png`}
       className="endurance-icon"
     />
   );
 };
 
-export const EgoIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
-  const contentHostName2 = contentHost2(gameName);
+export const EgoIcon: React.FC = () => {
+  const contentHost = getContentHost();
   return (
-    <img
-      alt=""
-      src={`https://${contentHostName2}/caracs/ego.png`}
-      className="ego-icon"
-    />
+    <img alt="" src={`${contentHost}/caracs/ego.png`} className="ego-icon" />
   );
 };
 
-export const AttackIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
-  const contentHostName2 = contentHost2(gameName);
+export const AttackIcon: React.FC = () => {
+  const contentHost = getContentHost();
   return (
     <img
       alt=""
-      src={`https://${contentHostName2}/caracs/damage.png`}
+      src={`${contentHost}/caracs/damage.png`}
       className="attack-icon"
     />
   );
 };
 
-export const DefenseIcon: React.FC<SimpleIconProps> = ({ gameName }) => {
-  const contentHostName2 = contentHost2(gameName);
+export const DefenseIcon: React.FC = () => {
+  const contentHost = getContentHost();
   return (
     <img
       alt=""
-      src={`https://${contentHostName2}/caracs/deff_undefined.png`}
+      src={`${contentHost}/caracs/deff_undefined.png`}
       className="defense-icon"
     />
   );
@@ -668,9 +627,8 @@ export const TraitIcon: React.FC<TraitIconProps> = ({ trait }) => {
     [EyeColor.white]: 'FFF'
   };
 
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
-  let url = `https://${contentHostName2}/pictures/design/blessings_icons/`;
+  const contentHost = getContentHost();
+  let url = `${contentHost}/pictures/design/blessings_icons/`;
   switch (trait.traitEnum) {
     case TraitEnum.HairColor:
       url += `hair_colors/hair_color_${hairColorMap[trait.traitValue]}.png`;
@@ -696,9 +654,8 @@ export interface RoleIconProps {
 }
 
 export const RoleIcon: React.FC<RoleIconProps> = ({ roleId }) => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
-  const url = `https://${contentHostName2}/pictures/design/girl_roles/role_${roleId}.png`;
+  const contentHost = getContentHost();
+  const url = `${contentHost}/pictures/design/girl_roles/role_${roleId}.png`;
   return (
     <span className="role-icon" style={{ backgroundImage: `url(${url})` }} />
   );
@@ -709,8 +666,7 @@ export interface SkillIconProps {
 }
 
 export const SkillIcon: React.FC<SkillIconProps> = ({ element }) => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
+  const contentHost = getContentHost();
 
   const stun = 'pvp4_trigger_skills/stun_icon.png';
   const shield = 'pvp4_trigger_skills/shield_icon.png';
@@ -727,7 +683,7 @@ export const SkillIcon: React.FC<SkillIconProps> = ({ element }) => {
     [Element.blue]: execute
   } as Record<Element, string>;
 
-  const url = `https://${contentHostName2}/pictures/design/girl_skills/${map[element]}`;
+  const url = `${contentHost}/pictures/design/girl_skills/${map[element]}`;
 
   return (
     <span className="skill-icon" style={{ backgroundImage: `url(${url})` }} />
@@ -741,8 +697,7 @@ export interface LabyrinthSkillIconProps {
 export const LabyrinthSkillIcon: React.FC<LabyrinthSkillIconProps> = ({
   element
 }) => {
-  const gameName = useContext(GameAPIContext).gameAPI!.getGameName();
-  const contentHostName2 = contentHost2(gameName);
+  const contentHost = getContentHost();
 
   const map = {
     [Element.dark]: 'punch_icon.png',
@@ -755,7 +710,7 @@ export const LabyrinthSkillIcon: React.FC<LabyrinthSkillIconProps> = ({
     [Element.blue]: 'shield_icon.png'
   } as Record<Element, string>;
 
-  const url = `https://${contentHostName2}/pictures/design/girl_skills/pvp4_trigger_skills/${map[element]}`;
+  const url = `${contentHost}/pictures/design/girl_skills/pvp4_trigger_skills/${map[element]}`;
 
   return (
     <span className="skill-icon" style={{ backgroundImage: `url(${url})` }} />

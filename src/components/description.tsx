@@ -12,7 +12,6 @@ import {
   CommonGirlData,
   EyeColor,
   EyeColors,
-  GameName,
   getBlessedStats,
   getBlessingMultiplier,
   getPentaDrillStats,
@@ -47,7 +46,7 @@ import {
   SalaryIcon,
   StatsDescriptionTooltip,
   Tooltip,
-  contentHost2,
+  getContentHost,
   RoleIcon,
   SkillIcon,
   LabyrinthSkillIcon
@@ -213,7 +212,6 @@ export const GirlDescription: React.FC<GirlDescriptionProps> = ({
                   domain={domain}
                   openUpgrade={openUpgrade}
                   setSingleTrait={setSingleTrait}
-                  gameName={gameAPI.getGameName()}
                 />
               )}
               <p>
@@ -241,7 +239,6 @@ export interface BlessingSectionProps {
   upcomingBlessing: BlessingDefinition[];
   openUpgrade(page: UpgradePage): void;
   setSingleTrait(trait: Trait): void;
-  gameName: GameName;
 }
 
 export const BlessingSection: React.FC<BlessingSectionProps> = ({
@@ -252,8 +249,7 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
   currentBlessing,
   upcomingBlessing,
   openUpgrade,
-  setSingleTrait,
-  gameName
+  setSingleTrait
 }) => {
   return (
     <div className="details-section stats">
@@ -286,7 +282,6 @@ export const BlessingSection: React.FC<BlessingSectionProps> = ({
             girl={girl}
             listGirls={listGirls}
             allGirls={allGirls}
-            gameName={gameName}
           />
         </>
       ) : null}
@@ -810,13 +805,13 @@ const QuestStep: React.FC<QuestStepProps> = ({
   step,
   gameAPI
 }) => {
-  const contentHostName2 = contentHost2(gameAPI.getGameName());
+  const contentHost = getContentHost();
   if (quest) {
     const imgSrc = quest.ready
-      ? `https://${contentHostName2}/design_v2/affstar_upgrade.png`
+      ? `${contentHost}/design_v2/affstar_upgrade.png`
       : quest.done
-        ? `https://${contentHostName2}/design_v2/affstar.png`
-        : `https://${contentHostName2}/design_v2/affstar_empty.png`;
+        ? `${contentHost}/design_v2/affstar.png`
+        : `${contentHost}/design_v2/affstar_empty.png`;
     const img = <img alt="" src={imgSrc} />;
     const link =
       quest.done || quest.ready
@@ -864,7 +859,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
       </>
     );
   } else {
-    const imgSrc = `https://${contentHostName2}/design_v2/affstar_empty.png`;
+    const imgSrc = `${contentHost}/design_v2/affstar_empty.png`;
     return <img alt="" src={imgSrc} />;
   }
 };

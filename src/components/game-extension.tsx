@@ -9,20 +9,17 @@ import { CloseButton } from './common';
 import { HaremOptions, optionsManager } from '../data/options';
 import { LoadHaremData } from '../hooks/load-harem-data';
 import { GameAPIContext } from '../data/game-api-context';
-import { GameName } from '../data/data';
 import { getDocumentHref } from '../migration';
 import { Provider } from 'jotai';
 
 export interface GameExtensionProps {
   visible: boolean;
   setVisible(visible: boolean): void;
-  gameName: GameName;
 }
 
 export const GameExtension: React.FC<GameExtensionProps> = ({
   visible,
-  setVisible,
-  gameName
+  setVisible
 }) => {
   const [options, setOptions] = useState<HaremOptions | undefined>(undefined);
 
@@ -35,7 +32,6 @@ export const GameExtension: React.FC<GameExtensionProps> = ({
   const hide = useCallback(() => setVisible(false), [setVisible]);
 
   const gameAPI: GameAPI = useMemo(() => new GameAPIImpl(), []);
-  gameAPI.setGameName(gameName);
 
   return (
     <div className={`QuickHarem game-extension ${visible ? '' : 'hidden'}`}>

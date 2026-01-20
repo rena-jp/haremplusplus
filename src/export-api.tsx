@@ -23,11 +23,7 @@ export function exportAPI() {
     root.render(
       <React.StrictMode>
         <SelectedGirlIdContext value={[girlId, ++count]}>
-          <GameExtension
-            visible={visible}
-            setVisible={setVisible}
-            gameName={gameName}
-          />
+          <GameExtension visible={visible} setVisible={setVisible} />
         </SelectedGirlIdContext>
       </React.StrictMode>
     );

@@ -16,7 +16,6 @@ import {
   Element,
   Equipment,
   EquipmentData,
-  GameName,
   InventoryStats,
   Pose
 } from '../data/data';
@@ -73,10 +72,6 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
   const displayGirls = useMemo(() => girls.slice(0, 20), [girls]);
 
   const gameAPI = useContext(GameAPIContext).gameAPI;
-  let gameName = GameName.HentaiHeroes;
-  if (gameAPI !== undefined) {
-    gameName = gameAPI.getGameName();
-  }
 
   const [inventory, setInventory] = useState<EquipmentData>({ items: [] });
   const [loading, setLoading] = useState(true);
@@ -166,8 +161,8 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
       ) : null}
       <div className="girls-inventory-content">
         <div className="girls-list">
-          <GirlInventoryHeader gameName={gameName} />
-          <EquipmentStatsEntry equipment={selectedItem} gameName={gameName} />
+          <GirlInventoryHeader />
+          <EquipmentStatsEntry equipment={selectedItem} />
           {displayGirls.map((girl) => (
             <GirlInventoryEntry
               girl={girl}
@@ -175,7 +170,6 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
               selectedEquipment={selectedItem}
               equipSelected={equipSelected}
               unequipOne={unequipOne}
-              gameName={gameName}
               girlClass={girlClass}
               element={element}
               pose={pose}
@@ -192,7 +186,6 @@ export const GirlsInventory: React.FC<GirlsInventoryProps> = ({
           selectedItem={selectedItem}
           setSelectedItem={setSelectedItem}
           unequipAll={unequipAll}
-          gameName={gameName}
           girlClass={girlClass}
           element={element}
           pose={pose}
@@ -215,7 +208,6 @@ interface GirlsInventoryEntryProps {
   selectedEquipment: Equipment | undefined;
   equipSelected(girl: CommonGirlData): Promise<void>;
   unequipOne(girl: CommonGirlData, equipment: Equipment): void;
-  gameName: GameName;
   girlClass: Class | null;
   element: Element | null;
   pose: Pose | null;
@@ -229,7 +221,6 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
   selectedEquipment,
   equipSelected,
   unequipOne,
-  gameName,
   girlClass,
   element,
   pose,
@@ -288,13 +279,10 @@ const GirlInventoryEntry: React.FC<GirlsInventoryEntryProps> = ({
             unequipOne={
               selectedEquipment === undefined ? unequipOne : undefined
             }
-            gameName={gameName}
           />
         );
       })}
-      {selectedEquipment === undefined ? (
-        <InventoryPlaceholder gameName={gameName} />
-      ) : null}
+      {selectedEquipment === undefined ? <InventoryPlaceholder /> : null}
       <EquipmentStatsDetails
         girl={girl}
         equipment={selectedEquipment}
@@ -431,13 +419,11 @@ const EquipmentStatsDiff: React.FC<EquipmentStatsDetailsProps> = ({
   );
 };
 
-const GirlInventoryHeader: React.FC<{ gameName: GameName }> = ({
-  gameName
-}) => {
+const GirlInventoryHeader: React.FC = () => {
   return (
     <>
       <div className="header"></div>
-      <InventoryPlaceholder showAsItem={false} gameName={gameName} />
+      <InventoryPlaceholder showAsItem={false} />
       <div className="header item-slot"></div>
       <div className="header item-slot"></div>
       <div className="header item-slot"></div>
@@ -448,22 +434,22 @@ const GirlInventoryHeader: React.FC<{ gameName: GameName }> = ({
         <StatIcon statClass="rainbow" />
       </div>
       <div className="header stat">
-        <EgoIcon gameName={gameName} />
+        <EgoIcon />
       </div>
       <div className="header stat">
-        <AttackIcon gameName={gameName} />
+        <AttackIcon />
       </div>
       <div className="header stat">
-        <DefenseIcon gameName={gameName} />
+        <DefenseIcon />
       </div>
       <div className="header stat-res">
-        <EgoIcon gameName={gameName} />%
+        <EgoIcon />%
       </div>
       <div className="header stat-res">
-        <DefenseIcon gameName={gameName} />%
+        <DefenseIcon />%
       </div>
       <div className="header stat-res">
-        <AttackIcon gameName={gameName} />%
+        <AttackIcon />%
       </div>
       <div className="header equipment-resonance"></div>
       <div className="header equipment-resonance"></div>
@@ -474,12 +460,10 @@ const GirlInventoryHeader: React.FC<{ gameName: GameName }> = ({
 
 interface EquipmentStatsEntryProps {
   equipment: Equipment | undefined;
-  gameName: GameName;
 }
 
 const EquipmentStatsEntry: React.FC<EquipmentStatsEntryProps> = ({
-  equipment,
-  gameName
+  equipment
 }) => {
   const stats = getEquipmentStats(undefined, equipment);
   const itemSlot = equipment?.slot;
@@ -500,15 +484,12 @@ const EquipmentStatsEntry: React.FC<EquipmentStatsEntryProps> = ({
             slotId={slotIndex + 1}
             key={slotIndex}
             classNames={classNames}
-            gameName={gameName}
           />
         ) : (
           <div className={classNames.join(' ')} key={slotIndex} />
         );
       })}
-      {equipment === undefined ? (
-        <InventoryPlaceholder gameName={gameName} />
-      ) : null}
+      {equipment === undefined ? <InventoryPlaceholder /> : null}
       <div className="equipment stat total-stats">
         <span className="stat-value">{stats.totalStats}</span>
       </div>
@@ -628,7 +609,6 @@ interface EquipmentTileProps {
   classNames?: string[];
   onClick?: EventHandler<MouseEvent<unknown>>;
   unequipOne?: (girl: CommonGirlData, equipment: Equipment) => void;
-  gameName: GameName;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
@@ -637,8 +617,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   slotId,
   classNames,
   onClick,
-  unequipOne,
-  gameName
+  unequipOne
 }) => {
   return (
     <SimpleEquipmentTile
@@ -647,7 +626,6 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
       slotId={slotId}
       onClick={onClick}
       classNames={classNames}
-      gameName={gameName}
     >
       <Tooltip tooltip="Unequip" cssClasses="unequip-one-decorator">
         {unequipOne === undefined ? null : (
@@ -666,20 +644,14 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
 
 interface InventoryPlaceholderProps {
   showAsItem?: boolean;
-  gameName: GameName;
 }
 const InventoryPlaceholder: React.FC<InventoryPlaceholderProps> = ({
-  showAsItem,
-  gameName
+  showAsItem
 }) => {
   return (
     <div className="inv-placeholder item-slot">
       {showAsItem !== false ? (
-        <SimpleEquipmentTile
-          slotId={0}
-          equipment={undefined}
-          gameName={gameName}
-        />
+        <SimpleEquipmentTile slotId={0} equipment={undefined} />
       ) : null}
     </div>
   );
@@ -691,7 +663,6 @@ interface InventoryItemsProps {
   selectedItem: Equipment | undefined;
   setSelectedItem(item: Equipment | undefined): void;
   unequipAll(): void;
-  gameName: GameName;
   girlClass: Class | null;
   element: Element | null;
   pose: Pose | null;
@@ -706,7 +677,6 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
   selectedItem,
   setSelectedItem,
   unequipAll,
-  gameName,
   girlClass,
   element,
   pose,
@@ -760,7 +730,6 @@ const InventoryItems: React.FC<InventoryItemsProps> = ({
                   ev.preventDefault();
                   setSelectedItem(item === selectedItem ? undefined : item);
                 }}
-                gameName={gameName}
                 hidden={!visible}
               />
             );

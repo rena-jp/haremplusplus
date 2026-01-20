@@ -2,7 +2,6 @@ import {
   Book,
   CommonGirlData,
   Equipment,
-  GameName,
   getPoseN,
   Gift,
   QuestData,
@@ -105,7 +104,6 @@ export namespace HaremMessage {
 export class GameAPIImpl implements GameAPI {
   private requestListeners = new Set<RequestListener>();
   private reqCount = 0;
-  private gameName = GameName.HentaiHeroes;
 
   constructor(private updateGirl?: (girl: CommonGirlData) => void) {}
 
@@ -1401,14 +1399,6 @@ export class GameAPIImpl implements GameAPI {
     for (const listener of this.requestListeners) {
       listener(event);
     }
-  }
-
-  setGameName(gameName: GameName): void {
-    this.gameName = gameName;
-  }
-
-  getGameName(): GameName {
-    return this.gameName;
   }
 }
 

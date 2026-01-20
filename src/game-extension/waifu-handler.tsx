@@ -28,11 +28,7 @@ export async function handleWaifu(): Promise<void> {
   const updateApp = () => {
     root.render(
       <React.StrictMode>
-        <GameExtension
-          visible={visible}
-          setVisible={setVisible}
-          gameName={gameName}
-        />
+        <GameExtension visible={visible} setVisible={setVisible} />
       </React.StrictMode>
     );
   };

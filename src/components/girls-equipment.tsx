@@ -12,7 +12,6 @@ import {
   CommonGirlData,
   Equipment,
   EquipmentData,
-  GameName,
   Rarity
 } from '../data/data';
 import { GameAPIContext } from '../data/game-api-context';
@@ -46,7 +45,6 @@ export interface EquipmentListProps {
   listGirls: CommonGirlData[];
   allGirls: CommonGirlData[];
   showActions?: boolean;
-  gameName: GameName;
 }
 
 export const EquipmentList: React.FC<EquipmentListProps> = ({
@@ -54,8 +52,7 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
   girl,
   listGirls,
   allGirls,
-  showActions,
-  gameName
+  showActions
 }) => {
   const [loading, setLoading] = useState(false);
   const loadingTimeout = useRef<string | number | NodeJS.Timeout | undefined>(
@@ -91,7 +88,6 @@ export const EquipmentList: React.FC<EquipmentListProps> = ({
             slotId={index + 1 /* Slots are indexed 1 to 6 */}
             loading={loading}
             setLoading={delayedSetLoading}
-            gameName={gameName}
           />
         ))}
         {showActions === undefined || showActions ? (
@@ -128,7 +124,6 @@ interface EquipmentTileProps {
   setLoading(loading: boolean): void;
   classNames?: string[];
   onClick?: EventHandler<MouseEvent<unknown>>;
-  gameName: GameName;
 }
 
 const EquipmentTile: React.FC<EquipmentTileProps> = ({
@@ -138,8 +133,7 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
   loading,
   classNames,
   setLoading,
-  onClick,
-  gameName
+  onClick
 }) => {
   const { gameAPI } = useContext(GameAPIContext);
   const domain = getDomain();
@@ -206,7 +200,6 @@ const EquipmentTile: React.FC<EquipmentTileProps> = ({
                 equipment={equipment}
                 currentEquipment={equipment}
                 girl={girl}
-                gameName={gameName}
               />
             }
           >
@@ -284,14 +277,12 @@ export interface EquipmentTooltipProps {
   equipment: Equipment;
   currentEquipment: Equipment | undefined;
   girl: CommonGirlData | undefined;
-  gameName: GameName;
 }
 
 export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
   equipment,
   currentEquipment,
-  girl,
-  gameName
+  girl
 }) => {
   const tooltipClasses = ['qh-equipment-tooltip', Rarity[equipment.rarity]];
 
@@ -339,15 +330,15 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
           <StatsDiff diff={khDiff} />
         </span>
         <span>
-          <EgoIcon gameName={gameName} /> {equipment.stats.ego}
+          <EgoIcon /> {equipment.stats.ego}
           <StatsDiff diff={egoDiff} />
         </span>
         <span>
-          <AttackIcon gameName={gameName} /> {equipment.stats.attack}
+          <AttackIcon /> {equipment.stats.attack}
           <StatsDiff diff={attackDiff} />
         </span>
         <span>
-          <DefenseIcon gameName={gameName} /> {equipment.stats.defense}
+          <DefenseIcon /> {equipment.stats.defense}
           <StatsDiff diff={defDiff} />
         </span>
       </div>
@@ -355,7 +346,6 @@ export const EquipmentTooltip: React.FC<EquipmentTooltipProps> = ({
         equipment={equipment}
         currentEquipment={currentEquipment}
         girl={girl}
-        gameName={gameName}
       />
     </div>
   );
@@ -383,14 +373,12 @@ interface ResonanceSectionProps {
   equipment: Equipment;
   currentEquipment?: Equipment;
   girl?: CommonGirlData;
-  gameName: GameName;
 }
 
 const ResonanceSection: React.FC<ResonanceSectionProps> = ({
   equipment,
   currentEquipment,
-  girl,
-  gameName
+  girl
 }) => {
   const matchesClass = matchesClassResonance(equipment, girl);
   const matchesElement = matchesElementResonance(equipment, girl);
@@ -450,7 +438,7 @@ const ResonanceSection: React.FC<ResonanceSectionProps> = ({
             }
           >
             <StatIcon statClass={displayClass} />:
-            <EgoIcon gameName={gameName} /> + {equipment.resonance.ego}%
+            <EgoIcon /> + {equipment.resonance.ego}%
             <StatsDiff diff={activeEgoValue - refEgo} />
           </span>
         ) : null}
@@ -467,7 +455,7 @@ const ResonanceSection: React.FC<ResonanceSectionProps> = ({
             }
           >
             <ElementIcon element={displayElement} />:
-            <DefenseIcon gameName={gameName} /> + {equipment.resonance.defense}%
+            <DefenseIcon /> + {equipment.resonance.defense}%
             <StatsDiff diff={activeDefValue - refDef} />
           </span>
         ) : null}
@@ -484,7 +472,7 @@ const ResonanceSection: React.FC<ResonanceSectionProps> = ({
             }
           >
             <PoseIcon pose={displayPose} />:
-            <AttackIcon gameName={gameName} /> + {equipment.resonance.attack}%
+            <AttackIcon /> + {equipment.resonance.attack}%
             <StatsDiff diff={activeAttValue - refAtt} />
           </span>
         ) : null}
@@ -617,7 +605,6 @@ export interface SimpleEquipmentTileProps {
   children?: ReactNode;
   girl?: CommonGirlData;
   onClick?: EventHandler<MouseEvent<unknown>>;
-  gameName: GameName;
   hidden?: boolean;
 }
 
@@ -628,7 +615,6 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
   children,
   girl,
   onClick,
-  gameName,
   hidden
 }) => {
   const img = equipment?.icon;
@@ -665,7 +651,6 @@ export const SimpleEquipmentTile: React.FC<SimpleEquipmentTileProps> = ({
                 equipment={equipment}
                 currentEquipment={equipment}
                 girl={girl}
-                gameName={gameName}
               />
             }
             tooltipId="equipment-tooltip"
