@@ -26,7 +26,7 @@ export namespace Rarities {
   }
 
   export function toDisplayString(rarity: Rarity): string {
-    return firstToUpper(toString(rarity));
+    return window.GT.design[`girls_rarity_${Rarity[rarity]}`];
   }
 }
 
@@ -332,6 +332,13 @@ export namespace Poses {
   }
 
   export function toDisplayString(pose: Pose): string {
+    if (window.GT.figures != null) {
+      const { figures } = window.GT;
+      if (0 < pose && pose < figures.length) {
+        return figures[pose];
+      }
+    }
+
     switch (pose) {
       case Pose.doggie:
         return 'Doggie style';
@@ -575,8 +582,8 @@ export namespace Zodiacs {
   }
 
   export function toDisplayString(zodiac: Zodiac): string {
-    const name = Zodiac[zodiac];
-    return Symbols[zodiac] + ' ' + firstToUpper(name);
+    const name = window.GT.zodiac[Zodiac[zodiac]];
+    return Symbols[zodiac] + ' ' + name;
   }
 }
 
