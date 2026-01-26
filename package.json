@@ -1,13 +1,13 @@
 {
   "name": "harem-plus-plus",
-  "version": "0.25.4",
+  "version": "0.25.5",
   "private": true,
   "dependencies": {
     "deep-equal": "^2.2.3",
     "idb": "^8.0.3",
     "jotai": "^2.16.2",
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
     "react-lazyload": "^3.2.1",
     "react-spinners": "^0.17.0",
     "react-tooltip": "^5.30.0",
@@ -39,8 +39,8 @@
   },
   "devDependencies": {
     "@types/deep-equal": "^1.0.4",
-    "@types/node": "^25.0.9",
-    "@types/react": "^19.2.8",
+    "@types/node": "^25.0.10",
+    "@types/react": "^19.2.9",
     "@types/react-dom": "^19.2.3",
     "@types/react-lazyload": "^3.2.3",
     "eslint-config-prettier": "^10.1.8",

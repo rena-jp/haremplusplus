@@ -1,3 +1,7 @@
+## 0.25.5 - 2026-01-27
+
+- Fix various bugs
+
 ## 0.25.4 - 2026-01-21
 
 - Add new event source
