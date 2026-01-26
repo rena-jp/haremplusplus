@@ -20,24 +20,20 @@ export const QuickEquipment: React.FC<QuickEquipmentProps> = ({
   close
 }) => {
   const gameAPI = useContext(GameAPIContext).gameAPI;
-  if (!gameAPI) {
-    return null;
-  }
-  const currentEquipment = girl.equipment
-    ? girl.equipment.items.find((item) => item.slot === slot)
-    : undefined;
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [equipment, setEquipment] = useState<Equipment[]>([]);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
+    if (!gameAPI) return;
     gameAPI
       .getGirlsInventory(girl, slot)
       .then((inventory) => importEquipment(inventory))
       .then((inventory) => setEquipment(inventory.items))
       .then(() => setLoading(false));
   }, [gameAPI, girl, slot]);
+  if (!gameAPI) return null;
+  const currentEquipment = girl.equipment
+    ? girl.equipment.items.find((item) => item.slot === slot)
+    : undefined;
 
   return (
     <div className="qh-quick-equipment">

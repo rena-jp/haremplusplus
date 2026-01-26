@@ -872,7 +872,7 @@ export namespace GiftResult {
         if (object.success) {
           return (
             isUnknownObject(object.can_upgrade) &&
-            typeof (object.can_upgrade.upgradable === 'boolean') &&
+            typeof object.can_upgrade.upgradable === 'boolean' &&
             typeof object.affection === 'number'
           );
         } else {

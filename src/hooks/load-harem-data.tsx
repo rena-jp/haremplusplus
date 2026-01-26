@@ -99,10 +99,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     [setGemsCount]
   );
 
-  const [cachedGirls, setCachedGirls] = useState<
-    CommonGirlData[] | undefined
-  >();
-
   useEffect(() => {
     let inited = false;
 
@@ -120,7 +116,6 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
       ([gemsData, blessings, haremData]) => {
         if (!inited && gemsData && blessings && haremData) {
           setGemsCount(countGems(gemsData));
-          setCachedGirls(haremData.allGirls);
           updateResult(haremData);
         }
       }
@@ -194,7 +189,7 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
         let waifuGirls = await gameAPI.getWaifuGirls(true);
         if (Array.isArray(waifuGirls)) {
           const data = await toHaremDataFromWaifuData(
-            cachedGirls ?? [],
+            allGirls.current ?? [],
             waifuGirls,
             blessings
           );

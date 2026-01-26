@@ -805,6 +805,7 @@ const QuestStep: React.FC<QuestStepProps> = ({
   step,
   gameAPI
 }) => {
+  const [openUpgradePopup, setOpenUpgradePopup] = useState(false);
   const contentHost = getContentHost();
   if (quest) {
     const imgSrc = quest.ready
@@ -817,9 +818,6 @@ const QuestStep: React.FC<QuestStepProps> = ({
       quest.done || quest.ready
         ? `quest/${quest.idQuest}`
         : `girl/${girl.id}?resource=affection`;
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const [openUpgradePopup, setOpenUpgradePopup] = useState(false);
 
     return (
       <>
