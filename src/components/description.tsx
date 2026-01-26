@@ -715,7 +715,7 @@ export const PoseSwitcher: React.FC<PoseSwitcherProps> = ({
               <PoseSelector
                 key={`skin_empty_${i}`}
                 kind="empty"
-                tooltip={`${e.grade_skin_name}<br/><span class="skin-shards skins_shard_icn"></span> ${e.shards_count} / 33`}
+                tooltip={`${e.grade_skin_name}<br/><span class="skin-shards skins_shard_icn"></span> ${e.shards_count ?? 0} / 33`}
               />
             )
           )}

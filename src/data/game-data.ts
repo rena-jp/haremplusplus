@@ -440,7 +440,7 @@ export interface GradeSkin {
   release_date: string;
   is_released: boolean;
   is_owned: boolean;
-  shards_count: number;
+  shards_count?: number | undefined;
   is_selected: number;
 }
 
