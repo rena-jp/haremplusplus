@@ -1,3 +1,7 @@
+## 0.25.6 - 2026-01-27
+
+- Fix bug in old Firefox private mode
+
 ## 0.25.5 - 2026-01-27
 
 - Fix various bugs
