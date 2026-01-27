@@ -14,26 +14,36 @@ function saveSettings() {
   if (isUpdating) return;
   isUpdating = true;
   queueMicrotask(async () => {
-    const cache = await caches.open(CONFIG_CACHE);
-    while (hasChanged) {
-      hasChanged = false;
-      const json = JSON.stringify(settings);
-      await cache.put(
-        new Request(SETTINGS_REQUEST),
-        new Response(json, { headers: { 'Content-Type': 'application/json' } })
-      );
+    try {
+      const cache = await caches.open(CONFIG_CACHE);
+      while (hasChanged) {
+        hasChanged = false;
+        const json = JSON.stringify(settings);
+        await cache.put(
+          new Request(SETTINGS_REQUEST),
+          new Response(json, {
+            headers: { 'Content-Type': 'application/json' }
+          })
+        );
+      }
+      isUpdating = false;
+    } catch (e) {
+      // console.error(e);
     }
-    isUpdating = false;
   });
 }
 
 export async function loadSettings() {
-  if (window.caches == null) return;
-  if (!(await caches.has(CONFIG_CACHE))) return;
-  const cache = await caches.open(CONFIG_CACHE);
-  const storedSettings = await cache.match(new Request(SETTINGS_REQUEST));
-  if (!storedSettings) return;
-  settings = await storedSettings.json();
+  try {
+    if (window.caches == null) return;
+    if (!(await caches.has(CONFIG_CACHE))) return;
+    const cache = await caches.open(CONFIG_CACHE);
+    const storedSettings = await cache.match(new Request(SETTINGS_REQUEST));
+    if (!storedSettings) return;
+    settings = await storedSettings.json();
+  } catch (e) {
+    // console.error(e);
+  }
 }
 
 export function atomWithStorage<Value>(
