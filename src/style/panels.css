@@ -79,9 +79,10 @@
 
 .filter-entry.rarity > button.toggle,
 .filter-entry.power > button.toggle,
-.filter-entry.skills > button.toggle {
+.filter-entry.skills > button.toggle,
+.filter-entry.avatar > button.toggle {
   /** Use more compact buttons for Rarity and Potential power, as we have many of them */
-  min-width: initial;
+  min-width: auto;
   padding-left: 8px;
   padding-right: 8px;
 }

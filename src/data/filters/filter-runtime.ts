@@ -1163,6 +1163,40 @@ export class SourceMultiFilter extends AbstractFilter {
   };
 }
 
+export class AvatarFilter extends AbstractFilter {
+  static ID = 'avatar-filter';
+  id = AvatarFilter.ID;
+
+  constructor(public avatars: boolean[]) {
+    super();
+    const forLabel = [0, 1, 2, 3, 4, 5, 6, 'Skin'];
+    this.label = 'Pose-' + forLabel.filter((_, i) => avatars[i]).join(', ');
+  }
+
+  includes(girl: CommonGirlData): boolean {
+    const selected = girl.currentIcon >= 0 ? girl.currentIcon : girl.stars;
+    const skinSelected = girl.gradeSkins?.some((e) => e.is_selected) ?? false;
+    return skinSelected ? this.avatars[7]! : this.avatars[selected]!;
+  }
+
+  getParams() {
+    return {
+      avatars: this.avatars
+    };
+  }
+
+  static FACTORY: FilterFactory<AvatarFilter> = {
+    type: AvatarFilter.ID,
+    create: (config) => {
+      const avatars = config.params?.avatars;
+      if (Array.isArray(avatars)) {
+        return new AvatarFilter(avatars);
+      }
+      return undefined;
+    }
+  };
+}
+
 interface SimpleFilter {
   label: string;
   includes(girl: CommonGirlData): boolean;

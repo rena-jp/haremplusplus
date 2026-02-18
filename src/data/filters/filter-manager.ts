@@ -23,7 +23,8 @@ import {
   GirlSkillsFilter,
   TeamsFilter,
   BulbFilter,
-  GradeSkinFilter
+  GradeSkinFilter,
+  AvatarFilter
 } from './filter-runtime';
 import { BlessingDefinition, Team } from '../data';
 import { optionsManager } from '../options';
@@ -57,6 +58,8 @@ export class FiltersManagerImpl implements FiltersManager {
 
     this.register(ShardsMultiFilter.FACTORY);
     this.register(SourceMultiFilter.FACTORY);
+
+    this.register(AvatarFilter.FACTORY);
 
     this.register(RootFilter.FACTORY);
   }

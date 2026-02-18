@@ -18,7 +18,8 @@ import {
   GirlSkillsFilter,
   TeamsFilter,
   BulbFilter,
-  GradeSkinFilter
+  GradeSkinFilter,
+  AvatarFilter
 } from '../data/filters/filter-runtime';
 import {
   FilterHeader,
@@ -180,6 +181,11 @@ export const FiltersPanel: React.FC<FiltersProps> = ({
           removeFilter={removeFilter}
         />
         <GradeSkinForm
+          getActiveFilter={getActiveFilter}
+          updateFilter={updateFilter}
+          removeFilter={removeFilter}
+        />
+        <AvatarForm
           getActiveFilter={getActiveFilter}
           updateFilter={updateFilter}
           removeFilter={removeFilter}
@@ -952,6 +958,54 @@ const GradeSkinForm: React.FC<FormProps> = ({
       removeFilter={removeFilter}
       multipleChoices={true}
       filterId={GradeSkinFilter.ID}
+    />
+  );
+};
+
+const AvatarForm: React.FC<FormProps> = ({
+  getActiveFilter,
+  updateFilter,
+  removeFilter
+}) => {
+  const options = useMemo<ToggleOption[]>(
+    () => [
+      ...[0, 1, 2, 3, 4, 5, 6].map((e) => ({
+        label: e >= 0 ? String(e) : 'Skin',
+        description: `Filter pose-${e} girls`
+      })),
+      {
+        label: 'Skin',
+        description: 'Filter Pose-skin girls'
+      }
+    ],
+    []
+  );
+
+  const createFilter = useCallback((values: boolean[]) => {
+    return values.every((v) => !v) ? undefined : new AvatarFilter(values);
+  }, []);
+
+  const getValues = useCallback((filter: Filter) => {
+    if (filter instanceof AvatarFilter) {
+      return filter.avatars;
+    } else {
+      return Array(8).fill(true);
+    }
+  }, []);
+
+  return (
+    <ToggleOptionsForm
+      label="Avatar"
+      description="Filter Avatar"
+      options={options}
+      getValues={getValues}
+      createFilter={createFilter}
+      getActiveFilter={getActiveFilter}
+      updateFilter={updateFilter}
+      removeFilter={removeFilter}
+      multipleChoices={true}
+      filterId={AvatarFilter.ID}
+      cssClasses={['avatar']}
     />
   );
 };
