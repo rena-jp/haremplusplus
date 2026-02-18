@@ -1,3 +1,11 @@
+## 0.25.7 - 2026-02-19
+
+- Change to continue processing on error
+- Add release dates for unowned girls
+- Fix some filter settings not being saved
+- Update girl image URLs to match game changes
+- Add Avatar Filter
+
 ## 0.25.6 - 2026-01-27
 
 - Fix bug in old Firefox private mode
