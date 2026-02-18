@@ -257,7 +257,8 @@ export async function toHaremDataFromWaifuData(
       id_role: girlData.id_role,
       gradeSkins: girlData.grade_skins_data,
       birthday: girlData.anniversary,
-      shards: girlData.shards ?? 0
+      shards: girlData.shards ?? 0,
+      release_date: girlData.release_date
     };
 
     const commonGirl: CommonGirlData = {
