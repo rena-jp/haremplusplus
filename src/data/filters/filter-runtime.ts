@@ -67,7 +67,7 @@ export class GradeRangeFilter extends AbstractFilter {
     create: (config) => {
       const minStars = numberParam(config, 'minStars');
       const maxStars = numberParam(config, 'maxStars');
-      if (minStars) {
+      if (minStars || maxStars) {
         return new GradeRangeFilter(minStars, maxStars);
       }
       return undefined;
@@ -113,7 +113,7 @@ export class MaxGradeRangeFilter extends AbstractFilter {
     create: (config) => {
       const minStars = numberParam(config, 'minStars');
       const maxStars = numberParam(config, 'maxStars');
-      if (minStars) {
+      if (minStars || maxStars) {
         return new MaxGradeRangeFilter(minStars, maxStars);
       }
       return undefined;
@@ -160,7 +160,7 @@ export class LevelRangeFilter extends AbstractFilter {
     create: (config) => {
       const minLevel = numberParam(config, 'minLevel');
       const maxLevel = numberParam(config, 'maxLevel');
-      if (minLevel) {
+      if (minLevel || maxLevel) {
         return new LevelRangeFilter(minLevel, maxLevel);
       }
       return undefined;
@@ -207,7 +207,7 @@ export class MaxLevelRangeFilter extends AbstractFilter {
     create: (config) => {
       const minLevel = numberParam(config, 'minLevel');
       const maxLevel = numberParam(config, 'maxLevel');
-      if (minLevel) {
+      if (minLevel || maxLevel) {
         return new MaxLevelRangeFilter(minLevel, maxLevel);
       }
       return undefined;
