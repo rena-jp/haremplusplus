@@ -234,6 +234,11 @@ export interface OwnedGirlEntry extends CommonGirlsDataEntry {
   default_avatar: string;
 
   release_date: string;
+
+  images: {
+    ava: string[];
+    ico: string[];
+  };
 }
 export interface MissingGirlEntry extends CommonGirlsDataEntry {
   own: false;

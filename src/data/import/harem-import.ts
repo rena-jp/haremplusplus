@@ -206,7 +206,9 @@ export async function toHaremDataFromWaifuData(
       };
     });
     const maxLevel = girlData.level_cap ?? +girlData.awakening_level * 50 + 250;
-    const ava = girlData.default_avatar.replace('ava0', 'avb0');
+    const ava = girlData.default_avatar
+      .replace('ava0', 'avb0')
+      .replace('/1200x/', '/1200x-black/');
     const baseCommonGirl: BaseGirlData = {
       // Unknown
       fullName: '',
@@ -235,10 +237,10 @@ export async function toHaremDataFromWaifuData(
       id: String(girlData.id_girl),
       name: girlData.name,
       icon: girlData.ico,
-      icon0: get0Pose(girlData.ico),
+      icon0: girlData.ico,
       poseImage: ava,
-      poseImage0: get0Pose(ava),
-      poses: girlData.poses,
+      poseImage0: ava,
+      // poses: girlData.poses,
       class: getClass(girlData.class),
       own: false,
       rarity: rarity,
@@ -248,7 +250,10 @@ export async function toHaremDataFromWaifuData(
       eyeColor: getEyeColor(girlData),
       zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
       element: getElement(girlData),
-      currentIcon: getCurrentIcon(girlData.default_avatar),
+      currentIcon:
+        Number(girlData.fav_graded) < 0
+          ? girlData.graded
+          : Number(girlData.fav_graded),
       salaryTime: girlData.pay_time,
       salary: girlData.salary,
       salaryPerHour: girlData.salary_per_hour,
@@ -297,7 +302,7 @@ export async function toHaremDataFromWaifuData(
       id: String(girlData.id_girl),
       name: girlData.name,
       icon: girlData.ico,
-      icon0: girlData.default_avatar.replace('ava', 'ico'),
+      icon0: girlData.images.ico[0]!,
       poseImage: girlData.avatar,
       poseImage0: girlData.default_avatar,
       poses: girlData.preview.poses,
@@ -320,7 +325,10 @@ export async function toHaremDataFromWaifuData(
       currentAffection: currentAffection,
       upgradeReady: upgradeReady,
       currentGXP: +(girlData.Xp?.cur ?? girlData.xp!),
-      currentIcon: getCurrentIcon(girlData.avatar),
+      currentIcon:
+        Number(girlData.fav_graded) < 0
+          ? girlData.graded
+          : Number(girlData.fav_graded),
       salaryTime: girlData.pay_time,
       salary: girlData.salary,
       salaryPerHour: girlData.salary_per_hour,
