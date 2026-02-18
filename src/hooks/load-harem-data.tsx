@@ -113,10 +113,10 @@ export const LoadHaremData: React.FC<LoadHaremDataProps> = ({
     });
 
     Promise.all([gemsDataFromDB, blessingsFromDB, haremDataFromDB]).then(
-      ([gemsData, blessings, haremData]) => {
-        if (!inited && gemsData && blessings && haremData) {
-          setGemsCount(countGems(gemsData));
-          updateResult(haremData);
+      ([gemsData, _blessings, haremData]) => {
+        if (!inited) {
+          if (gemsData) setGemsCount(countGems(gemsData));
+          if (haremData) updateResult(haremData);
         }
       }
     );
