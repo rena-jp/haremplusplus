@@ -1,3 +1,7 @@
+## 0.25.8 - 2026-02-20
+
+- Fix incorrect pose for girls with 0 shards
+
 ## 0.25.7 - 2026-02-19
 
 - Change to continue processing on error
