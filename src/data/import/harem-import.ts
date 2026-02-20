@@ -250,10 +250,7 @@ export async function toHaremDataFromWaifuData(
       eyeColor: getEyeColor(girlData),
       zodiac: Zodiacs.fromSymbol(girlData.zodiac.substring(0, 2))!,
       element: getElement(girlData),
-      currentIcon:
-        Number(girlData.fav_graded) < 0
-          ? girlData.graded
-          : Number(girlData.fav_graded),
+      currentIcon: 0,
       salaryTime: girlData.pay_time,
       salary: girlData.salary,
       salaryPerHour: girlData.salary_per_hour,
@@ -326,9 +323,9 @@ export async function toHaremDataFromWaifuData(
       upgradeReady: upgradeReady,
       currentGXP: +(girlData.Xp?.cur ?? girlData.xp!),
       currentIcon:
-        Number(girlData.fav_graded) < 0
-          ? girlData.graded
-          : Number(girlData.fav_graded),
+        Number(girlData.fav_graded) >= 0
+          ? Number(girlData.fav_graded)
+          : girlData.graded,
       salaryTime: girlData.pay_time,
       salary: girlData.salary,
       salaryPerHour: girlData.salary_per_hour,
