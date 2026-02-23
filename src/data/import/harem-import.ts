@@ -15,7 +15,6 @@ import {
   Zodiacs,
   EventSource,
   CommonGirlData,
-  getPoseN,
   HaremData,
   Class,
   Quest,
@@ -73,6 +72,7 @@ export namespace DataFormat {
  * @param gameName The game name
  * @returns The HaremData used in this application
  */
+/*
 export async function toHaremData(
   playerData: DataFormat,
   gameName: GameName
@@ -176,6 +176,7 @@ export async function toHaremData(
     nextBlessing: upcomingBlessings
   };
 }
+*/
 
 export async function toHaremDataFromWaifuData(
   cachedGirls: CommonGirlData[],
@@ -302,7 +303,8 @@ export async function toHaremDataFromWaifuData(
       icon0: girlData.images.ico[0]!,
       poseImage: girlData.avatar,
       poseImage0: girlData.default_avatar,
-      poses: girlData.preview.poses,
+      poses: girlData.images.ava,
+      icons: girlData.images.ico,
       level: Number(girlData.level),
       maxLevel: maxLevel,
       class: getClass(girlData.class),
@@ -651,11 +653,11 @@ function getEventType(eventId: number): EventSource {
   }
   return 'unknown';
 }
-
+/*
 function get0Pose(avatar: string): string {
   return getPoseN(avatar, 0);
 }
-
+*/
 interface GirlsPose {
   [key: string]: number;
 }

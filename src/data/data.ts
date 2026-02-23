@@ -79,6 +79,7 @@ export interface BaseGirlData {
   name: string;
   icon: string;
   icon0: string;
+  icons?: string[];
   poseImage: string;
   poseImage0: string;
   poses?: string[];
@@ -905,6 +906,7 @@ export interface HaremData {
   nextBlessing: BlessingDefinition[];
 }
 
+/*
 export function getPoseN(avatar: string, pose: number): string {
   const lastSeparator = avatar.lastIndexOf('/'); // http://..../.../ava3.png?v=8
   const filePath = avatar.substring(0, lastSeparator + 1); // http://..../.../
@@ -915,6 +917,7 @@ export function getPoseN(avatar: string, pose: number): string {
   }
   return filePath + iconName.substring(0, iconName.length - 1) + `${pose}.png`; // http://..../.../ava1.png
 }
+*/
 
 export interface Inventory {
   books: BookEntry[];

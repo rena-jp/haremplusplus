@@ -2,7 +2,6 @@ import {
   Book,
   CommonGirlData,
   Equipment,
-  getPoseN,
   Gift,
   QuestData,
   Team,
@@ -336,11 +335,10 @@ export class GameAPIImpl implements GameAPI {
         // While we wait for the result, update the image to what we expect is going to happen...
         girl.currentIcon = pose;
         girl.gradeSkins?.forEach((e) => (e.is_selected = 0));
-        if (girl.poses !== undefined) {
-          const newPose = girl.poses[pose]!;
-          girl.poseImage = newPose;
-          girl.icon = newPose.replace('ava', 'ico');
-        }
+        const newPose = girl.poses?.[pose];
+        if (newPose) girl.poseImage = newPose;
+        const newIcon = girl.icons?.[pose];
+        if (newIcon) girl.icon = newIcon;
         this.updateGirl(girl);
       }
 
@@ -616,8 +614,10 @@ export class GameAPIImpl implements GameAPI {
         const currentQuest = girl.stars;
         girl.stars++;
         girl.currentIcon = girl.stars;
-        girl.poseImage = getPoseN(girl.poseImage, girl.stars);
-        girl.icon = getPoseN(girl.icon, girl.stars);
+        const newPose = girl.poses?.[girl.stars];
+        if (newPose) girl.poseImage = newPose;
+        const newIcon = girl.icons?.[girl.stars];
+        if (newIcon) girl.icon = newIcon;
         girl.upgradeReady = false;
         girl.upgradeReady = isUpgradeReady(girl, 0);
         girl.quests[currentQuest]!.done = true;
@@ -1014,8 +1014,10 @@ export class GameAPIImpl implements GameAPI {
       );
       girl.stars = result.girl.graded;
       girl.currentIcon = girl.stars;
-      girl.poseImage = getPoseN(girl.poseImage, girl.stars);
-      girl.icon = getPoseN(girl.icon, girl.stars);
+      const newPose = girl.poses?.[girl.stars];
+      if (newPose) girl.poseImage = newPose;
+      const newIcon = girl.poses?.[girl.stars];
+      if (newIcon) girl.icon = newIcon;
       girl.upgradeReady = false;
       girl.currentAffection = result.girl.affection;
       const questMatch = result.quest.match(/\/quest\/(\d+)/);
