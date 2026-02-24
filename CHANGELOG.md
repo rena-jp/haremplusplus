@@ -1,3 +1,7 @@
+## 0.25.9 - 2026-02-24
+
+- Fix incorrect girl image URL after upgrade
+
 ## 0.25.8 - 2026-02-20
 
 - Fix incorrect pose for girls with 0 shards
