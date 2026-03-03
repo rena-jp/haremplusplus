@@ -77,17 +77,27 @@ export async function persistGemsData(gemsData: GemsData): Promise<void> {
   }
 }
 const HAREM_DATA_REQUEST = '/quickHaremData.json';
-const HAREM_DATA_REQUEST2 = '/quickHaremData2.json';
+const HAREM_DATA_2_REQUEST = '/quickHaremData2.json';
+const HAREM_DATA_2_BACKUP_REQUEST = '/quickHaremData2.backup.json';
 
 export async function loadHaremData(): Promise<HaremData> {
   try {
     if (await caches.has(DATA_CACHE)) {
       const cache = await caches.open(DATA_CACHE);
       const storedHaremData2 = await cache.match(
-        new Request(HAREM_DATA_REQUEST2)
+        new Request(HAREM_DATA_2_REQUEST)
       );
       if (storedHaremData2) {
-        return await storedHaremData2.json();
+        const data = await storedHaremData2.json();
+        if (!(await cache.match(new Request(HAREM_DATA_2_BACKUP_REQUEST)))) {
+          await cache.put(
+            new Request(HAREM_DATA_2_BACKUP_REQUEST),
+            new Response(JSON.stringify(data), {
+              headers: { 'Content-Type': 'application/json' }
+            })
+          );
+        }
+        return data;
       }
       const storedHaremData = await cache.match(
         new Request(HAREM_DATA_REQUEST)
@@ -107,7 +117,7 @@ export async function persistHaremData(harem: HaremData): Promise<void> {
     try {
       const cache = await caches.open(DATA_CACHE);
       await cache.put(
-        new Request(HAREM_DATA_REQUEST2),
+        new Request(HAREM_DATA_2_REQUEST),
         new Response(JSON.stringify(harem), {
           headers: { 'Content-Type': 'application/json' }
         })
