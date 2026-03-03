@@ -1,3 +1,7 @@
+## 0.25.10 - 2026-03-03
+
+- Add simple backup feature
+
 ## 0.25.9 - 2026-02-24
 
 - Fix incorrect girl image URL after upgrade
